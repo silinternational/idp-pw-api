@@ -1,0 +1,138 @@
+data:
+    image: silintl/data-volume:latest
+    container_name: data
+    volumes:
+        - ./application:/data
+    user: "${DOCKER_UIDGID}"
+
+db:
+    image: silintl/mariadb:latest
+    container_name: db
+    ports:
+        - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: r00tp@ss!
+      MYSQL_DATABASE: idpmgmt
+      MYSQL_USER: idpmgmt
+      MYSQL_PASSWORD: idpmgmt
+
+testDb:
+   image: silintl/mariadb:latest
+   container_name: testDb
+   ports:
+       - "3306"
+   environment:
+       MYSQL_ROOT_PASSWORD: r00tp@ss!
+       MYSQL_DATABASE: test
+       MYSQL_USER: idpmgmt
+       MYSQL_PASSWORD: idpmgmt
+
+api:
+    image: idp-pw-api
+    container_name: api
+    volumes_from:
+         - data
+    ports:
+        - "8080:80"
+    links:
+        - db
+    env_file:
+        - ./common.env
+        - ./local.env
+    user: "${DOCKER_UIDGID}"
+
+#cron:
+#   image: idp-pw-api
+#   container_name: cron
+#   volumes_from:
+#       - data
+#   links:
+#       - db
+#   env_file:
+#       - ./common.env
+#       - ./local.env
+#   command: /data/run-cron.sh
+
+composer:
+   image: silintl/php-cli:latest
+   container_name: composer
+   volumes_from:
+       - data
+   working_dir: /data
+   command: composer install --prefer-dist
+
+yiimigrate:
+    image: silintl/php-cli:latest
+    container_name: yiimigrate
+    volumes_from:
+        - data
+    links:
+        - db
+    env_file:
+        - ./common.env
+        - ./local.env
+    user: "${DOCKER_UIDGID}"
+    working_dir: /data
+    command: bash -c "whenavail db 3306 100 ./yii migrate --interactive=0 && ./rebuildbasemodels.sh"
+
+yiimigratelocal:
+   image: silintl/php-cli:latest
+   container_name: yiimigratelocal
+   volumes_from:
+       - data
+   links:
+       - db
+   env_file:
+       - ./common.env
+       - ./local.env
+   working_dir: /data
+   command: whenavail db 3306 100 ./yii migrate --migrationPath=console/migrations-local/ --interactive=0
+
+yiimigratetestDb:
+   image: silintl/php-cli:latest
+   container_name: yiimigratetestDb
+   volumes_from:
+       - data
+   links:
+       - testDb
+   env_file:
+       - ./common.env
+       - ./local.env
+   working_dir: /data
+   command: whenavail testDb 3306 100 ./yii migrate --interactive=0
+   environment:
+     MYSQL_HOST: testDb
+     MYSQL_DATABASE: test
+
+yiimigratetestDblocal:
+   image: silintl/php-cli:latest
+   container_name: yiimigratetestDblocal
+   volumes_from:
+       - data
+   links:
+       - testDb
+   env_file:
+       - ./common.env
+       - ./local.env
+   working_dir: /data
+   command: whenavail testDb 3306 100 ./yii migrate --migrationPath=console/migrations-test/ --interactive=0
+   environment:
+     MYSQL_HOST: testDb
+     MYSQL_DATABASE: test
+
+codecept:
+   image: silintl/php-cli:latest
+   container_name: codecept
+   volumes_from:
+       - data
+   links:
+       - testDb
+   env_file:
+       - ./common.env
+       - ./local.env
+   working_dir: /data
+   entrypoint: whenavail testDb 3306 100 codecept
+   command: run unit
+   environment:
+     MYSQL_HOST: testDb
+     MYSQL_DATABASE: test

@@ -1,0 +1,8 @@
+# Vagrant folder
+.vagrant/
+
+# phpstorm project files
+.idea/
+
+# local config files
+local.env
