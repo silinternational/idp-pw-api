@@ -39,5 +39,8 @@ return [
     ],
     'params' => [
         'adminEmail' => $ADMIN_EMAIL,
+        'reset' => [
+            'lifetimeSeconds' => 3600, // 1 hour
+        ],
     ],
 ];
