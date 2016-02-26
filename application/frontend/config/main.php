@@ -38,6 +38,46 @@ return [
             'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
+                /*
+                 * Auth routes
+                 */
+                'GET /auth/login' => 'auth/login',
+                'GET /auth/logout' => 'auth/logout',
+                'POST /auth/login/token' => 'auth/token',
+
+                /*
+                 * Config routes
+                 */
+                'GET /config' => 'config/index',
+
+                /*
+                 * Method routes
+                 */
+                'GET /method' => 'method/index',
+                'GET /method/{id}' => 'method/view',
+                'POST /method' => 'method/create',
+                'PUT /method/{id}' => 'method/update',
+                'DELETE /method/{id}' => 'method/delete',
+
+                /*
+                 * Password routes
+                 */
+                'GET /password' => 'password/view',
+                'PUT /password' => 'password/update',
+
+                /*
+                 * Reset routes
+                 */
+                'POST /reset' => 'reset/create',
+                'PUT /reset/{id}' => 'reset/update',
+                'PUT /reset/{id}/resend' => 'reset/resend',
+                'PUT /reset/{id}/validate' => 'reset/validate',
+
+                /*
+                 * User  routes
+                 */
+                'GET /user/me' => 'user/me',
+
             ]
         ]
     ],
