@@ -8,6 +8,9 @@ filter:
     excluded_paths:
         - application/requirements.php
         - application/vendor/*
+        - application/console/migrations/*
+        - application/console/migrations-local/*
+        - application/console/migrations-test/*
         - application/console/runtime/*
         - application/common/models/*Base.php
         - application/tests/acceptance/AcceptanceTester.php
@@ -16,6 +19,7 @@ filter:
         - application/tests/codeception/bin/_bootstrap.php
         - application/tests/codeception/common/_bootstrap.php
         - application/tests/codeception/common/_support/*
+        - application/tests/codeception/console/_bootstrap.php
         - application/tests/codeception/console/_support/*
         - application/tests/functional/FunctionalTester.php
         - application/tests/unit/UnitTester.php

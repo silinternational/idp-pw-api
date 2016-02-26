@@ -17,6 +17,9 @@ class Reset extends ResetBase
     const TYPE_SUPERVISOR = 'supervisor';
     const TYPE_SPOUSE = 'spouse';
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return ArrayHelper::merge(
@@ -42,7 +45,7 @@ class Reset extends ResetBase
     /**
      * Calculate expiration timestamp based on given timestamp and configured reset lifetime
      * @param null $time
-     * @return int|null
+     * @return integer|null
      */
     public static function getExpireTimestamp($time=null)
     {
