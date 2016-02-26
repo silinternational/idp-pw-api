@@ -1,0 +1,22 @@
+db:
+    image: silintl/mariadb:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: r00tp@ss!
+        MYSQL_DATABASE: test
+        MYSQL_USER: idpmgmt
+        MYSQL_PASSWORD: idpmgmt
+
+api:
+    build:
+        image: silintl/idp-pw-api
+        dockerfile_path: ./Dockerfile
+    links:
+        - db
+    environment:
+        MYSQL_HOST: db
+        MYSQL_DATABASE: test
+        MYSQL_USER: idpmgmt
+        MYSQL_PASSWORD: idpmgmt
+    working_dir: /data
+    command: /data/run-tests.sh
+

@@ -1,0 +1,3 @@
+- name: test
+  service: api
+  command: whenavail db 3306 100 /data/run-tests.sh
