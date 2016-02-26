@@ -21,8 +21,8 @@ class Method extends MethodBase
         return ArrayHelper::merge(
             [
                 [
-                    ['type'], 'in', 'range' => [self::TYPE_EMAIL,self::TYPE_PHONE],
-                    'message' => 'Method type must be either '.self::TYPE_EMAIL.' or '.self::TYPE_PHONE.'.',
+                    ['type'], 'in', 'range' => [self::TYPE_EMAIL, self::TYPE_PHONE],
+                    'message' => 'Method type must be either ' . self::TYPE_EMAIL . ' or ' . self::TYPE_PHONE . '.',
                 ],
 
                 [

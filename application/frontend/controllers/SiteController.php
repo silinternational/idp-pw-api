@@ -18,7 +18,7 @@ class SiteController extends Controller
 
     public function behaviors()
     {
-        return ArrayHelper::merge(parent::behaviors(),[
+        return ArrayHelper::merge(parent::behaviors(), [
             [
                 'class' => 'yii\filters\ContentNegotiator',
                 'formats' => [
@@ -46,7 +46,7 @@ class SiteController extends Controller
         /**
          * Redirect to Doorman UI
          */
-        return $this->redirect(\Yii::$app->params['ui_url'],301);
+        return $this->redirect(\Yii::$app->params['ui_url'], 301);
     }
 
     public function actionSystemStatus()
@@ -54,12 +54,12 @@ class SiteController extends Controller
         /**
          * Check for DB connection
          */
-        try{
+        try {
             Reset::find()->all();
             return [];
         } catch (\Exception $e) {
             throw new ServerErrorHttpException(
-                'Unable to connect to db, error code '.$e->getCode(),
+                'Unable to connect to db, error code ' . $e->getCode(),
                 $e->getCode()
             );
         }
