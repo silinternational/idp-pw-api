@@ -8,6 +8,9 @@ filter:
     excluded_paths:
         - application/vendor/*
         - application/console/runtime/*
+        - application/tests/acceptance/AcceptanceTester.php
+        - application/tests/acceptance/FunctionalTester.php
+        - application/tests/acceptance/UnitTester.php
 
 ########### [End of project-specific section] ############
 
