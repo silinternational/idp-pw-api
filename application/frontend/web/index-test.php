@@ -14,6 +14,4 @@ $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../config/main.php')
 );
 
-//$config = require(__DIR__ . '/../../tests/codeception/config/frontend/acceptance.php');
-
 (new yii\web\Application($config))->run();
