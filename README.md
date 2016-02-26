@@ -1,6 +1,8 @@
 # idp-pw-api
 Backend API for Identity Provider Password Management
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silinternational/idp-pw-api/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/silinternational/idp-pw-api/?branch=develop)
+
 ## Dev Requirements
 
 ### Linux
