@@ -28,7 +28,7 @@ class User extends UserBase implements IdentityInterface
                 ],
 
                 [
-                    ['created'],'default', 'value' => Utils::getDatetime(),
+                    ['created'], 'default', 'value' => Utils::getDatetime(),
                 ],
 
                 [

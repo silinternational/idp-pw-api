@@ -45,10 +45,10 @@ return [
         'saml' => [
             'default-sp' => 'default-sp',
             'fields' => [
-                'idp_uid' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
-                'first_name' => ['field' => 'givenName', 'element' => 0 ],
-                'last_name' => ['field' => 'sn', 'element' => 0 ],
-                'email' => ['field' => 'mail', 'element' => 0 ],
+                'idp_uid' => ['field' => 'eduPersonPrincipalName', 'element' => 0],
+                'first_name' => ['field' => 'givenName', 'element' => 0],
+                'last_name' => ['field' => 'sn', 'element' => 0],
+                'email' => ['field' => 'mail', 'element' => 0],
                 'groups' => ['field' => 'groups'],
                 'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
             ]
