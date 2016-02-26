@@ -36,7 +36,7 @@ class MethodBase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'type', 'value', 'verified', 'created'], 'required'],
+            [['user_id', 'type', 'value', 'created'], 'required'],
             [['user_id', 'verified', 'verification_attempts'], 'integer'],
             [['type'], 'string'],
             [['verification_expires', 'created'], 'safe'],

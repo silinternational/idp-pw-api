@@ -15,7 +15,7 @@ class Reset extends ResetBase
 
     const TYPE_METHOD = 'method';
     const TYPE_SUPERVISOR = 'supervisor';
-    const TYPE_SPOUSE = 'SPOUSE';
+    const TYPE_SPOUSE = 'spouse';
 
     public function rules()
     {

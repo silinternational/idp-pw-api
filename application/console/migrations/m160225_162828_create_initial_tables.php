@@ -43,7 +43,7 @@ class m160225_162828_create_initial_tables extends Migration
                 'user_id' => 'int(11) not null',
                 'type' => "enum('email','phone') not null",
                 'value' => 'varchar(255) not null',
-                'verified' => 'boolean not null',
+                'verified' => 'boolean not null default false',
                 'verification_code' => 'varchar(64) null',
                 'verification_attempts' => 'smallint null',
                 'verification_expires' => 'datetime null',

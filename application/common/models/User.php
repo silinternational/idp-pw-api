@@ -59,7 +59,7 @@ class User extends UserBase implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne($token);
+        return null;
     }
 
     /**

@@ -8,14 +8,14 @@ class Utils
 
     const DT_Format = 'Y-m-d H:i:s';
 
-    public static function getDatetime($timestamp=false)
+    public static function getDatetime($timestamp=null)
     {
         $timestamp = $timestamp ?: time();
 
         return date(self::DT_Format,$timestamp);
     }
 
-    public static function getIso8601($timestamp=false)
+    public static function getIso8601($timestamp=null)
     {
         $timestamp = $timestamp ?: time();
         return date('c', strtotime($timestamp));
