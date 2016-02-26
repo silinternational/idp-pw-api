@@ -6,12 +6,19 @@ filter:
     dependency_paths:
         - application/vendor/*
     excluded_paths:
+        - application/requirements.php
         - application/vendor/*
         - application/console/runtime/*
         - application/common/models/*Base.php
         - application/tests/acceptance/AcceptanceTester.php
         - application/tests/acceptance/FunctionalTester.php
         - application/tests/acceptance/UnitTester.php
+        - application/tests/codeception/bin/_bootstrap.php
+        - application/tests/codeception/common/_bootstrap.php
+        - application/tests/codeception/common/_support/*
+        - application/tests/codeception/console/_support/*
+        - application/tests/functional/FunctionalTester.php
+        - application/tests/unit/UnitTester.php
 
 ########### [End of project-specific section] ############
 

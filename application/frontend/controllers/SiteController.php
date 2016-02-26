@@ -1,12 +1,9 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\EmailQueue;
+use common\models\Reset;
 use Yii;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
@@ -58,10 +55,13 @@ class SiteController extends Controller
          * Check for DB connection
          */
         try{
-            EmailQueue::find()->all();
+            Reset::find()->all();
             return [];
         } catch (\Exception $e) {
-            throw new ServerErrorHttpException("Unable to connect to db, error code ".$e->getCode(),$e->getCode());
+            throw new ServerErrorHttpException(
+                'Unable to connect to db, error code '.$e->getCode(),
+                $e->getCode()
+            );
         }
 
     }

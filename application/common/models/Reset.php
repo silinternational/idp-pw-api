@@ -31,13 +31,19 @@ class Reset extends ResetBase
 
                 [
                     ['type'], 'in', 'range' => [self::TYPE_METHOD, self::TYPE_SUPERVISOR, self::TYPE_SPOUSE],
-                    'message' => 'Reset type must be either '.self::TYPE_METHOD.' or '.self::TYPE_SUPERVISOR.' or '.self::TYPE_SPOUSE.' .',
+                    'message' => 'Reset type must be either '.self::TYPE_METHOD.' or '.
+                        self::TYPE_SUPERVISOR.' or '.self::TYPE_SPOUSE.' .',
                 ],
             ],
             parent::rules()
         );
     }
 
+    /**
+     * Calculate expiration timestamp based on given timestamp and configured reset lifetime
+     * @param null $time
+     * @return int|null
+     */
     public static function getExpireTimestamp($time=null)
     {
         $time = is_null($time) ? time() : $time;

@@ -1,7 +1,7 @@
 <?php
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$FRONT_COOKIE_KEY = getenv('FRONT_COOKIE_KEY') ?: null;
+$frontCookieKey = getenv('FRONT_COOKIE_KEY') ?: null;
 
 return [
     'id' => 'app-frontend',
@@ -28,7 +28,7 @@ return [
         'request' => [
             'enableCookieValidation' => true,
             'enableCsrfValidation' => true,
-            'cookieValidationKey' => $FRONT_COOKIE_KEY,
+            'cookieValidationKey' => $frontCookieKey,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]

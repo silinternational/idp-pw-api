@@ -56,6 +56,8 @@ api:
 composer:
    image: silintl/php-cli:latest
    container_name: composer
+   volumes:
+       - ${COMPOSER_CONFIG_FILE}:/root/.composer/config.json
    volumes_from:
        - data
    working_dir: /data

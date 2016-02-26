@@ -6,13 +6,13 @@ use yii\base\Security;
 class Utils
 {
 
-    const DT_Format = 'Y-m-d H:i:s';
+    const DT_FORMAT = 'Y-m-d H:i:s';
 
     public static function getDatetime($timestamp=null)
     {
         $timestamp = $timestamp ?: time();
 
-        return date(self::DT_Format,$timestamp);
+        return date(self::DT_FORMAT,$timestamp);
     }
 
     public static function getIso8601($timestamp=null)
@@ -63,7 +63,7 @@ class Utils
     {
         foreach ($map as $key => $value) {
             if(!array_key_exists($key, $attributes)){
-                throw new \Exception("SAML attributes missing attribute: $key",1454436522);
+                throw new \Exception(sprintf('SAML attributes missing attribute: %s',$key),1454436522);
             }
         }
     }

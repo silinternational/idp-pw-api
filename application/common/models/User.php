@@ -72,7 +72,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Returning null to explicitly disable this
-     * @return string current user auth key
+     * @return string|null current user auth key
      */
     public function getAuthKey()
     {
