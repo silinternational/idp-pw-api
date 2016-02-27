@@ -3,12 +3,11 @@ namespace frontend\controllers;
 
 use frontend\components\BaseRestController;
 
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
-class UserController extends BaseRestController
+class MethodController extends BaseRestController
 {
-
     /**
      * Access Control Filter
      * NEEDS TO BE UPDATED FOR EVERY ACTION
@@ -25,7 +24,7 @@ class UserController extends BaseRestController
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['me'],
+                        'actions' => ['index','view'],
                         'roles' => ['?'],
                     ],
                 ]
@@ -34,10 +33,12 @@ class UserController extends BaseRestController
     }
 
     /**
-     * @return null|\yii\web\IdentityInterface
+     * Return list of available reset methods for user.
+     * If user is not authenticated they should be masked.
+     * @return array
      */
-    public function actionMe()
+    public function actionIndex()
     {
-        return \Yii::$app->user->identity;
+        
     }
 }

@@ -39,7 +39,7 @@ api:
     env_file:
         - ./common.env
         - ./local.env
-    user: "${DOCKER_UIDGID}"
+
 
 #cron:
 #   image: idp-pw-api

@@ -2,19 +2,19 @@
 namespace frontend\components;
 
 use yii\helpers\ArrayHelper;
-use yii\rest\ActiveController;
+use yii\rest\Controller;
 use yii\filters\AccessControl;
 use yii\filters\Cors;
 use yii\web\ForbiddenHttpException;
 use yii\web\UnauthorizedHttpException;
 
 
-class BaseController extends ActiveController
+class BaseRestController extends Controller
 {
 
     /**
      * Enable CORS support
-     * @todo update cors['Orgin'] for valid options
+     * @todo update cors['Origin'] for valid options
      * @return array
      */
     public function behaviors()

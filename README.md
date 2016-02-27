@@ -25,10 +25,16 @@ Backend API for Identity Provider Password Management
 ## Setup
 1. Clone this repo
 2. Copy ```local.env.dist``` to ```local.env``` and update values as appropriate
-3. Follow operating system specific steps below
-4. You should be able to access the API using a REST client or your browser
+3. Setup environment variable for ```DOCKER_UIDGID``` in the format of ```"uid:gid"```.
+   This will run some of the containers as you so that they can write to your host filesystem
+   and the file permissions will be owned you you.
+4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
+   to your composer config.json file, for example: ```/home/my/.composer/config.json```. 
+   This will allow the composer container to use your github auth token when pulling dependencies.
+5. Follow operating system specific steps below
+6. You should be able to access the API using a REST client or your browser
    at http://idp-pw-api.local:8080.
-5. You'll probably also want the web interface for this application which you can 
+7. You'll probably also want the web interface for this application which you can 
    clone at ```link coming soon```
 
 ### Additional setup for Linux
