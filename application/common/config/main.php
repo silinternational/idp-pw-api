@@ -8,6 +8,8 @@ $mysqlUser = getenv('MYSQL_USER');
 $mysqlPassword = getenv('MYSQL_PASSWORD');
 $adminEmail = getenv('ADMIN_EMAIL');
 $appEnv = getenv('APP_ENV');
+$recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
+$recaptchaSecretKey = getenv('RECAPTCHA_SECRET_KEY');
 
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
@@ -95,7 +97,10 @@ return [
                 'displayWarnings' => true,
             ]
         ],
-        'recaptchaKey' => '',
+        'recaptcha' => [
+            'siteKey' => $recaptchaSiteKey,
+            'secretKey' => $recaptchaSecretKey,
+        ],
         'support' => [
             'phone' => '',
             'email' => '',

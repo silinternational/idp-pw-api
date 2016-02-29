@@ -15,7 +15,7 @@ class m160225_162828_create_initial_tables extends Migration
             '{{user}}',
             [
                 'id' => 'pk',
-                'uuid' => 'char(32) not null',
+                'uid' => 'char(32) not null',
                 'employee_id' => 'varchar(32) not null',
                 'first_name' => 'varchar(255) not null',
                 'last_name' => 'varchar(255) not null',
@@ -29,7 +29,7 @@ class m160225_162828_create_initial_tables extends Migration
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
-        $this->createIndex('uq_user_uuid','{{user}}','uuid',true);
+        $this->createIndex('uq_user_uid','{{user}}','uid',true);
         $this->createIndex('uq_user_employee_id','{{user}}','employee_id',true);
         $this->createIndex('uq_user_email','{{user}}','email',true);
 
@@ -40,6 +40,7 @@ class m160225_162828_create_initial_tables extends Migration
             '{{method}}',
             [
                 'id' => 'pk',
+                'uid' => 'char(32) not null',
                 'user_id' => 'int(11) not null',
                 'type' => "enum('email','phone') not null",
                 'value' => 'varchar(255) not null',
@@ -52,6 +53,7 @@ class m160225_162828_create_initial_tables extends Migration
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
         $this->addForeignKey('fk_method_user_id','{{method}}','user_id','{{user}}','id','CASCADE','NO ACTION');
+        $this->createIndex('uq_method_uid','{{method}}','uid',true);
         $this->createIndex('uq_method_user_type_value','{{method}}',['user_id','type','value'],true);
         $this->createIndex('uq_method_verification_code','{{method}}','verification_code',true);
 
@@ -62,8 +64,9 @@ class m160225_162828_create_initial_tables extends Migration
             '{{reset}}',
             [
                 'id' => 'pk',
+                'uid' => 'char(32) not null',
                 'user_id' => 'int(11) not null',
-                'type' => "enum('method','supervisor','spouse') not null",
+                'type' => "enum('primary', 'method','supervisor','spouse') not null default 'primary'",
                 'method_id' => 'int(11) null',
                 'code' => 'varchar(64) not null',
                 'attempts' => 'smallint not null default 0',
@@ -75,6 +78,7 @@ class m160225_162828_create_initial_tables extends Migration
         );
         $this->addForeignKey('fk_reset_user_id','{{reset}}','user_id','{{user}}','id','CASCADE','NO ACTION');
         $this->addForeignKey('fk_reset_method_id','{{reset}}','method_id','{{method}}','id','CASCADE','NO ACTION');
+        $this->createIndex('uq_reset_uid','{{reset}}','uid',true);
         $this->createIndex('uq_reset_user_id','{{reset}}','user_id',true);
         $this->createIndex('uq_reset_code','{{reset}}','code',true);
 
@@ -101,7 +105,7 @@ class m160225_162828_create_initial_tables extends Migration
                 'id' => 'pk',
                 'user_id' => 'int(11) not null',
                 'scenario' => "enum('change','reset') not null",
-                'reset_type' => "enum('method','supervisor','spouse') not null",
+                'reset_type' => "enum('primary','method','supervisor','spouse') not null",
                 'method_type' => "enum('email','phone') not null",
                 'masked_value' => 'varchar(255) not null',
                 'created' => 'datetime not null',

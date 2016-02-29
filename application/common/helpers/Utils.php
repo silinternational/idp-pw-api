@@ -85,4 +85,22 @@ class Utils
         return null;
     }
 
+    /**
+     * @param string $phone
+     * @return string
+     */
+    public static function maskPhone($phone)
+    {
+        return '';
+    }
+
+    /**
+     * @param string $email
+     * @return string
+     */
+    public static function maskEmail($email)
+    {
+        return '';
+    }
+
 }
