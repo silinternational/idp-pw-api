@@ -26,7 +26,7 @@ class ErrorAction extends YiiErrorAction
             $name = $this->defaultName ?: \Yii::t('yii', 'Error');
         }
         if ($code) {
-            $name .= " (#$code)";
+            $name .= ' (#' . $code . ')';
         }
 
         if ($exception instanceof UserException) {

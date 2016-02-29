@@ -9,7 +9,8 @@ class Utils
     const DT_FORMAT = 'Y-m-d H:i:s';
 
     /**
-     * @param integer $timestamp
+     * @param integer|null $timestamp
+     * @return integer
      */
     public static function getDatetime($timestamp=null)
     {
@@ -18,12 +19,20 @@ class Utils
         return date(self::DT_FORMAT,$timestamp);
     }
 
+    /**
+     * @param integer|null $timestamp
+     * @return string
+     */
     public static function getIso8601($timestamp=null)
     {
         $timestamp = $timestamp ?: time();
         return date('c', strtotime($timestamp));
     }
 
+    /**
+     * @param int $length
+     * @return string
+     */
     public static function generateRandomString($length=32)
     {
         $security = new Security();
@@ -71,6 +80,11 @@ class Utils
         }
     }
 
+    /**
+     * @param array $array
+     * @param string $key
+     * @return bool
+     */
     public static function isArrayEntryTruthy($array, $key)
     {
         return (is_array($array) && isset($array[$key]) && $array[$key]);
@@ -94,6 +108,9 @@ class Utils
      */
     public static function maskPhone($phone)
     {
+        /**
+         * @todo mask phone number to something like "+77 #########234"
+         */
         return '';
     }
 
@@ -103,6 +120,9 @@ class Utils
      */
     public static function maskEmail($email)
     {
+        /**
+         * @todo mask email to something like "ab******@s**.org"
+         */
         return '';
     }
 

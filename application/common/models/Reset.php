@@ -48,7 +48,9 @@ class Reset extends ResetBase
                 ],
 
                 [
-                    ['type'], 'in', 'range' => [self::TYPE_PRIMARY, self::TYPE_METHOD, self::TYPE_SUPERVISOR, self::TYPE_SPOUSE],
+                    ['type'], 'in', 'range' => [
+                        self::TYPE_PRIMARY, self::TYPE_METHOD, self::TYPE_SUPERVISOR, self::TYPE_SPOUSE
+                    ],
                     'message' => 'Reset type must be either ' . self::TYPE_METHOD . ' or ' .
                         self::TYPE_SUPERVISOR . ' or ' . self::TYPE_SPOUSE . ' .',
                 ],
@@ -78,7 +80,7 @@ class Reset extends ResetBase
      * @throws NotFoundHttpException
      * @throws \Exception
      */
-    public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $method_id = null) {
+    public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $methodId = null) {
         $reset = new Reset();
         $reset->user_id = $user->id;
         $reset->type = $type;
@@ -86,12 +88,12 @@ class Reset extends ResetBase
         /*
          * If $method_id is provided, make sure user owns it
          */
-        $method = Method::findOne(['user_id' => $user->id, 'id' => $method_id]);
+        $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId]);
         if ( ! $method) {
             throw new NotFoundHttpException('Requested method not found', 1456608142);
         }
 
-        $reset->method_id = $method_id;
+        $reset->method_id = $methodId;
 
         if ( ! $reset->save()) {
             throw new \Exception('Unable to create new reset', 1456608028);

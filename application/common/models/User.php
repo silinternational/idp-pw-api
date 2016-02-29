@@ -19,7 +19,7 @@ class User extends UserBase implements IdentityInterface
      * Holds personnelData
      * @var array
      */
-    public $personnelData;
+    public $personnelData = [];
 
     /**
      * Validation rules, applies User rules before UserBase rules
@@ -102,7 +102,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function getPersonnelData()
     {
-        if ($this->personnelData) {
+        if ( ! empty($this->personnelData)) {
             return $this->personnelData;
         }
 
@@ -134,11 +134,7 @@ class User extends UserBase implements IdentityInterface
     public function hasSupervisor()
     {
         $personnelData = $this->getPersonnelData();
-        if ($personnelData['supervisor']) {
-            return true;
-        }
-
-        return false;
+        return (bool) $personnelData['supervisor'];
     }
 
     /**
@@ -147,11 +143,7 @@ class User extends UserBase implements IdentityInterface
     public function hasSpouse()
     {
         $personnelData = $this->getPersonnelData();
-        if ($personnelData['spouse']) {
-            return true;
-        }
-
-        return false;
+        return (bool) $personnelData['spouse'];
     }
 
     /**

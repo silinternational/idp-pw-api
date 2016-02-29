@@ -44,7 +44,7 @@ class ResetController extends BaseRestController
         $verificationToken = \Yii::$app->request->post('verification_token');
 
         if ( ! $username || ! $verificationToken) {
-            throw new BadRequestHttpException("Missing username or verification_token");
+            throw new BadRequestHttpException('Missing username or verification_token');
         }
 
         /*

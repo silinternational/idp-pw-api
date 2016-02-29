@@ -69,7 +69,7 @@ class BaseRestController extends Controller
      * If the user is logged in but not allowed, a [[UnauthorizedHttpException]] should be thrown.
      *
      * @param string $action the ID of the action to be executed
-     * @param \yii\base\Model $model the model to be accessed. If null, it means no specific model is being accessed.
+     * @param \yii\base\Model|null $model the model to be accessed. If null, it means no specific model is being accessed.
      * @param array $params additional parameters
      * @throws UnauthorizedHttpException if the user is not logged in
      * @throws ForbiddenHttpException if the user is logged in but not authorized for the call
@@ -80,7 +80,7 @@ class BaseRestController extends Controller
         $appUser = \Yii::$app->user;
 
         // Not logged in
-        if ( ! $appUser or $appUser->isGuest) {
+        if ( ! $appUser || $appUser->isGuest) {
             throw new UnauthorizedHttpException;
         }
 

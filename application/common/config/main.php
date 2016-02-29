@@ -14,9 +14,6 @@ $recaptchaSecretKey = getenv('RECAPTCHA_SECRET_KEY');
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
-//        'cache' => [
-//            'class' => 'yii\caching\FileCache',
-//        ],
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => sprintf('mysql:host=%s;dbname=%s',$mysqlHost,$mysqlDatabase),
@@ -46,7 +43,7 @@ return [
                         try {
                             $appUser = \Yii::$app->user;
                         } catch (\Exception $e) {
-                            $appUser = Null;
+                            $appUser = null;
                         }
                         if ($appUser && ! \Yii::$app->user->isGuest) {
                             $prefixData['user'] = \Yii::$app->user->identity->email;
