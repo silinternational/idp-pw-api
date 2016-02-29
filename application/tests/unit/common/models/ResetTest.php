@@ -34,11 +34,11 @@ class ResetTest extends DbTestCase
         $user1 = $this->users('user1');
         $reset = new Reset();
         $reset->user_id = $user1->id;
-        if (!$reset->save()) {
-            $this->fail('Failed to create Reset: '.print_r($reset->getFirstErrors(),true));
+        if ( ! $reset->save()) {
+            $this->fail('Failed to create Reset: ' . print_r($reset->getFirstErrors(), true));
         }
 
-        $this->assertEquals(32,strlen($reset->uid));
+        $this->assertEquals(32, strlen($reset->uid));
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
         $this->assertNull($reset->method_id);
         $this->assertNull($reset->code);
@@ -77,7 +77,7 @@ class ResetTest extends DbTestCase
 
         $reset = Reset::findOrCreate($user);
 
-        $this->assertEquals(32,strlen($reset->uid));
+        $this->assertEquals(32, strlen($reset->uid));
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
         $this->assertNull($reset->method_id);
         $this->assertNull($reset->code);
@@ -92,7 +92,7 @@ class ResetTest extends DbTestCase
         $existing = $this->resets('reset1');
         $new = Reset::findOrCreate($existing->user);
 
-        $this->assertEquals($existing->id,$new->id);
+        $this->assertEquals($existing->id, $new->id);
     }
 
 

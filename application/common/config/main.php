@@ -17,7 +17,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => sprintf('mysql:host=%s;dbname=%s',$mysqlHost,$mysqlDatabase),
+            'dsn' => sprintf('mysql:host=%s;dbname=%s', $mysqlHost, $mysqlDatabase),
             'username' => $mysqlUser,
             'password' => $mysqlPassword,
             'charset' => 'utf8',

@@ -10,9 +10,9 @@ class Component extends YiiComponent implements PersonnelInterface
 {
     public function findByEmployeeId($employeeId)
     {
-        $data = include __DIR__.'/data.php';
+        $data = include __DIR__ . '/data.php';
         foreach ($data as $user) {
-            if($user['employeeId'] == $employeeId){
+            if ($user['employeeId'] == $employeeId) {
                 return $this->createPersonnelUserFromData($user);
             }
         }
@@ -21,9 +21,9 @@ class Component extends YiiComponent implements PersonnelInterface
 
     public function findByUsername($username)
     {
-        $data = include __DIR__.'/data.php';
+        $data = include __DIR__ . '/data.php';
         foreach ($data as $user) {
-            if($user['username'] == $username){
+            if ($user['username'] == $username) {
                 return $this->createPersonnelUserFromData($user);
             }
         }
@@ -32,9 +32,9 @@ class Component extends YiiComponent implements PersonnelInterface
 
     public function findByEmail($email)
     {
-        $data = include __DIR__.'/data.php';
+        $data = include __DIR__ . '/data.php';
         foreach ($data as $user) {
-            if($user['email'] == $email){
+            if ($user['email'] == $email) {
                 return $this->createPersonnelUserFromData($user);
             }
         }

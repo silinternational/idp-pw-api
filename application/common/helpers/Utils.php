@@ -50,13 +50,13 @@ class Utils
     {
         $attrs = [];
 
-        foreach($map as $attr => $details){
-            if(isset($details['element'])){
-                if(isset($attributes[$details['field']][$details['element']])){
+        foreach($map as $attr => $details) {
+            if(isset($details['element'])) {
+                if(isset($attributes[$details['field']][$details['element']])) {
                     $attrs[$attr] = $attributes[$details['field']][$details['element']];
                 }
             } else {
-                if(isset($attributes[$details['field']])){
+                if(isset($attributes[$details['field']])) {
                     $attrs[$attr] = $attributes[$details['field']];
                 }
             }
@@ -74,8 +74,8 @@ class Utils
     public static function assertHasRequiredSamlAttributes($attributes, $map)
     {
         foreach ($map as $key => $value) {
-            if(!array_key_exists($key, $attributes)){
-                throw new \Exception(sprintf('SAML attributes missing attribute: %s',$key),1454436522);
+            if ( ! array_key_exists($key, $attributes)) {
+                throw new \Exception(sprintf('SAML attributes missing attribute: %s', $key), 1454436522);
             }
         }
     }
@@ -96,7 +96,7 @@ class Utils
      */
     public static function getCurrentUser()
     {
-        if(\Yii::$app->user && !\Yii::$app->user->isGuest){
+        if(\Yii::$app->user && !\Yii::$app->user->isGuest) {
             return \Yii::$app->user->identity;
         }
         return null;
