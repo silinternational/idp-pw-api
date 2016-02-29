@@ -1,12 +1,11 @@
 <?php
 namespace common\models;
 
-use common\components\PersonnelInterface;
 use Yii;
+use common\components\PersonnelInterface;
+use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
-
-use common\helpers\Utils;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -57,14 +56,14 @@ class User extends UserBase implements IdentityInterface
         /*
          * If username looks like an email address, search by email
          */
-        if (substr_count($username,'@') > 0) {
+        if (substr_count($username, '@') > 0) {
             $criteria = ['email' => $username];
         } else {
             $criteria = ['username' => $username];
         }
 
         $user = self::findOne($criteria);
-        if (!$user) {
+        if ( ! $user) {
             /**
              * @todo integrate with personnel backend to find user and create local user
              *       throw NotFoundHttpException if not found
@@ -87,7 +86,7 @@ class User extends UserBase implements IdentityInterface
     public function getMaskedMethods()
     {
         $methods = [];
-        foreach($this->methods as $method) {
+        foreach ($this->methods as $method) {
             $methods[] = [
                 'uid' => $method->uid,
                 'type' => $method->type,
@@ -124,7 +123,7 @@ class User extends UserBase implements IdentityInterface
          * Fetch data from Personnel system and cache it
          */
         $this->fetchPersonnelData();
-        \Yii::$app->session->set('personnelData',$this->personnelData);
+        \Yii::$app->session->set('personnelData', $this->personnelData);
 
         return $this->personnelData;
     }
@@ -187,7 +186,7 @@ class User extends UserBase implements IdentityInterface
         } elseif ($this->email) {
             $this->personnelData = $personnel->findByEmail($this->email);
         } else {
-            throw new \Exception('Not enough information to find personnel data',1456690741);
+            throw new \Exception('Not enough information to find personnel data', 1456690741);
         }
     }
 

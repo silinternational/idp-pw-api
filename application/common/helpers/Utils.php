@@ -8,6 +8,9 @@ class Utils
 
     const DT_FORMAT = 'Y-m-d H:i:s';
 
+    /**
+     * @param integer $timestamp
+     */
     public static function getDatetime($timestamp=null)
     {
         $timestamp = $timestamp ?: time();

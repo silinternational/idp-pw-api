@@ -19,7 +19,7 @@ class ResetController extends BaseRestController
      */
     public function behaviors()
     {
-        return ArrayHelper::merge(parent::behaviors(),[
+        return ArrayHelper::merge(parent::behaviors(), [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
@@ -43,7 +43,7 @@ class ResetController extends BaseRestController
         $username = \Yii::$app->request->post('username');
         $verificationToken = \Yii::$app->request->post('verification_token');
 
-        if (!$username || !$verificationToken) {
+        if ( ! $username || ! $verificationToken) {
             throw new BadRequestHttpException("Missing username or verification_token");
         }
 
@@ -58,7 +58,7 @@ class ResetController extends BaseRestController
          * Find or create user
          */
         $user = User::findOrCreate($username);
-        if(!$user->reset){
+        if ( ! $user->reset) {
 
         }
 
