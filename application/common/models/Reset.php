@@ -51,8 +51,8 @@ class Reset extends ResetBase
                     ['type'], 'in', 'range' => [
                         self::TYPE_PRIMARY, self::TYPE_METHOD, self::TYPE_SUPERVISOR, self::TYPE_SPOUSE
                     ],
-                    'message' => 'Reset type must be either ' . self::TYPE_METHOD . ' or ' .
-                        self::TYPE_SUPERVISOR . ' or ' . self::TYPE_SPOUSE . ' .',
+                    'message' => 'Reset type must be either ' . self::TYPE_PRIMARY . ' or ' . self::TYPE_METHOD .
+                        ' or ' . self::TYPE_SUPERVISOR . ' or ' . self::TYPE_SPOUSE . ' .',
                 ],
             ],
             parent::rules()
@@ -85,7 +85,7 @@ class Reset extends ResetBase
         /*
          * Find existing or create new Reset
          */
-        $reset = self::findOne(['user_id' => $user->id]);
+        $reset = $user->reset;
         if ($reset === null) {
             $reset = new Reset();
             $reset->user_id = $user->id;
@@ -144,8 +144,7 @@ class Reset extends ResetBase
                 $this->sendMethod();
                 break;
             default:
-                $this->sendPrimary();
-                break;
+                throw new \Exception('Reset is configured with unknown type.', 1456784825);
         }
     }
 
@@ -159,7 +158,7 @@ class Reset extends ResetBase
     public function sendSupervisor()
     {
         /**
-         * @todo if $this->user->getHasSupervisor(), send reset
+         * @todo if $this->user->hasSupervisor(), send reset
          *       code to $this->user->getSupervisorEmail()
          */
     }
@@ -167,7 +166,7 @@ class Reset extends ResetBase
     public function sendSpouse()
     {
         /**
-         * @todo if $this->user->getHasSpouse(), send reset
+         * @todo if $this->user->hasSpouse(), send reset
          *       code to $this->user->getSpouseEmail()
          */
     }

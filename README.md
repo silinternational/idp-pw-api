@@ -27,7 +27,7 @@ Backend API for Identity Provider Password Management
 2. Copy ```local.env.dist``` to ```local.env``` and update values as appropriate
 3. Setup environment variable for ```DOCKER_UIDGID``` in the format of ```"uid:gid"```.
    This will run some of the containers as you so that they can write to your host filesystem
-   and the file permissions will be owned you you.
+   and the file permissions will be owned you.
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```. 
    This will allow the composer container to use your github auth token when pulling dependencies.

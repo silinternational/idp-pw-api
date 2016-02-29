@@ -31,9 +31,11 @@ class PasswordChangeLog extends PasswordChangeLogBase
                 ],
 
                 [
-                    ['reset_type'], 'in', 'range' => [Reset::TYPE_METHOD, Reset::TYPE_SUPERVISOR, Reset::TYPE_SPOUSE],
-                    'message' => 'Reset type must be either ' . Reset::TYPE_METHOD . ' or ' .
-                        Reset::TYPE_SUPERVISOR . ' or ' . Reset::TYPE_SPOUSE . ' .',
+                    ['reset_type'], 'in', 'range' => [
+                        Reset::TYPE_PRIMARY, Reset::TYPE_METHOD, Reset::TYPE_SUPERVISOR, Reset::TYPE_SPOUSE
+                    ],
+                    'message' => 'Reset type must be either ' . Reset::TYPE_PRIMARY . ' or ' . Reset::TYPE_METHOD .
+                        ' or ' . Reset::TYPE_SUPERVISOR . ' or ' . Reset::TYPE_SPOUSE . ' .',
                 ],
 
                 [
