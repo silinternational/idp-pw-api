@@ -48,13 +48,13 @@ class MethodTest extends DbTestCase
     public function testGetMaskedValuePhone()
     {
         $method = $this->methods('method1');
-        $this->assertEquals('', $method->getMaskedValue());
+        $this->assertEquals('1,1234567890', $method->getMaskedValue());
     }
 
     public function testGetMaskedValueEmail()
     {
         $method = $this->methods('method2');
-        $this->assertEquals('', $method->getMaskedValue());
+        $this->assertEquals('email-1456769679@domain.org', $method->getMaskedValue());
     }
 
 

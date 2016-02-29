@@ -32,7 +32,7 @@ class ResetController extends BaseRestController
 
     /**
      * Create new reset process
-     * @returns array
+     * @return Reset
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */

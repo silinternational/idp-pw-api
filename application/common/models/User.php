@@ -95,11 +95,12 @@ class User extends UserBase implements IdentityInterface
 
 
     /**
+     * Update local user record if given properties are different than currently stored
      * @param string $firstName
      * @param string $lastName
      * @param string $username
      * @param string $email
-     * @return bool
+     * @return bool True if profile was updated, false if not
      * @throws \Exception
      */
     public function updateProfileIfNeeded($firstName, $lastName, $username, $email)
@@ -126,7 +127,7 @@ class User extends UserBase implements IdentityInterface
                 /**
                  * @todo add logging with model validation errors
                  */
-                throw new \Exception("Unable to update profile", 1456760819);
+                throw new \Exception('Unable to update profile', 1456760819);
             }
         }
         return false;

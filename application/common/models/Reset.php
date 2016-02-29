@@ -76,7 +76,7 @@ class Reset extends ResetBase
      * @param User $user
      * @param string [default=self::TYPE_PRIMARY] $type
      * @param integer|null [default=null] $method_id
-     * @returns Reset
+     * @return Reset
      * @throws NotFoundHttpException
      * @throws \Exception
      */
@@ -85,7 +85,7 @@ class Reset extends ResetBase
         /*
          * Find existing or create new Reset
          */
-        $reset = Reset::findOne(['user_id' => $user->id]);
+        $reset = self::findOne(['user_id' => $user->id]);
         if ($reset === null) {
             $reset = new Reset();
             $reset->user_id = $user->id;

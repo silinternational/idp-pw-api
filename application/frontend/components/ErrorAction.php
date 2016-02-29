@@ -34,6 +34,10 @@ class ErrorAction extends YiiErrorAction
         return $response;
     }
 
+    /**
+     * @param \Exception $exception
+     * @return int
+     */
     public function getCode($exception)
     {
         if ($exception instanceof HttpException) {
@@ -43,6 +47,10 @@ class ErrorAction extends YiiErrorAction
         }
     }
 
+    /**
+     * @param \Exception $exception
+     * @return string
+     */
     public function getName($exception)
     {
         if ($exception instanceof Exception) {
@@ -52,6 +60,10 @@ class ErrorAction extends YiiErrorAction
         }
     }
 
+    /**
+     * @param \Exception $exception
+     * @return string
+     */
     public function getMessage($exception)
     {
         if ($exception instanceof UserException) {
