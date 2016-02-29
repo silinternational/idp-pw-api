@@ -27,7 +27,7 @@ PARENTS=`git log --pretty=%P -n 1 ${CI_COMMIT_ID}`
 # Push coverage data to scrutinizer
 cd /data
 curl -Lo ocular.phar https://scrutinizer-ci.com/ocular.phar
-php ocular.phar code-coverage:upload --repository="g/silinternational/idp-pw-api" --revision="${CI_COMMIT_ID}" --parent="${PARENTS}" --format=php-clover tests/_output/coverage.xml
+php ocular.phar code-coverage:upload --repository="g/silinternational/idp-pw-api" --revision="${CI_COMMIT_ID}" --parent="${PARENTS}" --format=php-clover -n -vvv tests/_output/coverage.xml
 
 # If unit tests fail, make sure to exit with error status
 if [[ "$TESTRESULTS" -ne 0 ]]; then
