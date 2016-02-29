@@ -10,7 +10,7 @@ class Utils
 
     /**
      * @param integer|null $timestamp
-     * @return integer
+     * @return string
      */
     public static function getDatetime($timestamp=null)
     {

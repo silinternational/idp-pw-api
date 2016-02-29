@@ -1,16 +1,19 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\components\BaseRestController;
 
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+use common\models\Method;
 
 class MethodController extends BaseRestController
 {
     /**
      * Access Control Filter
      * NEEDS TO BE UPDATED FOR EVERY ACTION
+     * @return array
      */
     public function behaviors()
     {
@@ -35,10 +38,12 @@ class MethodController extends BaseRestController
     /**
      * Return list of available reset methods for user.
      * If user is not authenticated they should be masked.
-     * @return array
+     * @return Method[]
      */
     public function actionIndex()
     {
-        
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+        return $user->methods;
     }
 }
