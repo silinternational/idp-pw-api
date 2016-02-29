@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 set -x
-# Run database migrations
-whenavail db 3306 100 /data/yii migrate --interactive=0
-whenavail db 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test
 
 # Install composer dev dependencies
 cd /data
-composer install --prefer-dist --no-interaction
+composer install --prefer-dist --no-interaction --optimize-autoloader
+
+# Run database migrations
+whenavail db 3306 100 /data/yii migrate --interactive=0
+whenavail db 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test
 
 # Install and enable xdebug for code coverage
 apt-get install -y php5-xdebug git
 php5enmod xdebug
 
 # Run codeception tests
-
 ./vendor/bin/codecept run unit --coverage --coverage-xml
 TESTRESULTS=$?
 
