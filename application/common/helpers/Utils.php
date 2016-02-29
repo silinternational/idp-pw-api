@@ -111,7 +111,7 @@ class Utils
         /**
          * @todo mask phone number to something like "+77 #########234"
          */
-        return '';
+        return $phone;
     }
 
     /**
@@ -123,7 +123,7 @@ class Utils
         /**
          * @todo mask email to something like "ab******@s**.org"
          */
-        return '';
+        return $email;
     }
 
 }

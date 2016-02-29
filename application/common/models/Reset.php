@@ -207,7 +207,7 @@ class Reset extends ResetBase
 
     /**
      * Calculate expiration timestamp based on given timestamp and configured reset lifetime
-     * @param null $time
+     * @param null|integer $time
      * @return integer
      */
     public static function getExpireTimestamp($time = null)

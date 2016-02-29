@@ -15,25 +15,11 @@ class ErrorAction extends YiiErrorAction
             return '';
         }
 
-        if ($exception instanceof HttpException) {
-            $code = $exception->statusCode;
-        } else {
-            $code = $exception->getCode();
-        }
-        if ($exception instanceof Exception) {
-            $name = $exception->getName();
-        } else {
-            $name = $this->defaultName ?: \Yii::t('yii', 'Error');
-        }
-        if ($code) {
-            $name .= ' (#' . $code . ')';
-        }
+        $code = $this->getCode($exception);
+        $name = $this->getName($exception);
+        $message = $this->getMessage($exception);
 
-        if ($exception instanceof UserException) {
-            $message = $exception->getMessage();
-        } else {
-            $message = $this->defaultMessage ?: \Yii::t('yii', 'An internal server error occurred.');
-        }
+        $name .= ($code ? ' (#' . $code . ')' : '');
 
         $response = [
             'name' => $name,
@@ -41,10 +27,37 @@ class ErrorAction extends YiiErrorAction
             'code' => $code,
         ];
 
-        if(YII_DEBUG){
+        if (YII_DEBUG) {
             $response['exception'] = $exception;
         }
 
         return $response;
+    }
+
+    public function getCode($exception)
+    {
+        if ($exception instanceof HttpException) {
+            return $exception->statusCode;
+        } else {
+            return $exception->getCode();
+        }
+    }
+
+    public function getName($exception)
+    {
+        if ($exception instanceof Exception) {
+            return $exception->getName();
+        } else {
+            return  $this->defaultName ?: \Yii::t('yii', 'Error');
+        }
+    }
+
+    public function getMessage($exception)
+    {
+        if ($exception instanceof UserException) {
+            return $exception->getMessage();
+        } else {
+            return $this->defaultMessage ?: \Yii::t('yii', 'An internal server error occurred.');
+        }
     }
 }
