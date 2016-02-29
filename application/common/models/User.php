@@ -1,14 +1,14 @@
 <?php
 namespace common\models;
 
+use Sil\IdpPw\Common\Personnel\NotFoundException;
+use Sil\IdpPw\Common\Personnel\PersonnelInterface;
+use Sil\IdpPw\Common\Personnel\PersonnelUser;
 use Yii;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
-use Sil\IdpPw\Common\Personnel\PersonnelInterface;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
-use Sil\IdpPw\Common\Personnel\NotFoundException;
 
 /**
  * Class User
@@ -113,7 +113,7 @@ class User extends UserBase implements IdentityInterface
         ];
 
         foreach ($properties as $property => $value) {
-            if($this->$property != $value) {
+            if ($this->$property != $value) {
                 $dirty = true;
                 $this->$property = $value;
             }
@@ -200,7 +200,7 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return null|PersonnelUser
+     * @return null|string
      */
     public function getSupervisorEmail()
     {
@@ -208,7 +208,7 @@ class User extends UserBase implements IdentityInterface
         return $personnelUser->supervisorEmail;
     }
     /**
-     * @return null|PersonnelUser
+     * @return null|string
      */
     public function getSpouseEmail()
     {

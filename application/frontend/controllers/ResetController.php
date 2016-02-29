@@ -1,13 +1,11 @@
 <?php
 namespace frontend\controllers;
 
-use frontend\components\BaseRestController;
-
 use common\models\Reset;
 use common\models\User;
-
-use yii\helpers\ArrayHelper;
+use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 

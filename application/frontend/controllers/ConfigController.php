@@ -13,7 +13,7 @@ class ConfigController extends BaseRestController
      */
     public function behaviors()
     {
-        return ArrayHelper::merge(parent::behaviors(),[
+        return ArrayHelper::merge(parent::behaviors(), [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
@@ -49,7 +49,7 @@ class ConfigController extends BaseRestController
          * Remove phpRegex from password params before adding to config
          */
         foreach ($params['password'] as $key => $value) {
-            if(isset($params['password'][$key]['phpRegex'])){
+            if (isset($params['password'][$key]['phpRegex'])) {
                 unset($params['password'][$key]['phpRegex']);
             }
         }
