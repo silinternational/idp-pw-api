@@ -41,7 +41,7 @@ class ErrorAction extends YiiErrorAction
             'code' => $code,
         ];
 
-        if(YII_DEBUG){
+        if (YII_DEBUG) {
             $response['exception'] = $exception;
         }
 
