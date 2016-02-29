@@ -2,11 +2,13 @@
 namespace common\models;
 
 use Yii;
-use common\components\PersonnelInterface;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
+use Sil\IdpPw\Common\Personnel\PersonnelInterface;
+use Sil\IdpPw\Common\Personnel\PersonnelUser;
+use Sil\IdpPw\Common\Personnel\NotFoundException;
 
 /**
  * Class User
@@ -16,10 +18,10 @@ use yii\web\NotFoundHttpException;
 class User extends UserBase implements IdentityInterface
 {
     /**
-     * Holds personnelData
-     * @var array
+     * Holds personnelUser
+     * @var PersonnelUser
      */
-    public $personnelData = [];
+    public $personnelUser;
 
     /**
      * Validation rules, applies User rules before UserBase rules
@@ -50,33 +52,84 @@ class User extends UserBase implements IdentityInterface
      * @param string $username
      * @return User
      * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws NotFoundException
      */
     public static function findOrCreate($username)
     {
         /*
          * If username looks like an email address, search by email
          */
+        /** @var PersonnelUser $personnelUser */
         if (substr_count($username, '@') > 0) {
-            $criteria = ['email' => $username];
+            $personnelUser = \Yii::$app->personnel->findByEmail($username);
         } else {
-            $criteria = ['username' => $username];
+            $personnelUser = \Yii::$app->personnel->findByUsername($username);
         }
 
-        $user = self::findOne($criteria);
+        $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
         if ( ! $user) {
-            /**
-             * @todo integrate with personnel backend to find user and create local user
-             *       throw NotFoundHttpException if not found
-             */
+            $user = new User();
+            $user->employee_id = $personnelUser->employeeId;
+            $user->first_name = $personnelUser->firstName;
+            $user->last_name = $personnelUser->lastName;
+            $user->idp_username = $personnelUser->username;
+            $user->email = $personnelUser->email;
+            if ( ! $user->save()) {
+                /**
+                 * @todo add logging with model validation errors
+                 */
+                throw new \Exception('Unable to create new user', 1456760294);
+            }
         } else {
-            /**
-             * @todo user found, but call personnel to verify they still exist
-             *       update local user info if found?
-             *       If not found throw NotFoundHttpException
-             */
+            $user->updateProfileIfNeeded(
+                $personnelUser->firstName,
+                $personnelUser->lastName,
+                $personnelUser->username,
+                $personnelUser->email
+            );
         }
 
         return $user;
+    }
+
+
+    /**
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $email
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateProfileIfNeeded($firstName, $lastName, $username, $email)
+    {
+        $dirty = false;
+        $properties = [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'idp_username' => $username,
+            'email' => $email,
+        ];
+
+        foreach ($properties as $property => $value) {
+            if($this->$property != $value) {
+                $dirty = true;
+                $this->$property = $value;
+            }
+        }
+
+        if ($dirty) {
+            if ($this->save()) {
+                return true;
+            } else {
+                /**
+                 * @todo add logging with model validation errors
+                 */
+                throw new \Exception("Unable to update profile", 1456760819);
+            }
+        }
+        return false;
     }
 
     /**
@@ -97,13 +150,13 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return array
+     * @return PersonnelUser
      * @throws \Exception
      */
-    public function getPersonnelData()
+    public function getPersonnelUser()
     {
-        if ( ! empty($this->personnelData)) {
-            return $this->personnelData;
+        if ( ! empty($this->personnelUser)) {
+            return $this->personnelUser;
         }
 
         /*
@@ -115,17 +168,17 @@ class User extends UserBase implements IdentityInterface
             $sessionAvailable = false;
         }
 
-        if ($sessionAvailable && is_array(\Yii::$app->session->get('personnelData'))) {
-            return \Yii::$app->session->get('personnelData');
+        if ($sessionAvailable && is_array(\Yii::$app->session->get('personnelUser'))) {
+            return \Yii::$app->session->get('personnelUser');
         }
 
         /*
          * Fetch data from Personnel system and cache it
          */
-        $this->fetchPersonnelData();
-        \Yii::$app->session->set('personnelData', $this->personnelData);
+        $this->fetchPersonnelUser();
+        \Yii::$app->session->set('personnelUser', $this->personnelUser);
 
-        return $this->personnelData;
+        return $this->personnelUser;
     }
 
     /**
@@ -133,8 +186,8 @@ class User extends UserBase implements IdentityInterface
      */
     public function hasSupervisor()
     {
-        $personnelData = $this->getPersonnelData();
-        return (bool) $personnelData['supervisor'];
+        $personnelUser = $this->getPersonnelUser();
+        return $personnelUser->supervisorEmail !== null;
     }
 
     /**
@@ -142,41 +195,41 @@ class User extends UserBase implements IdentityInterface
      */
     public function hasSpouse()
     {
-        $personnelData = $this->getPersonnelData();
-        return (bool) $personnelData['spouse'];
+        $personnelUser = $this->getPersonnelUser();
+        return $personnelUser->spouseEmail !== null;
     }
 
     /**
-     * @return null|array
+     * @return null|PersonnelUser
      */
-    public function getSupervisor()
+    public function getSupervisorEmail()
     {
-        $personnelData = $this->getPersonnelData();
-        return $personnelData['supervisor'] ?: null;
+        $personnelUser = $this->getPersonnelUser();
+        return $personnelUser->supervisorEmail;
     }
     /**
-     * @return null|array
+     * @return null|PersonnelUser
      */
-    public function getSpouse()
+    public function getSpouseEmail()
     {
-        $personnelData = $this->getPersonnelData();
-        return $personnelData['spouse'] ?: null;
+        $personnelUser = $this->getPersonnelUser();
+        return $personnelUser->spouseEmail;
     }
 
     /**
      * @throws \Exception
      */
-    public function fetchPersonnelData()
+    public function fetchPersonnelUser()
     {
         /** @var PersonnelInterface $personnel */
         $personnel = \Yii::$app->personnel;
 
         if ($this->employee_id) {
-            $this->personnelData = $personnel->findByEmployeeId($this->employee_id);
+            $this->personnelUser = $personnel->findByEmployeeId($this->employee_id);
         } elseif ($this->idp_username) {
-            $this->personnelData = $personnel->findByUsername($this->idp_username);
+            $this->personnelUser = $personnel->findByUsername($this->idp_username);
         } elseif ($this->email) {
-            $this->personnelData = $personnel->findByEmail($this->email);
+            $this->personnelUser = $personnel->findByEmail($this->email);
         } else {
             throw new \Exception('Not enough information to find personnel data', 1456690741);
         }

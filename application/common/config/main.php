@@ -12,6 +12,7 @@ $recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = getenv('RECAPTCHA_SECRET_KEY');
 
 return [
+    'id' => 'app-common',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'db' => [

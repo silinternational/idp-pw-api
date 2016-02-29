@@ -68,7 +68,7 @@ class m160225_162828_create_initial_tables extends Migration
                 'user_id' => 'int(11) not null',
                 'type' => "enum('primary', 'method','supervisor','spouse') not null default 'primary'",
                 'method_id' => 'int(11) null',
-                'code' => 'varchar(64) not null',
+                'code' => 'varchar(64) null',
                 'attempts' => 'smallint not null default 0',
                 'expires' => 'datetime not null',
                 'disable_until' => 'datetime null',

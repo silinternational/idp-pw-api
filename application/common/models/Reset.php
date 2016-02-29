@@ -80,25 +80,41 @@ class Reset extends ResetBase
      * @throws NotFoundHttpException
      * @throws \Exception
      */
-    public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $methodId = null) {
-        $reset = new Reset();
-        $reset->user_id = $user->id;
-        $reset->type = $type;
+    public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $methodId = null)
+    {
+        /*
+         * Find existing or create new Reset
+         */
+        $reset = Reset::findOne(['user_id' => $user->id]);
+        if ($reset === null) {
+            $reset = new Reset();
+            $reset->user_id = $user->id;
+            /*
+             * Only set type/method if creating so that on subsequent restarts of process
+             * it does not reset method to primary
+             */
+            $reset->type = $type;
+            /*
+             * If $method_id is provided, make sure user owns it
+             */
+            if ($type == self::TYPE_METHOD && $methodId !== null) {
+                $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId]);
+                if ( ! $method) {
+                    throw new NotFoundHttpException('Requested method not found', 1456608142);
+                }
+                $reset->method_id = $methodId;
+            }
+            /*
+             * Save new Reset
+             */
+            if ( ! $reset->save()) {
+                throw new \Exception('Unable to create new reset', 1456608028);
+            }
+        }
 
         /*
-         * If $method_id is provided, make sure user owns it
+         * Send Reset to appropriate method
          */
-        $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId]);
-        if ( ! $method) {
-            throw new NotFoundHttpException('Requested method not found', 1456608142);
-        }
-
-        $reset->method_id = $methodId;
-
-        if ( ! $reset->save()) {
-            throw new \Exception('Unable to create new reset', 1456608028);
-        }
-
         $reset->send();
 
         return $reset;
@@ -144,7 +160,7 @@ class Reset extends ResetBase
     {
         /**
          * @todo if $this->user->getHasSupervisor(), send reset
-         *       code to $this->user->getSupervisor()['email']
+         *       code to $this->user->getSupervisorEmail()
          */
     }
 
@@ -152,7 +168,7 @@ class Reset extends ResetBase
     {
         /**
          * @todo if $this->user->getHasSpouse(), send reset
-         *       code to $this->user->getSpouse()['email']
+         *       code to $this->user->getSpouseEmail()
          */
     }
 

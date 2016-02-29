@@ -1,18 +1,24 @@
 <?php
 /**
- * Application configuration shared by all applications functional tests
+ * Application configuration shared by all applications unit tests
  */
-return [
+
+use yii\helpers\ArrayHelper;
+
+$mainLocalConfig = require(__DIR__ . '/../../../common/config/main.php');
+
+$config = [
+    'id' => 'unit_tests_app',
+    'basePath' => dirname(dirname(dirname(__DIR__))),
     'components' => [
-        'request' => [
-            // it's not recommended to run functional tests with CSRF validation enabled
-            'enableCsrfValidation' => false,
-            // but if you absolutely need it set cookie domain to localhost
-            /*
-            'csrfCookie' => [
-                'domain' => 'localhost',
-            ],
-            */
-        ],
+
+    ],
+    'params' => [
+
     ],
 ];
+
+return ArrayHelper::merge(
+    $mainLocalConfig,
+    $config
+);

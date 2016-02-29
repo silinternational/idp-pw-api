@@ -37,7 +37,7 @@ class ResetBase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'user_id', 'code', 'expires', 'created'], 'required'],
+            [['uid', 'user_id', 'expires', 'created'], 'required'],
             [['user_id', 'method_id', 'attempts'], 'integer'],
             [['type'], 'string'],
             [['expires', 'disable_until', 'created'], 'safe'],

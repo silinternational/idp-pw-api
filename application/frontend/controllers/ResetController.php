@@ -59,12 +59,37 @@ class ResetController extends BaseRestController
          */
         $user = User::findOrCreate($username);
         if ( ! $user->reset) {
-
+            /*
+             * Create reset
+             */
+            $reset = Reset::findOrCreate($user);
+        } else {
+            /*
+             * Reset already exists, resend if able
+             */
+            $reset = $user->reset;
+            $reset->send();
         }
 
-        /*
-         * Find or initialize reset
-         */
-        return Reset::findOrCreate($username);
+        return $reset;
+    }
+
+    /**
+     * @param string $uid
+     * @return void
+     * @throws NotFoundHttpException
+     */
+    public function actionResend($uid)
+    {
+        /** @var Reset $reset */
+        $reset = Reset::findOne(['uid' => $uid]);
+        if ($reset === null) {
+            throw new NotFoundHttpException();
+        }
+
+        $reset->send();
+
+        \Yii::$app->response->statusCode = 204;
+        return;
     }
 }

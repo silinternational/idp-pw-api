@@ -2,6 +2,7 @@
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieKey = getenv('FRONT_COOKIE_KEY') ?: null;
+const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
 
 return [
     'id' => 'app-frontend',
@@ -48,10 +49,10 @@ return [
                  * Method routes
                  */
                 'GET /method' => 'method/index',
-                'GET /method/{id}' => 'method/view',
+                'GET /method/' . UID_ROUTE_PATTERN => 'method/view',
                 'POST /method' => 'method/create',
-                'PUT /method/{id}' => 'method/update',
-                'DELETE /method/{id}' => 'method/delete',
+                'PUT /method/' . UID_ROUTE_PATTERN => 'method/update',
+                'DELETE /method/' . UID_ROUTE_PATTERN => 'method/delete',
 
                 /*
                  * Password routes
@@ -63,9 +64,9 @@ return [
                  * Reset routes
                  */
                 'POST /reset' => 'reset/create',
-                'PUT /reset/{id}' => 'reset/update',
-                'PUT /reset/{id}/resend' => 'reset/resend',
-                'PUT /reset/{id}/validate' => 'reset/validate',
+                'PUT /reset/' . UID_ROUTE_PATTERN => 'reset/update',
+                'PUT /reset/' . UID_ROUTE_PATTERN . '/resend' => 'reset/resend',
+                'PUT /reset/' . UID_ROUTE_PATTERN . '/validate' => 'reset/validate',
 
                 /*
                  * User  routes
