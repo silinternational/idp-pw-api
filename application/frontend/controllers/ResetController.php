@@ -56,18 +56,10 @@ class ResetController extends BaseRestController
          * Find or create user
          */
         $user = User::findOrCreate($username);
-        if ( ! $user->reset) {
-            /*
-             * Create reset
-             */
-            $reset = Reset::findOrCreate($user);
-        } else {
-            /*
-             * Reset already exists, resend if able
-             */
-            $reset = $user->reset;
-            $reset->send();
-        }
+        /*
+         * Find or create a reset
+         */
+        $reset = Reset::findOrCreate($user);
 
         return $reset;
     }

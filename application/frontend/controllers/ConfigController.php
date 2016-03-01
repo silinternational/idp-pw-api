@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\helpers\Utils;
 use frontend\components\BaseRestController;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
@@ -37,24 +38,6 @@ class ConfigController extends BaseRestController
      */
     public function actionIndex()
     {
-        $params = \Yii::$app->params;
-
-        $config = [];
-
-        $config['gaTrackingId'] = $params['gaTrackingId'];
-        $config['support'] = $params['support'];
-        $config['recaptchaKey'] = $params['recaptchaKey'];
-
-        /*
-         * Remove phpRegex from password params before adding to config
-         */
-        foreach ($params['password'] as $key => $value) {
-            if (isset($params['password'][$key]['phpRegex'])) {
-                unset($params['password'][$key]['phpRegex']);
-            }
-        }
-        $config['password'] = $params['password'];
-
-        return $config;
+        return Utils::getFrontendConfig();
     }
 }

@@ -2,6 +2,7 @@
 namespace common\helpers;
 
 use yii\base\Security;
+use yii\web\ServerErrorHttpException;
 
 class Utils
 {
@@ -124,6 +125,39 @@ class Utils
          * @todo mask email to something like "ab******@s**.org"
          */
         return $email;
+    }
+
+    /**
+     * @return array
+     * @throws ServerErrorHttpException
+     */
+    public static function getFrontendConfig()
+    {
+        $params = \Yii::$app->params;
+
+        $config = [];
+
+        $config['gaTrackingId'] = $params['gaTrackingId'];
+        $config['support'] = $params['support'];
+        $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
+        $config['password'] = [];
+
+        $passwordRuleFields = [
+            'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
+        ];
+
+        foreach($passwordRuleFields as $rule) {
+            if (empty($params['password'][$rule])) {
+                throw new ServerErrorHttpException('Missing configuration for '.$rule);
+            }
+            $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
+            $config['password'][$rule]['regex'] = $params['password'][$rule]['jsRegex'];
+        }
+
+        $config['password']['blacklist'] = $params['password']['blacklist'];
+        $config['password']['zxcvbn'] = $params['password']['zxcvbn'];
+
+        return $config;
     }
 
 }
