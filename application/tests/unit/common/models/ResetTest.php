@@ -52,13 +52,12 @@ class ResetTest extends DbTestCase
     {
         // Set config to consistent value
         \Yii::$app->params['reset']['lifetimeSeconds'] = 100;
+        $reset = $this->resets('reset1');
         $time = time();
 
-        $reset = $this->resets('reset1');
+        $expireTimestamp = $reset->getExpireTimestamp();
 
-        $expireTimestamp = $reset->getExpireTimestamp($time);
-
-        $this->assertEquals($time + 100, $expireTimestamp);
+        $this->assertEquals($time + 100, $expireTimestamp, null, 2);
     }
 
     public function testCannotCreateSecondResetForUser()

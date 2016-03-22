@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use common\helpers\Utils;
 use common\models\User;
 use yii\web\NotFoundHttpException;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class Reset
@@ -112,11 +113,6 @@ class Reset extends ResetBase
             }
         }
 
-        /*
-         * Send Reset to appropriate method
-         */
-        $reset->send();
-
         return $reset;
     }
 
@@ -206,13 +202,19 @@ class Reset extends ResetBase
 
     /**
      * Calculate expiration timestamp based on given timestamp and configured reset lifetime
-     * @param null|integer $time
      * @return integer
+     * @throws ServerErrorHttpException
      */
-    public static function getExpireTimestamp($time = null)
+    public static function getExpireTimestamp()
     {
-        $time = is_null($time) ? time() : $time;
+        $params = \Yii::$app->params;
+        if(!isset($params['reset']) || !isset($params['reset']['lifetimeSeconds']) ||
+            !is_integer($params['reset']['lifetimeSeconds'])){
+            throw new ServerErrorHttpException("Application configuration for reset lifetime is not set", 1458676224);
+        }
 
-        return $time + \Yii::$app->params['reset']['lifetimeSeconds'];
+        $time = time();
+
+        return $time + $params['reset']['lifetimeSeconds'];
     }
 }

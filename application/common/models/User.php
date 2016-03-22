@@ -100,7 +100,7 @@ class User extends UserBase implements IdentityInterface
      * @param string $lastName
      * @param string $username
      * @param string $email
-     * @return bool True if profile was updated, false if not
+     * @return bool True if profile was updated, false if no updates were needed
      * @throws \Exception
      */
     public function updateProfileIfNeeded($firstName, $lastName, $username, $email)
@@ -160,23 +160,17 @@ class User extends UserBase implements IdentityInterface
             return $this->personnelUser;
         }
 
-        /*
-         * If session is available, cache data in session
-         */
-        try {
-            $sessionAvailable = (\Yii::$app->user->identity == $this);
-        } catch (\Exception $e) {
-            $sessionAvailable = false;
-        }
+        $sessionAvailable = Utils::isSessionAvailable();
 
         if ($sessionAvailable && is_array(\Yii::$app->session->get('personnelUser'))) {
-            return \Yii::$app->session->get('personnelUser');
+            $this->personnelUser = \Yii::$app->session->get('personnelUser');
+            return $this->personnelUser;
         }
 
         /*
          * Fetch data from Personnel system and cache it
          */
-        $this->fetchPersonnelUser();
+        $this->personnelUser = $this->getPersonnelUserFromInterface();
         \Yii::$app->session->set('personnelUser', $this->personnelUser);
 
         return $this->personnelUser;
@@ -187,8 +181,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function hasSupervisor()
     {
-        $personnelUser = $this->getPersonnelUser();
-        return $personnelUser->supervisorEmail !== null;
+        return $this->getSupervisorEmail() !== null;
     }
 
     /**
@@ -196,8 +189,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function hasSpouse()
     {
-        $personnelUser = $this->getPersonnelUser();
-        return $personnelUser->spouseEmail !== null;
+        return $this->getSpouseEmail() !== null;
     }
 
     /**
@@ -218,19 +210,20 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
+     * @return PersonnelUser
      * @throws \Exception
      */
-    public function fetchPersonnelUser()
+    public function getPersonnelUserFromInterface()
     {
         /** @var PersonnelInterface $personnel */
         $personnel = \Yii::$app->personnel;
 
         if ($this->employee_id) {
-            $this->personnelUser = $personnel->findByEmployeeId($this->employee_id);
+            return $personnel->findByEmployeeId($this->employee_id);
         } elseif ($this->idp_username) {
-            $this->personnelUser = $personnel->findByUsername($this->idp_username);
+            return $personnel->findByUsername($this->idp_username);
         } elseif ($this->email) {
-            $this->personnelUser = $personnel->findByEmail($this->email);
+            return $personnel->findByEmail($this->email);
         } else {
             throw new \Exception('Not enough information to find personnel data', 1456690741);
         }

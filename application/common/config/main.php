@@ -10,6 +10,7 @@ $adminEmail = getenv('ADMIN_EMAIL');
 $appEnv = getenv('APP_ENV');
 $recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = getenv('RECAPTCHA_SECRET_KEY');
+$uiUrl = getenv('UI_URL');
 
 return [
     'id' => 'app-common',
@@ -57,6 +58,7 @@ return [
     ],
     'params' => [
         'adminEmail' => $adminEmail,
+        'ui_url' => $uiUrl,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
         ],

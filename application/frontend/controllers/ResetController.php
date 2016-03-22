@@ -60,6 +60,10 @@ class ResetController extends BaseRestController
          * Find or create a reset
          */
         $reset = Reset::findOrCreate($user);
+        /*
+         * Send reset notification
+         */
+        $reset->send();
 
         return $reset;
     }

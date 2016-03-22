@@ -8,6 +8,7 @@ class Utils
 {
 
     const DT_FORMAT = 'Y-m-d H:i:s';
+    const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
      * @param integer|null $timestamp
@@ -158,6 +159,21 @@ class Utils
         $config['password']['zxcvbn'] = $params['password']['zxcvbn'];
 
         return $config;
+    }
+
+    /**
+     * Check if user session is available
+     * @return boolean
+     */
+    public static function isSessionAvailable()
+    {
+        try {
+            $sessionAvailable = !\Yii::$app->user->isGuest;
+        } catch (\Exception $e) {
+            $sessionAvailable = false;
+        }
+
+        return $sessionAvailable;
     }
 
 }

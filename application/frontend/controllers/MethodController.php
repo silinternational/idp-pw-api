@@ -12,7 +12,7 @@ class MethodController extends BaseRestController
 {
     /**
      * Access Control Filter
-     * NEEDS TO BE UPDATED FOR EVERY ACTION
+     * REMEMBER: NEEDS TO BE UPDATED FOR EVERY ACTION
      * @return array
      */
     public function behaviors()
@@ -25,11 +25,6 @@ class MethodController extends BaseRestController
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view'],
-                        'roles' => ['?'],
-                    ],
                 ]
             ]
         ]);
@@ -37,7 +32,6 @@ class MethodController extends BaseRestController
 
     /**
      * Return list of available reset methods for user.
-     * If user is not authenticated they should be masked.
      * @return Method[]
      */
     public function actionIndex()
