@@ -146,12 +146,6 @@ build_failure_conditions:
     - 'project.metric("scrutinizer.quality", < 6)'
 
 build:
-    environment:
-        MYSQL_HOST: '0.0.0.0'
-        MYSQL_USER: 'root'
-        MYSQL_PASSWORD: ''
-        MYSQL_DATABASE: 'idpmgmt'
-
     project_setup:
         before:
             - mysql -e "CREATE DATABASE idpmgmt"
@@ -160,6 +154,7 @@ build:
         override:
             -
                 command: /data/run-tests.sh
+                environment: { MYSQL_HOST: '0.0.0.0', MYSQL_USER: 'root', MYSQL_PASSWORD: '', MYSQL_DATABASE: 'idpmgmt' }
                 coverage:
                     file: /data/tests/_output/coverage.xml
                     format: php-clover
