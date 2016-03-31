@@ -14,10 +14,14 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 #php5enmod xdebug
 
 # Run codeception tests
-./vendor/bin/codecept run unit --coverage --coverage-xml
+./vendor/bin/codecept run unit
+
+##### Disabled reporting of code coverage on 3/30 because scrutinizer isnt working with it yet
+
+#./vendor/bin/codecept run unit --coverage --coverage-xml
 #TESTRESULTS=$?
 #
-##### Disabled reporting of code coverage on 3/30 because scrutinizer isnt working with it yet
+
 ## Clone repo to get git parents
 #cd /tmp
 #rm -rf idp-pw-api/
