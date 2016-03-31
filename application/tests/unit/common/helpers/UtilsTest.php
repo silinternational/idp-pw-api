@@ -8,10 +8,10 @@ class UtilsTest extends TestCase
 {
     public function testUidRegexGenerateRandomString()
     {
-        $regex = '/'.Utils::UID_REGEX.'/';
-        for ($i=0; $i < 50; $i++) {
+        $regex = '/' . Utils::UID_REGEX . '/';
+        for ($i = 0; $i < 50; $i++) {
             $uid = Utils::generateRandomString();
-            $this->assertRegExp($regex,$uid);
+            $this->assertRegExp($regex, $uid);
         }
     }
 }

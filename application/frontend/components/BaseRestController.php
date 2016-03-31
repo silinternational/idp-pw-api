@@ -1,10 +1,10 @@
 <?php
 namespace frontend\components;
 
-use yii\helpers\ArrayHelper;
-use yii\rest\Controller;
 use yii\filters\AccessControl;
 use yii\filters\Cors;
+use yii\helpers\ArrayHelper;
+use yii\rest\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\UnauthorizedHttpException;
 
@@ -22,7 +22,7 @@ class BaseRestController extends Controller
         return ArrayHelper::merge(parent::behaviors(), [
             'corsFilter' => [
                 'class' => Cors::className(),
-                'actions' => ['index','view','create','update','delete','options'],
+                'actions' => ['index', 'view', 'create', 'update', 'delete', 'options'],
                 'cors' => [
                     'Origin' => ['*'],
                     'Access-Control-Request-Method' => [
@@ -42,8 +42,8 @@ class BaseRestController extends Controller
                         'actions' => ['options']
                     ],
                 ],
-                'denyCallback' => function($rule, $action){
-                    if(\Yii::$app->user->isGuest){
+                'denyCallback' => function($rule, $action) {
+                    if (\Yii::$app->user->isGuest) {
                         throw new UnauthorizedHttpException();
                     } else {
                         throw new ForbiddenHttpException();
@@ -57,8 +57,10 @@ class BaseRestController extends Controller
     /**
      * Default rule is forbidden
      * @throws \yii\web\ForbiddenHttpException
+     * @param string $action
      */
-    protected function checkForForbidden($action) {
+    protected function checkForForbidden($action)
+    {
         throw new ForbiddenHttpException;
     }
 
