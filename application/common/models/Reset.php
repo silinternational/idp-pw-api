@@ -208,8 +208,8 @@ class Reset extends ResetBase
     public static function getExpireTimestamp()
     {
         $params = \Yii::$app->params;
-        if(!isset($params['reset']) || !isset($params['reset']['lifetimeSeconds']) ||
-            !is_integer($params['reset']['lifetimeSeconds'])){
+        if ( ! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
+            ! is_integer($params['reset']['lifetimeSeconds'])) {
             throw new ServerErrorHttpException("Application configuration for reset lifetime is not set", 1458676224);
         }
 

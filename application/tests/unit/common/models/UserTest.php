@@ -37,11 +37,11 @@ class UserTest extends DbTestCase
         $user->last_name = 'One';
         $user->idp_username = 'user_1456771651';
         $user->email = 'user-1456771651@domain.org';
-        if (!$user->save()) {
-            $this->fail('Failed to create User: '.print_r($user->getFirstErrors(),true));
+        if ( ! $user->save()) {
+            $this->fail('Failed to create User: ' . print_r($user->getFirstErrors(), true));
         }
 
-        $this->assertEquals(32,strlen($user->uid));
+        $this->assertEquals(32, strlen($user->uid));
         $this->assertNull($user->last_login);
         $this->assertNull($user->pw_last_changed);
         $this->assertNull($user->pw_expires);
@@ -53,7 +53,7 @@ class UserTest extends DbTestCase
         User::deleteAll();
         $user = User::findOrCreate('first_last');
 
-        $this->assertEquals(32,strlen($user->uid));
+        $this->assertEquals(32, strlen($user->uid));
         $this->assertNull($user->last_login);
         $this->assertNull($user->pw_last_changed);
         $this->assertNull($user->pw_expires);
@@ -65,7 +65,7 @@ class UserTest extends DbTestCase
         $existing = $this->users('user1');
         $new = User::findOrCreate($existing->idp_username);
 
-        $this->assertEquals($existing->id,$new->id);
+        $this->assertEquals($existing->id, $new->id);
     }
 
     public function testFindOrCreateDoesntExist()
@@ -93,7 +93,7 @@ class UserTest extends DbTestCase
          * Test changed for each property
          */
         $changed = $user->updateProfileIfNeeded(
-            $user->first_name.'a',
+            $user->first_name . 'a',
             $user->last_name,
             $user->idp_username,
             $user->email
@@ -102,7 +102,7 @@ class UserTest extends DbTestCase
 
         $changed = $user->updateProfileIfNeeded(
             $user->first_name,
-            $user->last_name.'a',
+            $user->last_name . 'a',
             $user->idp_username,
             $user->email
         );
@@ -111,7 +111,7 @@ class UserTest extends DbTestCase
         $changed = $user->updateProfileIfNeeded(
             $user->first_name,
             $user->last_name,
-            $user->idp_username.'a',
+            $user->idp_username . 'a',
             $user->email
         );
         $this->assertTrue($changed);
@@ -120,7 +120,7 @@ class UserTest extends DbTestCase
             $user->first_name,
             $user->last_name,
             $user->idp_username,
-            'a'.$user->email
+            'a' . $user->email
         );
         $this->assertTrue($changed);
     }
@@ -136,14 +136,14 @@ class UserTest extends DbTestCase
     {
         $user = $this->users('user1');
         $this->assertTrue($user->hasSupervisor());
-        $this->assertEquals('supervisor@domain.org',$user->getSupervisorEmail());
+        $this->assertEquals('supervisor@domain.org', $user->getSupervisorEmail());
     }
 
     public function testSpouse()
     {
         $user = $this->users('user1');
         $this->assertTrue($user->hasSpouse());
-        $this->assertEquals('spouse@domain.org',$user->getSpouseEmail());
+        $this->assertEquals('spouse@domain.org', $user->getSpouseEmail());
     }
 
 
