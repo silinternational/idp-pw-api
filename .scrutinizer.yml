@@ -153,8 +153,8 @@ build:
     tests:
         override:
             -
-                command: /data/run-tests.sh
+                command: ./run-tests.sh
                 environment: { MYSQL_HOST: '0.0.0.0', MYSQL_USER: 'root', MYSQL_PASSWORD: '', MYSQL_DATABASE: 'idpmgmt' }
                 coverage:
-                    file: /data/tests/_output/coverage.xml
+                    file: ./tests/_output/coverage.xml
                     format: php-clover
