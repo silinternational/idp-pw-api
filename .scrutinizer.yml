@@ -31,8 +31,8 @@ tools:
         enabled: true
         config:
             standard: PSR2
-#    external_code_coverage:
-#        timeout: 600    # Timeout in seconds.
+    external_code_coverage:
+        timeout: 600    # Timeout in seconds.
 
 checks:
     php:
