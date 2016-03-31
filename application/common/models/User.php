@@ -1,11 +1,14 @@
 <?php
 namespace common\models;
 
+use Sil\IdpPw\Common\Personnel\NotFoundException;
+use Sil\IdpPw\Common\Personnel\PersonnelInterface;
+use Sil\IdpPw\Common\Personnel\PersonnelUser;
 use Yii;
+use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
-
-use common\helpers\Utils;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class User
@@ -14,6 +17,11 @@ use common\helpers\Utils;
  */
 class User extends UserBase implements IdentityInterface
 {
+    /**
+     * Holds personnelUser
+     * @var PersonnelUser
+     */
+    public $personnelUser;
 
     /**
      * Validation rules, applies User rules before UserBase rules
@@ -24,7 +32,7 @@ class User extends UserBase implements IdentityInterface
         return ArrayHelper::merge(
             [
                 [
-                    ['uuid'], 'default', 'value' => Utils::generateRandomString(),
+                    ['uid'], 'default', 'value' => Utils::generateRandomString(),
                 ],
 
                 [
@@ -37,6 +45,188 @@ class User extends UserBase implements IdentityInterface
             ],
             parent::rules()
         );
+    }
+
+    /**
+     * Find or create local user. Fetch/update user data from personnel.
+     * @param string $username
+     * @return User
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws NotFoundException
+     */
+    public static function findOrCreate($username)
+    {
+        /*
+         * If username looks like an email address, search by email
+         */
+        /** @var PersonnelUser $personnelUser */
+        if (substr_count($username, '@') > 0) {
+            $personnelUser = \Yii::$app->personnel->findByEmail($username);
+        } else {
+            $personnelUser = \Yii::$app->personnel->findByUsername($username);
+        }
+
+        $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
+        if ( ! $user) {
+            $user = new User();
+            $user->employee_id = $personnelUser->employeeId;
+            $user->first_name = $personnelUser->firstName;
+            $user->last_name = $personnelUser->lastName;
+            $user->idp_username = $personnelUser->username;
+            $user->email = $personnelUser->email;
+            if ( ! $user->save()) {
+                /**
+                 * @todo add logging with model validation errors
+                 */
+                throw new \Exception('Unable to create new user', 1456760294);
+            }
+        } else {
+            $user->updateProfileIfNeeded(
+                $personnelUser->firstName,
+                $personnelUser->lastName,
+                $personnelUser->username,
+                $personnelUser->email
+            );
+        }
+
+        return $user;
+    }
+
+
+    /**
+     * Update local user record if given properties are different than currently stored
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $email
+     * @return bool True if profile was updated, false if no updates were needed
+     * @throws \Exception
+     */
+    public function updateProfileIfNeeded($firstName, $lastName, $username, $email)
+    {
+        $dirty = false;
+        $properties = [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'idp_username' => $username,
+            'email' => $email,
+        ];
+
+        foreach ($properties as $property => $value) {
+            if ($this->$property != $value) {
+                $dirty = true;
+                $this->$property = $value;
+            }
+        }
+
+        if ($dirty) {
+            if ($this->save()) {
+                return true;
+            } else {
+                /**
+                 * @todo add logging with model validation errors
+                 */
+                throw new \Exception('Unable to update profile', 1456760819);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Return array of arrays of masked out methods
+     * @return array
+     */
+    public function getMaskedMethods()
+    {
+        $methods = [];
+        foreach ($this->methods as $method) {
+            $methods[] = [
+                'uid' => $method->uid,
+                'type' => $method->type,
+                'value' => $method->getMaskedValue(),
+            ];
+        }
+        return $methods;
+    }
+
+    /**
+     * @return PersonnelUser
+     * @throws \Exception
+     */
+    public function getPersonnelUser()
+    {
+        if ( ! empty($this->personnelUser)) {
+            return $this->personnelUser;
+        }
+
+        $sessionAvailable = Utils::isSessionAvailable();
+
+        if ($sessionAvailable && is_array(\Yii::$app->session->get('personnelUser'))) {
+            $this->personnelUser = \Yii::$app->session->get('personnelUser');
+            return $this->personnelUser;
+        }
+
+        /*
+         * Fetch data from Personnel system and cache it
+         */
+        $this->personnelUser = $this->getPersonnelUserFromInterface();
+        \Yii::$app->session->set('personnelUser', $this->personnelUser);
+
+        return $this->personnelUser;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSupervisor()
+    {
+        return $this->getSupervisorEmail() !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSpouse()
+    {
+        return $this->getSpouseEmail() !== null;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSupervisorEmail()
+    {
+        $personnelUser = $this->getPersonnelUser();
+        return $personnelUser->supervisorEmail;
+    }
+    /**
+     * @return null|string
+     */
+    public function getSpouseEmail()
+    {
+        $personnelUser = $this->getPersonnelUser();
+        return $personnelUser->spouseEmail;
+    }
+
+    /**
+     * @return PersonnelUser
+     * @throws \Exception
+     */
+    public function getPersonnelUserFromInterface()
+    {
+        /** @var PersonnelInterface $personnel */
+        $personnel = \Yii::$app->personnel;
+
+        if ($this->employee_id) {
+            return $personnel->findByEmployeeId($this->employee_id);
+        } elseif ($this->idp_username) {
+            return $personnel->findByUsername($this->idp_username);
+        } elseif ($this->email) {
+            return $personnel->findByEmail($this->email);
+        } else {
+            throw new \Exception('Not enough information to find personnel data', 1456690741);
+        }
     }
 
     /**

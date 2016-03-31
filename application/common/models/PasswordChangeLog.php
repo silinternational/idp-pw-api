@@ -25,21 +25,23 @@ class PasswordChangeLog extends PasswordChangeLogBase
                 ],
 
                 [
-                    ['scenario'], 'in', 'range' => [self::SCENARIO_CHANGE,self::SCENARIO_RESET],
-                    'message' => 'Scenario must be either '.self::SCENARIO_CHANGE.' or '.
-                        self::SCENARIO_RESET.'.',
+                    ['scenario'], 'in', 'range' => [self::SCENARIO_CHANGE, self::SCENARIO_RESET],
+                    'message' => 'Scenario must be either ' . self::SCENARIO_CHANGE . ' or ' .
+                        self::SCENARIO_RESET . '.',
                 ],
 
                 [
-                    ['reset_type'], 'in', 'range' => [Reset::TYPE_METHOD, Reset::TYPE_SUPERVISOR, Reset::TYPE_SPOUSE],
-                    'message' => 'Reset type must be either '.Reset::TYPE_METHOD.' or '.
-                        Reset::TYPE_SUPERVISOR.' or '.Reset::TYPE_SPOUSE.' .',
+                    ['reset_type'], 'in', 'range' => [
+                        Reset::TYPE_PRIMARY, Reset::TYPE_METHOD, Reset::TYPE_SUPERVISOR, Reset::TYPE_SPOUSE
+                    ],
+                    'message' => 'Reset type must be either ' . Reset::TYPE_PRIMARY . ' or ' . Reset::TYPE_METHOD .
+                        ' or ' . Reset::TYPE_SUPERVISOR . ' or ' . Reset::TYPE_SPOUSE . ' .',
                 ],
 
                 [
-                    ['method_type'], 'in', 'range' => [Method::TYPE_EMAIL,Method::TYPE_PHONE],
-                    'message' => 'Method type must be either '.Method::TYPE_EMAIL.' or '.
-                        Method::TYPE_PHONE.'.',
+                    ['method_type'], 'in', 'range' => [Method::TYPE_EMAIL, Method::TYPE_PHONE],
+                    'message' => 'Method type must be either ' . Method::TYPE_EMAIL . ' or ' .
+                        Method::TYPE_PHONE . '.',
                 ],
             ],
             parent::rules()

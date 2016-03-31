@@ -1,7 +1,6 @@
 include:
   - codeception/common
   - codeception/console
-  - codeception/backend
   - codeception/frontend
 
 paths:

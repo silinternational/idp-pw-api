@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "reset".
  *
  * @property integer $id
+ * @property string $uid
  * @property integer $user_id
  * @property string $type
  * @property integer $method_id
@@ -36,11 +37,13 @@ class ResetBase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'type', 'code', 'expires', 'created'], 'required'],
+            [['uid', 'user_id', 'type', 'expires', 'created'], 'required'],
             [['user_id', 'method_id', 'attempts'], 'integer'],
             [['type'], 'string'],
             [['expires', 'disable_until', 'created'], 'safe'],
+            [['uid'], 'string', 'max' => 32],
             [['code'], 'string', 'max' => 64],
+            [['uid'], 'unique'],
             [['user_id'], 'unique'],
             [['code'], 'unique']
         ];
@@ -53,6 +56,7 @@ class ResetBase extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'uid' => Yii::t('app', 'Uid'),
             'user_id' => Yii::t('app', 'User ID'),
             'type' => Yii::t('app', 'Type'),
             'method_id' => Yii::t('app', 'Method ID'),

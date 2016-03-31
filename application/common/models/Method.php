@@ -21,6 +21,10 @@ class Method extends MethodBase
         return ArrayHelper::merge(
             [
                 [
+                    ['uid'], 'default', 'value' => Utils::generateRandomString(),
+                ],
+
+                [
                     ['type'], 'in', 'range' => [self::TYPE_EMAIL, self::TYPE_PHONE],
                     'message' => 'Method type must be either ' . self::TYPE_EMAIL . ' or ' . self::TYPE_PHONE . '.',
                 ],
@@ -32,5 +36,20 @@ class Method extends MethodBase
             ],
             parent::rules()
         );
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getMaskedValue()
+    {
+        if ($this->type == self::TYPE_PHONE) {
+            return Utils::maskPhone($this->value);
+        } elseif ($this->type == self::TYPE_EMAIL) {
+            return Utils::maskEmail($this->value);
+        } else {
+            throw new \Exception('Method using invalid Type', 1456610497);
+        }
     }
 }

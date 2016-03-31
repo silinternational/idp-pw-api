@@ -6,7 +6,6 @@ ENV REFRESHED_AT 2016-02-24
 COPY dockerbuild/vhost.conf /etc/apache2/sites-enabled/
 
 RUN mkdir -p /data
-VOLUME ["/data"]
 
 # Copy in syslog config
 RUN rm -f /etc/rsyslog.d/*
