@@ -10,8 +10,8 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test
 
 # Install and enable xdebug for code coverage
-apt-get install -y php5-xdebug git
-php5enmod xdebug
+#apt-get install -y php5-xdebug git
+#php5enmod xdebug
 
 # Run codeception tests
 ./vendor/bin/codecept run unit --coverage --coverage-xml

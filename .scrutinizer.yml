@@ -31,8 +31,8 @@ tools:
         enabled: true
         config:
             standard: PSR2
-    external_code_coverage:
-        timeout: 600    # Timeout in seconds.
+#    external_code_coverage:
+#        timeout: 600    # Timeout in seconds.
 
 checks:
     php:
@@ -144,3 +144,22 @@ build_failure_conditions:
 
     # Don't let Code Quality Rating drop below 6.
     - 'project.metric("scrutinizer.quality", < 6)'
+
+build:
+    environment:
+        MYSQL_HOST: '0.0.0.0'
+        MYSQL_USER: 'root'
+        MYSQL_PASSWORD: ''
+        MYSQL_DATABASE: 'idpmgmt'
+
+    project_setup:
+        before:
+            - mysql -e "CREATE DATABASE idpmgmt"
+
+    tests:
+        override:
+            -
+                command: /data/run-tests.sh
+                coverage:
+                    file: /data/tests/_output/coverage.xml
+                    format: php-clover
