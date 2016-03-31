@@ -146,14 +146,20 @@ build_failure_conditions:
     - 'project.metric("scrutinizer.quality", < 6)'
 
 build:
+    dependencies:
+        before:
+            - cd application/ && composer install
+
     project_setup:
         before:
             - mysql -e "CREATE DATABASE idpmgmt"
+            - ./application/yii migrate --interactive=0
+            - ./application/yii migrate --interactive=0 --migrationPath=console/migrations-test
 
     tests:
         override:
             -
-                command: ./application/run-tests.sh
+                command: ./application/vendor/bin/codecept run unit --coverage --coverage-xml
                 environment: { MYSQL_HOST: '0.0.0.0', MYSQL_USER: 'root', MYSQL_PASSWORD: '', MYSQL_DATABASE: 'idpmgmt' }
                 coverage:
                     file: ./application/tests/_output/coverage.xml
