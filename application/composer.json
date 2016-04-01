@@ -1,5 +1,11 @@
 {
   "minimum-stability": "stable",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://bitbucket.org/silintl/insite-people-search.git"
+    }
+  ],
   "require": {
     "php": ">=5.4.0",
     "yiisoft/yii2": "2.0.6",
@@ -7,7 +13,8 @@
     "yiisoft/yii2-swiftmailer": "*",
     "silinternational/php-env": "^0.1.1",
     "silinternational/yii2-jsonsyslog": "*",
-    "silinternational/idp-pw-api-common": "dev-master"
+    "silinternational/idp-pw-api-common": "dev-master",
+    "silinternational/idp-pw-api-personnel-insite": "^0.0.2"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

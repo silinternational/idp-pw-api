@@ -110,22 +110,91 @@ class Utils
      */
     public static function maskPhone($phone)
     {
-        /**
-         * @todo mask phone number to something like "+77 #########234"
+        /*
+         * $phone may be formatted with country code followed by a comma followed by the rest of the phone number
+         * Example: 1,4085551212 or 77,8588923456
          */
-        return $phone;
+        if(substr_count($phone,',') > 0) {
+            list($countryCode, $number) = explode(',',$phone);
+        } else {
+            $countryCode = null;
+            $number = $phone;
+        }
+
+        $string = '';
+
+        /*
+         * If country code is present, prepend string with + followed by country code
+         */
+        if(!is_null($countryCode)){
+            $string .= '+' . $countryCode . ' ';
+        }
+
+        $string .= self::maskString($number);
+
+        return $string;
     }
 
     /**
-     * @param string $email
-     * @return string
+     * @param string $email an email address (it doesn't verify it)
+     * @return string with most letters changed to asterisks
      */
     public static function maskEmail($email)
     {
-        /**
-         * @todo mask email to something like "ab******@s**.org"
+        list($part1, $domain) = explode('@', $email);
+        $newEmail = '';
+        $useRealChar = true;
+
+        /*
+         * Replace all characters with '*', except
+         * the first one, the last one, underscores and each
+         * character that follows and underscore.
          */
-        return $email;
+        foreach (str_split($part1) as $nextChar) {
+            if ($useRealChar) {
+                $newEmail .= $nextChar;
+                $useRealChar = false;
+            } else if ($nextChar === '_') {
+                $newEmail .= $nextChar;
+                $useRealChar = true;
+            } else {
+                $newEmail .= '*';
+            }
+        }
+
+        // replace the last * with the last real character
+        $newEmail = substr($newEmail, 0, -1);
+        $newEmail .= substr($part1, -1);
+        $newEmail .='@';
+
+        /*
+         * Add an '*' for each of the characters of the domain, except
+         * for the first character of each part and the .
+         */
+        list($domainA, $domainB) = explode('.', $domain);
+
+        $newEmail .= substr($domainA, 0, 1);
+        $newEmail .= str_repeat('*', strlen($domainA) - 1);
+        $newEmail .= '.';
+
+        $newEmail .= substr($domainB, 0, 1);
+        $newEmail .= str_repeat('*', strlen($domainB) - 1);
+        return $newEmail;
+    }
+
+    /**
+     * Replaces all the characters with asterisks, except for the last X characters.
+     *
+     * @param string $inString
+     * @param string $maskChar [optional, default #]
+     * @param int $goodCount [optional, default 3]
+     * @return string
+     */
+    public static function maskString($inString, $maskChar = '#', $goodCount = 3)
+    {
+        $newString = str_repeat($maskChar, strlen($inString) - $goodCount);
+        $newString .= substr($inString, - $goodCount);
+        return $newString;
     }
 
     /**

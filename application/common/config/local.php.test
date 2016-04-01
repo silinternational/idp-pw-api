@@ -1,0 +1,12 @@
+<?php
+
+return [
+    'components' => [
+        'personnel' => [
+            'class' => '\Sil\IdpPw\Common\Personnel\Insite',
+            'insitePeopleSearchBaseUrl' => getenv('INSITE_PEOPLE_SEARCH_BASE_URL'),
+            'insitePeopleSearchApiKey' => getenv('INSITE_PEOPLE_SEARCH_API_KEY'),
+            'insitePeopleSearchApiSecret' => getenv('INSITE_PEOPLE_SEARCH_API_SECRET'),
+        ]
+    ]
+];

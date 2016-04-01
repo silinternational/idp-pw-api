@@ -210,7 +210,7 @@ class Reset extends ResetBase
         $params = \Yii::$app->params;
         if ( ! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
             ! is_integer($params['reset']['lifetimeSeconds'])) {
-            throw new ServerErrorHttpException("Application configuration for reset lifetime is not set", 1458676224);
+            throw new ServerErrorHttpException('Application configuration for reset lifetime is not set', 1458676224);
         }
 
         $time = time();
