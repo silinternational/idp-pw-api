@@ -5,6 +5,11 @@ set -x
 cd /data
 composer install --prefer-dist --no-interaction --optimize-autoloader
 
+# Copy test version of common/config/local.php if doesn't exist
+if [ ! -f /data/common/config/local.php ]; then
+    cp /data/common/config/local.php.test /data/common/config/local.php
+fi
+
 # Run database migrations
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test
