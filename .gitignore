@@ -5,6 +5,7 @@
 .idea/
 
 # local config files
+local.php
 local.env
 *.aes
 

@@ -55,6 +55,9 @@ return [
                 ],
             ],
         ],
+        'personnel' => [
+            // Define in local.php
+        ],
     ],
     'params' => [
         'adminEmail' => $adminEmail,
