@@ -7,6 +7,26 @@ return [
             'insitePeopleSearchBaseUrl' => getenv('INSITE_PEOPLE_SEARCH_BASE_URL'),
             'insitePeopleSearchApiKey' => getenv('INSITE_PEOPLE_SEARCH_API_KEY'),
             'insitePeopleSearchApiSecret' => getenv('INSITE_PEOPLE_SEARCH_API_SECRET'),
-        ]
+        ],
+        'auth' => [
+            'class' => '\Sil\IdpPw\Auth\Saml',
+            'signRequest' => true,
+            'checkResponseSigning' => true,
+            'requireEncryptedAssertion' => true,
+            'idpCertificate' => '',
+            'spCertificate' => '',
+            'spPrivateKey' => '',
+            'assertionConsumerServiceUrl' => 'http://idp-pw-api.local:8080/auth/login',
+            'entityId' => 'idp-pw-api.local',
+            'ssoUrl' => '',
+            'sloUrl' => '',
+            'attributeMap' => [
+                'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
+                'first_name' => ['field' => 'givenName', 'element' => 0 ],
+                'last_name' => ['field' => 'sn', 'element' => 0 ],
+                'email' => ['field' => 'mail', 'element' => 0 ],
+                'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
+            ]
+        ],
     ]
 ];

@@ -37,6 +37,7 @@ return [
                  * Auth routes
                  */
                 'GET /auth/login' => 'auth/login',
+                'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
                 'POST /auth/login/token' => 'auth/token',
 
@@ -77,17 +78,6 @@ return [
         ]
     ],
     'params' => [
-        'saml' => [
-            'default-sp' => 'default-sp',
-            'fields' => [
-                'idp_uid' => ['field' => 'eduPersonPrincipalName', 'element' => 0],
-                'first_name' => ['field' => 'givenName', 'element' => 0],
-                'last_name' => ['field' => 'sn', 'element' => 0],
-                'email' => ['field' => 'mail', 'element' => 0],
-                'groups' => ['field' => 'groups'],
-                'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
-            ]
-        ],
-        'sessionDuration' => 28800, // 8 hours
+        'sessionDuration' => 1800, // 30 minutes
     ],
 ];

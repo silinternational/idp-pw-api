@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use Sil\IdpPw\Common\Auth\User as AuthUser;
 use Sil\IdpPw\Common\Personnel\NotFoundException;
 use Sil\IdpPw\Common\Personnel\PersonnelInterface;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
@@ -48,29 +49,59 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
+     * Limit what fields are returned from api calls
+     * @return array
+     */
+    public function fields()
+    {
+        return [
+            'first_name',
+            'last_name',
+            'idp_username' => function($model) {
+                return strtolower($model->idp_username);
+            },
+            'email',
+        ];
+    }
+
+    /**
      * Find or create local user. Fetch/update user data from personnel.
-     * @param string $username
+     * @param string|null [default=null] $username
+     * @param string|null [default=null] $email
+     * @param string|null [default=null] $employeeId
      * @return User
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws NotFoundException
      */
-    public static function findOrCreate($username)
+    public static function findOrCreate($username = null, $email = null, $employeeId = null)
     {
         /*
-         * If username looks like an email address, search by email
+         * Make sure at least one method was provided
+         */
+        if (is_null($username) && is_null($email) && is_null($employeeId)) {
+            throw new \Exception(
+                'You must provide a username, email address, or employee id to find or create a user',
+                1459974492
+            );
+        }
+
+        /*
+         * Always call Personnel system in case employee is no longer employed
          */
         /** @var PersonnelUser $personnelUser */
-        if (substr_count($username, '@') > 0) {
-            $personnelUser = \Yii::$app->personnel->findByEmail($username);
-        } else {
+        if( ! is_null($employeeId)) {
+            $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
+        } elseif ( ! is_null($username)) {
             $personnelUser = \Yii::$app->personnel->findByUsername($username);
+        } elseif ( ! is_null($email)) {
+            $personnelUser = \Yii::$app->personnel->findByEmail($email);
         }
 
         $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
         if ( ! $user) {
             $user = new User();
-            $user->employee_id = $personnelUser->employeeId;
+            $user->employee_id = (string)$personnelUser->employeeId;
             $user->first_name = $personnelUser->firstName;
             $user->last_name = $personnelUser->lastName;
             $user->idp_username = $personnelUser->username;
@@ -277,5 +308,21 @@ class User extends UserBase implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return false;
+    }
+
+    /**
+     * Get this user as an AuthUser object
+     * @return AuthUser
+     */
+    public function getAuthUser()
+    {
+        $authUser = new AuthUser();
+        $authUser->firstName = $this->first_name;
+        $authUser->lastName = $this->last_login;
+        $authUser->email = $this->email;
+        $authUser->employeeId = $this->employee_id;
+        $authUser->idpUsername = $this->idp_username;
+
+        return $authUser;
     }
 }

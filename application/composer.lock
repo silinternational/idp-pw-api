@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "218dcee51bbe1ed5874043fc3976898e",
-    "content-hash": "14051ccf11d531c8f60c92ee2c843987",
+    "hash": "7aa1c5c8639c2dc1859c2fca2694c8a8",
+    "content-hash": "4d971944416323143cc2c7c56694dcdd",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -61,12 +61,12 @@
             "version": "2.1.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "7751e69b615c6eca6f783a81e292a55725af6b85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery/zipball/7751e69b615c6eca6f783a81e292a55725af6b85",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/7751e69b615c6eca6f783a81e292a55725af6b85",
                 "reference": "7751e69b615c6eca6f783a81e292a55725af6b85",
                 "shasum": ""
             },
@@ -308,8 +308,7 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com",
-                    "role": "Developer"
+                    "homepage": "http://ezyang.com"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -512,6 +511,122 @@
             "time": "2014-10-12 19:18:40"
         },
         {
+            "name": "monolog/monolog",
+            "version": "1.18.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
+                "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^2.4.9",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "raven/raven": "^0.13",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "swiftmailer/swiftmailer": "~5.3",
+                "videlalvaro/php-amqplib": "~2.4"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
+                "raven/raven": "Allow sending log messages to a Sentry server",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "time": "2016-03-13 16:08:35"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
+        },
+        {
             "name": "react/promise",
             "version": "v2.4.0",
             "source": {
@@ -674,18 +789,104 @@
             "time": "2016-03-15 19:40:54"
         },
         {
+            "name": "robrichards/xmlseclibs",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/robrichards/xmlseclibs.git",
+                "reference": "1b78df099c107279e9069a7b7608be98fd530dfd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/1b78df099c107279e9069a7b7608be98fd530dfd",
+                "reference": "1b78df099c107279e9069a7b7608be98fd530dfd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3"
+            },
+            "suggest": {
+                "ext/mcrypt": "MCrypt extension",
+                "ext/openssl": "OpenSSL extension"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RobRichards\\XMLSecLibs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "A PHP library for XML Security",
+            "homepage": "https://github.com/robrichards/xmlseclibs",
+            "keywords": [
+                "security",
+                "signature",
+                "xml",
+                "xmldsig"
+            ],
+            "time": "2015-07-31 15:08:38"
+        },
+        {
+            "name": "silinternational/idp-pw-api-auth-saml",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/idp-pw-api-auth-saml.git",
+                "reference": "1b3481ac36f8dbff20ef267636a302f30d4d7ca2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/1b3481ac36f8dbff20ef267636a302f30d4d7ca2",
+                "reference": "1b3481ac36f8dbff20ef267636a302f30d4d7ca2",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "1.18.1",
+                "php": ">=5.4.0",
+                "silinternational/idp-pw-api-common": "dev-master",
+                "silinternational/yii2-jsonsyslog": "*",
+                "simplesamlphp/saml2": "^2.2",
+                "yiisoft/yii2": "2.0.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sil\\IdpPw\\Auth\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phillip Shipley",
+                    "email": "phillip_shipley@sil.org"
+                }
+            ],
+            "description": "SAML Auth component for IdP PW API",
+            "time": "2016-04-06 20:57:11"
+        },
+        {
             "name": "silinternational/idp-pw-api-common",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "676164f5e610afce92124c9853a850049a2fe83d"
+                "reference": "98d850e4f47870adf53aa8f895d2d743af6b412b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/676164f5e610afce92124c9853a850049a2fe83d",
-                "reference": "676164f5e610afce92124c9853a850049a2fe83d",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/98d850e4f47870adf53aa8f895d2d743af6b412b",
+                "reference": "98d850e4f47870adf53aa8f895d2d743af6b412b",
                 "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "2.0.6"
             },
             "require-dev": {
                 "phpunit/phpunit": "5.2.9"
@@ -707,7 +908,7 @@
                 }
             ],
             "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-04-01 13:55:34"
+            "time": "2016-04-06 20:54:52"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -852,6 +1053,58 @@
                 }
             },
             "time": "2016-03-03 17:59:15"
+        },
+        {
+            "name": "simplesamlphp/saml2",
+            "version": "v2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplesamlphp/saml2.git",
+                "reference": "0d6861bc2966249702e623d325609adb2a782612"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/0d6861bc2966249702e623d325609adb2a782612",
+                "reference": "0d6861bc2966249702e623d325609adb2a782612",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "php": ">=5.3.3",
+                "psr/log": "~1.0",
+                "robrichards/xmlseclibs": "^2.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpmd/phpmd": "~1.5",
+                "phpunit/phpunit": "~3.7",
+                "satooshi/php-coveralls": "~0.6.1",
+                "sebastian/phpcpd": "~1.4",
+                "sensiolabs/security-checker": "~1.1",
+                "squizlabs/php_codesniffer": "~1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SAML2\\": "src/"
+                },
+                "files": [
+                    "src/_autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Åkre Solberg",
+                    "email": "andreas.solberg@uninett.no"
+                }
+            ],
+            "description": "SAML2 PHP library from SimpleSAMLphp",
+            "time": "2016-03-16 13:39:22"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3076,6 +3329,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "silinternational/idp-pw-api-common": 20,
+        "silinternational/idp-pw-api-auth-saml": 20,
         "roave/security-advisories": 20,
         "fillup/phpmyadmin-minimal": 20
     },
