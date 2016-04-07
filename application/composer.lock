@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7aa1c5c8639c2dc1859c2fca2694c8a8",
-    "content-hash": "4d971944416323143cc2c7c56694dcdd",
+    "hash": "69223a6412f54b38d0abcfa2bc3ee092",
+    "content-hash": "68b8f1ae89abaf32fac07da7f04f513b",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -835,12 +835,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-auth-saml.git",
-                "reference": "1b3481ac36f8dbff20ef267636a302f30d4d7ca2"
+                "reference": "2fbfd3792d919ecf55f193dd626888bacb7a10a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/1b3481ac36f8dbff20ef267636a302f30d4d7ca2",
-                "reference": "1b3481ac36f8dbff20ef267636a302f30d4d7ca2",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/2fbfd3792d919ecf55f193dd626888bacb7a10a8",
+                "reference": "2fbfd3792d919ecf55f193dd626888bacb7a10a8",
                 "shasum": ""
             },
             "require": {
@@ -868,7 +868,7 @@
                 }
             ],
             "description": "SAML Auth component for IdP PW API",
-            "time": "2016-04-06 20:57:11"
+            "time": "2016-04-07 12:48:31"
         },
         {
             "name": "silinternational/idp-pw-api-common",
@@ -876,12 +876,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "98d850e4f47870adf53aa8f895d2d743af6b412b"
+                "reference": "e0ca777c0de84664858a8a2eb8136d24a7f5bf34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/98d850e4f47870adf53aa8f895d2d743af6b412b",
-                "reference": "98d850e4f47870adf53aa8f895d2d743af6b412b",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/e0ca777c0de84664858a8a2eb8136d24a7f5bf34",
+                "reference": "e0ca777c0de84664858a8a2eb8136d24a7f5bf34",
                 "shasum": ""
             },
             "require": {
@@ -908,7 +908,7 @@
                 }
             ],
             "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-04-06 20:54:52"
+            "time": "2016-04-07 12:33:07"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -1856,19 +1856,24 @@
         },
         {
             "name": "phpspec/php-diff",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/php-diff.git",
-                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a"
+                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/30e103d19519fe678ae64a60d77884ef3d71b28a",
-                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a",
+                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/0464787bfa7cd13576c5a1e318709768798bec6a",
+                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a",
                 "shasum": ""
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Diff": "lib/"
@@ -1881,12 +1886,11 @@
             "authors": [
                 {
                     "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton",
-                    "role": "Original developer"
+                    "homepage": "http://github.com/chrisboulton"
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
-            "time": "2013-11-01 13:02:21"
+            "time": "2016-04-07 12:29:16"
         },
         {
             "name": "phpspec/prophecy",
