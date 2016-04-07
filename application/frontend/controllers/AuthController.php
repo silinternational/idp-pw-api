@@ -9,6 +9,11 @@ use yii\web\UnauthorizedHttpException;
 
 class AuthController extends Controller
 {
+    /**
+     * @param \yii\base\Action $action
+     * @return bool
+     * @throws \yii\web\BadRequestHttpException
+     */
     public function beforeAction($action)
     {
         /*

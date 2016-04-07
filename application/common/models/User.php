@@ -94,7 +94,7 @@ class User extends UserBase implements IdentityInterface
             $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
         } elseif ( ! is_null($username)) {
             $personnelUser = \Yii::$app->personnel->findByUsername($username);
-        } elseif ( ! is_null($email)) {
+        } else {
             $personnelUser = \Yii::$app->personnel->findByEmail($email);
         }
 
