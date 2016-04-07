@@ -1,8 +1,8 @@
 <?php
 /**
- * @var $faker \Faker\Generator
- * @var $index integer
- */
+     * @var $faker \Faker\Generator
+     * @var $index integer
+     */
 
 $security = Yii::$app->getSecurity();
 
