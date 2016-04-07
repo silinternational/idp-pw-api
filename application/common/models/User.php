@@ -57,9 +57,7 @@ class User extends UserBase implements IdentityInterface
         return [
             'first_name',
             'last_name',
-            'idp_username' => function($model) {
-                return strtolower($model->idp_username);
-            },
+            'idp_username',
             'email',
         ];
     }
@@ -312,13 +310,13 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Get this user as an AuthUser object
-     * @return AuthUser
+     * @return \Sil\IdpPw\Common\Auth\User
      */
     public function getAuthUser()
     {
         $authUser = new AuthUser();
         $authUser->firstName = $this->first_name;
-        $authUser->lastName = $this->last_login;
+        $authUser->lastName = $this->last_name;
         $authUser->email = $this->email;
         $authUser->employeeId = $this->employee_id;
         $authUser->idpUsername = $this->idp_username;

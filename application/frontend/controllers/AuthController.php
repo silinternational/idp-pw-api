@@ -53,7 +53,11 @@ class AuthController extends Controller
             $authUser = \Yii::$app->auth->login(\Yii::$app->request, $returnTo);
 
             $log['email'] = $authUser->email;
-            // Get local user instance or create one
+
+            /*
+             * Get local user instance or create one.
+             * Use employeeId since username or email could change.
+             */
             $user = User::findOrCreate(null, null, $authUser->employeeId);
             // Initialize session for user
             if (\Yii::$app->user->login($user, \Yii::$app->params['sessionDuration'])) {
@@ -82,15 +86,19 @@ class AuthController extends Controller
 
     public function actionLogout()
     {
-        if ( ! \Yii::$app->user->isGuest) {
-            $authUser = \Yii::$app->user->identity->getAuthUser();
-        } else {
+        if ( \Yii::$app->user->isGuest) {
             /*
              * User not logged in, but lets kill session anyway and redirect to UI
              */
             \Yii::$app->user->logout(true);
+
             return $this->redirect(\Yii::$app->params['ui_url']);
         }
+
+        /*
+         * Get AuthUser for call to auth component
+         */
+        $authUser = \Yii::$app->user->identity->getAuthUser();
 
         /*
          * Kill local session
@@ -106,12 +114,14 @@ class AuthController extends Controller
             return $this->redirect($e->getUrl());
         }
 
+        return $this->redirect(\Yii::$app->params['ui_url']);
     }
 
     public function getAfterLoginUrl($returnTo)
     {
         /*
-         * Only keep $returnTo if it is a path on the frontend
+         * Only keep $returnTo if it is a path on the frontend as a safety measure
+         * to help prevent CSRF
          */
         if (substr($returnTo, 0, 1) == '/') {
             $path = $returnTo;
