@@ -1,7 +1,7 @@
 <?php
 /**
- * Application configuration shared by all applications unit tests
- */
+     * Application configuration shared by all applications unit tests
+     */
 
 use yii\helpers\ArrayHelper;
 use tests\mock\personnel\Component as PersonnelComponent;

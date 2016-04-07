@@ -1,8 +1,8 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\User;
 use Sil\IdpPw\Common\Auth\User as AuthUser;
+use common\models\User;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\UnauthorizedHttpException;
@@ -34,9 +34,9 @@ class AuthController extends Controller
          * Expected as relative url starting with /
          * Before redirecting user after login this will be prefixed with ui_url
          */
-        $returnTo = \Yii::$app->request->get('ReturnTo','');
+        $returnTo = \Yii::$app->request->get('ReturnTo', '');
 
-        if(!\Yii::$app->user->isGuest){
+        if ( ! \Yii::$app->user->isGuest) {
             $afterLogin = $this->getAfterLoginUrl($returnTo);
             return $this->redirect($afterLogin);
         }
@@ -55,20 +55,20 @@ class AuthController extends Controller
             // Get local user instance or create one
             $user = User::findOrCreate(null, null, $authUser->employeeId);
             // Initialize session for user
-            if(\Yii::$app->user->login($user, \Yii::$app->params['sessionDuration'])){
+            if (\Yii::$app->user->login($user, \Yii::$app->params['sessionDuration'])) {
                 $log['status'] = 'success';
-                \Yii::warning($log,'application');
+                \Yii::warning($log, 'application');
 
                 $afterLogin = $this->getAfterLoginUrl($returnTo);
                 return $this->redirect($afterLogin);
             } else {
-                throw new UnauthorizedHttpException('Unable to perform user login',1459966846);
+                throw new UnauthorizedHttpException('Unable to perform user login', 1459966846);
             }
         } catch (\Exception $e) {
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $log['code'] = $e->getCode();
-            \Yii::error($log,'application');
+            \Yii::error($log, 'application');
             throw new UnauthorizedHttpException($e->getMessage(), $e->getCode());
         }
 
@@ -93,7 +93,7 @@ class AuthController extends Controller
         /*
          * Only keep $returnTo if it is a path on the frontend
          */
-        if(substr($returnTo, 0, 1) == '/') {
+        if (substr($returnTo, 0, 1) == '/') {
             $path = $returnTo;
         } else {
             $path = '';
