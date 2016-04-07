@@ -835,12 +835,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-auth-saml.git",
-                "reference": "2fbfd3792d919ecf55f193dd626888bacb7a10a8"
+                "reference": "917422fac31d0636a293238579b42104ab94c917"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/2fbfd3792d919ecf55f193dd626888bacb7a10a8",
-                "reference": "2fbfd3792d919ecf55f193dd626888bacb7a10a8",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/917422fac31d0636a293238579b42104ab94c917",
+                "reference": "917422fac31d0636a293238579b42104ab94c917",
                 "shasum": ""
             },
             "require": {
@@ -868,7 +868,7 @@
                 }
             ],
             "description": "SAML Auth component for IdP PW API",
-            "time": "2016-04-07 12:48:31"
+            "time": "2016-04-07 13:37:58"
         },
         {
             "name": "silinternational/idp-pw-api-common",
@@ -876,12 +876,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "e0ca777c0de84664858a8a2eb8136d24a7f5bf34"
+                "reference": "8256c143c07e6c6f80cac9bb106ea1d8b2de7904"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/e0ca777c0de84664858a8a2eb8136d24a7f5bf34",
-                "reference": "e0ca777c0de84664858a8a2eb8136d24a7f5bf34",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/8256c143c07e6c6f80cac9bb106ea1d8b2de7904",
+                "reference": "8256c143c07e6c6f80cac9bb106ea1d8b2de7904",
                 "shasum": ""
             },
             "require": {
@@ -908,7 +908,7 @@
                 }
             ],
             "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-04-07 12:33:07"
+            "time": "2016-04-07 13:34:25"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",

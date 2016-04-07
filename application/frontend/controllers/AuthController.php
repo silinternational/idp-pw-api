@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use Sil\IdpPw\Common\Auth\RedirectException;
 use Sil\IdpPw\Common\Auth\User as AuthUser;
 use common\models\User;
 use yii\helpers\Url;
@@ -64,6 +65,11 @@ class AuthController extends Controller
             } else {
                 throw new UnauthorizedHttpException('Unable to perform user login', 1459966846);
             }
+        } catch (RedirectException $e) {
+            /*
+             * Login triggered redirect to IdP to login, so return a redirect to it
+             */
+            return $this->redirect($e->getUrl());
         } catch (\Exception $e) {
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
@@ -79,13 +85,27 @@ class AuthController extends Controller
         if ( ! \Yii::$app->user->isGuest) {
             $authUser = \Yii::$app->user->identity->getAuthUser();
         } else {
-            // Just to be extra safe
+            /*
+             * User not logged in, but lets kill session anyway and redirect to UI
+             */
             \Yii::$app->user->logout(true);
             return $this->redirect(\Yii::$app->params['ui_url']);
         }
 
+        /*
+         * Kill local session
+         */
         \Yii::$app->user->logout(true);
-        \Yii::$app->auth->logout($authUser, \Yii::$app->params['ui_url']);
+
+        /*
+         * Log user out of IdP
+         */
+        try {
+            \Yii::$app->auth->logout($authUser, \Yii::$app->params['ui_url']);
+        } catch (RedirectException $e) {
+            return $this->redirect($e->getUrl());
+        }
+
     }
 
     public function getAfterLoginUrl($returnTo)
