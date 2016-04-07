@@ -90,7 +90,7 @@ class User extends UserBase implements IdentityInterface
          * Always call Personnel system in case employee is no longer employed
          */
         /** @var PersonnelUser $personnelUser */
-        if( ! is_null($employeeId)) {
+        if ( ! is_null($employeeId)) {
             $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
         } elseif ( ! is_null($username)) {
             $personnelUser = \Yii::$app->personnel->findByUsername($username);

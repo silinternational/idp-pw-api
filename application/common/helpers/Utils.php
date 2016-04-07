@@ -14,18 +14,18 @@ class Utils
      * @param integer|null $timestamp
      * @return string
      */
-    public static function getDatetime($timestamp=null)
+    public static function getDatetime($timestamp = null)
     {
         $timestamp = $timestamp ?: time();
 
-        return date(self::DT_FORMAT,$timestamp);
+        return date(self::DT_FORMAT, $timestamp);
     }
 
     /**
      * @param integer|null $timestamp
      * @return string
      */
-    public static function getIso8601($timestamp=null)
+    public static function getIso8601($timestamp = null)
     {
         $timestamp = $timestamp ?: time();
         return date('c', strtotime($timestamp));
@@ -35,7 +35,7 @@ class Utils
      * @param int $length
      * @return string
      */
-    public static function generateRandomString($length=32)
+    public static function generateRandomString($length = 32)
     {
         $security = new Security();
         return $security->generateRandomString($length);
@@ -52,13 +52,13 @@ class Utils
     {
         $attrs = [];
 
-        foreach($map as $attr => $details) {
-            if(isset($details['element'])) {
-                if(isset($attributes[$details['field']][$details['element']])) {
+        foreach ($map as $attr => $details) {
+            if (isset($details['element'])) {
+                if (isset($attributes[$details['field']][$details['element']])) {
                     $attrs[$attr] = $attributes[$details['field']][$details['element']];
                 }
             } else {
-                if(isset($attributes[$details['field']])) {
+                if (isset($attributes[$details['field']])) {
                     $attrs[$attr] = $attributes[$details['field']];
                 }
             }
@@ -98,7 +98,7 @@ class Utils
      */
     public static function getCurrentUser()
     {
-        if(\Yii::$app->user && !\Yii::$app->user->isGuest) {
+        if (\Yii::$app->user && ! \Yii::$app->user->isGuest) {
             return \Yii::$app->user->identity;
         }
         return null;
@@ -114,8 +114,8 @@ class Utils
          * $phone may be formatted with country code followed by a comma followed by the rest of the phone number
          * Example: 1,4085551212 or 77,8588923456
          */
-        if(substr_count($phone,',') > 0) {
-            list($countryCode, $number) = explode(',',$phone);
+        if (substr_count($phone, ',') > 0) {
+            list($countryCode, $number) = explode(',', $phone);
         } else {
             $countryCode = null;
             $number = $phone;
@@ -126,7 +126,7 @@ class Utils
         /*
          * If country code is present, prepend string with + followed by country code
          */
-        if(!is_null($countryCode)){
+        if ( ! is_null($countryCode)) {
             $string .= '+' . $countryCode . ' ';
         }
 
@@ -165,7 +165,7 @@ class Utils
         // replace the last * with the last real character
         $newEmail = substr($newEmail, 0, -1);
         $newEmail .= substr($part1, -1);
-        $newEmail .='@';
+        $newEmail .= '@';
 
         /*
          * Add an '*' for each of the characters of the domain, except
@@ -216,9 +216,9 @@ class Utils
             'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
         ];
 
-        foreach($passwordRuleFields as $rule) {
+        foreach ($passwordRuleFields as $rule) {
             if (empty($params['password'][$rule])) {
-                throw new ServerErrorHttpException('Missing configuration for '.$rule);
+                throw new ServerErrorHttpException('Missing configuration for ' . $rule);
             }
             $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
             $config['password'][$rule]['regex'] = $params['password'][$rule]['jsRegex'];
@@ -237,7 +237,7 @@ class Utils
     public static function isSessionAvailable()
     {
         try {
-            $sessionAvailable = !\Yii::$app->user->isGuest;
+            $sessionAvailable = ! \Yii::$app->user->isGuest;
         } catch (\Exception $e) {
             $sessionAvailable = false;
         }
