@@ -58,6 +58,12 @@ return [
         'personnel' => [
             // Define in local.php
         ],
+        'auth' => [
+            // Define in local.php
+        ],
+        'phone' => [
+            // Define in local.php
+        ],
     ],
     'params' => [
         'adminEmail' => $adminEmail,

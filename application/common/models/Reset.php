@@ -5,6 +5,7 @@ use yii\helpers\ArrayHelper;
 
 use common\helpers\Utils;
 use common\models\User;
+use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -193,11 +194,52 @@ class Reset extends ResetBase
          */
     }
 
+    /**
+     * Send phone verification and store resulting code
+     * @throws \Exception
+     */
     public function sendPhone()
     {
-        /**
-         * @todo use phone service component to send notification to $this->method->value
-         */
+        // Initialize log
+        $log = [
+            'action' => 'reset',
+            'method' => 'phone',
+            'method_id' => $this->method_id,
+            'previous_attempts' => $this->attempts,
+        ];
+
+        // Get phone number without comma
+        $number = $this->method->getRawPhoneNumber();
+
+        // Generate random code for potential use
+        $code = Utils::getRandomDigits(\Yii::$app->phone->codeLength);
+
+        // Call component send() method to send verification and capture resulting code
+        $result = \Yii::$app->phone->send($number, $code);
+
+        // Update db with code and increased attempts count
+        $this->code = $result;
+        $this->attempts++;
+        if ( ! $this->save()) {
+            $log['status'] = 'error';
+            $log['error'] = 'Unable to update Reset in database';
+            $log['model_error'] = Json::encode($this->getFirstErrors());
+            \Yii::error($log, 'application');
+            throw new \Exception($log['error'], 1460388532);
+        }
+        $log['status'] = 'success';
+        \Yii::warning($log, 'application');
+    }
+
+    /**
+     * @param string $userProvided code submitted by user
+     * @return boolean
+     * @throws \Exception
+     * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
+     */
+    public function verifyPhone($userProvided)
+    {
+        return \Yii::$app->phone->verify($this->code, $userProvided);
     }
 
     /**

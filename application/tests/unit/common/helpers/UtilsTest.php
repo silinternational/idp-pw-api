@@ -1,6 +1,7 @@
 <?php
 namespace tests\unit\common\helpers;
 
+use Monolog\Handler\Curl\Util;
 use yii\codeception\TestCase;
 use common\helpers\Utils;
 
@@ -36,5 +37,14 @@ class UtilsTest extends TestCase
         $email2 = 'first_last@myco.org';
         $expected2 = 'f****_l**t@m***.o**';
         $this->assertEquals($expected2, Utils::maskEmail($email2));
+    }
+
+    public function testGetRandomDigits()
+    {
+        for ($i = 4; $i < 32; $i++) {
+            $value = Utils::getRandomDigits($i);
+            $regex = '/^[0-9]{'.$i.'}$/';
+            $this->assertRegExp($regex, $value);
+        }
     }
 }

@@ -29,5 +29,12 @@ return [
                 'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
             ]
         ],
+        'phone' => [
+            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Verify',
+            'apiKey' => '',
+            'apiSecret' => '',
+            'generateCodeBeforeCall' => false,
+            'codeLength' => 4,
+        ],
     ]
 ];

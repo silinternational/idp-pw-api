@@ -94,5 +94,18 @@ class ResetTest extends DbTestCase
         $this->assertEquals($existing->id, $new->id);
     }
 
+    public function testSendPhone()
+    {
+        $reset = $this->resets('reset2');
+        $this->assertNull($reset->code);
+        $reset->send();
+        $this->assertEquals('1234', $reset->code);
+        $this->assertEquals(1, $reset->attempts);
+        $this->assertTrue($reset->verifyPhone('1234'));
+
+        $this->setExpectedException('Sil\IdpPw\Common\PhoneVerification\NotMatchException');
+        $reset->verifyPhone('1111');
+    }
+
 
 }

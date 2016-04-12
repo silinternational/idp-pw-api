@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69223a6412f54b38d0abcfa2bc3ee092",
-    "content-hash": "68b8f1ae89abaf32fac07da7f04f513b",
+    "hash": "e26478743619cec792bc21ddc10b1ee1",
+    "content-hash": "538c0d5547ab03f77148291cefd966e8",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -319,6 +319,45 @@
             "time": "2013-11-30 08:25:19"
         },
         {
+            "name": "fillup/nexmo",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fillup/nexmo.git",
+                "reference": "c8c51bb54789a7d0a23859262a86c2b473f33cd5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fillup/nexmo/zipball/c8c51bb54789a7d0a23859262a86c2b473f33cd5",
+                "reference": "c8c51bb54789a7d0a23859262a86c2b473f33cd5",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.0",
+                "guzzlehttp/guzzle-services": "*",
+                "guzzlehttp/log-subscriber": "*",
+                "guzzlehttp/retry-subscriber": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nexmo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phillip Shipley",
+                    "email": "phillip.shipley@gmail.com"
+                }
+            ],
+            "description": "Nexmo API client built with Guzzle Web Service descriptions",
+            "time": "2016-03-29 18:59:47"
+        },
+        {
             "name": "forevermatt/calc-api-sig",
             "version": "0.1.1",
             "source": {
@@ -350,6 +389,52 @@
                 "MIT"
             ],
             "time": "2015-09-03 15:21:29"
+        },
+        {
+            "name": "guzzlehttp/command",
+            "version": "0.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/command.git",
+                "reference": "2e8286ff81f75f97b00f7dcc2f51e2efafb373bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/command/zipball/2e8286ff81f75f97b00f7dcc2f51e2efafb373bd",
+                "reference": "2e8286ff81f75f97b00f7dcc2f51e2efafb373bd",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Command\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides the foundation for building command based web service clients",
+            "time": "2015-01-14 18:54:57"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -408,6 +493,158 @@
                 "web service"
             ],
             "time": "2015-01-28 01:03:29"
+        },
+        {
+            "name": "guzzlehttp/guzzle-services",
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle-services.git",
+                "reference": "5402867628d266748db88f05c90ede54fd1d884c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle-services/zipball/5402867628d266748db88f05c90ede54fd1d884c",
+                "reference": "5402867628d266748db88f05c90ede54fd1d884c",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/command": "0.7.*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Command\\Guzzle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides an implementation of the Guzzle Command library that uses Guzzle service descriptions to describe web services, serialize requests, and parse responses into easy to use model structures.",
+            "time": "2014-12-23 19:13:18"
+        },
+        {
+            "name": "guzzlehttp/log-subscriber",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/log-subscriber.git",
+                "reference": "99c3c0004165db721d8ef7bbef60c996210e538a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/log-subscriber/zipball/99c3c0004165db721d8ef7bbef60c996210e538a",
+                "reference": "99c3c0004165db721d8ef7bbef60c996210e538a",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~4.0 | ~5.0",
+                "php": ">=5.4.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Subscriber\\Log\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Logs HTTP requests and responses as they are sent over the wire (Guzzle 4+)",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "log",
+                "plugin"
+            ],
+            "time": "2014-10-13 03:31:43"
+        },
+        {
+            "name": "guzzlehttp/retry-subscriber",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/retry-subscriber.git",
+                "reference": "f13a4c640b823e9eaf06975d8e8981f9551250e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/retry-subscriber/zipball/f13a4c640b823e9eaf06975d8e8981f9551250e8",
+                "reference": "f13a4c640b823e9eaf06975d8e8981f9551250e8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.1",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "guzzlehttp/log-subscriber": "~1.0",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Subscriber\\Retry\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Retries failed HTTP requests using customizable retry strategies (Guzzle 4+)",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "http",
+                "retry"
+            ],
+            "time": "2014-12-19 20:42:37"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -676,12 +913,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ce4c36bdc9310ba76fdd167f16978f14ab3b8e42"
+                "reference": "438196c8f66647073bcaf99908b543bda7ffd6d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ce4c36bdc9310ba76fdd167f16978f14ab3b8e42",
-                "reference": "ce4c36bdc9310ba76fdd167f16978f14ab3b8e42",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/438196c8f66647073bcaf99908b543bda7ffd6d4",
+                "reference": "438196c8f66647073bcaf99908b543bda7ffd6d4",
                 "shasum": ""
             },
             "conflict": {
@@ -715,6 +952,7 @@
                 "phpmailer/phpmailer": ">=5,<5.2.14",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
+                "shopware/shopware": "<4.3.7|>=5,<5.1|>=5.1,<5.1.5",
                 "silverstripe/cms": ">=3.1,<3.1.11|>=3,<=3.0.11",
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
                 "silverstripe/framework": ">=3,<3.1|>=3.1,<3.2|>=3.2,<3.3",
@@ -786,7 +1024,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-03-15 19:40:54"
+            "time": "2016-04-11 16:52:34"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -876,12 +1114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "8256c143c07e6c6f80cac9bb106ea1d8b2de7904"
+                "reference": "f5c0b1a7e0d0b1131701a7dfc5370112e155f7b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/8256c143c07e6c6f80cac9bb106ea1d8b2de7904",
-                "reference": "8256c143c07e6c6f80cac9bb106ea1d8b2de7904",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/f5c0b1a7e0d0b1131701a7dfc5370112e155f7b9",
+                "reference": "f5c0b1a7e0d0b1131701a7dfc5370112e155f7b9",
                 "shasum": ""
             },
             "require": {
@@ -908,7 +1146,7 @@
                 }
             ],
             "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-04-07 13:34:25"
+            "time": "2016-04-11 15:21:19"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -953,6 +1191,47 @@
             ],
             "description": "IdP Password Management personnel component for Insite",
             "time": "2016-03-03 18:36:45"
+        },
+        {
+            "name": "silinternational/idp-pw-api-phoneverification-nexmo",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/idp-pw-api-phoneverification-nexmo.git",
+                "reference": "3721df2b44ee3fba9cd44f4a60de1576a2c2293f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/3721df2b44ee3fba9cd44f4a60de1576a2c2293f",
+                "reference": "3721df2b44ee3fba9cd44f4a60de1576a2c2293f",
+                "shasum": ""
+            },
+            "require": {
+                "fillup/nexmo": "~1.0",
+                "php": ">=5.4.0",
+                "silinternational/idp-pw-api-common": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sil\\IdpPw\\PhoneVerification\\Nexmo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phillip Shipley",
+                    "email": "phillip_shipley@sil.org"
+                }
+            ],
+            "description": "PhoneVerification component for IdP PW API that uses Nexmo services for SMS/Voice verification",
+            "time": "2016-04-11 15:23:13"
         },
         {
             "name": "silinternational/php-env",
@@ -3334,13 +3613,15 @@
     "stability-flags": {
         "silinternational/idp-pw-api-common": 20,
         "silinternational/idp-pw-api-auth-saml": 20,
+        "silinternational/idp-pw-api-phoneverification-nexmo": 20,
         "roave/security-advisories": 20,
         "fillup/phpmyadmin-minimal": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "lib-openssl": "*"
     },
     "platform-dev": []
 }

@@ -7,7 +7,7 @@ composer install --prefer-dist --no-interaction --optimize-autoloader
 
 # Copy test version of common/config/local.php if doesn't exist
 if [ ! -f /data/common/config/local.php ]; then
-    cp /data/common/config/local.php.test /data/common/config/local.php
+    cp /data/common/config/local.test.php /data/common/config/local.php
 fi
 
 # Run database migrations

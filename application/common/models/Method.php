@@ -52,4 +52,13 @@ class Method extends MethodBase
             throw new \Exception('Method using invalid Type', 1456610497);
         }
     }
+
+    /**
+     * If this is a phone method, remove comma from value before returning
+     * @return string
+     */
+    public function getRawPhoneNumber()
+    {
+        return preg_replace('/,/','',$this->value);
+    }
 }

@@ -5,8 +5,10 @@
 
 use yii\helpers\ArrayHelper;
 use tests\mock\personnel\Component as PersonnelComponent;
+use tests\mock\auth\Component as AuthComponent;
+use tests\mock\phone\Component as PhoneComponent;
 
-$mainLocalConfig = require(__DIR__ . '/../../../common/config/main.php');
+$mainConfig = require(__DIR__ . '/../../../common/config/main.php');
 
 $config = [
     'id' => 'unit_tests_app',
@@ -15,6 +17,13 @@ $config = [
         'personnel' => [
             'class' => PersonnelComponent::className(),
         ],
+        'auth' => [
+            'class' => AuthComponent::className(),
+        ],
+        'phone' => [
+            'class' => PhoneComponent::className(),
+            'codeLength' => 4,
+        ],
     ],
     'params' => [
 
@@ -22,6 +31,6 @@ $config = [
 ];
 
 return ArrayHelper::merge(
-    $mainLocalConfig,
+    $mainConfig,
     $config
 );
