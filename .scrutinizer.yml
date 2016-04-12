@@ -157,7 +157,7 @@ build:
     tests:
         override:
             -
-                command: cp ./common/config/local.php.test ./common/config/local.php
+                command: cp ./common/config/local.test.php ./common/config/local.php
             -
                 command: ./yii migrate --interactive=0
                 environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt' }
