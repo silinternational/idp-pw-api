@@ -14,7 +14,6 @@ class BaseRestController extends Controller
 
     /**
      * Enable CORS support
-     * @todo update cors['Origin'] for valid options
      * @return array
      */
     public function behaviors()

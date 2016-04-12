@@ -146,23 +146,23 @@ class Reset extends ResetBase
 
     public function sendPrimary()
     {
-        /**
-         * @todo send email to $user->email with reset code
+        /*
+         * send email to $user->email with reset code
          */
     }
 
     public function sendSupervisor()
     {
-        /**
-         * @todo if $this->user->hasSupervisor(), send reset
+        /*
+         * If $this->user->hasSupervisor(), send reset
          *       code to $this->user->getSupervisorEmail()
          */
     }
 
     public function sendSpouse()
     {
-        /**
-         * @todo if $this->user->hasSpouse(), send reset
+        /*
+         * if $this->user->hasSpouse(), send reset
          *       code to $this->user->getSpouseEmail()
          */
     }
@@ -188,8 +188,8 @@ class Reset extends ResetBase
 
     public function sendEmail()
     {
-        /**
-         * @todo send email to $this->method->value with reset code
+        /*
+         * send email to $this->method->value with reset code
          */
     }
 

@@ -48,8 +48,8 @@ class ResetController extends BaseRestController
         /*
          * Validate $verificationToken before proceeding
          */
-        /**
-         * @todo integrate with reCAPTCHA to validate token
+        /*
+         * integrate with reCAPTCHA to validate token
          */
 
         /*
