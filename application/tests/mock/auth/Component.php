@@ -22,7 +22,7 @@ class Component extends YiiComponent implements AuthnInterface
         $username = null;
         $password = null;
 
-        if ( $request instanceof \yii\web\Request) {
+        if ($request instanceof \yii\web\Request) {
             $username = $request->post('username', null);
             $password = $request->post('password', null);
         }
@@ -30,7 +30,7 @@ class Component extends YiiComponent implements AuthnInterface
         /*
          * If username or password are missing, "redirect" them
          */
-        if ( is_null($username) || is_null($password)) {
+        if (is_null($username) || is_null($password)) {
             throw new RedirectException('https://login');
         }
 
@@ -39,8 +39,8 @@ class Component extends YiiComponent implements AuthnInterface
          */
         $data = include __DIR__ . '/data.php';
         foreach ($data as $user) {
-            if ( $user['username'] == $username) {
-                if( $user['password'] == $password) {
+            if ($user['username'] == $username) {
+                if ($user['password'] == $password) {
                     return $this->toAuthUser($user);
                 } else {
                     break;
@@ -60,7 +60,7 @@ class Component extends YiiComponent implements AuthnInterface
     public function logout($returnTo, AuthUser $user = null)
     {
         // Allow for redirect potential
-        if( $returnTo == 'redirect') {
+        if ($returnTo == 'redirect') {
             throw new RedirectException('https://logout');
         }
     }
