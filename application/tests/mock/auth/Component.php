@@ -13,7 +13,7 @@ class Component extends YiiComponent implements AuthnInterface
     /**
      * @param string $returnTo Where to have IdP send user after login
      * @param \yii\web\Request|null $request
-     * @return \Sil\IdpPw\Common\Auth\User|void
+     * @return AuthUser|void
      * @throws InvalidLoginException
      * @throws RedirectException
      */
