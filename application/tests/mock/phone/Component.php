@@ -23,7 +23,7 @@ class Component extends YiiComponent implements PhoneVerificationInterface
         // Look up code by phone number to support "generated" numbers
         $data = include __DIR__ . '/data.php';
         foreach ($data as $phone) {
-            if ( $phone['number'] == $phoneNumber) {
+            if ($phone['number'] == $phoneNumber) {
                 return $phone['code'];
             }
         }
@@ -52,7 +52,7 @@ class Component extends YiiComponent implements PhoneVerificationInterface
         // Look up code by id to simulate verifying with a service like Nexmo Verify
         $data = include __DIR__ . '/data.php';
         foreach ($data as $phone) {
-            if( $phone['id'] == $resetCode && $phone['code'] == $userProvided) {
+            if ($phone['id'] == $resetCode && $phone['code'] == $userProvided) {
                 return true;
             }
         }
