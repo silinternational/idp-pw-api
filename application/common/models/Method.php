@@ -59,6 +59,6 @@ class Method extends MethodBase
      */
     public function getRawPhoneNumber()
     {
-        return preg_replace('/,/','',$this->value);
+        return preg_replace('/,/', '', $this->value);
     }
 }

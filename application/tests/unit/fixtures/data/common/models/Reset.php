@@ -12,7 +12,7 @@ return [
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],
-    'reset2' => [ // phone
+    'reset2' => [// phone
         'id' => 2,
         'uid' => '22222222222222222222222222222222',
         'user_id' => 2,
@@ -24,7 +24,7 @@ return [
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],
-    'reset3' => [ // email
+    'reset3' => [// email
         'id' => 3,
         'uid' => '33333333333333333333333333333333',
         'user_id' => 3,

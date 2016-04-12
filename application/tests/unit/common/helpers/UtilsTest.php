@@ -43,7 +43,7 @@ class UtilsTest extends TestCase
     {
         for ($i = 4; $i < 32; $i++) {
             $value = Utils::getRandomDigits($i);
-            $regex = '/^[0-9]{'.$i.'}$/';
+            $regex = '/^[0-9]{' . $i . '}$/';
             $this->assertRegExp($regex, $value);
         }
     }

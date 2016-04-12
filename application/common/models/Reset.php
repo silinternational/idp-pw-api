@@ -1,10 +1,9 @@
 <?php
 namespace common\models;
 
-use yii\helpers\ArrayHelper;
 
 use common\helpers\Utils;
-use common\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -237,9 +236,11 @@ class Reset extends ResetBase
      * @throws \Exception
      * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
      */
-    public function verifyPhone($userProvided)
+    public function isUserProvidedCodeCorrect($userProvided)
     {
-        return \Yii::$app->phone->verify($this->code, $userProvided);
+        if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
+            return \Yii::$app->phone->verify($this->code, $userProvided);
+        }
     }
 
     /**

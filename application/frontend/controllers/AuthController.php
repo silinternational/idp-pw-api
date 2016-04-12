@@ -86,7 +86,7 @@ class AuthController extends Controller
 
     public function actionLogout()
     {
-        if ( \Yii::$app->user->isGuest) {
+        if (\Yii::$app->user->isGuest) {
             /*
              * User not logged in, but lets kill session anyway and redirect to UI
              */

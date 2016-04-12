@@ -20,14 +20,14 @@ class Component extends YiiComponent implements PhoneVerificationInterface
     public function send($phoneNumber, $code)
     {
         // For testing, if code starts with zero, just return the code
-        if (substr($code, 0, 1) == '0') {
+        if ( substr($code, 0, 1) == '0') {
             return $code;
         }
 
         // Look up code by phone number to support "generated" numbers too
         $data = include __DIR__ . '/data.php';
         foreach ($data as $phone) {
-            if ($phone['number'] == $phoneNumber) {
+            if ( $phone['number'] == $phoneNumber) {
                 return $phone['code'];
             }
         }
@@ -48,7 +48,7 @@ class Component extends YiiComponent implements PhoneVerificationInterface
      */
     public function verify($resetCode, $userProvided)
     {
-        // If codes match, return true
+        // Check if codes match and return true
         if ($resetCode == $userProvided) {
             return true;
         }
@@ -56,7 +56,7 @@ class Component extends YiiComponent implements PhoneVerificationInterface
         // Look up code by id to simulate verifying with a service like Nexmo Verify
         $data = include __DIR__ . '/data.php';
         foreach ($data as $phone) {
-            if($phone['id'] == $resetCode && $phone['code'] == $userProvided) {
+            if( $phone['id'] == $resetCode && $phone['code'] == $userProvided) {
                 return true;
             }
         }

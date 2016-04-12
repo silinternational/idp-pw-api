@@ -255,6 +255,7 @@ class Utils
     {
         $result = '';
         while (strlen($result) < $length) {
+            /** @var boolean $cryptoStrong */
             $randomString = openssl_random_pseudo_bytes(16, $cryptoStrong);
             if ( ! $cryptoStrong) {
                 throw new \Exception('Unable to generate cryptographically strong number', 1460385230);
@@ -263,7 +264,7 @@ class Utils
             }
 
             $hex = bin2hex($randomString);
-            $digits = preg_replace('/[^0-9]/','',$hex);
+            $digits = preg_replace('/[^0-9]/', '', $hex);
             $result .= $digits;
         }
 
