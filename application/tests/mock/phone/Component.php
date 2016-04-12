@@ -19,12 +19,8 @@ class Component extends YiiComponent implements PhoneVerificationInterface
      */
     public function send($phoneNumber, $code)
     {
-        // For testing, if code starts with zero, just return the code
-        if ( substr($code, 0, 1) == '0') {
-            return $code;
-        }
 
-        // Look up code by phone number to support "generated" numbers too
+        // Look up code by phone number to support "generated" numbers
         $data = include __DIR__ . '/data.php';
         foreach ($data as $phone) {
             if ( $phone['number'] == $phoneNumber) {
@@ -32,7 +28,7 @@ class Component extends YiiComponent implements PhoneVerificationInterface
             }
         }
 
-        throw new \Exception('Not found', 1460486422);
+        return $code;
     }
 
     /**
