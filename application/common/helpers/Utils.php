@@ -255,9 +255,8 @@ class Utils
     {
         $result = '';
         while (strlen($result) < $length) {
-            $cryptoStrong = true;
             $randomString = openssl_random_pseudo_bytes(16, $cryptoStrong);
-            if ( ! $cryptoStrong) {
+            if ($cryptoStrong !== true) {
                 throw new \Exception('Unable to generate cryptographically strong number', 1460385230);
             } else if ( ! $randomString) {
                 throw new \Exception('Unable to generate random number', 1460385231);
