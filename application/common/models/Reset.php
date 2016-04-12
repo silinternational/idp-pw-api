@@ -154,7 +154,7 @@ class Reset extends ResetBase
     public function sendSupervisor()
     {
         /*
-         * If $this->user->hasSupervisor(), send reset
+         * check if $this->user->hasSupervisor(), send reset
          *       code to $this->user->getSupervisorEmail()
          */
     }
@@ -162,7 +162,7 @@ class Reset extends ResetBase
     public function sendSpouse()
     {
         /*
-         * if $this->user->hasSpouse(), send reset
+         * check if $this->user->hasSpouse(), send reset
          *       code to $this->user->getSpouseEmail()
          */
     }

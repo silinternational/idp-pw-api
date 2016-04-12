@@ -64,9 +64,9 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Find or create local user. Fetch/update user data from personnel.
-     * @param string|null [default=null] $username
-     * @param string|null [default=null] $email
-     * @param string|null [default=null] $employeeId
+     * @param string|null $username [default=null]
+     * @param string|null $email [default=null]
+     * @param string|null $employeeId [default=null]
      * @return User
      * @throws NotFoundHttpException
      * @throws \Exception
