@@ -101,6 +101,12 @@ class ResetTest extends DbTestCase
         $reset->send();
         $this->assertEquals('1234', $reset->code);
         $this->assertEquals(1, $reset->attempts);
+    }
+
+    public function testIsUserProvidedCodeCorrect()
+    {
+        $reset = $this->resets('reset2');
+        $reset->send();
         $this->assertTrue($reset->isUserProvidedCodeCorrect('1234'));
 
         $this->setExpectedException('Sil\IdpPw\Common\PhoneVerification\NotMatchException');

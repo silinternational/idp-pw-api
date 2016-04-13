@@ -42,9 +42,9 @@ class Component extends YiiComponent implements AuthnInterface
             if ($user['username'] == $username) {
                 if ($user['password'] == $password) {
                     return $this->toAuthUser($user);
-                } else {
-                    break;
                 }
+                
+                break;
             }
         }
 
