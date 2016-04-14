@@ -8,6 +8,7 @@ use yii\base\Component as YiiComponent;
 
 class Component extends YiiComponent implements PersonnelInterface
 {
+
     public function findByEmployeeId($employeeId)
     {
         $data = include __DIR__ . '/data.php';

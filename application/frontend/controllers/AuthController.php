@@ -21,7 +21,7 @@ class AuthController extends Controller
          * Disable CSRF validation for login since user is redirected to an IdP for logging in
          */
         if ($action->id == 'login') {
-            // @todo can this be changed to use a URL parameter for the
+            // can this be changed to use a URL parameter for the
             // token for this action and we can pass to idp and back?
             $this->enableCsrfValidation = false;
         }
@@ -86,7 +86,7 @@ class AuthController extends Controller
 
     public function actionLogout()
     {
-        if ( \Yii::$app->user->isGuest) {
+        if (\Yii::$app->user->isGuest) {
             /*
              * User not logged in, but lets kill session anyway and redirect to UI
              */

@@ -15,7 +15,8 @@
     "silinternational/yii2-jsonsyslog": "*",
     "silinternational/idp-pw-api-common": "dev-master",
     "silinternational/idp-pw-api-personnel-insite": "^0.0.2",
-    "silinternational/idp-pw-api-auth-saml": "dev-master"
+    "silinternational/idp-pw-api-auth-saml": "dev-master",
+    "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

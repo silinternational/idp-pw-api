@@ -1,10 +1,10 @@
 <?php
 namespace common\models;
 
-use yii\helpers\ArrayHelper;
 
 use common\helpers\Utils;
-use common\models\User;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -146,24 +146,22 @@ class Reset extends ResetBase
 
     public function sendPrimary()
     {
-        /**
-         * @todo send email to $user->email with reset code
+        /*
+         * send email to user's primary email with reset code
          */
     }
 
     public function sendSupervisor()
     {
-        /**
-         * @todo if $this->user->hasSupervisor(), send reset
-         *       code to $this->user->getSupervisorEmail()
+        /*
+         * check if user has a supervisor and then email the supervisor the reset code
          */
     }
 
     public function sendSpouse()
     {
-        /**
-         * @todo if $this->user->hasSpouse(), send reset
-         *       code to $this->user->getSpouseEmail()
+        /*
+         * check if user has a spouse and then email the spouse the reset code
          */
     }
 
@@ -188,16 +186,59 @@ class Reset extends ResetBase
 
     public function sendEmail()
     {
-        /**
-         * @todo send email to $this->method->value with reset code
+        /*
+         * send email to $this->method->value with reset code
          */
     }
 
+    /**
+     * Send phone verification and store resulting code
+     * @throws \Exception
+     */
     public function sendPhone()
     {
-        /**
-         * @todo use phone service component to send notification to $this->method->value
-         */
+        // Initialize log
+        $log = [
+            'action' => 'reset',
+            'method' => 'phone',
+            'method_id' => $this->method_id,
+            'previous_attempts' => $this->attempts,
+        ];
+
+        // Get phone number without comma
+        $number = $this->method->getRawPhoneNumber();
+
+        // Generate random code for potential use
+        $code = Utils::getRandomDigits(\Yii::$app->phone->codeLength);
+
+        // Call component send() method to send verification and capture resulting code
+        $result = \Yii::$app->phone->send($number, $code);
+
+        // Update db with code and increased attempts count
+        $this->code = $result;
+        $this->attempts++;
+        if ( ! $this->save()) {
+            $log['status'] = 'error';
+            $log['error'] = 'Unable to update Reset in database';
+            $log['model_error'] = Json::encode($this->getFirstErrors());
+            \Yii::error($log, 'application');
+            throw new \Exception($log['error'], 1460388532);
+        }
+        $log['status'] = 'success';
+        \Yii::warning($log, 'application');
+    }
+
+    /**
+     * @param string $userProvided code submitted by user
+     * @return boolean
+     * @throws \Exception
+     * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
+     */
+    public function isUserProvidedCodeCorrect($userProvided)
+    {
+        if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
+            return \Yii::$app->phone->verify($this->code, $userProvided);
+        }
     }
 
     /**

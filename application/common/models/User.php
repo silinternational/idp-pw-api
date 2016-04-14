@@ -64,9 +64,9 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Find or create local user. Fetch/update user data from personnel.
-     * @param string|null [default=null] $username
-     * @param string|null [default=null] $email
-     * @param string|null [default=null] $employeeId
+     * @param string|null $username [default=null]
+     * @param string|null $email [default=null]
+     * @param string|null $employeeId [default=null]
      * @return User
      * @throws NotFoundHttpException
      * @throws \Exception
@@ -105,8 +105,8 @@ class User extends UserBase implements IdentityInterface
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
             if ( ! $user->save()) {
-                /**
-                 * @todo add logging with model validation errors
+                /*
+                 * add logging with model validation errors
                  */
                 throw new \Exception('Unable to create new user', 1456760294);
             }
@@ -153,8 +153,8 @@ class User extends UserBase implements IdentityInterface
             if ($this->save()) {
                 return true;
             } else {
-                /**
-                 * @todo add logging with model validation errors
+                /*
+                 * add logging with model validation errors
                  */
                 throw new \Exception('Unable to update profile', 1456760819);
             }

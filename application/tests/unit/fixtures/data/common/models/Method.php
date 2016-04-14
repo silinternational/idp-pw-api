@@ -24,5 +24,4 @@ return [
         'verification_expires' => null,
         'created' => '2016-02-29 13:15:00',
     ],
-
 ];
