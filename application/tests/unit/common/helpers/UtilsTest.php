@@ -1,7 +1,6 @@
 <?php
 namespace tests\unit\common\helpers;
 
-use Monolog\Handler\Curl\Util;
 use yii\codeception\TestCase;
 use common\helpers\Utils;
 
