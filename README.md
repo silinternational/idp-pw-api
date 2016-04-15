@@ -41,13 +41,13 @@ Backend API for Identity Provider Password Management
 
 ### Additional setup for Linux
 1. Add entry to ```/etc/hosts``` for ```120.0.0.1 idp-pw-api.local```
-2. Run ```docker build -t insite-pw-api .```
+2. Run ```docker build -t idp-pw-api .```
 3. Run ```docker-compose up -d```
 
 ### Additional setup for Mac
 1. Get IP address for your default docker-machine env ```docker-machine ip default```
    and add entry to ```/etc/hosts``` for ```<docker machine ip> idp-pw-api.local```
-2. Run ```docker build -t insite-pw-api .```
+2. Run ```docker build -t idp-pw-api .```
 3. Run ```docker-compose up -d```
 
 ### Additional setup for Windows
