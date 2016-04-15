@@ -50,7 +50,7 @@ class AuthController extends Controller
         try {
             $returnTo = Url::to(['auth/login', 'ReturnTo' => $returnTo], true);
             /** @var AuthUser $authUser */
-            $authUser = \Yii::$app->auth->login(\Yii::$app->request, $returnTo);
+            $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
 
             $log['email'] = $authUser->email;
 
@@ -109,7 +109,7 @@ class AuthController extends Controller
          * Log user out of IdP
          */
         try {
-            \Yii::$app->auth->logout($authUser, \Yii::$app->params['ui_url']);
+            \Yii::$app->auth->logout(\Yii::$app->params['ui_url'], $authUser);
         } catch (RedirectException $e) {
             return $this->redirect($e->getUrl());
         }
