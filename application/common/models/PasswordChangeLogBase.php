@@ -39,7 +39,8 @@ class PasswordChangeLogBase extends \yii\db\ActiveRecord
             [['scenario', 'reset_type', 'method_type'], 'string'],
             [['created'], 'safe'],
             [['masked_value'], 'string', 'max' => 255],
-            [['ip_address'], 'string', 'max' => 48]
+            [['ip_address'], 'string', 'max' => 48],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 

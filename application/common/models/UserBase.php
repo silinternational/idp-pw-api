@@ -45,7 +45,7 @@ class UserBase extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
             [['uid'], 'unique'],
             [['employee_id'], 'unique'],
-            [['email'], 'unique']
+            [['email'], 'unique'],
         ];
     }
 

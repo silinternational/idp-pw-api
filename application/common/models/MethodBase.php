@@ -46,7 +46,8 @@ class MethodBase extends \yii\db\ActiveRecord
             [['verification_code'], 'string', 'max' => 64],
             [['uid'], 'unique'],
             [['user_id', 'type', 'value'], 'unique', 'targetAttribute' => ['user_id', 'type', 'value'], 'message' => 'The combination of User ID, Type and Value has already been taken.'],
-            [['verification_code'], 'unique']
+            [['verification_code'], 'unique'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 

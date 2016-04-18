@@ -7,6 +7,7 @@ $mysqlDatabase = getenv('MYSQL_DATABASE');
 $mysqlUser = getenv('MYSQL_USER');
 $mysqlPassword = getenv('MYSQL_PASSWORD');
 $adminEmail = getenv('ADMIN_EMAIL');
+$fromEmail = getenv('FROM_EMAIL');
 $appEnv = getenv('APP_ENV');
 $recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = getenv('RECAPTCHA_SECRET_KEY');
@@ -67,6 +68,7 @@ return [
     ],
     'params' => [
         'adminEmail' => $adminEmail,
+        'fromEmail' => $fromEmail,
         'ui_url' => $uiUrl,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
