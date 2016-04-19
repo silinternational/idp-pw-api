@@ -63,13 +63,13 @@ class EmailQueueTest extends DbTestCase
             'text_body' => 'test body',
         ];
 
-        $emailQueue = EmailQueue::sendOrQueue(
+        EmailQueue::sendOrQueue(
             $data['toAddress'],
             $data['subject'],
             $data['text_body']
         );
 
-        $this->assertTrue($this->didEmailFileGetCreated($data['subject']));
+        $this->assertTrue($this->hasEmailFileBeenCreated($data['subject']));
     }
 
     public function testSendOrQueueQueued()
@@ -99,7 +99,7 @@ class EmailQueueTest extends DbTestCase
         $this->assertNotNull($emailQueue->id);
         $this->assertEquals(1, $emailQueue->attempts_count);
 
-        $this->assertFalse($this->didEmailFileGetCreated($data['subject']));
+        $this->assertFalse($this->hasEmailFileBeenCreated($data['subject']));
     }
 
     public function testSendAttemptsCountIncreases()
@@ -136,23 +136,34 @@ class EmailQueueTest extends DbTestCase
 
     }
 
-    public function didEmailFileGetCreated($uniqueContent)
+    /**
+     * @param string $uniqueContent
+     * @return bool
+     */
+    public function hasEmailFileBeenCreated($uniqueContent)
     {
-        $files = FileHelper::findFiles($this->getFilesPath());
-        foreach ($files as $file) {
-            $contents = file_get_contents($file);
-            if (substr_count($contents, $uniqueContent) > 0) {
-                return true;
+        $path = $this->getFilesPath();
+        if ($path) {
+            $files = FileHelper::findFiles($this->getFilesPath());
+            foreach ($files as $file) {
+                $contents = file_get_contents($file);
+                if (substr_count($contents, $uniqueContent) > 0) {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 
     public function removeEmailFiles()
     {
-        $files = FileHelper::findFiles($this->getFilesPath());
-        foreach ($files as $file) {
-            unlink($file);
+        $path = $this->getFilesPath();
+        if ($path) {
+            $files = FileHelper::findFiles($this->getFilesPath());
+            foreach ($files as $file) {
+                unlink($file);
+            }
         }
     }
 

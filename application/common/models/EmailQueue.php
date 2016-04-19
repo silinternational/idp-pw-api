@@ -22,7 +22,8 @@ class EmailQueue extends EmailQueueBase
                     ['to_address', 'cc_address'], 'email',
                 ],
                 [
-                    'event_log_user_id', 'exist', 'targetClass' => User::className(), 'targetAttribute' => ['event_log_user_id' => 'id'],
+                    'event_log_user_id', 'exist', 'targetClass' => User::className(),
+                    'targetAttribute' => ['event_log_user_id' => 'id'],
                 ],
             ],
             parent::rules()
@@ -52,8 +53,7 @@ class EmailQueue extends EmailQueueBase
         $eventLogUserId = null,
         $eventLogTopic = null,
         $eventLogDetails = null
-    )
-    {
+    ) {
         $emailQueue = new EmailQueue();
         $emailQueue->to_address = $toAddress;
         $emailQueue->subject = $subject;
@@ -107,7 +107,7 @@ class EmailQueue extends EmailQueueBase
          */
         try {
             $sent = $mail->send();
-            if ( $sent === 0 || $sent === false) {
+            if ($sent === 0 || $sent === false) {
                 throw new \Exception('Unable to send email', 1461011826);
             }
 
@@ -153,19 +153,20 @@ class EmailQueue extends EmailQueueBase
          * Remove entry from queue (if saved to queue) after successful send
          */
         try {
-            if ( $this->id && ! $this->delete()) {
+            if ($this->id && ! $this->delete()) {
                 throw new \Exception(
                     'Unable to delete email queue entry after successful send.',
                     1461012183
                 );
             }
         } catch (\Exception $e) {
-            \Yii::error([
+            $log = [
                 'class' => __CLASS__,
                 'action' => 'delete after send',
                 'status' => 'failed to delete',
                 'error' => $e->getMessage(),
-            ], 'application');
+            ];
+            \Yii::error($log, 'application');
 
             throw new \Exception(
                 'Unable to delete email queue entry after successful send.',
