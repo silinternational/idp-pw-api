@@ -15,10 +15,14 @@ $mailerUsername = Env::get('MAILER_USERNAME');
 $mailerPassword = Env::get('MAILER_PASSWORD');
 $adminEmail = Env::get('ADMIN_EMAIL');
 $fromEmail = Env::get('FROM_EMAIL');
+$fromName = Env::get('FROM_NAME');
 $appEnv = Env::get('APP_ENV');
+$appName = Env::get('APP_NAME');
 $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
+$helpCenterUrl = Env::get('HELP_CENTER_URL');
+$codeLength = Env::get('CODE_LENGTH', 6);
 
 return [
     'id' => 'app-common',
@@ -86,8 +90,11 @@ return [
         ],
     ],
     'params' => [
+        'appName' => $appName,
         'adminEmail' => $adminEmail,
         'fromEmail' => $fromEmail,
+        'fromName' => $fromName,
+        'helpCenterUrl' => $helpCenterUrl,
         'ui_url' => $uiUrl,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour

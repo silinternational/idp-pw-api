@@ -323,4 +323,9 @@ class User extends UserBase implements IdentityInterface
 
         return $authUser;
     }
+
+    public function getDisplayName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }

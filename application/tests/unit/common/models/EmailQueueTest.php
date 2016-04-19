@@ -144,7 +144,7 @@ class EmailQueueTest extends DbTestCase
     {
         $path = $this->getFilesPath();
         if ($path) {
-            $files = FileHelper::findFiles($this->getFilesPath());
+            $files = FileHelper::findFiles($path);
             foreach ($files as $file) {
                 $contents = file_get_contents($file);
                 if (substr_count($contents, $uniqueContent) > 0) {
@@ -160,7 +160,7 @@ class EmailQueueTest extends DbTestCase
     {
         $path = $this->getFilesPath();
         if ($path) {
-            $files = FileHelper::findFiles($this->getFilesPath());
+            $files = FileHelper::findFiles($path);
             foreach ($files as $file) {
                 unlink($file);
             }
