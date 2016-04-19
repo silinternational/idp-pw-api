@@ -134,6 +134,7 @@ codecept:
        - ./common.env
        - ./local.env
    working_dir: /data
+   user: "${DOCKER_UIDGID}"
    entrypoint: whenavail testDb 3306 100 codecept
    command: run unit
    environment:

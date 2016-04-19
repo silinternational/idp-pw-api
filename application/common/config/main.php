@@ -1,17 +1,24 @@
 <?php
+
+use Sil\PhpEnv\Env;
+
 /*
  * Get config settings from ENV vars or set defaults
  */
-$mysqlHost = getenv('MYSQL_HOST');
-$mysqlDatabase = getenv('MYSQL_DATABASE');
-$mysqlUser = getenv('MYSQL_USER');
-$mysqlPassword = getenv('MYSQL_PASSWORD');
-$adminEmail = getenv('ADMIN_EMAIL');
-$fromEmail = getenv('FROM_EMAIL');
-$appEnv = getenv('APP_ENV');
-$recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
-$recaptchaSecretKey = getenv('RECAPTCHA_SECRET_KEY');
-$uiUrl = getenv('UI_URL');
+$mysqlHost = Env::get('MYSQL_HOST');
+$mysqlDatabase = Env::get('MYSQL_DATABASE');
+$mysqlUser = Env::get('MYSQL_USER');
+$mysqlPassword = Env::get('MYSQL_PASSWORD');
+$mailerUseFiles = Env::get('MAILER_USERFILES', false);
+$mailerHost = Env::get('MAILER_HOST');
+$mailerUsername = Env::get('MAILER_USERNAME');
+$mailerPassword = Env::get('MAILER_PASSWORD');
+$adminEmail = Env::get('ADMIN_EMAIL');
+$fromEmail = Env::get('FROM_EMAIL');
+$appEnv = Env::get('APP_ENV');
+$recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
+$recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
+$uiUrl = Env::get('UI_URL');
 
 return [
     'id' => 'app-common',
@@ -54,6 +61,18 @@ return [
                         return \yii\helpers\Json::encode($prefixData);
                     },
                 ],
+            ],
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => $mailerUseFiles,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => $mailerHost,
+                'username' => $mailerUsername,
+                'password' => $mailerPassword,
+                'port' => '465',
+                'encryption' => 'ssl',
             ],
         ],
         'personnel' => [
