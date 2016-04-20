@@ -222,6 +222,13 @@ class Reset extends ResetBase
         }
     }
 
+    /**
+     * @param string $toAddress
+     * @param string $subject
+     * @param string $view
+     * @param string|null $ccAddress
+     * @throws \Exception
+     */
     public function sendEmail($toAddress, $subject, $view, $ccAddress = null)
     {
         /*
@@ -233,7 +240,7 @@ class Reset extends ResetBase
         $this->attempts += 1;
         if ($this->save()) {
             $body = \Yii::$app->mailer->render(
-                '@common/mail/reset/'.$view,
+                '@common/mail/reset/' . $view,
                 [
                     'appName' => \Yii::$app->params['appName'],
                     'name' => $this->user->first_name,

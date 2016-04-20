@@ -128,13 +128,13 @@ class ResetTest extends DbTestCase
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->user->email));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('password change for your'));
-        $this->assertEquals($attempts+1, $reset->attempts);
+        $this->assertEquals($attempts + 1, $reset->attempts);
 
         $reset->send();
 
         $this->assertEquals(2, EmailUtils::getEmailFilesCount());
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
-        $this->assertEquals($attempts+2, $reset->attempts);
+        $this->assertEquals($attempts + 2, $reset->attempts);
     }
 
     public function testSendSupervisorHasSupervisor()
@@ -152,7 +152,7 @@ class ResetTest extends DbTestCase
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('supervisor@domain.org'));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
-        $this->assertEquals($attempts+1, $reset->attempts);
+        $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
     public function testSendSupervisorNoSupervisor()
@@ -183,7 +183,7 @@ class ResetTest extends DbTestCase
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('spouse@domain.org'));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
-        $this->assertEquals($attempts+1, $reset->attempts);
+        $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
     public function testSendSpouseNoSpouse()
@@ -213,7 +213,7 @@ class ResetTest extends DbTestCase
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('email-1456769679@domain.org'));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('password change for your'));
-        $this->assertEquals($attempts+1, $reset->attempts);
+        $this->assertEquals($attempts + 1, $reset->attempts);
 
     }
 
