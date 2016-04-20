@@ -9,4 +9,13 @@ return [
         'supervisorEmail' => 'supervisor@domain.org',
         'spouseEmail' => 'spouse@domain.org',
     ],
+    [
+        'firstName' => 'First2',
+        'lastName' => 'Last2',
+        'email' => 'first_last2@domain.com',
+        'employeeId' => '222222',
+        'username' => 'first2_last2',
+        'supervisorEmail' => null,
+        'spouseEmail' => null,
+    ],
 ];

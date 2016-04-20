@@ -149,7 +149,7 @@ class Reset extends ResetBase
     public function sendPrimary()
     {
         $subject = \Yii::t(
-            'application',
+            'app',
             '{{appName}} password reset request',
             [
                 'appName' => \Yii::$app->params['appName'],
@@ -163,9 +163,9 @@ class Reset extends ResetBase
     {
         if ($this->user->hasSupervisor()) {
             $supervisor = $this->user->getSupervisorEmail();
-            if ($supervisor !== null) {
-                $this->sendOnBehalf($supervisor);
-            }
+            $this->sendOnBehalf($supervisor);
+        } else {
+            throw new \Exception('User does not have supervisor on record', 1461173406);
         }
     }
 
@@ -173,16 +173,16 @@ class Reset extends ResetBase
     {
         if ($this->user->hasSpouse()) {
             $spouse = $this->user->getSpouseEmail();
-            if ($spouse !== null) {
-                $this->sendOnBehalf($spouse);
-            }
+            $this->sendOnBehalf($spouse);
+        } else {
+            throw new \Exception('User does not have supervisor on record', 1461173477);
         }
     }
 
     public function sendOnBehalf($toAddress)
     {
         $subject = \Yii::t(
-            'application',
+            'app',
             '{appName} password reset request for {name}',
             [
                 'appName' => \Yii::$app->params['appName'],
@@ -208,7 +208,7 @@ class Reset extends ResetBase
              * Send email to 'self' with verified email address
              */
             $subject = \Yii::t(
-                'application',
+                'app',
                 '{{appName}} password reset request',
                 [
                     'appName' => \Yii::$app->params['appName'],
@@ -228,7 +228,7 @@ class Reset extends ResetBase
          * Generate code if needed, update attempt counter, save record, and send email
          */
         if ($this->code === null) {
-            $this->code = Utils::getRandomDigits(\Yii::$app->params['codeLength']);
+            $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
         }
         $this->attempts += 1;
         if ($this->save()) {

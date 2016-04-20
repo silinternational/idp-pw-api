@@ -2,6 +2,7 @@
 namespace tests\unit\common\models;
 
 use common\models\EmailQueue;
+use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\EmailQueueFixture;
 use yii\codeception\DbTestCase;
 use yii\helpers\FileHelper;
@@ -56,7 +57,7 @@ class EmailQueueTest extends DbTestCase
 
     public function testSendOrQueueSent()
     {
-        $this->removeEmailFiles();
+        EmailUtils::removeEmailFiles();
         $data = [
             'toAddress' => 'test@test.com',
             'subject' => 'test subject - 1461087894',
@@ -69,12 +70,12 @@ class EmailQueueTest extends DbTestCase
             $data['text_body']
         );
 
-        $this->assertTrue($this->hasEmailFileBeenCreated($data['subject']));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($data['subject']));
     }
 
     public function testSendOrQueueQueued()
     {
-        $this->removeEmailFiles();
+        EmailUtils::removeEmailFiles();
         /*
          * Override mailer config to force attempted connection to fake domain
          */
@@ -99,7 +100,7 @@ class EmailQueueTest extends DbTestCase
         $this->assertNotNull($emailQueue->id);
         $this->assertEquals(1, $emailQueue->attempts_count);
 
-        $this->assertFalse($this->hasEmailFileBeenCreated($data['subject']));
+        $this->assertFalse(EmailUtils::hasEmailFileBeenCreated($data['subject']));
     }
 
     public function testSendAttemptsCountIncreases()
@@ -136,39 +137,5 @@ class EmailQueueTest extends DbTestCase
 
     }
 
-    /**
-     * @param string $uniqueContent
-     * @return bool
-     */
-    public function hasEmailFileBeenCreated($uniqueContent)
-    {
-        $path = $this->getFilesPath();
-        if ($path) {
-            $files = FileHelper::findFiles($path);
-            foreach ($files as $file) {
-                $contents = file_get_contents($file);
-                if (substr_count($contents, $uniqueContent) > 0) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public function removeEmailFiles()
-    {
-        $path = $this->getFilesPath();
-        if ($path) {
-            $files = FileHelper::findFiles($path);
-            foreach ($files as $file) {
-                unlink($file);
-            }
-        }
-    }
-
-    public function getFilesPath()
-    {
-        return \Yii::getAlias('@runtime/mail');
-    }
+    
 }

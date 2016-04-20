@@ -9,7 +9,7 @@ and not to someone else.
 Reset Code: <?php echo \yii\helpers\Html::encode($resetCode); ?>
 
 To keep their account secure, please don't forward this email to anyone.
-See our Help Center for <a href="<?php echo \Yii::$app->params['helpCenterLink'];  ?>">more security tips</a>.
+See our Help Center for <a href="<?php echo \Yii::$app->params['helpCenterUrl'];  ?>">more security tips</a>.
 
 Thanks!
 - <?php echo \yii\helpers\Html::encode(\Yii::$app->params['fromName']); ?>

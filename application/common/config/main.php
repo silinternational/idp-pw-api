@@ -98,6 +98,7 @@ return [
         'ui_url' => $uiUrl,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
+            'codeLength' => $codeLength,
         ],
         'password' => [
             'minLength' => [
