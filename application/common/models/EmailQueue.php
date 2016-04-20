@@ -152,8 +152,8 @@ class EmailQueue extends EmailQueueBase
      */
     private function createEventLogEntry()
     {
-        if ($this->event_log_user_id !== null && $this->event_log_topic !== null && $this->event_log_details !== null) {
-//            EventLog::log($this->event_log_user_id, $this->event_log_topic, $this->event_log_details);
+        if ($this->event_log_topic !== null && $this->event_log_details !== null && $this->event_log_user_id !== null) {
+            EventLog::log($this->event_log_topic, $this->event_log_details, $this->event_log_user_id);
         }
     }
 

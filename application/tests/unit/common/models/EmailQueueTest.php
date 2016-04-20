@@ -2,11 +2,20 @@
 namespace tests\unit\common\models;
 
 use common\models\EmailQueue;
+use common\models\EventLog;
+use common\models\User;
 use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\EmailQueueFixture;
+use tests\unit\fixtures\common\models\EventLogFixture;
+use tests\unit\fixtures\common\models\UserFixture;
 use yii\codeception\DbTestCase;
-use yii\helpers\FileHelper;
 
+/**
+ * Class EmailQueueTest
+ * @package tests\unit\common\models
+ * @method User users($key)
+ * @method EventLog eventLogs($key)
+ */
 class EmailQueueTest extends DbTestCase
 {
     
@@ -14,6 +23,8 @@ class EmailQueueTest extends DbTestCase
     {
         return [
             'email_queues' => EmailQueueFixture::className(),
+            'event_log' => EventLogFixture::className(),
+            'users' => UserFixture::className(),
         ];
     }
 
@@ -134,6 +145,32 @@ class EmailQueueTest extends DbTestCase
 
         $emailQueue->send();
         $this->assertEquals(3, $emailQueue->attempts_count);
+
+    }
+
+    public function testSendCreatesEventLogEntry()
+    {
+        $user = $this->users('user1');
+
+        $data = [
+            'toAddress' => 'test@test.com',
+            'subject' => 'test subject - 1461184303',
+            'text_body' => 'test body',
+        ];
+
+        EmailQueue::sendOrQueue(
+            $data['toAddress'],
+            $data['subject'],
+            $data['text_body'],
+            null,
+            null,
+            $user->id,
+            'event-log-1461184466',
+            'testing'
+        );
+
+        $eventLog = EventLog::findOne(['topic' => 'event-log-1461184466']);
+        $this->assertNotNull($eventLog);
 
     }
 
