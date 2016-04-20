@@ -174,17 +174,17 @@ class EmailQueue extends EmailQueueBase
             $log['error'] = Json::encode($this->getFirstErrors());
             \Yii::error($log, 'application');
             throw new \Exception('Unable to send or queue email', 1461009236);
-        } else {
-            /*
-             * Email queued, log it
-             */
-            $log['status'] = 'queued';
-            if ($previousException !== null) {
-                $log['error'] = $previousException->getMessage();
-            }
-
-            \Yii::error($log, 'application');
         }
+        
+        /*
+         * Email queued, log it
+         */
+        $log['status'] = 'queued';
+        if ($previousException !== null) {
+            $log['error'] = $previousException->getMessage();
+        }
+
+        \Yii::error($log, 'application');
     }
 
     /**
