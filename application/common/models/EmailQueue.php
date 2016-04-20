@@ -83,11 +83,53 @@ class EmailQueue extends EmailQueueBase
             'subject' => $this->subject,
         ];
 
-        $mail = \Yii::$app->mailer->compose();
-        $mail->setFrom(\Yii::$app->params['fromEmail']);
-        $mail->setTo($this->to_address);
-        $mail->setSubject($this->subject);
-        $mail->setTextBody($this->text_body);
+        /*
+         * Try to send email or throw exception
+         */
+        try {
+            $mailer = $this->getMailer();
+            $sent = $mailer->send();
+            if ($sent === 0 || $sent === false) {
+                throw new \Exception('Unable to send email', 1461011826);
+            }
+
+            /*
+             * Create event log entry if needed
+             */
+            $this->createEventLogEntry();
+
+            /*
+             * Remove entry from queue (if saved to queue) after successful send
+             */
+            $this->removeFromQueue();
+
+            /*
+             * Log success
+             */
+            $log['status'] = 'sent';
+            \Yii::warning($log, 'application');
+
+        } catch (\Exception $e) {
+            /*
+             * Send failed, attempt to queue
+             */
+            $this->attempts_count += 1;
+            $this->last_attempt = Utils::getDatetime();
+            $this->queue($log, $e);
+        }
+    }
+
+    /**
+     * Builds a mailer object from $this and returns it
+     * @return \yii\mail\MessageInterface
+     */
+    private function getMailer()
+    {
+        $mailer = \Yii::$app->mailer->compose();
+        $mailer->setFrom(\Yii::$app->params['fromEmail']);
+        $mailer->setTo($this->to_address);
+        $mailer->setSubject($this->subject);
+        $mailer->setTextBody($this->text_body);
 
         /*
          * Conditionally set optional fields
@@ -98,60 +140,59 @@ class EmailQueue extends EmailQueueBase
         ];
         foreach ($setMethods as $method => $value) {
             if ($value) {
-                $mail->$method($value);
+                $mailer->$method($value);
             }
         }
+        
+        return $mailer;
+    }
 
-        /*
-         * Try to send email or throw exception
-         */
-        try {
-            $sent = $mail->send();
-            if ($sent === 0 || $sent === false) {
-                throw new \Exception('Unable to send email', 1461011826);
-            }
-
-            /*
-             * If event log details are provided, create event log entry
-             */
-//            if ( $eventLogUserId !== null && $eventLogTopic !== null && $eventLogDetails !== null) {
-//                EventLog::log($eventLogUserId, $eventLogTopic, $eventLogDetails);
-//            }
-
-            /*
-             * Log success
-             */
-            $log['status'] = 'sent';
-            \Yii::warning($log, 'application');
-
-
-        } catch (\Exception $e) {
-            /*
-             * Send failed, attempt to queue
-             */
-            $this->attempts_count += 1;
-            $this->last_attempt = Utils::getDatetime();
-            if ( ! $this->save()) {
-                /*
-                 * Queue failed, log it and throw exception
-                 */
-                $log['status'] = 'failed to queue';
-                $log['error'] = Json::encode($this->getFirstErrors());
-                \Yii::error($log, 'application');
-                throw new \Exception('Unable to send or queue email', 1461009236);
-            } else {
-                /*
-                 * Email queued, log it
-                 */
-                $log['status'] = 'queued';
-                $log['error'] = $e->getMessage();
-                \Yii::error($log, 'application');
-            }
+    /**
+     * Creates an EventLog entry if $this->event_log_* properties are set
+     */
+    private function createEventLogEntry()
+    {
+        if ($this->event_log_user_id !== null && $this->event_log_topic !== null && $this->event_log_details !== null) {
+//            EventLog::log($this->event_log_user_id, $this->event_log_topic, $this->event_log_details);
         }
+    }
 
-        /*
-         * Remove entry from queue (if saved to queue) after successful send
-         */
+    /**
+     * Queue's email for sending later, if there is an error saving to db it throws an exception
+     * @param array $log Optionally provide an array of data to be logged
+     * @param \Exception|null $previousException Optionally provide an exception if one occurred
+     *                                           resulting in queueing email
+     * @throws \Exception
+     */
+    private function queue($log = [], \Exception $previousException = null)
+    {
+        if ( ! $this->save()) {
+            /*
+             * Queue failed, log it and throw exception
+             */
+            $log['status'] = 'failed to queue';
+            $log['error'] = Json::encode($this->getFirstErrors());
+            \Yii::error($log, 'application');
+            throw new \Exception('Unable to send or queue email', 1461009236);
+        } else {
+            /*
+             * Email queued, log it
+             */
+            $log['status'] = 'queued';
+            if ($previousException !== null) {
+                $log['error'] = $previousException->getMessage();
+            }
+
+            \Yii::error($log, 'application');
+        }
+    }
+
+    /**
+     * If $this has been saved to database, it will be deleted and on failure throw an exception
+     * @throws \Exception
+     */
+    private function removeFromQueue()
+    {
         try {
             if ($this->id && ! $this->delete()) {
                 throw new \Exception(
