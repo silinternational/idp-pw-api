@@ -102,13 +102,8 @@ return [
                 'jsRegex' => '([\W_].*){0,0}',
                 'enabled' => false
             ],
-            'blacklist' => [
-
-            ],
             'zxcvbn' => [
                 'minScore' => 2,
-                'displaySuggestions' => true,
-                'displayWarnings' => true,
             ]
         ],
         'recaptcha' => [
@@ -121,6 +116,5 @@ return [
             'url' => '',
             'feedbackUrl' => '',
         ],
-        'gaTrackingId' => '',
     ],
 ];

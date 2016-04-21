@@ -207,7 +207,6 @@ class Utils
 
         $config = [];
 
-        $config['gaTrackingId'] = $params['gaTrackingId'];
         $config['support'] = $params['support'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
         $config['password'] = [];
@@ -225,7 +224,6 @@ class Utils
             $config['password'][$rule]['enabled'] = $params['password'][$rule]['enabled'];
         }
 
-        $config['password']['blacklist'] = $params['password']['blacklist'];
         $config['password']['zxcvbn'] = $params['password']['zxcvbn'];
 
         return $config;
