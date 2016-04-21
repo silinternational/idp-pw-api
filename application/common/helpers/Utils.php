@@ -221,7 +221,8 @@ class Utils
                 throw new ServerErrorHttpException('Missing configuration for ' . $rule);
             }
             $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
-            $config['password'][$rule]['regex'] = $params['password'][$rule]['jsRegex'];
+            $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
+            $config['password'][$rule]['enabled'] = $params['password'][$rule]['enabled'];
         }
 
         $config['password']['blacklist'] = $params['password']['blacklist'];

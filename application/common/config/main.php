@@ -75,27 +75,32 @@ return [
             'minLength' => [
                 'value' => 10,
                 'phpRegex' => '',
-                'jsRegex' => '',
+                'jsRegex' => '.{10,}',
+                'enabled' => true
             ],
             'maxLength' => [
                 'value' => 255,
                 'phpRegex' => '',
-                'jsRegex' => '',
+                'jsRegex' => '.{0,255}',
+                'enabled' => true
             ],
             'minNum' => [
                 'value' => 2,
                 'phpRegex' => '',
-                'jsRegex' => '',
+                'jsRegex' => '(\d.*){2,}',
+                'enabled' => true
             ],
             'minUpper' => [
                 'value' => 0,
                 'phpRegex' => '',
-                'jsRegex' => '',
+                'jsRegex' => '([A-Z].*){0,0}',
+                'enabled' => false
             ],
             'minSpecial' => [
                 'value' => 0,
                 'phpRegex' => '',
-                'jsRegex' => '',
+                'jsRegex' => '([\W_].*){0,0}',
+                'enabled' => false
             ],
             'blacklist' => [
 
