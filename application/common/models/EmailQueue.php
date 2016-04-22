@@ -65,7 +65,7 @@ class EmailQueue extends EmailQueueBase
         $emailQueue->event_log_details = $eventLogDetails;
 
         $emailQueue->send();
-
+        
         return $emailQueue;
     }
 
@@ -87,9 +87,8 @@ class EmailQueue extends EmailQueueBase
          * Try to send email or throw exception
          */
         try {
-            $mailer = $this->getMailer();
-            $sent = $mailer->send();
-            if ($sent === 0 || $sent === false) {
+            $message = $this->getMessage();
+            if ( ! $message->send()) {
                 throw new \Exception('Unable to send email', 1461011826);
             }
 
@@ -113,6 +112,12 @@ class EmailQueue extends EmailQueueBase
             /*
              * Send failed, attempt to queue
              */
+            $log = [
+                'class' => __CLASS__,
+                'action' => 'sendOrQueue',
+                'to' => $this->to_address,
+                'subject' => $this->subject,
+            ];
             $this->attempts_count += 1;
             $this->last_attempt = Utils::getDatetime();
             $this->queue($log, $e);
@@ -123,7 +128,7 @@ class EmailQueue extends EmailQueueBase
      * Builds a mailer object from $this and returns it
      * @return \yii\mail\MessageInterface
      */
-    private function getMailer()
+    private function getMessage()
     {
         $mailer = \Yii::$app->mailer->compose();
         $mailer->setFrom(\Yii::$app->params['fromEmail']);
@@ -149,11 +154,15 @@ class EmailQueue extends EmailQueueBase
 
     /**
      * Creates an EventLog entry if $this->event_log_* properties are set
+     * @return boolean
+     * @throws \Exception
      */
     private function createEventLogEntry()
     {
         if ($this->event_log_topic !== null && $this->event_log_details !== null && $this->event_log_user_id !== null) {
             EventLog::log($this->event_log_topic, $this->event_log_details, $this->event_log_user_id);
+        } else {
+            return false;
         }
     }
 
@@ -173,7 +182,7 @@ class EmailQueue extends EmailQueueBase
             $log['status'] = 'failed to queue';
             $log['error'] = Json::encode($this->getFirstErrors());
             \Yii::error($log, 'application');
-            throw new \Exception('Unable to send or queue email', 1461009236);
+            throw new \Exception('Unable to queue email', 1461009236);
         }
         
         /*
@@ -196,7 +205,7 @@ class EmailQueue extends EmailQueueBase
         try {
             if ($this->id && ! $this->delete()) {
                 throw new \Exception(
-                    'Unable to delete email queue entry after successful send.',
+                    'Unable to delete email queue entry',
                     1461012183
                 );
             }
@@ -210,7 +219,7 @@ class EmailQueue extends EmailQueueBase
             \Yii::error($log, 'application');
 
             throw new \Exception(
-                'Unable to delete email queue entry after successful send.',
+                'Unable to delete email queue entry',
                 1461012337
             );
         }
