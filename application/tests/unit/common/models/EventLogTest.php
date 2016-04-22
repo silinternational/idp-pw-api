@@ -40,7 +40,7 @@ class EventLogTest extends DbTestCase
     public function testLogInvalidUser()
     {
         $this->setExpectedException('\Exception', '', 1461182172);
-        EventLog::log('test-1461183456', 'testing-1461183456', 44);
+        EventLog::log('test-1461183456', 'testing-1461183456', 4499999999);
     }
 
     public function testLogWithUser()

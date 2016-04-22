@@ -75,6 +75,8 @@ class EmailQueueTest extends DbTestCase
             'text_body' => 'test body',
         ];
 
+        $this->assertFalse(EmailUtils::hasEmailFileBeenCreated($data['subject']));
+
         EmailQueue::sendOrQueue(
             $data['toAddress'],
             $data['subject'],
