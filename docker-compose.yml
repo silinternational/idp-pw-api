@@ -54,7 +54,7 @@ api:
 #   command: /data/run-cron.sh
 
 composer:
-   image: silintl/php-cli:latest
+   image: silintl/php7:latest
    container_name: composer
    volumes_from:
        - data
@@ -65,7 +65,7 @@ composer:
    command: composer install --prefer-dist
 
 yiimigrate:
-    image: silintl/php-cli:latest
+    image: silintl/php7:latest
     container_name: yiimigrate
     volumes_from:
         - data
@@ -79,7 +79,7 @@ yiimigrate:
     command: bash -c "whenavail db 3306 100 ./yii migrate --interactive=0 && ./rebuildbasemodels.sh"
 
 yiimigratelocal:
-   image: silintl/php-cli:latest
+   image: silintl/php7:latest
    container_name: yiimigratelocal
    volumes_from:
        - data
@@ -92,7 +92,7 @@ yiimigratelocal:
    command: whenavail db 3306 100 ./yii migrate --migrationPath=console/migrations-local/ --interactive=0
 
 yiimigratetestDb:
-   image: silintl/php-cli:latest
+   image: silintl/php7:latest
    container_name: yiimigratetestDb
    volumes_from:
        - data
@@ -108,7 +108,7 @@ yiimigratetestDb:
      MYSQL_DATABASE: test
 
 yiimigratetestDblocal:
-   image: silintl/php-cli:latest
+   image: silintl/php7:latest
    container_name: yiimigratetestDblocal
    volumes_from:
        - data
