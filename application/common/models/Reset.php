@@ -175,7 +175,7 @@ class Reset extends ResetBase
             $spouse = $this->user->getSpouseEmail();
             $this->sendOnBehalf($spouse);
         } else {
-            throw new \Exception('User does not have supervisor on record', 1461173477);
+            throw new \Exception('User does not have spouse on record', 1461173477);
         }
     }
 

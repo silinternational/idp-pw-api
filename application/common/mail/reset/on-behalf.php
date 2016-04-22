@@ -1,7 +1,7 @@
 Hi there,
 
 <?php echo \yii\helpers\Html::encode($name); ?> recently requested a password change for their
-<?php echo \Yii::$app->params['appName']; ?> account and they have requested your assistance.
+<?php echo \Yii::$app->params['idpName']; ?> account and they have requested your assistance.
 
 Please contact them directly to ensure that you are only providing the following reset code to them
 and not to someone else.

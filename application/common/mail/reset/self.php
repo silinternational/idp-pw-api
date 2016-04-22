@@ -1,6 +1,6 @@
 Hi there,
 
-Someone recently requested a password change for your <?php echo \Yii::$app->params['appName']; ?>
+Someone recently requested a password change for your <?php echo \Yii::$app->params['idpName']; ?>
 account. If this was you, you can use the reset code below to set a new password.
 
 Reset Code: <?php echo \yii\helpers\Html::encode($resetCode); ?> 

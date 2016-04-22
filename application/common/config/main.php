@@ -17,7 +17,7 @@ $adminEmail = Env::get('ADMIN_EMAIL');
 $fromEmail = Env::get('FROM_EMAIL');
 $fromName = Env::get('FROM_NAME');
 $appEnv = Env::get('APP_ENV');
-$appName = Env::get('APP_NAME');
+$idpName = Env::get('IDP_NAME');
 $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
@@ -90,7 +90,7 @@ return [
         ],
     ],
     'params' => [
-        'appName' => $appName,
+        'idpName' => $idpName,
         'adminEmail' => $adminEmail,
         'fromEmail' => $fromEmail,
         'fromName' => $fromName,
