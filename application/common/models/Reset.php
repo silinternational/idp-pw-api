@@ -150,9 +150,9 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{{appName}} password reset request',
+            '{{idpName}} password reset request',
             [
-                'appName' => \Yii::$app->params['appName'],
+                'idpName' => \Yii::$app->params['idpName'],
             ]
         );
 
@@ -183,9 +183,9 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{appName} password reset request for {name}',
+            '{idpName} password reset request for {name}',
             [
-                'appName' => \Yii::$app->params['appName'],
+                'idpName' => \Yii::$app->params['idpName'],
                 'name' => $this->user->first_name,
             ]
         );
@@ -209,9 +209,9 @@ class Reset extends ResetBase
              */
             $subject = \Yii::t(
                 'app',
-                '{{appName}} password reset request',
+                '{{idpName}} password reset request',
                 [
-                    'appName' => \Yii::$app->params['appName'],
+                    'idpName' => \Yii::$app->params['idpName'],
                 ]
             );
             $this->sendEmail($this->method->value, $subject, 'self');
@@ -242,7 +242,7 @@ class Reset extends ResetBase
             $body = \Yii::$app->mailer->render(
                 '@common/mail/reset/' . $view,
                 [
-                    'appName' => \Yii::$app->params['appName'],
+                    'idpName' => \Yii::$app->params['idpName'],
                     'name' => $this->user->first_name,
                     'resetCode' => $this->code,
                 ]
