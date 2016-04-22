@@ -140,10 +140,10 @@ class EmailQueueTest extends DbTestCase
         $this->assertNotNull($emailQueue->id);
         $this->assertEquals(1, $emailQueue->attempts_count);
 
-        $emailQueue->send();
+        $emailQueue->retry();
         $this->assertEquals(2, $emailQueue->attempts_count);
 
-        $emailQueue->send();
+        $emailQueue->retry();
         $this->assertEquals(3, $emailQueue->attempts_count);
 
     }
