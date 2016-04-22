@@ -1,7 +1,7 @@
-FROM silintl/php-web:latest
+FROM silintl/php7:latest
 MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
 
-ENV REFRESHED_AT 2016-02-24
+ENV REFRESHED_AT 2016-04-22
 
 COPY dockerbuild/vhost.conf /etc/apache2/sites-enabled/
 

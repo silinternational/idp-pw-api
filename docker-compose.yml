@@ -124,7 +124,7 @@ yiimigratetestDblocal:
      MYSQL_DATABASE: test
 
 codecept:
-   image: silintl/php-cli:latest
+   image: silintl/php7:latest
    container_name: codecept
    volumes_from:
        - data
@@ -134,7 +134,7 @@ codecept:
        - ./common.env
        - ./local.env
    working_dir: /data
-   entrypoint: whenavail testDb 3306 100 codecept
+   entrypoint: ./vendor/bin/codecept
    command: run unit
    environment:
      MYSQL_HOST: testDb
