@@ -31,7 +31,7 @@ class RequestsByIpBase extends \yii\db\ActiveRecord
             [['username', 'ip_address', 'created'], 'required'],
             [['created'], 'safe'],
             [['username'], 'string', 'max' => 255],
-            [['ip_address'], 'string', 'max' => 48]
+            [['ip_address'], 'string', 'max' => 48],
         ];
     }
 

@@ -19,6 +19,7 @@ use Yii;
  * @property string $pw_last_changed
  * @property string $pw_expires
  *
+ * @property EventLog[] $eventLogs
  * @property Method[] $methods
  * @property PasswordChangeLog[] $passwordChangeLogs
  * @property Reset $reset
@@ -45,7 +46,7 @@ class UserBase extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
             [['uid'], 'unique'],
             [['employee_id'], 'unique'],
-            [['email'], 'unique']
+            [['email'], 'unique'],
         ];
     }
 
@@ -67,6 +68,14 @@ class UserBase extends \yii\db\ActiveRecord
             'pw_last_changed' => Yii::t('app', 'Pw Last Changed'),
             'pw_expires' => Yii::t('app', 'Pw Expires'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEventLogs()
+    {
+        return $this->hasMany(EventLog::className(), ['user_id' => 'id']);
     }
 
     /**

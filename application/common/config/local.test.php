@@ -2,6 +2,12 @@
 
 return [
     'components' => [
+        'mailer' => [
+            'useFileTransport' => true,
+            'transport' => [
+                'host' => null,
+            ],
+        ],
         'personnel' => [
             'class' => 'tests\mock\personnel\Component',
         ],

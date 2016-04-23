@@ -9,28 +9,15 @@ use tests\mock\auth\Component as AuthComponent;
 use tests\mock\phone\Component as PhoneComponent;
 
 $mainConfig = require(__DIR__ . '/../../../common/config/main.php');
+$testConfig = require(__DIR__ . '/../../../common/config/local.test.php');
 
 $config = [
     'id' => 'unit_tests_app',
     'basePath' => dirname(dirname(dirname(__DIR__))),
-    'components' => [
-        'personnel' => [
-            'class' => PersonnelComponent::className(),
-        ],
-        'auth' => [
-            'class' => AuthComponent::className(),
-        ],
-        'phone' => [
-            'class' => PhoneComponent::className(),
-            'codeLength' => 4,
-        ],
-    ],
-    'params' => [
-
-    ],
 ];
 
 return ArrayHelper::merge(
     $mainConfig,
+    $testConfig,
     $config
 );
