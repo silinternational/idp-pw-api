@@ -37,7 +37,7 @@ class EventLog extends EventLogBase
         $eventLog->topic = $topic;
         $eventLog->details = $details;
 
-        if( ! $eventLog->save()) {
+        if ( ! $eventLog->save()) {
             throw new \Exception('Unable to save event log entry', 1461182172);
         }
     }

@@ -190,6 +190,7 @@ class EmailQueue extends EmailQueueBase
     {
         if ($this->event_log_topic !== null && $this->event_log_details !== null && $this->event_log_user_id !== null) {
             EventLog::log($this->event_log_topic, $this->event_log_details, $this->event_log_user_id);
+            return true;
         } else {
             return false;
         }
@@ -201,20 +202,21 @@ class EmailQueue extends EmailQueueBase
      */
     private function queue()
     {
+        $log = [
+            'class' => __CLASS__,
+            'action' => 'queue',
+            'to' => $this->to_address,
+            'subject' => $this->subject,
+            'attempts_count' => $this->attempts_count,
+            'last_attempt' => $this->last_attempt,
+        ];
+
         if ( ! $this->save()) {
             /*
              * Queue failed, log it and throw exception
              */
-            $log = [
-                'class' => __CLASS__,
-                'action' => 'queue',
-                'to' => $this->to_address,
-                'subject' => $this->subject,
-                'attempts_count' => $this->attempts_count,
-                'last_attempt' => $this->last_attempt,
-                'status' => 'failed to queue',
-                'error' => Json::encode($this->getFirstErrors()),
-            ];
+            $log['status'] = 'failed to queue';
+            $log['error'] = Json::encode($this->getFirstErrors());
             \Yii::error($log, 'application');
             throw new \Exception('Unable to queue email', 1461009236);
         }
