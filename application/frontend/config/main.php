@@ -40,6 +40,7 @@ return [
                 'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
                 'POST /auth/login/token' => 'auth/token',
+                'OPTIONS /auth/login/token' => 'auth/options',
 
                 /*
                  * Config routes
@@ -54,12 +55,15 @@ return [
                 'POST /method' => 'method/create',
                 'PUT /method/' . UID_ROUTE_PATTERN => 'method/update',
                 'DELETE /method/' . UID_ROUTE_PATTERN => 'method/delete',
+                'OPTIONS /method' => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN => 'method/options',
 
                 /*
                  * Password routes
                  */
                 'GET /password' => 'password/view',
                 'PUT /password' => 'password/update',
+                'OPTIONS /password' => 'password/options',
 
                 /*
                  * Reset routes
@@ -68,6 +72,10 @@ return [
                 'PUT /reset/' . UID_ROUTE_PATTERN => 'reset/update',
                 'PUT /reset/' . UID_ROUTE_PATTERN . '/resend' => 'reset/resend',
                 'PUT /reset/' . UID_ROUTE_PATTERN . '/validate' => 'reset/validate',
+                'OPTIONS /reset' => 'reset/options',
+                'OPTIONS /reset/' . UID_ROUTE_PATTERN => 'reset/options',
+                'OPTIONS /reset/' . UID_ROUTE_PATTERN . '/resend' => 'reset/options',
+                'OPTIONS /reset/' . UID_ROUTE_PATTERN . '/validate' => 'reset/options',
 
                 /*
                  * User  routes
