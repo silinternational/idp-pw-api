@@ -1,10 +1,8 @@
 <?php
 namespace common\models;
 
-use yii\filters\PageCache;
-use yii\helpers\ArrayHelper;
-
 use common\helpers\Utils;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 /**
@@ -45,12 +43,13 @@ class Method extends MethodBase
                     'message' => 'Method type must be either ' . self::TYPE_EMAIL . ' or ' . self::TYPE_PHONE . '.',
                 ],
 
-                [   // Email validation when type is email
+                [// Email validation when type is email
                     'value', 'email', 'when' => function() { return $this->type === self::TYPE_EMAIL; }
                 ],
 
-                [   // Phone number validation when type is phone
-                    'value', 'match', 'pattern' => '/[0-9,]{8,16}/', 'when' => function() { return $this->type === self::TYPE_PHONE; }
+                [// Phone number validation when type is phone
+                    'value', 'match', 'pattern' => '/[0-9,]{8,16}/',
+                    'when' => function() { return $this->type === self::TYPE_PHONE; }
                 ],
 
                 [
@@ -163,7 +162,7 @@ class Method extends MethodBase
             null,
             $this->user->getId(),
             'New email method',
-            'A new email method has been added and verification sent to '. $this->getMaskedValue()
+            'A new email method has been added and verification sent to ' . $this->getMaskedValue()
         );
     }
 
@@ -178,7 +177,7 @@ class Method extends MethodBase
             $this->verification_code,
             $this->user->getId(),
             'New phone method',
-            'A new phone method has been added and verification sent to '. $this->getMaskedValue()
+            'A new phone method has been added and verification sent to ' . $this->getMaskedValue()
         );
     }
 
@@ -186,11 +185,14 @@ class Method extends MethodBase
      * @param string $userSubmitted
      * @return bool
      */
-    public function isUserProvidedCodeCorrect($userSubmitted) {
+    public function isUserProvidedCodeCorrect($userSubmitted)
+    {
         if ($this->type === self::TYPE_EMAIL) {
             return Verification::isEmailCodeValid($this->verification_code, $userSubmitted);
         } elseif ($this->type === self::TYPE_PHONE) {
             return Verification::isPhoneCodeValid($this->verification_code, $userSubmitted);
+        } else {
+            return false;
         }
     }
 
