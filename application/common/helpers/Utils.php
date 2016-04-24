@@ -2,6 +2,7 @@
 namespace common\helpers;
 
 use yii\base\Security;
+use yii\validators\EmailValidator;
 use yii\web\ServerErrorHttpException;
 
 class Utils
@@ -138,9 +139,15 @@ class Utils
     /**
      * @param string $email an email address (it doesn't verify it)
      * @return string with most letters changed to asterisks
+     * @throws \Exception
      */
     public static function maskEmail($email)
     {
+        $validator = new EmailValidator();
+        if ( ! $validator->validate($email)) {
+            throw new \Exception('Invalid email address provided', 1461459797);
+        }
+
         list($part1, $domain) = explode('@', $email);
         $newEmail = '';
         $useRealChar = true;

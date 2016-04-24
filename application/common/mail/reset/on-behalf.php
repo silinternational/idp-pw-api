@@ -6,7 +6,7 @@ Hi there,
 Please contact them directly to ensure that you are only providing the following reset code to them
 and not to someone else.
 
-Reset Code: <?php echo \yii\helpers\Html::encode($resetCode); ?>
+Reset Code: <?php echo \yii\helpers\Html::encode($code); ?>
 
 To keep their account secure, please don't forward this email to anyone.
 See our Help Center for <a href="<?php echo \Yii::$app->params['helpCenterUrl']; ?>">more security tips</a>.
