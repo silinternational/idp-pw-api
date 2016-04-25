@@ -61,6 +61,15 @@ class Method extends MethodBase
         );
     }
 
+    public function fields()
+    {
+        return [
+            'id' => function() { return $this->uid; },
+            'type',
+            'value',
+        ];
+    }
+
     /**
      * @return string
      * @throws \Exception

@@ -328,4 +328,9 @@ class User extends UserBase implements IdentityInterface
     {
         return $this->first_name . ' ' . $this->last_name;
     }
+
+    public function getVerifiedMethods()
+    {
+        return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
+    }
 }
