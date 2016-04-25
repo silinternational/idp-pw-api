@@ -1199,12 +1199,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-phoneverification-nexmo.git",
-                "reference": "1ee97069f2d2549b8c4877c68ad8dad01ec3d283"
+                "reference": "6588b61806e2ab4472152af6c949fa9c3f87a1a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/1ee97069f2d2549b8c4877c68ad8dad01ec3d283",
-                "reference": "1ee97069f2d2549b8c4877c68ad8dad01ec3d283",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/6588b61806e2ab4472152af6c949fa9c3f87a1a4",
+                "reference": "6588b61806e2ab4472152af6c949fa9c3f87a1a4",
                 "shasum": ""
             },
             "require": {
@@ -1232,7 +1232,7 @@
                 }
             ],
             "description": "PhoneVerification component for IdP PW API that uses Nexmo services for SMS/Voice verification",
-            "time": "2016-04-25 18:59:28"
+            "time": "2016-04-25 19:21:50"
         },
         {
             "name": "silinternational/php-env",
