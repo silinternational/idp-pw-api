@@ -164,7 +164,7 @@ class Method extends MethodBase
     {
         Verification::sendEmail(
             $this->value,
-            '',
+            'Verification required - New account recovery method added',
             '@common/mail/method/verify',
             $this->verification_code,
             $this->user,
