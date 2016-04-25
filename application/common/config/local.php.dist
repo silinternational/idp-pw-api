@@ -36,5 +36,11 @@ return [
             'codeLength' => 4,
             'brand' => 'Verification',
         ],
+//        'phone' => [
+//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Sms',
+//            'apiKey' => '',
+//            'apiSecret' => '',
+//            'from' => '',
+//        ],
     ]
 ];
