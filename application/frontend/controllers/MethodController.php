@@ -124,7 +124,11 @@ class MethodController extends BaseRestController
             throw new BadRequestHttpException('Code is required');
         }
 
-        $method->validateAndSetAsVerified($code);
+        try {
+            $method->validateAndSetAsVerified($code);
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException('Invalid verification code');
+        }
 
         return $method;
     }

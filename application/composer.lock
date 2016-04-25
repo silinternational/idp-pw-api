@@ -308,7 +308,8 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com"
+                    "homepage": "http://ezyang.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -320,16 +321,16 @@
         },
         {
             "name": "fillup/nexmo",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fillup/nexmo.git",
-                "reference": "c8c51bb54789a7d0a23859262a86c2b473f33cd5"
+                "reference": "b9a8d30cb67c7b49a2d2f0775210aad6bbeeab53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fillup/nexmo/zipball/c8c51bb54789a7d0a23859262a86c2b473f33cd5",
-                "reference": "c8c51bb54789a7d0a23859262a86c2b473f33cd5",
+                "url": "https://api.github.com/repos/fillup/nexmo/zipball/b9a8d30cb67c7b49a2d2f0775210aad6bbeeab53",
+                "reference": "b9a8d30cb67c7b49a2d2f0775210aad6bbeeab53",
                 "shasum": ""
             },
             "require": {
@@ -355,7 +356,7 @@
                 }
             ],
             "description": "Nexmo API client built with Guzzle Web Service descriptions",
-            "time": "2016-03-29 18:59:47"
+            "time": "2016-04-22 14:51:38"
         },
         {
             "name": "forevermatt/calc-api-sig",
@@ -913,12 +914,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "438196c8f66647073bcaf99908b543bda7ffd6d4"
+                "reference": "c671d3899901257a98ec4c4fd39685d14112efc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/438196c8f66647073bcaf99908b543bda7ffd6d4",
-                "reference": "438196c8f66647073bcaf99908b543bda7ffd6d4",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c671d3899901257a98ec4c4fd39685d14112efc7",
+                "reference": "c671d3899901257a98ec4c4fd39685d14112efc7",
                 "shasum": ""
             },
             "conflict": {
@@ -1004,7 +1005,7 @@
                 "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
                 "zendframework/zendframework": ">=2,<2.4.9|>=2.5,<2.5.1",
-                "zendframework/zendframework1": ">=1,<1.11.15|>=1.12,<1.12.17",
+                "zendframework/zendframework1": ">=1,<1.11.15|>=1.12,<1.12.18",
                 "zendframework/zendopenid": ">=2,<2.0.2",
                 "zendframework/zendxml": ">=1,<1.0.1",
                 "zf-commons/zfc-user": "<1.2.2",
@@ -1024,7 +1025,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-04-11 16:52:34"
+            "time": "2016-04-21 06:36:58"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -1198,12 +1199,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-phoneverification-nexmo.git",
-                "reference": "3721df2b44ee3fba9cd44f4a60de1576a2c2293f"
+                "reference": "1ee97069f2d2549b8c4877c68ad8dad01ec3d283"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/3721df2b44ee3fba9cd44f4a60de1576a2c2293f",
-                "reference": "3721df2b44ee3fba9cd44f4a60de1576a2c2293f",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/1ee97069f2d2549b8c4877c68ad8dad01ec3d283",
+                "reference": "1ee97069f2d2549b8c4877c68ad8dad01ec3d283",
                 "shasum": ""
             },
             "require": {
@@ -1231,7 +1232,7 @@
                 }
             ],
             "description": "PhoneVerification component for IdP PW API that uses Nexmo services for SMS/Voice verification",
-            "time": "2016-04-11 15:23:13"
+            "time": "2016-04-25 18:59:28"
         },
         {
             "name": "silinternational/php-env",
