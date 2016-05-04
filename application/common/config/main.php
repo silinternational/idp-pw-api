@@ -99,6 +99,7 @@ return [
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
             'codeLength' => $codeLength,
+            'maxAttempts' => 10,
         ],
         'password' => [
             'minLength' => [

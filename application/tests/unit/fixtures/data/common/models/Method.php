@@ -24,4 +24,16 @@ return [
         'verification_expires' => null,
         'created' => '2016-02-29 13:15:00',
     ],
+    'method3' => [
+        'id' => 3,
+        'uid' => '33333333333333333333333333333333',
+        'user_id' => 1,
+        'type' => 'email',
+        'value' => 'email-1456769721@domain.org',
+        'verified' => 0,
+        'verification_code' => 123456,
+        'verification_attempts' => null,
+        'verification_expires' => '2000-01-01 00:00:00',
+        'created' => '2000-01-01 00:00:00',
+    ],
 ];

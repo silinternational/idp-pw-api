@@ -230,4 +230,19 @@ class Method extends MethodBase
             throw new \Exception('Unable to set method as verified', 1461442990);
         }
     }
+
+    /**
+     * Delete all method records that are not verified and verification_expires date is in the past
+     * @throws \Exception
+     */
+    public static function deleteExpiredUnverifiedMethods()
+    {
+        $methods = Method::find()->where(['verified' => 0])
+                                 ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
+                                 ->all();
+
+        foreach ($methods as $method) {
+            $method->delete();
+        }
+    }
 }

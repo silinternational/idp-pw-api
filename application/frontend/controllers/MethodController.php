@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use common\models\Method;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\TooManyRequestsHttpException;
 
 class MethodController extends BaseRestController
 {
@@ -107,19 +108,59 @@ class MethodController extends BaseRestController
      * @return Method
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
+     * @throws TooManyRequestsHttpException
      * @throws \Exception
      */
     public function actionUpdate($uid)
     {
+        /*
+         * Delete methods not yet verified that have expired - Just-in-time cleanup
+         */
+        try {
+            Method::deleteExpiredUnverifiedMethods();
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'deleteExpiredUnverifiedMethods',
+                'status' => 'error',
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        /*
+         * Find method if belongs to user and is not expired
+         */
         /** @var Method $method */
-        $method = Method::findOne(['uid' => $uid, 'user_id' => \Yii::$app->user->getId()]);
+        $method = Method::findOne([
+            'uid' => $uid,
+            'user_id' => \Yii::$app->user->getId(),
+        ]);
+
+        /*
+         * If not found, throw 404
+         */
         if ($method === null) {
             throw new NotFoundHttpException();
         }
 
+        /*
+         * If method is already verified, just return it as if successful
+         */
+        if ($method->verified === 1) {
+            return $method;
+        }
+
+        /*
+         * Ensure verification attempts is not above limit
+         */
+        if ($method->verification_attempts >= \Yii::$app->params['reset']['maxAttempts']) {
+            throw new TooManyRequestsHttpException();
+        }
+
+        /*
+         * Get verification code and attempt to verify
+         */
         $request = \Yii::$app->request;
         $code = $request->getBodyParam('code');
-
         if ($code === null) {
             throw new BadRequestHttpException('Code is required');
         }
@@ -143,7 +184,11 @@ class MethodController extends BaseRestController
     public function actionDelete($uid)
     {
         /** @var Method $method */
-        $method = Method::findOne(['uid' => $uid, 'user_id' => \Yii::$app->user->getId()]);
+        $method = Method::findOne([
+            'uid' => $uid,
+            'user_id' => \Yii::$app->user->getId()
+        ]);
+        
         if ($method === null) {
             throw new NotFoundHttpException();
         }
