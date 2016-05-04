@@ -1,13 +1,11 @@
 <?php
 namespace frontend\controllers;
 
-use common\helpers\Utils;
+use common\models\Method;
 use common\models\User;
 use frontend\components\BaseRestController;
-
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
-use common\models\Method;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\TooManyRequestsHttpException;
@@ -188,7 +186,7 @@ class MethodController extends BaseRestController
             'uid' => $uid,
             'user_id' => \Yii::$app->user->getId()
         ]);
-        
+
         if ($method === null) {
             throw new NotFoundHttpException();
         }

@@ -136,6 +136,9 @@ class Method extends MethodBase
          */
         $method->sendVerification();
 
+        $log['status'] = 'success';
+        \Yii::warning($log);
+
         return $method;
     }
 
@@ -237,9 +240,9 @@ class Method extends MethodBase
      */
     public static function deleteExpiredUnverifiedMethods()
     {
-        $methods = Method::find()->where(['verified' => 0])
-                                 ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
-                                 ->all();
+        $methods = self::find()->where(['verified' => 0])
+                               ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
+                               ->all();
 
         foreach ($methods as $method) {
             $method->delete();

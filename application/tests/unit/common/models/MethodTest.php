@@ -178,13 +178,15 @@ class MethodTest extends DbTestCase
 
     public function testDeleteExpiredUnverifiedMethods()
     {
-        $method1 = Method::findOne(['uid' => '33333333333333333333333333333333']);
+        $method = $this->methods('method3');
+
+        $method1 = Method::findOne(['uid' => $method->uid]);
         $this->assertNotNull($method1);
 
         Method::deleteExpiredUnverifiedMethods();
 
-        $method2 = Method::findOne(['uid' => '33333333333333333333333333333333']);
+        $method2 = Method::findOne(['uid' => $method->uid]);
         $this->assertNull($method2);
     }
-    
+
 }
