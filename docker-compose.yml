@@ -40,7 +40,6 @@ api:
         - ./common.env
         - ./local.env
 
-
 #cron:
 #   image: idp-pw-api
 #   container_name: cron
