@@ -218,7 +218,7 @@ class EmailQueue extends EmailQueueBase
             $log['status'] = 'failed to queue';
             $log['error'] = Json::encode($this->getFirstErrors());
             \Yii::error($log, 'application');
-            throw new \Exception('Unable to queue email', 1461009236);
+            throw new \Exception('Unable to queue email: ' . $log['error'], 1461009236);
         }
         
         /*

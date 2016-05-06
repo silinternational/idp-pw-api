@@ -33,8 +33,14 @@ return [
             'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Verify',
             'apiKey' => '',
             'apiSecret' => '',
-            'generateCodeBeforeCall' => false,
             'codeLength' => 4,
+            'brand' => 'Verification',
         ],
+//        'phone' => [
+//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Sms',
+//            'apiKey' => '',
+//            'apiSecret' => '',
+//            'from' => '',
+//        ],
     ]
 ];

@@ -91,4 +91,12 @@ class BaseRestController extends Controller
         $this->checkForForbidden($action);
 
     }
+
+    /**
+     * @return array
+     */
+    public function actionOptions()
+    {
+        return [];
+    }
 }

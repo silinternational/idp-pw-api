@@ -239,26 +239,20 @@ class Reset extends ResetBase
         }
         $this->attempts += 1;
         if ($this->save()) {
-            $body = \Yii::$app->mailer->render(
-                '@common/mail/reset/' . $view,
-                [
-                    'idpName' => \Yii::$app->params['idpName'],
-                    'name' => $this->user->first_name,
-                    'resetCode' => $this->code,
-                ]
-            );
-
-            EmailQueue::sendOrQueue(
+            // Send email verification
+            Verification::sendEmail(
                 $toAddress,
                 $subject,
-                $body,
-                $body,
+                '@common/mail/reset/' . $view,
+                $this->code,
+                $this->user,
                 $ccAddress,
                 $this->user->id,
                 self::TOPIC_RESET_EMAIL_SENT,
                 'Password reset email for ' . $this->user->getDisplayName() .
                 'sent to ' . $toAddress
             );
+
         } else {
             throw new \Exception('Unable to update reset in database, email not sent', 1461098651);
         }
@@ -284,8 +278,15 @@ class Reset extends ResetBase
         // Generate random code for potential use
         $code = Utils::getRandomDigits(\Yii::$app->phone->codeLength);
 
-        // Call component send() method to send verification and capture resulting code
-        $result = \Yii::$app->phone->send($number, $code);
+        // Send phone verification
+        $result = Verification::sendPhone(
+            $number,
+            $code,
+            $this->user->getId(),
+            self::TOPIC_RESET_PHONE_SENT,
+            'Password reset for ' . $this->user->getDisplayName() .
+            'sent to phone ' . $this->method->getMaskedValue()
+        );
 
         // Update db with code and increased attempts count
         $this->code = $result;
@@ -302,6 +303,7 @@ class Reset extends ResetBase
     }
 
     /**
+     * Check if user provided code is valid
      * @param string $userProvided code submitted by user
      * @return boolean
      * @throws \Exception
@@ -310,7 +312,11 @@ class Reset extends ResetBase
     public function isUserProvidedCodeCorrect($userProvided)
     {
         if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
-            return \Yii::$app->phone->verify($this->code, $userProvided);
+            return Verification::isPhoneCodeValid($this->code, $userProvided);
+        } elseif ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_EMAIL) {
+            return Verification::isEmailCodeValid($this->code, $userProvided);
+        } else {
+            throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
         }
     }
 
