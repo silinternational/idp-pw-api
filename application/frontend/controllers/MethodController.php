@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\exception\InvalidCodeException;
 use common\models\Method;
 use common\models\User;
 use frontend\components\BaseRestController;
@@ -8,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
 
 class MethodController extends BaseRestController
@@ -165,8 +167,10 @@ class MethodController extends BaseRestController
 
         try {
             $method->validateAndSetAsVerified($code);
-        } catch (\Exception $e) {
+        } catch (InvalidCodeException $e) {
             throw new BadRequestHttpException('Invalid verification code');
+        } catch (\Exception $e) {
+            throw new ServerErrorHttpException('Unable to set method as verified');
         }
 
         return $method;
@@ -177,6 +181,7 @@ class MethodController extends BaseRestController
      * @param string $uid
      * @return array
      * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
      * @throws \Exception
      */
     public function actionDelete($uid)
@@ -191,7 +196,9 @@ class MethodController extends BaseRestController
             throw new NotFoundHttpException();
         }
 
-        $method->delete();
+        if ( ! $method->delete()) {
+            throw new ServerErrorHttpException('Unable to delete method');
+        }
 
         return [];
     }

@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -105,7 +106,7 @@ class Method extends MethodBase
     {
         $log = [
             'class' => __CLASS__,
-            'method' => 'createAndSendVerification',
+            'method' => __METHOD__,
             'user_id' => $userId,
             'type' => $type,
         ];
@@ -218,7 +219,7 @@ class Method extends MethodBase
         if ( ! $this->isUserProvidedCodeCorrect($userSubmitted)) {
             $this->verification_attempts++;
             $this->save();
-            throw new \Exception('Invalid verification code', 1461442988);
+            throw new InvalidCodeException('Invalid verification code', 1461442988);
         }
 
         /*
@@ -245,7 +246,14 @@ class Method extends MethodBase
                                ->all();
 
         foreach ($methods as $method) {
-            $method->delete();
+            if ( ! $method->delete()) {
+                \Yii::error([
+                    'action' => 'delete expired unverified methods',
+                    'status' => 'failed',
+                    'error' => Json::encode($method->getFirstErrors()),
+                    'method_id' => $method->id,
+                ]);
+            }
         }
     }
 }

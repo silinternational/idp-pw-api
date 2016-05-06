@@ -137,7 +137,7 @@ class Utils
     }
 
     /**
-     * @param string $email an email address (it doesn't verify it)
+     * @param string $email an email address
      * @return string with most letters changed to asterisks
      * @throws \Exception
      */

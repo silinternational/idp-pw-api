@@ -313,8 +313,10 @@ class Reset extends ResetBase
     {
         if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
             return Verification::isPhoneCodeValid($this->code, $userProvided);
-        } else {
+        } elseif ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_EMAIL) {
             return Verification::isEmailCodeValid($this->code, $userProvided);
+        } else {
+            throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
         }
     }
 

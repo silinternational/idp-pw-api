@@ -40,6 +40,8 @@ class Verification extends Model
                 'name' => $forUser->first_name,
                 'code' => $code,
                 'toAddress' => $toAddress,
+                'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
+                'fromName' => \Yii::$app->params['fromName'],
             ]
         );
 
