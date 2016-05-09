@@ -42,18 +42,26 @@ Backend API for Identity Provider Password Management
 ### Additional setup for Linux
 1. Add entry to ```/etc/hosts``` for ```120.0.0.1 idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
-3. Run ```docker-compose up -d```
+3. Run ```make start```
 
 ### Additional setup for Mac
 1. Get IP address for your default docker-machine env ```docker-machine ip default```
    and add entry to ```/etc/hosts``` for ```<docker machine ip> idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
-3. Run ```docker-compose up -d```
+3. Run ```make start```
 
 ### Additional setup for Windows
 1. Add entry to ```c:\windows\system32\drivers\etc\hosts``` for 
    ```192.168.37.37 idp-pw-api.local```
 2. Run ```vagrant up```
 3. In order to run docker commands directly, SSH into the vagrant box ```vagrant ssh```
-   change to /vagrant folder ```cd /vagrant``` and run ```docker <cmd>```
+   change to /vagrant folder ```cd /vagrant``` and run ```make start```
    
+### Makefile script aliases
+To simplify common tasks there is a Makefile in place. The most common tasks will likely be:
+
+- ```make start``` - Does what is needed to get API server online
+- ```make test``` - Does cleanup and restart of test instances and runs unit tests
+- ```make clean``` - Remove all containers
+- ```make composerupdate``` - ```make start``` will run a ```composer install```, but to update composer
+    you need to run ```make composerupdate```
