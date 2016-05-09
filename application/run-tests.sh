@@ -10,6 +10,8 @@ if [ ! -f /data/common/config/local.php ]; then
     cp /data/common/config/local.test.php /data/common/config/local.php
 fi
 
+mkdir -p /data/runtime/mail
+
 # Run database migrations
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test

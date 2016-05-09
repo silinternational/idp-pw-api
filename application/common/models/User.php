@@ -323,4 +323,20 @@ class User extends UserBase implements IdentityInterface
 
         return $authUser;
     }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
+     * @return Method[]
+     */
+    public function getVerifiedMethods()
+    {
+        return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
+    }
 }

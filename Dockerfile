@@ -10,6 +10,8 @@ RUN mkdir -p /data
 # Copy in syslog config
 RUN rm -f /etc/rsyslog.d/*
 COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
+RUN mkdir -p /opt/ssl
+COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
 
 # It is expected that /data is = application/ in project folder
 COPY application/ /data/
@@ -26,4 +28,4 @@ RUN chown -R www-data:www-data \
 RUN composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader
 
 EXPOSE 80
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+CMD ["/data/run.sh"]

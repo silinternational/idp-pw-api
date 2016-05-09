@@ -1,7 +1,6 @@
 <?php
 namespace common\models;
 
-
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -20,6 +19,9 @@ class Reset extends ResetBase
     const TYPE_METHOD = 'method';
     const TYPE_SUPERVISOR = 'supervisor';
     const TYPE_SPOUSE = 'spouse';
+
+    const TOPIC_RESET_EMAIL_SENT = 'Reset Email Sent';
+    const TOPIC_RESET_PHONE_SENT = 'Reset Phone Sent';
 
     /**
      * @return array
@@ -99,7 +101,7 @@ class Reset extends ResetBase
              * If $method_id is provided, make sure user owns it
              */
             if ($type == self::TYPE_METHOD && $methodId !== null) {
-                $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId]);
+                $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId, 'verified' => 1]);
                 if ( ! $method) {
                     throw new NotFoundHttpException('Requested method not found', 1456608142);
                 }
@@ -146,23 +148,49 @@ class Reset extends ResetBase
 
     public function sendPrimary()
     {
-        /*
-         * send email to user's primary email with reset code
-         */
+        $subject = \Yii::t(
+            'app',
+            '{{idpName}} password reset request',
+            [
+                'idpName' => \Yii::$app->params['idpName'],
+            ]
+        );
+
+        $this->sendEmail($this->user->email, $subject, 'self');
     }
 
     public function sendSupervisor()
     {
-        /*
-         * check if user has a supervisor and then email the supervisor the reset code
-         */
+        if ($this->user->hasSupervisor()) {
+            $supervisor = $this->user->getSupervisorEmail();
+            $this->sendOnBehalf($supervisor);
+        } else {
+            throw new \Exception('User does not have supervisor on record', 1461173406);
+        }
     }
 
     public function sendSpouse()
     {
-        /*
-         * check if user has a spouse and then email the spouse the reset code
-         */
+        if ($this->user->hasSpouse()) {
+            $spouse = $this->user->getSpouseEmail();
+            $this->sendOnBehalf($spouse);
+        } else {
+            throw new \Exception('User does not have spouse on record', 1461173477);
+        }
+    }
+
+    public function sendOnBehalf($toAddress)
+    {
+        $subject = \Yii::t(
+            'app',
+            '{idpName} password reset request for {name}',
+            [
+                'idpName' => \Yii::$app->params['idpName'],
+                'name' => $this->user->first_name,
+            ]
+        );
+
+        $this->sendEmail($toAddress, $subject, 'on-behalf', $this->user->email);
     }
 
     /**
@@ -176,7 +204,17 @@ class Reset extends ResetBase
         }
 
         if ($this->method->type == Method::TYPE_EMAIL) {
-            $this->sendEmail();
+            /*
+             * Send email to 'self' with verified email address
+             */
+            $subject = \Yii::t(
+                'app',
+                '{{idpName}} password reset request',
+                [
+                    'idpName' => \Yii::$app->params['idpName'],
+                ]
+            );
+            $this->sendEmail($this->method->value, $subject, 'self');
         } elseif ($this->method->type == Method::TYPE_PHONE) {
             $this->sendPhone();
         } else {
@@ -184,11 +222,40 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendEmail()
+    /**
+     * @param string $toAddress
+     * @param string $subject
+     * @param string $view
+     * @param string|null $ccAddress
+     * @throws \Exception
+     */
+    public function sendEmail($toAddress, $subject, $view, $ccAddress = null)
     {
         /*
-         * send email to $this->method->value with reset code
+         * Generate code if needed, update attempt counter, save record, and send email
          */
+        if ($this->code === null) {
+            $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+        }
+        $this->attempts += 1;
+        if ($this->save()) {
+            // Send email verification
+            Verification::sendEmail(
+                $toAddress,
+                $subject,
+                '@common/mail/reset/' . $view,
+                $this->code,
+                $this->user,
+                $ccAddress,
+                $this->user->id,
+                self::TOPIC_RESET_EMAIL_SENT,
+                'Password reset email for ' . $this->user->getDisplayName() .
+                'sent to ' . $toAddress
+            );
+
+        } else {
+            throw new \Exception('Unable to update reset in database, email not sent', 1461098651);
+        }
     }
 
     /**
@@ -211,8 +278,15 @@ class Reset extends ResetBase
         // Generate random code for potential use
         $code = Utils::getRandomDigits(\Yii::$app->phone->codeLength);
 
-        // Call component send() method to send verification and capture resulting code
-        $result = \Yii::$app->phone->send($number, $code);
+        // Send phone verification
+        $result = Verification::sendPhone(
+            $number,
+            $code,
+            $this->user->getId(),
+            self::TOPIC_RESET_PHONE_SENT,
+            'Password reset for ' . $this->user->getDisplayName() .
+            'sent to phone ' . $this->method->getMaskedValue()
+        );
 
         // Update db with code and increased attempts count
         $this->code = $result;
@@ -229,6 +303,7 @@ class Reset extends ResetBase
     }
 
     /**
+     * Check if user provided code is valid
      * @param string $userProvided code submitted by user
      * @return boolean
      * @throws \Exception
@@ -237,7 +312,11 @@ class Reset extends ResetBase
     public function isUserProvidedCodeCorrect($userProvided)
     {
         if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
-            return \Yii::$app->phone->verify($this->code, $userProvided);
+            return Verification::isPhoneCodeValid($this->code, $userProvided);
+        } elseif ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_EMAIL) {
+            return Verification::isEmailCodeValid($this->code, $userProvided);
+        } else {
+            throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
         }
     }
 

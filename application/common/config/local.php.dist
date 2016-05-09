@@ -5,9 +5,9 @@ return [
         'personnel' => [
             // Example:
             'class' => '\Sil\IdpPw\Common\Personnel\Insite',
-            'insitePeopleSearchBaseUrl' => getenv('INSITE_PEOPLE_SEARCH_BASE_URL'),
-            'insitePeopleSearchApiKey' => getenv('INSITE_PEOPLE_SEARCH_API_KEY'),
-            'insitePeopleSearchApiSecret' => getenv('INSITE_PEOPLE_SEARCH_API_SECRET'),
+            'insitePeopleSearchBaseUrl' => '',
+            'insitePeopleSearchApiKey' => '',
+            'insitePeopleSearchApiSecret' => '',
         ],
         'auth' => [
             'class' => '\Sil\IdpPw\Auth\Saml',
@@ -33,8 +33,14 @@ return [
             'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Verify',
             'apiKey' => '',
             'apiSecret' => '',
-            'generateCodeBeforeCall' => false,
             'codeLength' => 4,
+            'brand' => 'Verification',
         ],
+//        'phone' => [
+//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Sms',
+//            'apiKey' => '',
+//            'apiSecret' => '',
+//            'from' => '',
+//        ],
     ]
 ];
