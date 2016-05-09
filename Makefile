@@ -4,7 +4,10 @@ clean:
 
 start: api
 
-api: composer yiimigrate yiimigratelocal
+test: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
+	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
+
+api: upDb composer yiimigrate yiimigratelocal
 	docker-compose up -d api
 
 composer:
@@ -12,6 +15,13 @@ composer:
 
 composerupdate:
 	docker-compose run --rm cli composer update
+
+rmDb:
+	docker-compose kill db
+	docker-compose rm -f db
+
+upDb:
+	docker-compose up -d db
 
 yiimigrate:
 	docker-compose run --rm cli whenavail db 3306 100 ./yii migrate --interactive=0
@@ -23,13 +33,15 @@ basemodels:
 	docker-compose run --rm cli whenavail db 3306 100 ./rebuildbasemodels.sh
 
 yiimigratetestDb:
-	docker-compose run --rm cli whenavail db 3306 100 ./yii migrate --interactive=0
+	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test whenavail testDb 3306 100 ./yii migrate --interactive=0'
 
 yiimigratetestDblocal:
-	docker-compose run --rm cli whenavail db 3306 100 ./yii migrate --migrationPath=console/migrations-local/ --interactive=0
+	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test whenavail testDb 3306 100 ./yii migrate --migrationPath=console/migrations-test/ --interactive=0'
 
-
-test: composer
+rmTestDb:
 	docker-compose kill testDb
+	docker-compose rm -f testDb
+
+upTestDb:
 	docker-compose up -d testDb
-	docker-compose run --rm cli whenavail testDb 3306 100 ./yii migrate --interactive=0
+
