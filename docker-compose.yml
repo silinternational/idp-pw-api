@@ -13,10 +13,10 @@ services:
         ports:
             - "3306"
         environment:
-          MYSQL_ROOT_PASSWORD: r00tp@ss!
-          MYSQL_DATABASE: idpmgmt
-          MYSQL_USER: idpmgmt
-          MYSQL_PASSWORD: idpmgmt
+            MYSQL_ROOT_PASSWORD: r00tp@ss!
+            MYSQL_DATABASE: idpmgmt
+            MYSQL_USER: idpmgmt
+            MYSQL_PASSWORD: idpmgmt
 
     testDb:
        image: silintl/mariadb:latest
@@ -43,7 +43,7 @@ services:
             - ./local.env
 
     cli:
-        image: silintl/php7
+        image: silintl/php7:latest
         container_name: cli
         volumes_from:
             - data
@@ -53,3 +53,12 @@ services:
             - ./common.env
             - ./local.env
         command: ["true"]
+networks:
+    default:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+            - subnet: 10.20.31.0/24
+              gateway: 10.20.31.1
+
