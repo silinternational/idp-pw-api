@@ -216,9 +216,19 @@ class Method extends MethodBase
      */
     public function validateAndSetAsVerified($userSubmitted)
     {
+        /*
+         * Increase attempts count before verifying code in case verification fails
+         * for some reason
+         */
+        $this->verification_attempts++;
+        if ( ! $this->save()) {
+            throw new \Exception('Unable to increment verification attempts', 1462903086);
+        }
+
+        /*
+         * Verify user provided code
+         */
         if ( ! $this->isUserProvidedCodeCorrect($userSubmitted)) {
-            $this->verification_attempts++;
-            $this->save();
             throw new InvalidCodeException('Invalid verification code', 1461442988);
         }
 
