@@ -96,6 +96,7 @@ return [
         'fromName' => $fromName,
         'helpCenterUrl' => $helpCenterUrl,
         'ui_url' => $uiUrl,
+        'sessionDuration' => 1800, // 30 minutes
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
             'disableDuration' => 900,  // 15 minutes

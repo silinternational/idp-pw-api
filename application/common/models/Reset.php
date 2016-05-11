@@ -71,9 +71,15 @@ class Reset extends ResetBase
     {
         return [
             'uid',
-            'hasSupervisor' => $this->user->hasSupervisor(),
-            'hasSpouse' => $this->user->hasSpouse(),
-            'methods' => $this->user->getMaskedMethods(),
+            'hasSupervisor' => function($model) {
+                return $model->user->hasSupervisor();
+            },
+            'hasSpouse' => function($model) {
+                return $model->user->hasSpouse();
+            },
+            'methods' => function($model) {
+                return $model->user->getMaskedMethods();
+            },
         ];
     }
 
@@ -128,39 +134,9 @@ class Reset extends ResetBase
     public function send()
     {
         /*
-         * Increment attempts count first thing
+         * Track attempt and throw error if disabled or limit is reached
          */
-        $this->attempts++;
-        if( ! $this->save()) {
-            \Yii::error([
-                'action' => 'send reset',
-                'reset_id' => $this->id,
-                'attempts' => $this->attempts,
-                'error' => 'Unable to increment attempts count. Error: ' . Json::encode($this->getFirstErrors()),
-            ]);
-        }
-
-        /*
-         * Check if reset is disabled and throw exception if it is
-         */
-        if ($this->isDisabled()) {
-            \Yii::error([
-                'action' => 'send reset',
-                'reset_id' => $this->id,
-                'attempts' => $this->attempts,
-                'status' => 'error',
-                'error' => 'Reset is currently disabled until ' . $this->disable_until,
-            ]);
-            throw new TooManyRequestsHttpException();
-        }
-
-        /*
-         * If attempts has reached limit, disable reset
-         */
-        if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
-            $this->disable();
-            throw new TooManyRequestsHttpException();
-        } 
+        $this->trackAttempt('send');
 
         /*
          * Based on type/method send reset verification and update
@@ -184,7 +160,7 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendPrimary()
+    private function sendPrimary()
     {
         $subject = \Yii::t(
             'app',
@@ -197,7 +173,7 @@ class Reset extends ResetBase
         $this->sendEmail($this->user->email, $subject, 'self');
     }
 
-    public function sendSupervisor()
+    private function sendSupervisor()
     {
         if ($this->user->hasSupervisor()) {
             $supervisor = $this->user->getSupervisorEmail();
@@ -207,7 +183,7 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendSpouse()
+    private function sendSpouse()
     {
         if ($this->user->hasSpouse()) {
             $spouse = $this->user->getSpouseEmail();
@@ -217,7 +193,7 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendOnBehalf($toAddress)
+    private function sendOnBehalf($toAddress)
     {
         $subject = \Yii::t(
             'app',
@@ -235,7 +211,7 @@ class Reset extends ResetBase
      * Determine if type is phone or email and send accordingly
      * @throws \Exception
      */
-    public function sendMethod()
+    private function sendMethod()
     {
         if ( ! ($this->method instanceof Method)) {
             throw new \Exception('Method not initialized on Reset', 1456608512);
@@ -267,7 +243,7 @@ class Reset extends ResetBase
      * @param string|null $ccAddress
      * @throws \Exception
      */
-    public function sendEmail($toAddress, $subject, $view, $ccAddress = null)
+    private function sendEmail($toAddress, $subject, $view, $ccAddress = null)
     {
         /*
          * Generate code if needed, update attempt counter, save record, and send email
@@ -298,7 +274,7 @@ class Reset extends ResetBase
      * Send phone verification and store resulting code
      * @throws \Exception
      */
-    public function sendPhone()
+    private function sendPhone()
     {
         // Initialize log
         $log = [
@@ -342,17 +318,53 @@ class Reset extends ResetBase
      * @param string $userProvided code submitted by user
      * @return boolean
      * @throws \Exception
+     * @throws ServerErrorHttpException
+     * @throws TooManyRequestsHttpException
      * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
      */
     public function isUserProvidedCodeCorrect($userProvided)
     {
-        if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
+        /*
+         * Track attempt and throw error if disabled or limit is reached
+         */
+        $this->trackAttempt('verify');
+
+        if ($this->isTypePhone()) {
             return Verification::isPhoneCodeValid($this->code, $userProvided);
-        } elseif ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_EMAIL) {
+        } elseif ($this->isTypeEmail()) {
             return Verification::isEmailCodeValid($this->code, $userProvided);
         } else {
             throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
         }
+    }
+
+    /**
+     * Check if reset is using an email type of verification
+     * @return bool
+     */
+    public function isTypeEmail()
+    {
+        if ($this->type === self::TYPE_PRIMARY
+            || $this->type === self::TYPE_SUPERVISOR
+            || $this->type === self::TYPE_SPOUSE
+            || ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_EMAIL)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if reset is using a phone type of verification
+     * @return bool
+     */
+    public function isTypePhone()
+    {
+        if ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_PHONE) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -412,5 +424,93 @@ class Reset extends ResetBase
 
         $log['status'] = 'success';
         \Yii::warning($log);
+    }
+
+    public function setType($type, $methodId = null)
+    {
+        /*
+         * If type is method but methodId is missing, throw error
+         */
+        if ($type == self::TYPE_METHOD && $methodId === null) {
+            throw new BadRequestHttpException('Method ID required for reset type method', 1462988984);
+        }
+
+        /*
+         * If type is not method, update or throw error
+         */
+        if ($type === self::TYPE_SPOUSE || $type === self::TYPE_SUPERVISOR || $type == self::TYPE_PRIMARY) {
+            $this->type = $type;
+            $this->method_id = null;
+        } elseif ($type == self::TYPE_METHOD && $methodId !== null) {
+            /*
+             * Make sure user owns requested method before update
+             */
+            $method = Method::findOne(['id' => $methodId, 'user_id' => $this->user_id]);
+            if ($method === null) {
+                throw new NotFoundHttpException('Method not found', 1462989221);
+            }
+            $this->type = self::TYPE_METHOD;
+            $this->method_id = $methodId;
+        } else {
+            throw new BadRequestHttpException('Unknown reset type requested', 1462989489);
+        }
+
+        /*
+         * Save changes
+         */
+        if ( ! $this->save()) {
+            \Yii::error([
+                'action' => 'Set type of reset',
+                'reset_id' => $this->id,
+                'type' => $type,
+                'status' => 'error',
+                'error' => 'Unable to update reset. Error: ' . Json::encode($this->getFirstErrors()),
+            ]);
+            throw new ServerErrorHttpException('Unable to update reset type', 1462988908);
+        }
+    }
+
+    /**
+     * Increments attempts counter and disables account when limit is reached
+     * @param string $action Used in logging, either 'send' or 'verify'
+     * @throws ServerErrorHttpException
+     * @throws TooManyRequestsHttpException
+     */
+    public function trackAttempt($action)
+    {
+        /*
+         * Increment attempts count first thing
+         */
+        $this->attempts++;
+        if( ! $this->save()) {
+            \Yii::error([
+                'action' => $action . ' reset',
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'error' => 'Unable to increment attempts count. Error: ' . Json::encode($this->getFirstErrors()),
+            ]);
+        }
+
+        /*
+         * Check if reset is disabled and throw exception if it is
+         */
+        if ($this->isDisabled()) {
+            \Yii::error([
+                'action' => $action . ' reset',
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'status' => 'error',
+                'error' => 'Reset is currently disabled until ' . $this->disable_until,
+            ]);
+            throw new TooManyRequestsHttpException();
+        }
+
+        /*
+         * If attempts has reached limit, disable reset
+         */
+        if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
+            $this->disable();
+            throw new TooManyRequestsHttpException();
+        }
     }
 }
