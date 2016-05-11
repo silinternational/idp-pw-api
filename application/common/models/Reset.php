@@ -2,6 +2,7 @@
 namespace common\models;
 
 use common\helpers\Utils;
+use GuzzleHttp\Tests\Ring\Client\Server;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -118,9 +119,7 @@ class Reset extends ResetBase
             /*
              * Save new Reset
              */
-            if ( ! $reset->save()) {
-                throw new \Exception('Unable to create new reset', 1456608028);
-            }
+            $reset->saveOrError('create new reset', 'Unable to create new reset.');
         }
 
         return $reset;
@@ -302,13 +301,8 @@ class Reset extends ResetBase
 
         // Update db with code and increased attempts count
         $this->code = $result;
-        if ( ! $this->save()) {
-            $log['status'] = 'error';
-            $log['error'] = 'Unable to update Reset in database';
-            $log['model_error'] = Json::encode($this->getFirstErrors());
-            \Yii::error($log, 'application');
-            throw new \Exception($log['error'], 1460388532);
-        }
+        $this->saveOrError('send phone reset', 'Unable to update reset after sending phone verification.');
+
         $log['status'] = 'success';
         \Yii::warning($log, 'application');
     }
@@ -421,19 +415,19 @@ class Reset extends ResetBase
     public function setType($type, $methodId = null)
     {
         /*
-         * If type is method but methodId is missing, throw error
-         */
-        if ($type == self::TYPE_METHOD && $methodId === null) {
-            throw new BadRequestHttpException('Method ID required for reset type method', 1462988984);
-        }
-
-        /*
          * If type is not method, update or throw error
          */
-        if ($type === self::TYPE_SPOUSE || $type === self::TYPE_SUPERVISOR || $type == self::TYPE_PRIMARY) {
+        if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
             $this->type = $type;
             $this->method_id = null;
-        } elseif ($type == self::TYPE_METHOD && $methodId !== null) {
+        } elseif ($type == self::TYPE_METHOD) {
+            /*
+             * If type is method but methodId is missing, throw error
+             */
+            if ($methodId === null) {
+                throw new BadRequestHttpException('Method ID required for reset type method', 1462988984);
+            }
+
             /*
              * Make sure user owns requested method before update
              */
@@ -450,16 +444,7 @@ class Reset extends ResetBase
         /*
          * Save changes
          */
-        if ( ! $this->save()) {
-            \Yii::error([
-                'action' => 'Set type of reset',
-                'reset_id' => $this->id,
-                'type' => $type,
-                'status' => 'error',
-                'error' => 'Unable to update reset. Error: ' . Json::encode($this->getFirstErrors()),
-            ]);
-            throw new ServerErrorHttpException('Unable to update reset type', 1462988908);
-        }
+        $this->saveOrError('Set type of reset', 'Unable to update reset type.');
     }
 
     /**
@@ -474,14 +459,7 @@ class Reset extends ResetBase
          * Increment attempts count first thing
          */
         $this->attempts++;
-        if ( ! $this->save()) {
-            \Yii::error([
-                'action' => $action . ' reset',
-                'reset_id' => $this->id,
-                'attempts' => $this->attempts,
-                'error' => 'Unable to increment attempts count. Error: ' . Json::encode($this->getFirstErrors()),
-            ]);
-        }
+        $this->saveOrError($action . ' reset', 'Unable to increment attempts count.');
 
         /*
          * Check if reset is disabled and throw exception if it is
@@ -503,6 +481,27 @@ class Reset extends ResetBase
         if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
             $this->disable();
             throw new TooManyRequestsHttpException();
+        }
+    }
+
+    /**
+     * Save model or throw exception on error
+     * @param string $action
+     * @param string $errorPrefix
+     * @throws ServerErrorHttpException
+     */
+    public function saveOrError($action, $errorPrefix = '')
+    {
+        if ( ! $this->save()) {
+            \Yii::error([
+                'action' => $action,
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'type' => $this->type,
+                'status' => 'error',
+                'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
+            ]);
+            throw new ServerErrorHttpException($errorPrefix);
         }
     }
 }

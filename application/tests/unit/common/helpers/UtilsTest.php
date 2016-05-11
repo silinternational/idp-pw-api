@@ -3,6 +3,7 @@ namespace tests\unit\common\helpers;
 
 use yii\codeception\TestCase;
 use common\helpers\Utils;
+use yii\web\Request;
 
 class UtilsTest extends TestCase
 {
@@ -46,4 +47,14 @@ class UtilsTest extends TestCase
             $this->assertRegExp($regex, $value);
         }
     }
+    
+    public function testIsValidIpAddress()
+    {
+        $this->assertTrue(Utils::isValidIpAddress('127.0.0.1'));
+        $this->assertTrue(Utils::isValidIpAddress('fe80::58bb:d8ff:feec:ff6c'));
+        $this->assertFalse(Utils::isValidIpAddress('not an ip address'));
+        $this->assertFalse(Utils::isValidIpAddress('10.256.123.123'));
+    }
+
+    
 }

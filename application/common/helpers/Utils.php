@@ -341,7 +341,7 @@ class Utils
      * @param  string  $ip
      * @return boolean
      */
-    protected static function isValidIpAddress($ip)
+    public static function isValidIpAddress($ip)
     {
         $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
         if (filter_var($ip, FILTER_VALIDATE_IP, $flags) === false) {
