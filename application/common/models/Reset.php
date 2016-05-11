@@ -4,8 +4,10 @@ namespace common\models;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
+use yii\web\TooManyRequestsHttpException;
 
 /**
  * Class Reset
@@ -119,11 +121,47 @@ class Reset extends ResetBase
     }
 
     /**
+     * Make sure reset is not disabled, track attempt, and then send.
      * Send reset notification to appropriate method
      * @throws \Exception
      */
     public function send()
     {
+        /*
+         * Increment attempts count first thing
+         */
+        $this->attempts++;
+        if( ! $this->save()) {
+            \Yii::error([
+                'action' => 'send reset',
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'error' => 'Unable to increment attempts count. Error: ' . Json::encode($this->getFirstErrors()),
+            ]);
+        }
+
+        /*
+         * Check if reset is disabled and throw exception if it is
+         */
+        if ($this->isDisabled()) {
+            \Yii::error([
+                'action' => 'send reset',
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'status' => 'error',
+                'error' => 'Reset is currently disabled until ' . $this->disable_until,
+            ]);
+            throw new TooManyRequestsHttpException();
+        }
+
+        /*
+         * If attempts has reached limit, disable reset
+         */
+        if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
+            $this->disable();
+            throw new TooManyRequestsHttpException();
+        } 
+
         /*
          * Based on type/method send reset verification and update
          * model with reset code
@@ -237,7 +275,6 @@ class Reset extends ResetBase
         if ($this->code === null) {
             $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
         }
-        $this->attempts += 1;
         if ($this->save()) {
             // Send email verification
             Verification::sendEmail(
@@ -252,7 +289,6 @@ class Reset extends ResetBase
                 'Password reset email for ' . $this->user->getDisplayName() .
                 'sent to ' . $toAddress
             );
-
         } else {
             throw new \Exception('Unable to update reset in database, email not sent', 1461098651);
         }
@@ -290,7 +326,6 @@ class Reset extends ResetBase
 
         // Update db with code and increased attempts count
         $this->code = $result;
-        $this->attempts++;
         if ( ! $this->save()) {
             $log['status'] = 'error';
             $log['error'] = 'Unable to update Reset in database';
@@ -336,5 +371,46 @@ class Reset extends ResetBase
         $time = time();
 
         return $time + $params['reset']['lifetimeSeconds'];
+    }
+
+    /**
+     * Check if this reset is currently disabled
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        if ($this->disable_until !== null) {
+            $disableUntilTime = strtotime($this->disable_until);
+            // Intentionally loose comparison to catch zero
+            if ($disableUntilTime == false) {
+                return true;
+            }
+            return $disableUntilTime > time();
+        }
+
+        return false;
+    }
+
+    /**
+     * Mark reset as disabled by setting disable_until date
+     * @throws ServerErrorHttpException
+     */
+    public function disable()
+    {
+        $log = [
+            'action' => 'disable reset',
+            'reset_id' => $this->id,
+            'attempts' => $this->attempts,
+        ];
+        $this->disable_until = Utils::getDatetime(time() + \Yii::$app->params['reset']['disableDuration']);
+        if ( ! $this->save()) {
+            $log['status'] = 'error';
+            $log['error'] = 'Unable to save reset with disable_until. Error: ' . Json::encode($this->getFirstErrors());
+            \Yii::error($log);
+            throw new ServerErrorHttpException();
+        }
+
+        $log['status'] = 'success';
+        \Yii::warning($log);
     }
 }

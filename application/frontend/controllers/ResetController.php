@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\helpers\Utils;
 use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
@@ -46,26 +47,36 @@ class ResetController extends BaseRestController
         }
 
         /*
-         * Validate $verificationToken before proceeding
+         * Validate reCaptcha $verificationToken before proceeding.
+         * This will throw an exception if not successful, checking response to
+         * be double sure an exception is thrown.
          */
-        /*
-         * integrate with reCAPTCHA to validate token
-         */
+        $clientIp = Utils::getClientIp(\Yii::$app->request);
+        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            throw new BadRequestHttpException('reCaptcha failed verification');
+        }
 
         /*
          * Find or create user
          */
         $user = User::findOrCreate($username);
+
         /*
          * Find or create a reset
          */
         $reset = Reset::findOrCreate($user);
+
         /*
          * Send reset notification
          */
         $reset->send();
 
         return $reset;
+    }
+
+    public function actionUpdate($uid)
+    {
+
     }
 
     /**
@@ -85,5 +96,10 @@ class ResetController extends BaseRestController
 
         \Yii::$app->response->statusCode = 204;
         return;
+    }
+
+    public function actionValidate($uid)
+    {
+
     }
 }

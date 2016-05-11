@@ -98,6 +98,7 @@ return [
         'ui_url' => $uiUrl,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
+            'disableDuration' => 900,  // 15 minutes
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],

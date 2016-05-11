@@ -2,7 +2,10 @@
 namespace common\helpers;
 
 use yii\base\Security;
+use yii\helpers\Json;
 use yii\validators\EmailValidator;
+use yii\web\BadRequestHttpException;
+use yii\web\Request;
 use yii\web\ServerErrorHttpException;
 
 class Utils
@@ -276,6 +279,75 @@ class Utils
         $randomDigits = substr($result, 0, $length);
 
         return $randomDigits;
+    }
+
+    /**
+     * Call reCaptcha API to verify response token
+     * @param string $verificationToken
+     * @param string $ipAddress
+     * @return bool
+     * @throws \Exception
+     */
+    public static function isRecaptchaResponseValid($verificationToken, $ipAddress)
+    {
+        $recaptcha = new \ReCaptcha\ReCaptcha(\Yii::$app->params['recaptcha']['secretKey']);
+        $response = $recaptcha->verify($verificationToken, $ipAddress);
+
+        if ($response->isSuccess()) {
+            return true;
+        }
+
+        \Yii::error([
+            'action' => __METHOD__,
+            'status' => 'error',
+            'error' => Json::encode($response->getErrorCodes()),
+        ]);
+        throw new BadRequestHttpException('Unable to verify recaptcha', 1462904023);
+    }
+
+    /**
+     * Get Client IP address by looking through headers for proxied requests
+     * @param Request $request
+     * @return string
+     */
+    public static function getClientIp(Request $request)
+    {
+        $checkHeaders = [
+            'X-Forwarded-For',
+            'X-Forwarded',
+            'X-Cluster-Client-Ip',
+            'Client-Ip',
+        ];
+
+        $ipAddress = $request->userIP;
+
+        $requestHeaders = $request->getHeaders();
+        foreach ($checkHeaders as $header) {
+            if ($requestHeaders->has($header)) {
+                $ip = trim(current(explode(',', $requestHeaders->get($header))));
+                if (self::isValidIpAddress($ip)) {
+                    $ipAddress = $ip;
+                    break;
+                }
+            }
+        }
+
+        return $ipAddress;
+    }
+
+    /**
+     * Check that a given string is a valid IP address
+     *
+     * @param  string  $ip
+     * @return boolean
+     */
+    protected static function isValidIpAddress($ip)
+    {
+        $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
+        if (filter_var($ip, FILTER_VALIDATE_IP, $flags) === false) {
+            return false;
+        }
+        return true;
     }
 
 }
