@@ -344,14 +344,10 @@ class Reset extends ResetBase
      */
     public function isTypeEmail()
     {
-        if ($this->type === self::TYPE_PRIMARY
+        return ($this->type === self::TYPE_PRIMARY
             || $this->type === self::TYPE_SUPERVISOR
             || $this->type === self::TYPE_SPOUSE
-            || ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_EMAIL)) {
-            return true;
-        }
-
-        return false;
+            || ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_EMAIL));
     }
 
     /**
@@ -360,11 +356,7 @@ class Reset extends ResetBase
      */
     public function isTypePhone()
     {
-        if ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_PHONE) {
-            return true;
-        }
-
-        return false;
+        return ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_PHONE);
     }
 
     /**
@@ -482,7 +474,7 @@ class Reset extends ResetBase
          * Increment attempts count first thing
          */
         $this->attempts++;
-        if( ! $this->save()) {
+        if ( ! $this->save()) {
             \Yii::error([
                 'action' => $action . ' reset',
                 'reset_id' => $this->id,

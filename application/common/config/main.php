@@ -99,7 +99,7 @@ return [
         'sessionDuration' => 1800, // 30 minutes
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
-            'disableDuration' => 900,  // 15 minutes
+            'disableDuration' => 900, // 15 minutes
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],

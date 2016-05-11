@@ -174,7 +174,7 @@ class ResetController extends BaseRestController
                 /*
                  * Delete reset record, log errors, but let user proceed
                  */
-                if ( ! $reset->delete()){
+                if ( ! $reset->delete()) {
                     \Yii::error([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,

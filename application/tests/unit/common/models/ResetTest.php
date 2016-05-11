@@ -2,14 +2,13 @@
 namespace tests\unit\common\models;
 
 use common\models\Method;
-use common\models\User;
 use common\models\Reset;
+use common\models\User;
 use tests\helpers\EmailUtils;
-use yii\codeception\DbTestCase;
-
-use tests\unit\fixtures\common\models\UserFixture;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
+use tests\unit\fixtures\common\models\UserFixture;
+use yii\codeception\DbTestCase;
 use yii\web\TooManyRequestsHttpException;
 
 /**
@@ -225,7 +224,7 @@ class ResetTest extends DbTestCase
         $expireDate = time() + \Yii::$app->params['reset']['disableDuration'];
         $reset->disable();
         $this->assertTrue($reset->isDisabled());
-        $this->assertEquals($expireDate, strtotime($reset->disable_until),'',2);
+        $this->assertEquals($expireDate, strtotime($reset->disable_until), '', 2);
     }
 
     public function testSetType()
@@ -265,7 +264,7 @@ class ResetTest extends DbTestCase
             }
             $this->fail('TooManyRequestsHttpException should have been thrown');
         } catch (TooManyRequestsHttpException $e) {
-            
+            // This is the expected behavior
         }
 
         $this->assertTrue($reset->isDisabled());
