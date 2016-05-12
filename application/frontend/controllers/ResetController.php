@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\helpers\Utils;
+use common\models\EventLog;
 use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
@@ -164,6 +165,17 @@ class ResetController extends BaseRestController
 
         $isValid = $reset->isUserProvidedCodeCorrect($code);
         if ($isValid === true) {
+
+            EventLog::log(
+                'ResetVerificationSuccessful',
+                [
+                    'reset_id' => $reset->id,
+                    'type' => $reset->type,
+                    'attempts' => $reset->attempts,
+                ],
+                $reset->user_id
+            );
+
             /*
              * Reset verified successfully, log user in
              */
@@ -194,6 +206,16 @@ class ResetController extends BaseRestController
                 1462990877
             );
         }
+
+        EventLog::log(
+            'ResetVerificationFailed',
+            [
+                'reset_id' => $reset->id,
+                'type' => $reset->type,
+                'attempts' => $reset->attempts,
+            ],
+            $reset->user_id
+        );
 
         $log['status'] = 'error';
         $log['error'] = 'Reset code verification failed';

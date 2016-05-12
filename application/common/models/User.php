@@ -168,7 +168,18 @@ class User extends UserBase implements IdentityInterface
      */
     public function getMaskedMethods()
     {
-        $methods = [];
+        /*
+         * Include primary email address
+         */
+        $methods = [
+            [
+                'type' => Reset::TYPE_PRIMARY,
+                'value' => Utils::maskEmail($this->email),
+            ],
+        ];
+        /*
+         * Then get all other methods
+         */
         foreach ($this->methods as $method) {
             $methods[] = [
                 'uid' => $method->uid,

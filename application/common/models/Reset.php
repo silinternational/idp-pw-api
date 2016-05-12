@@ -120,6 +120,14 @@ class Reset extends ResetBase
              * Save new Reset
              */
             $reset->saveOrError('create new reset', 'Unable to create new reset.');
+            EventLog::log(
+                'ResetCreated',
+                [
+                    'reset_id' => $reset->id,
+                    'type' => $reset->type
+                ],
+                $user->id
+            );
         }
 
         return $reset;
@@ -250,23 +258,22 @@ class Reset extends ResetBase
         if ($this->code === null) {
             $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
         }
-        if ($this->save()) {
-            // Send email verification
-            Verification::sendEmail(
-                $toAddress,
-                $subject,
-                '@common/mail/reset/' . $view,
-                $this->code,
-                $this->user,
-                $ccAddress,
-                $this->user->id,
-                self::TOPIC_RESET_EMAIL_SENT,
-                'Password reset email for ' . $this->user->getDisplayName() .
-                'sent to ' . $toAddress
-            );
-        } else {
-            throw new \Exception('Unable to update reset in database, email not sent', 1461098651);
-        }
+
+        $this->saveOrError('send email','Unable to update reset in database, email not sent.');
+
+        // Send email verification
+        Verification::sendEmail(
+            $toAddress,
+            $subject,
+            '@common/mail/reset/' . $view,
+            $this->code,
+            $this->user,
+            $ccAddress,
+            $this->user->id,
+            self::TOPIC_RESET_EMAIL_SENT,
+            'Password reset email for ' . $this->user->getDisplayName() .
+            'sent to ' . $toAddress
+        );
     }
 
     /**
@@ -401,12 +408,18 @@ class Reset extends ResetBase
             'attempts' => $this->attempts,
         ];
         $this->disable_until = Utils::getDatetime(time() + \Yii::$app->params['reset']['disableDuration']);
-        if ( ! $this->save()) {
-            $log['status'] = 'error';
-            $log['error'] = 'Unable to save reset with disable_until. Error: ' . Json::encode($this->getFirstErrors());
-            \Yii::error($log);
-            throw new ServerErrorHttpException();
-        }
+        $this->saveOrError($log['action'], 'Unable to save reset with disable_until.');
+
+        EventLog::log(
+            'ResetDisabled',
+            [
+                'reset_id' => $this->id,
+                'type' => $this->type,
+                'attempts' => $this->attempts,
+                'disable_until' => $this->disable_until,
+            ],
+            $this->user_id
+        );
 
         $log['status'] = 'success';
         \Yii::warning($log);
@@ -414,6 +427,7 @@ class Reset extends ResetBase
 
     public function setType($type, $methodId = null)
     {
+        $previousType = $this->type;
         /*
          * If type is not method, update or throw error
          */
@@ -445,6 +459,17 @@ class Reset extends ResetBase
          * Save changes
          */
         $this->saveOrError('Set type of reset', 'Unable to update reset type.');
+
+        EventLog::log(
+            'ResetChangeType',
+            [
+                'reset_id' => $this->id,
+                'previous_type' => $previousType,
+                'new_type' => $this->type,
+                'attempts' => $this->attempts,
+            ],
+            $this->user_id
+        );
     }
 
     /**
