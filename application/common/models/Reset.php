@@ -171,7 +171,7 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{{idpName}} password reset request',
+            '{idpName} password reset request',
             [
                 'idpName' => \Yii::$app->params['idpName'],
             ]
