@@ -56,5 +56,17 @@ class UtilsTest extends TestCase
         $this->assertFalse(Utils::isValidIpAddress('10.256.123.123'));
     }
 
+    public function testGetFrontendConfig()
+    {
+        $params = \Yii::$app->params;
+        $config = Utils::getFrontendConfig();
+        $this->assertEquals($params['idpName'], $config['idpName']);
+        $this->assertEquals($params['idpUsernameHint'], $config['idpUsernameHint']);
+        $this->assertEquals($params['support'], $config['support']);
+        $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
+        $this->assertEquals($config['password']['zxcvbn'], $params['password']['zxcvbn']);
+        $this->assertTrue(is_array($config['password']));
+    }
+
     
 }

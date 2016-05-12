@@ -217,6 +217,8 @@ class Utils
 
         $config = [];
 
+        $config['idpName'] = $params['idpName'];
+        $config['idpUsernameHint'] = $params['idpUsernameHint'];
         $config['support'] = $params['support'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
         $config['password'] = [];
