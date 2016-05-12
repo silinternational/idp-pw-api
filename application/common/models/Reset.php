@@ -2,7 +2,6 @@
 namespace common\models;
 
 use common\helpers\Utils;
-use GuzzleHttp\Tests\Ring\Client\Server;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -257,9 +256,8 @@ class Reset extends ResetBase
          */
         if ($this->code === null) {
             $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+            $this->saveOrError('send email','Unable to update reset in database, email not sent.');
         }
-
-        $this->saveOrError('send email','Unable to update reset in database, email not sent.');
 
         // Send email verification
         Verification::sendEmail(
