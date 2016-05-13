@@ -1,6 +1,43 @@
 <?php
 
 return [
+    'params' => [
+        'password' => [
+            'minLength' => [
+                'value' => 10,
+                'phpRegex' => '',
+                'jsRegex' => '.{10,}',
+                'enabled' => true
+            ],
+            'maxLength' => [
+                'value' => 255,
+                'phpRegex' => '',
+                'jsRegex' => '.{0,255}',
+                'enabled' => true
+            ],
+            'minNum' => [
+                'value' => 2,
+                'phpRegex' => '',
+                'jsRegex' => '(\d.*){2,}',
+                'enabled' => true
+            ],
+            'minUpper' => [
+                'value' => 1,
+                'phpRegex' => '',
+                'jsRegex' => '([A-Z].*){0,0}',
+                'enabled' => true
+            ],
+            'minSpecial' => [
+                'value' => 1,
+                'phpRegex' => '',
+                'jsRegex' => '([\W_].*){0,0}',
+                'enabled' => true
+            ],
+            'zxcvbn' => [
+                'minScore' => 2,
+            ]
+        ],
+    ],
     'components' => [
         'mailer' => [
             'useFileTransport' => true,
@@ -18,5 +55,5 @@ return [
             'class' => 'tests\mock\phone\Component',
             'codeLength' => 4,
         ],
-    ]
+    ],
 ];

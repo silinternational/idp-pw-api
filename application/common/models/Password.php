@@ -3,17 +3,20 @@ namespace common\models;
 
 use d3th\validators\ZxcvbnPasswordValidator;
 use yii\base\Model;
+use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 class Password extends Model
 {
-    public $user;
-
+    /** @var string */
     public $password;
 
+    /** @var \Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface */
     public $passwordStore;
 
+    /** @var array */
     public $config;
-
 
     public function init()
     {
@@ -81,4 +84,54 @@ class Password extends Model
             ],
         ];
     }
+
+    /**
+     * Shortcut method to initialize a Password object
+     * @param string $newPassword
+     * @return Password
+     */
+    public static function create($newPassword)
+    {
+        $password = new Password();
+        $password->password = $newPassword;
+
+        return $password;
+    }
+
+    public function save($userId, $username)
+    {
+        $log = [
+            'action' => 'save password',
+            'user_id' => $userId,
+        ];
+
+        /*
+         * If validation fails, return just the first error
+         */
+        if ( ! $this->validate()) {
+            $errors = $this->getFirstErrors();
+            $log['status'] = 'error';
+            $log['error'] = Json::encode($errors);
+            \Yii::error($log);
+            throw new BadRequestHttpException($errors[0], 1463164336);
+        }
+
+        /*
+         * Update password
+         */
+        try {
+            $this->passwordStore->set($username, $this->password);
+            $log['status'] = 'success';
+            \Yii::warning($log);
+        } catch (\Exception $e) {
+            $log['status'] = 'error';
+            $log['error'] = $e->getMessage();
+            \Yii::error($log);
+            throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
+        }
+
+        return [];
+    }
+
+
 }
