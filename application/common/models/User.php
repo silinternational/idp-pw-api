@@ -59,6 +59,9 @@ class User extends UserBase implements IdentityInterface
             'last_name',
             'idp_username',
             'email',
+            'password' => function ($model) {
+                return $model->getPasswordMeta();
+            }
         ];
     }
 
@@ -349,5 +352,13 @@ class User extends UserBase implements IdentityInterface
     public function getVerifiedMethods()
     {
         return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
+    }
+
+    public function getPasswordMeta()
+    {
+        return [
+            'last_changed' => $this->pw_last_changed,
+            'expires' => $this->pw_expires,
+        ];
     }
 }
