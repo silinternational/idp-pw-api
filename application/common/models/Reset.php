@@ -270,7 +270,7 @@ class Reset extends ResetBase
             $this->user->id,
             self::TOPIC_RESET_EMAIL_SENT,
             'Password reset email for ' . $this->user->getDisplayName() .
-            'sent to ' . $toAddress
+            ' sent to ' . $toAddress
         );
     }
 
@@ -304,7 +304,7 @@ class Reset extends ResetBase
             'sent to phone ' . $this->method->getMaskedValue()
         );
 
-        // Update db with code and increased attempts count
+        // Update db with code
         $this->code = $result;
         $this->saveOrError('send phone reset', 'Unable to update reset after sending phone verification.');
 
@@ -423,6 +423,61 @@ class Reset extends ResetBase
         \Yii::warning($log);
     }
 
+    /**
+     * Re-enable reset
+     * @throws ServerErrorHttpException
+     * @throws \Exception
+     */
+    public function enable()
+    {
+        $this->disable_until = null;
+        $this->attempts = 0;
+        $this->saveOrError('enable reset', 'Unable to enable reset.');
+
+        EventLog::log(
+            'ResetEnabled',
+            [
+                'reset_id' => $this->id,
+                'type' => $this->type,
+            ],
+            $this->user_id
+        );
+
+        \Yii::warning([
+            'action' => 'enable reset',
+            'reset_id' => $this->id,
+            'status' => 'success',
+        ]);
+    }
+
+    /**
+     * Enable reset if disable until time has past, or check attempts count and disable if it should be
+     * @throws ServerErrorHttpException
+     */
+    public function enableOrDisableIfNeeded()
+    {
+        if ($this->disable_until !== null) {
+            $disableUntilTime = strtotime($this->disable_until);
+            if ($disableUntilTime == false) {
+                throw new ServerErrorHttpException('Unable to check disable timeout', 1463146757);
+            }
+
+            /*
+             * Disable until is in the past, so enable reset
+             */
+            if ($disableUntilTime < time()) {
+                $this->enable();
+            }
+        } else {
+            /*
+             * If attempts has reached limit, disable reset
+             */
+            if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
+                $this->disable();
+            }
+        }
+    }
+
     public function setType($type, $methodId = null)
     {
         $previousType = $this->type;
@@ -485,6 +540,11 @@ class Reset extends ResetBase
         $this->saveOrError($action . ' reset', 'Unable to increment attempts count.');
 
         /*
+         * Enable / disable reset as needed
+         */
+        $this->enableOrDisableIfNeeded();
+
+        /*
          * Check if reset is disabled and throw exception if it is
          */
         if ($this->isDisabled()) {
@@ -495,14 +555,6 @@ class Reset extends ResetBase
                 'status' => 'error',
                 'error' => 'Reset is currently disabled until ' . $this->disable_until,
             ]);
-            throw new TooManyRequestsHttpException();
-        }
-
-        /*
-         * If attempts has reached limit, disable reset
-         */
-        if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
-            $this->disable();
             throw new TooManyRequestsHttpException();
         }
     }
