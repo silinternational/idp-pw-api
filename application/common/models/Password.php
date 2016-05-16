@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\helpers\Utils;
 use d3th\validators\ZxcvbnPasswordValidator;
 use yii\base\Model;
 use yii\helpers\Json;
@@ -20,7 +21,7 @@ class Password extends Model
 
     public function init()
     {
-        $this->passwordStore = \Yii::$app->passwordStore;
+        //$this->passwordStore = \Yii::$app->passwordStore;
         $this->config = \Yii::$app->params['password'];
     }
 
@@ -98,39 +99,56 @@ class Password extends Model
         return $password;
     }
 
+    /**
+     * @param int $userId
+     * @param string $username
+     * @return array
+     * @throws BadRequestHttpException
+     * @throws ServerErrorHttpException
+     */
     public function save($userId, $username)
     {
-        $log = [
-            'action' => 'save password',
-            'user_id' => $userId,
-        ];
 
         /*
-         * If validation fails, return just the first error
+         * Temp code for dev/testing
          */
-        if ( ! $this->validate()) {
-            $errors = $this->getFirstErrors();
-            $log['status'] = 'error';
-            $log['error'] = Json::encode($errors);
-            \Yii::error($log);
-            throw new BadRequestHttpException($errors[0], 1463164336);
-        }
-
-        /*
-         * Update password
-         */
-        try {
-            $this->passwordStore->set($username, $this->password);
-            $log['status'] = 'success';
-            \Yii::warning($log);
-        } catch (\Exception $e) {
-            $log['status'] = 'error';
-            $log['error'] = $e->getMessage();
-            \Yii::error($log);
-            throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
-        }
-
+        $user = User::findOne(['id' => $userId]);
+        $user->pw_expires = Utils::getDatetime(time() + \Yii::$app->params['passwordLifetime']);
+        $user->pw_last_changed = Utils::getDatetime();
+        $user->save();
         return [];
+
+//        $log = [
+//            'action' => 'save password',
+//            'user_id' => $userId,
+//        ];
+//
+//        /*
+//         * If validation fails, return just the first error
+//         */
+//        if ( ! $this->validate()) {
+//            $errors = $this->getFirstErrors();
+//            $log['status'] = 'error';
+//            $log['error'] = Json::encode($errors);
+//            \Yii::error($log);
+//            throw new BadRequestHttpException($errors[0], 1463164336);
+//        }
+//
+//        /*
+//         * Update password
+//         */
+//        try {
+//            $this->passwordStore->set($username, $this->password);
+//            $log['status'] = 'success';
+//            \Yii::warning($log);
+//        } catch (\Exception $e) {
+//            $log['status'] = 'error';
+//            $log['error'] = $e->getMessage();
+//            \Yii::error($log);
+//            throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
+//        }
+//
+//        return [];
     }
 
 

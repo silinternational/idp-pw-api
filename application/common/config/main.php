@@ -109,6 +109,7 @@ return [
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],
+        'passwordLifetime' => 15552000, // 6 months
         'password' => [
             'minLength' => [
                 'value' => 10,
