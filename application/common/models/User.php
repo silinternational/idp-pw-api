@@ -358,8 +358,8 @@ class User extends UserBase implements IdentityInterface
     {
         $thisUser = User::findOne(['id' => $this->id]);
         return [
-            'last_changed' => $thisUser->pw_last_changed,
-            'expires' => $thisUser->pw_expires,
+            'last_changed' => Utils::getIso8601($thisUser->pw_last_changed),
+            'expires' => Utils::getIso8601($thisUser->pw_expires),
         ];
     }
 }

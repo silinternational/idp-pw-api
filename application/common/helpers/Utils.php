@@ -26,13 +26,14 @@ class Utils
     }
 
     /**
-     * @param integer|null $timestamp
+     * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
      * @return string
      */
     public static function getIso8601($timestamp = null)
     {
         $timestamp = $timestamp ?: time();
-        return date('c', strtotime($timestamp));
+        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
+        return date('c', $timestamp);
     }
 
     /**
