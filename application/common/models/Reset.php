@@ -4,8 +4,10 @@ namespace common\models;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
+use yii\web\TooManyRequestsHttpException;
 
 /**
  * Class Reset
@@ -69,9 +71,15 @@ class Reset extends ResetBase
     {
         return [
             'uid',
-            'hasSupervisor' => $this->user->hasSupervisor(),
-            'hasSpouse' => $this->user->hasSpouse(),
-            'methods' => $this->user->getMaskedMethods(),
+            'hasSupervisor' => function($model) {
+                return $model->user->hasSupervisor();
+            },
+            'hasSpouse' => function($model) {
+                return $model->user->hasSpouse();
+            },
+            'methods' => function($model) {
+                return $model->user->getMaskedMethods();
+            },
         ];
     }
 
@@ -110,20 +118,32 @@ class Reset extends ResetBase
             /*
              * Save new Reset
              */
-            if ( ! $reset->save()) {
-                throw new \Exception('Unable to create new reset', 1456608028);
-            }
+            $reset->saveOrError('create new reset', 'Unable to create new reset.');
+            EventLog::log(
+                'ResetCreated',
+                [
+                    'reset_id' => $reset->id,
+                    'type' => $reset->type
+                ],
+                $user->id
+            );
         }
 
         return $reset;
     }
 
     /**
+     * Make sure reset is not disabled, track attempt, and then send.
      * Send reset notification to appropriate method
      * @throws \Exception
      */
     public function send()
     {
+        /*
+         * Track attempt and throw error if disabled or limit is reached
+         */
+        $this->trackAttempt('send');
+
         /*
          * Based on type/method send reset verification and update
          * model with reset code
@@ -146,11 +166,11 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendPrimary()
+    private function sendPrimary()
     {
         $subject = \Yii::t(
             'app',
-            '{{idpName}} password reset request',
+            '{idpName} password reset request',
             [
                 'idpName' => \Yii::$app->params['idpName'],
             ]
@@ -159,7 +179,7 @@ class Reset extends ResetBase
         $this->sendEmail($this->user->email, $subject, 'self');
     }
 
-    public function sendSupervisor()
+    private function sendSupervisor()
     {
         if ($this->user->hasSupervisor()) {
             $supervisor = $this->user->getSupervisorEmail();
@@ -169,7 +189,7 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendSpouse()
+    private function sendSpouse()
     {
         if ($this->user->hasSpouse()) {
             $spouse = $this->user->getSpouseEmail();
@@ -179,7 +199,7 @@ class Reset extends ResetBase
         }
     }
 
-    public function sendOnBehalf($toAddress)
+    private function sendOnBehalf($toAddress)
     {
         $subject = \Yii::t(
             'app',
@@ -197,7 +217,7 @@ class Reset extends ResetBase
      * Determine if type is phone or email and send accordingly
      * @throws \Exception
      */
-    public function sendMethod()
+    private function sendMethod()
     {
         if ( ! ($this->method instanceof Method)) {
             throw new \Exception('Method not initialized on Reset', 1456608512);
@@ -229,40 +249,36 @@ class Reset extends ResetBase
      * @param string|null $ccAddress
      * @throws \Exception
      */
-    public function sendEmail($toAddress, $subject, $view, $ccAddress = null)
+    private function sendEmail($toAddress, $subject, $view, $ccAddress = null)
     {
         /*
          * Generate code if needed, update attempt counter, save record, and send email
          */
         if ($this->code === null) {
             $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+            $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
-        $this->attempts += 1;
-        if ($this->save()) {
-            // Send email verification
-            Verification::sendEmail(
-                $toAddress,
-                $subject,
-                '@common/mail/reset/' . $view,
-                $this->code,
-                $this->user,
-                $ccAddress,
-                $this->user->id,
-                self::TOPIC_RESET_EMAIL_SENT,
-                'Password reset email for ' . $this->user->getDisplayName() .
-                'sent to ' . $toAddress
-            );
 
-        } else {
-            throw new \Exception('Unable to update reset in database, email not sent', 1461098651);
-        }
+        // Send email verification
+        Verification::sendEmail(
+            $toAddress,
+            $subject,
+            '@common/mail/reset/' . $view,
+            $this->code,
+            $this->user,
+            $ccAddress,
+            $this->user->id,
+            self::TOPIC_RESET_EMAIL_SENT,
+            'Password reset email for ' . $this->user->getDisplayName() .
+            ' sent to ' . $toAddress
+        );
     }
 
     /**
      * Send phone verification and store resulting code
      * @throws \Exception
      */
-    public function sendPhone()
+    private function sendPhone()
     {
         // Initialize log
         $log = [
@@ -288,16 +304,10 @@ class Reset extends ResetBase
             'sent to phone ' . $this->method->getMaskedValue()
         );
 
-        // Update db with code and increased attempts count
+        // Update db with code
         $this->code = $result;
-        $this->attempts++;
-        if ( ! $this->save()) {
-            $log['status'] = 'error';
-            $log['error'] = 'Unable to update Reset in database';
-            $log['model_error'] = Json::encode($this->getFirstErrors());
-            \Yii::error($log, 'application');
-            throw new \Exception($log['error'], 1460388532);
-        }
+        $this->saveOrError('send phone reset', 'Unable to update reset after sending phone verification.');
+
         $log['status'] = 'success';
         \Yii::warning($log, 'application');
     }
@@ -307,17 +317,45 @@ class Reset extends ResetBase
      * @param string $userProvided code submitted by user
      * @return boolean
      * @throws \Exception
+     * @throws ServerErrorHttpException
+     * @throws TooManyRequestsHttpException
      * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
      */
     public function isUserProvidedCodeCorrect($userProvided)
     {
-        if ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_PHONE) {
+        /*
+         * Track attempt and throw error if disabled or limit is reached
+         */
+        $this->trackAttempt('verify');
+
+        if ($this->isTypePhone()) {
             return Verification::isPhoneCodeValid($this->code, $userProvided);
-        } elseif ($this->type == self::TYPE_METHOD && $this->method->type == Method::TYPE_EMAIL) {
+        } elseif ($this->isTypeEmail()) {
             return Verification::isEmailCodeValid($this->code, $userProvided);
         } else {
             throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
         }
+    }
+
+    /**
+     * Check if reset is using an email type of verification
+     * @return bool
+     */
+    public function isTypeEmail()
+    {
+        return ($this->type === self::TYPE_PRIMARY
+            || $this->type === self::TYPE_SUPERVISOR
+            || $this->type === self::TYPE_SPOUSE
+            || ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_EMAIL));
+    }
+
+    /**
+     * Check if reset is using a phone type of verification
+     * @return bool
+     */
+    public function isTypePhone()
+    {
+        return ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_PHONE);
     }
 
     /**
@@ -336,5 +374,209 @@ class Reset extends ResetBase
         $time = time();
 
         return $time + $params['reset']['lifetimeSeconds'];
+    }
+
+    /**
+     * Check if this reset is currently disabled
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        if ($this->disable_until !== null) {
+            $disableUntilTime = strtotime($this->disable_until);
+            // Intentionally loose comparison to catch zero
+            if ($disableUntilTime == false) {
+                return true;
+            }
+            return $disableUntilTime > time();
+        }
+
+        return false;
+    }
+
+    /**
+     * Mark reset as disabled by setting disable_until date
+     * @throws ServerErrorHttpException
+     */
+    public function disable()
+    {
+        $log = [
+            'action' => 'disable reset',
+            'reset_id' => $this->id,
+            'attempts' => $this->attempts,
+        ];
+        $this->disable_until = Utils::getDatetime(time() + \Yii::$app->params['reset']['disableDuration']);
+        $this->saveOrError($log['action'], 'Unable to save reset with disable_until.');
+
+        EventLog::log(
+            'ResetDisabled',
+            [
+                'reset_id' => $this->id,
+                'type' => $this->type,
+                'attempts' => $this->attempts,
+                'disable_until' => $this->disable_until,
+            ],
+            $this->user_id
+        );
+
+        $log['status'] = 'success';
+        \Yii::warning($log);
+    }
+
+    /**
+     * Re-enable reset
+     * @throws ServerErrorHttpException
+     * @throws \Exception
+     */
+    public function enable()
+    {
+        $this->disable_until = null;
+        $this->attempts = 0;
+        $this->saveOrError('enable reset', 'Unable to enable reset.');
+
+        EventLog::log(
+            'ResetEnabled',
+            [
+                'reset_id' => $this->id,
+                'type' => $this->type,
+            ],
+            $this->user_id
+        );
+
+        \Yii::warning([
+            'action' => 'enable reset',
+            'reset_id' => $this->id,
+            'status' => 'success',
+        ]);
+    }
+
+    /**
+     * Enable reset if disable until time has past, or check attempts count and disable if it should be
+     * @throws ServerErrorHttpException
+     */
+    public function enableOrDisableIfNeeded()
+    {
+        if ($this->disable_until !== null) {
+            $disableUntilTime = strtotime($this->disable_until);
+            if ($disableUntilTime == false) {
+                throw new ServerErrorHttpException('Unable to check disable timeout', 1463146757);
+            }
+
+            /*
+             * Disable until is in the past, so enable reset
+             */
+            if ($disableUntilTime < time()) {
+                $this->enable();
+            }
+        } else {
+            /*
+             * If attempts has reached limit, disable reset
+             */
+            if ($this->attempts >= \Yii::$app->params['reset']['maxAttempts']) {
+                $this->disable();
+            }
+        }
+    }
+
+    public function setType($type, $methodId = null)
+    {
+        $previousType = $this->type;
+        /*
+         * If type is not method, update or throw error
+         */
+        if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
+            $this->type = $type;
+            $this->method_id = null;
+        } elseif ($type == self::TYPE_METHOD) {
+            /*
+             * If type is method but methodId is missing, throw error
+             */
+            if ($methodId === null) {
+                throw new BadRequestHttpException('Method ID required for reset type method', 1462988984);
+            }
+
+            /*
+             * Make sure user owns requested method before update
+             */
+            $method = Method::findOne(['id' => $methodId, 'user_id' => $this->user_id]);
+            if ($method === null) {
+                throw new NotFoundHttpException('Method not found', 1462989221);
+            }
+            $this->type = self::TYPE_METHOD;
+            $this->method_id = $methodId;
+        } else {
+            throw new BadRequestHttpException('Unknown reset type requested', 1462989489);
+        }
+
+        /*
+         * Save changes
+         */
+        $this->saveOrError('Set type of reset', 'Unable to update reset type.');
+
+        EventLog::log(
+            'ResetChangeType',
+            [
+                'reset_id' => $this->id,
+                'previous_type' => $previousType,
+                'new_type' => $this->type,
+                'attempts' => $this->attempts,
+            ],
+            $this->user_id
+        );
+    }
+
+    /**
+     * Increments attempts counter and disables account when limit is reached
+     * @param string $action Used in logging, either 'send' or 'verify'
+     * @throws ServerErrorHttpException
+     * @throws TooManyRequestsHttpException
+     */
+    public function trackAttempt($action)
+    {
+        /*
+         * Increment attempts count first thing
+         */
+        $this->attempts++;
+        $this->saveOrError($action . ' reset', 'Unable to increment attempts count.');
+
+        /*
+         * Enable / disable reset as needed
+         */
+        $this->enableOrDisableIfNeeded();
+
+        /*
+         * Check if reset is disabled and throw exception if it is
+         */
+        if ($this->isDisabled()) {
+            \Yii::error([
+                'action' => $action . ' reset',
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'status' => 'error',
+                'error' => 'Reset is currently disabled until ' . $this->disable_until,
+            ]);
+            throw new TooManyRequestsHttpException();
+        }
+    }
+
+    /**
+     * Save model or throw exception on error
+     * @param string $action
+     * @param string $errorPrefix This can be displayed to end user, so do not put anything sensitive in it
+     * @throws ServerErrorHttpException
+     */
+    public function saveOrError($action, $errorPrefix = '')
+    {
+        if ( ! $this->save()) {
+            \Yii::error([
+                'action' => $action,
+                'reset_id' => $this->id,
+                'attempts' => $this->attempts,
+                'type' => $this->type,
+                'status' => 'error',
+                'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
+            ]);
+            throw new ServerErrorHttpException($errorPrefix);
+        }
     }
 }

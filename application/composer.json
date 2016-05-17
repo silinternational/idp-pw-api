@@ -16,7 +16,8 @@
     "silinternational/idp-pw-api-common": "dev-master",
     "silinternational/idp-pw-api-personnel-insite": "^0.0.3",
     "silinternational/idp-pw-api-auth-saml": "dev-master",
-    "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master"
+    "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
+    "google/recaptcha": "^1.1.2"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

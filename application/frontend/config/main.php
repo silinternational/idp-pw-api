@@ -13,6 +13,7 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
+            'authTimeout' => 1800, // 30 minutes
         ],
         'log' => [
 
@@ -39,8 +40,6 @@ return [
                 'GET /auth/login' => 'auth/login',
                 'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
-                'POST /auth/login/token' => 'auth/token',
-                'OPTIONS /auth/login/token' => 'auth/options',
 
                 /*
                  * Config routes
@@ -86,6 +85,6 @@ return [
         ]
     ],
     'params' => [
-        'sessionDuration' => 1800, // 30 minutes
+        
     ],
 ];

@@ -26,7 +26,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Validation rules, applies User rules before UserBase rules
-     * @return array
+     * @return string[]
      */
     public function rules()
     {
@@ -164,11 +164,22 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Return array of arrays of masked out methods
-     * @return array
+     * @return array<string,string>[]
      */
     public function getMaskedMethods()
     {
-        $methods = [];
+        /*
+         * Include primary email address
+         */
+        $methods = [
+            [
+                'type' => Reset::TYPE_PRIMARY,
+                'value' => Utils::maskEmail($this->email),
+            ],
+        ];
+        /*
+         * Then get all other methods
+         */
         foreach ($this->methods as $method) {
             $methods[] = [
                 'uid' => $method->uid,

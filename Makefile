@@ -45,3 +45,5 @@ rmTestDb:
 upTestDb:
 	docker-compose up -d testDb
 
+bounce: start
+

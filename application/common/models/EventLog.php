@@ -3,6 +3,7 @@ namespace common\models;
 
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 class EventLog extends EventLogBase
 {
@@ -25,9 +26,9 @@ class EventLog extends EventLogBase
 
     /**
      * Create new EventLog entry
-     * @param $topic
-     * @param $details
-     * @param null $userId
+     * @param string $topic
+     * @param string|array $details
+     * @param integer|null $userId
      * @throws \Exception
      */
     public static function log($topic, $details, $userId = null)
@@ -35,10 +36,11 @@ class EventLog extends EventLogBase
         $eventLog = new EventLog();
         $eventLog->user_id = $userId;
         $eventLog->topic = $topic;
-        $eventLog->details = $details;
+        $eventLog->details = is_array($details) ? Json::encode($details) : $details;
 
         if ( ! $eventLog->save()) {
             throw new \Exception('Unable to save event log entry', 1461182172);
         }
     }
+
 }

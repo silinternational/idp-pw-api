@@ -252,8 +252,8 @@ class Method extends MethodBase
     public static function deleteExpiredUnverifiedMethods()
     {
         $methods = self::find()->where(['verified' => 0])
-                               ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
-                               ->all();
+                                ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
+                                ->all();
 
         foreach ($methods as $method) {
             if ( ! $method->delete()) {

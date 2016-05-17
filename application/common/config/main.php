@@ -18,11 +18,16 @@ $fromEmail = Env::get('FROM_EMAIL');
 $fromName = Env::get('FROM_NAME');
 $appEnv = Env::get('APP_ENV');
 $idpName = Env::get('IDP_NAME');
+$idpUsernameHint = Env::get('IDP_USERNAME_HINT', $idpName . ' username, ex: first_last');
 $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
+$supportPhone = Env::get('SUPPORT_PHONE');
+$supportEmail = Env::get('SUPPORT_EMAIL');
+$supportUrl = Env::get('SUPPORT_URL');
+$supportFeedback = Env::get('SUPPORT_FEEDBACK');
 
 return [
     'id' => 'app-common',
@@ -91,6 +96,7 @@ return [
     ],
     'params' => [
         'idpName' => $idpName,
+        'idpUsernameHint' => $idpUsernameHint,
         'adminEmail' => $adminEmail,
         'fromEmail' => $fromEmail,
         'fromName' => $fromName,
@@ -98,6 +104,7 @@ return [
         'ui_url' => $uiUrl,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
+            'disableDuration' => 900, // 15 minutes
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],
@@ -141,10 +148,10 @@ return [
             'secretKey' => $recaptchaSecretKey,
         ],
         'support' => [
-            'phone' => '',
-            'email' => '',
-            'url' => '',
-            'feedbackUrl' => '',
+            'phone' => $supportPhone,
+            'email' => $supportEmail,
+            'url' => $supportEmail,
+            'feedbackUrl' => $supportFeedback,
         ],
     ],
 ];

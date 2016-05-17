@@ -2,14 +2,14 @@
 namespace tests\unit\common\models;
 
 use common\models\Method;
-use common\models\User;
 use common\models\Reset;
+use common\models\User;
 use tests\helpers\EmailUtils;
-use yii\codeception\DbTestCase;
-
-use tests\unit\fixtures\common\models\UserFixture;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
+use tests\unit\fixtures\common\models\UserFixture;
+use yii\codeception\DbTestCase;
+use yii\web\TooManyRequestsHttpException;
 
 /**
  * Class ResetTest
@@ -216,5 +216,58 @@ class ResetTest extends DbTestCase
 
     }
 
+    public function testDisableIsDisabled()
+    {
+        $reset = $this->resets('reset1');
+        $this->assertFalse($reset->isDisabled());
+
+        $expireDate = time() + \Yii::$app->params['reset']['disableDuration'];
+        $reset->disable();
+        $this->assertTrue($reset->isDisabled());
+        $this->assertEquals($expireDate, strtotime($reset->disable_until), '', 2);
+    }
+
+    public function testSetType()
+    {
+        $reset = $this->resets('reset1');
+        $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
+
+        $reset->setType(Reset::TYPE_SUPERVISOR);
+        $this->assertEquals(Reset::TYPE_SUPERVISOR, $reset->type);
+
+        $reset->setType(Reset::TYPE_SPOUSE);
+        $this->assertEquals(Reset::TYPE_SPOUSE, $reset->type);
+
+        $reset->setType(Reset::TYPE_METHOD, 1);
+        $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
+        $this->assertEquals(1, $reset->method_id);
+
+        $reset->setType(Reset::TYPE_PRIMARY);
+        $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
+        $this->assertNull($reset->method_id);
+    }
+
+    public function testTrackAttempt()
+    {
+        $reset = $this->resets('reset1');
+        $this->assertEquals(0, $reset->attempts);
+
+        $reset->trackAttempt('test');
+        $this->assertEquals(1, $reset->attempts);
+
+        $reset->trackAttempt('test');
+        $this->assertEquals(2, $reset->attempts);
+
+        try {
+            for ($i = 0; $i <= \Yii::$app->params['reset']['maxAttempts']; $i++) {
+                $reset->trackAttempt('test');
+            }
+            $this->fail('TooManyRequestsHttpException should have been thrown');
+        } catch (TooManyRequestsHttpException $e) {
+            // This is the expected behavior
+        }
+
+        $this->assertTrue($reset->isDisabled());
+    }
 
 }

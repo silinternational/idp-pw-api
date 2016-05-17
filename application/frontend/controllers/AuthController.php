@@ -60,7 +60,7 @@ class AuthController extends Controller
              */
             $user = User::findOrCreate(null, null, $authUser->employeeId);
             // Initialize session for user
-            if (\Yii::$app->user->login($user, \Yii::$app->params['sessionDuration'])) {
+            if (\Yii::$app->user->login($user)) {
                 $log['status'] = 'success';
                 \Yii::warning($log, 'application');
 
