@@ -13,6 +13,7 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
+            'authTimeout' => 1800, // 30 minutes
         ],
         'log' => [
 
@@ -84,6 +85,6 @@ return [
         ]
     ],
     'params' => [
-        'sessionDuration' => 1800, // 30 minutes
+        
     ],
 ];

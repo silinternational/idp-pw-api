@@ -139,7 +139,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return Reset
+     * @return \stdClass
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -179,7 +179,7 @@ class ResetController extends BaseRestController
             /*
              * Reset verified successfully, log user in
              */
-            if (\Yii::$app->user->login($reset->user, \Yii::$app->params['sessionDuration'])) {
+            if (\Yii::$app->user->login($reset->user)) {
                 $log['status'] = 'success';
                 \Yii::warning($log);
 
@@ -195,6 +195,9 @@ class ResetController extends BaseRestController
                     ]);
                 }
 
+                /*
+                 * return empty object so that it gets json encoded to {}
+                 */
                 return new \stdClass();
             }
 
