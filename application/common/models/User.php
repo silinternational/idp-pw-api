@@ -26,7 +26,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Validation rules, applies User rules before UserBase rules
-     * @return array
+     * @return string[]
      */
     public function rules()
     {
@@ -167,7 +167,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Return array of arrays of masked out methods
-     * @return array
+     * @return array<string,string>[]
      */
     public function getMaskedMethods()
     {
