@@ -256,7 +256,7 @@ class Reset extends ResetBase
          */
         if ($this->code === null) {
             $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
-            $this->saveOrError('send email','Unable to update reset in database, email not sent.');
+            $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
         // Send email verification
