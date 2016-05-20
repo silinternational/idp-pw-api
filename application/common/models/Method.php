@@ -175,7 +175,8 @@ class Method extends MethodBase
             null,
             $this->user->getId(),
             'New email method',
-            'A new email method has been added and verification sent to ' . $this->getMaskedValue()
+            'A new email method has been added and verification sent to ' . $this->getMaskedValue(),
+            []
         );
     }
 
