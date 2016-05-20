@@ -260,8 +260,7 @@ class Reset extends ResetBase
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
-        $resetPath = sprintf('/reset/%s/verify/%s', $this->uid, $this->code);
-        $resetUrl = Url::to($resetPath, true);
+        $resetUrl = sprintf('%s/reset/%s/verify/%s', \Yii::$app->params['ui_url'], $this->uid, $this->code);
 
         // Send email verification
         Verification::sendEmail(
