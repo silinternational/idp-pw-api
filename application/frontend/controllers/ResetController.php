@@ -45,25 +45,37 @@ class ResetController extends BaseRestController
         $username = \Yii::$app->request->post('username');
         $verificationToken = \Yii::$app->request->post('verification_token');
 
-        if ( ! $username || ! $verificationToken) {
-            throw new BadRequestHttpException('Missing username or verification_token');
-        }
+//        if ( ! $username || ! $verificationToken) {
+//            throw new BadRequestHttpException('Missing username or verification_token');
+//        }
 
         /*
          * Validate reCaptcha $verificationToken before proceeding.
          * This will throw an exception if not successful, checking response to
          * be double sure an exception is thrown.
          */
-        $clientIp = Utils::getClientIp(\Yii::$app->request);
-        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
-            throw new BadRequestHttpException('reCaptcha failed verification');
+//        $clientIp = Utils::getClientIp(\Yii::$app->request);
+//        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+//            throw new BadRequestHttpException('reCaptcha failed verification');
+//        }
+
+        /*
+         * Check if $username looks like an email address
+         */
+        $usernameIsEmail = false;
+        if (substr_count($username, '@')) {
+            $usernameIsEmail = true;
         }
 
         /*
          * Find or create user
          */
-        $user = User::findOrCreate($username);
-
+        if ($usernameIsEmail) {
+            $user = User::findOrCreate(null, $username);
+        } else {
+            $user = User::findOrCreate($username);
+        }
+        
         /*
          * Find or create a reset
          */

@@ -4,6 +4,7 @@ namespace common\models;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -259,7 +260,8 @@ class Reset extends ResetBase
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
-        $resetUrl = sprintf('/reset/%s/verify/%s', $this->uid, $this->code);
+        $resetPath = sprintf('/reset/%s/verify/%s', $this->uid, $this->code);
+        $resetUrl = Url::to($resetPath, true);
 
         // Send email verification
         Verification::sendEmail(

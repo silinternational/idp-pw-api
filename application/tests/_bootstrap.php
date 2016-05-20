@@ -6,6 +6,8 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 require(__DIR__ . '/../common/config/bootstrap.php');
 require(__DIR__ . '/../frontend/config/bootstrap.php');
 
+$_SERVER['SERVER_NAME'] = 'localhost';
+$_SERVER['SERVER_PORT'] = '80';
 
 $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../common/config/main.php'),
