@@ -15,7 +15,7 @@
     "silinternational/php-env": "^0.1.1",
     "silinternational/yii2-jsonsyslog": "*",
     "silinternational/idp-pw-api-common": "dev-master",
-    "silinternational/idp-pw-api-personnel-insite": "^0.0.3",
+    "silinternational/idp-pw-api-personnel-insite": "^0.0.4",
     "silinternational/idp-pw-api-auth-saml": "dev-master",
     "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
     "google/recaptcha": "^1.1.2",
