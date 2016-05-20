@@ -259,6 +259,8 @@ class Reset extends ResetBase
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
+        $resetUrl = sprintf('/reset/%s/verify/%s', $this->uid, $this->code);
+
         // Send email verification
         Verification::sendEmail(
             $toAddress,
@@ -270,7 +272,8 @@ class Reset extends ResetBase
             $this->user->id,
             self::TOPIC_RESET_EMAIL_SENT,
             'Password reset email for ' . $this->user->getDisplayName() .
-            ' sent to ' . $toAddress
+            ' sent to ' . $toAddress,
+            ['resetUrl' => $resetUrl]
         );
     }
 
