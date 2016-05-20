@@ -13,6 +13,10 @@ COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
 RUN mkdir -p /opt/ssl
 COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
 
+# get s3-expand
+RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/master/s3-expand -o /usr/local/bin/s3-expand
+RUN chmod a+x /usr/local/bin/s3-expand
+
 # It is expected that /data is = application/ in project folder
 COPY application/ /data/
 
@@ -28,4 +32,5 @@ RUN chown -R www-data:www-data \
 RUN composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader
 
 EXPOSE 80
+ENTRYPOINT ["/usr/local/bin/s3-expand"]
 CMD ["/data/run.sh"]

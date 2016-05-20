@@ -1,7 +1,3 @@
-clean:
-	docker-compose kill
-	docker-compose rm -f
-
 start: api
 
 test: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
@@ -47,3 +43,6 @@ upTestDb:
 
 bounce: start
 
+clean:
+	docker-compose kill
+	docker-compose rm -f

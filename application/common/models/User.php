@@ -59,6 +59,9 @@ class User extends UserBase implements IdentityInterface
             'last_name',
             'idp_username',
             'email',
+            'password' => function ($model) {
+                return $model->getPasswordMeta();
+            }
         ];
     }
 
@@ -164,7 +167,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Return array of arrays of masked out methods
-     * @return array<string,string>[]
+     * @return array
      */
     public function getMaskedMethods()
     {
@@ -349,5 +352,14 @@ class User extends UserBase implements IdentityInterface
     public function getVerifiedMethods()
     {
         return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
+    }
+
+    public function getPasswordMeta()
+    {
+        $thisUser = User::findOne(['id' => $this->id]);
+        return [
+            'last_changed' => Utils::getIso8601($thisUser->pw_last_changed),
+            'expires' => Utils::getIso8601($thisUser->pw_expires),
+        ];
     }
 }
