@@ -71,7 +71,6 @@ class MethodTest extends DbTestCase
 
     public function testCreateAndSendVerificationEmail()
     {
-        //$this->markTestSkipped('Skipping, not working on Codeship but works locally');
         EmailUtils::removeEmailFiles();
         $user = $this->users('user1');
 
