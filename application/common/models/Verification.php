@@ -36,19 +36,23 @@ class Verification extends Model
         $eventLogDetails = null,
         $additionalEmailParameters = []
     ) {
+
+        $parameters = ArrayHelper::merge(
+            [
+                'idpName' => \Yii::$app->params['idpName'],
+                'name' => $forUser->first_name,
+                'code' => $code,
+                'toAddress' => $toAddress,
+                'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
+                'fromName' => \Yii::$app->params['fromName'],
+            ],
+            $additionalEmailParameters
+        );
+
+
         $body = \Yii::$app->mailer->render(
             $view,
-            ArrayHelper::merge(
-                [
-                    'idpName' => \Yii::$app->params['idpName'],
-                    'name' => $forUser->first_name,
-                    'code' => $code,
-                    'toAddress' => $toAddress,
-                    'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
-                    'fromName' => \Yii::$app->params['fromName'],
-                ],
-                $additionalEmailParameters
-            )
+            $parameters
         );
 
         EmailQueue::sendOrQueue(
