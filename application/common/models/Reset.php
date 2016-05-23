@@ -72,12 +72,6 @@ class Reset extends ResetBase
     {
         return [
             'uid',
-            'hasSupervisor' => function($model) {
-                return $model->user->hasSupervisor();
-            },
-            'hasSpouse' => function($model) {
-                return $model->user->hasSpouse();
-            },
             'methods' => function($model) {
                 return $model->user->getMaskedMethods();
             },
@@ -491,7 +485,7 @@ class Reset extends ResetBase
         if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
             $this->type = $type;
             $this->method_id = null;
-        } elseif ($type == self::TYPE_METHOD) {
+        } elseif (in_array($type, [self::TYPE_METHOD, Method::TYPE_EMAIL, Method::TYPE_PHONE])) {
             /*
              * If type is method but methodId is missing, throw error
              */

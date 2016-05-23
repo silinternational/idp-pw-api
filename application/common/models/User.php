@@ -180,6 +180,27 @@ class User extends UserBase implements IdentityInterface
                 'value' => Utils::maskEmail($this->email),
             ],
         ];
+
+        /*
+         * Add spouse if available
+         */
+        if ($this->hasSpouse()) {
+            $methods[] = [
+                'type' => Reset::TYPE_SPOUSE,
+                'value' => Utils::maskEmail($this->getSpouseEmail()),
+            ];
+        }
+
+        /*
+         * Add supervisor if available
+         */
+        if ($this->hasSupervisor()) {
+            $methods[] = [
+                'type' => Reset::TYPE_SUPERVISOR,
+                'value' => Utils::maskEmail($this->getSupervisorEmail()),
+            ];
+        }
+        
         /*
          * Then get all other methods
          */

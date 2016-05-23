@@ -35,6 +35,21 @@ class ResetController extends BaseRestController
     }
 
     /**
+     * @param String $uid
+     * @return Reset
+     * @throws NotFoundHttpException
+     */
+    public function actionView($uid)
+    {
+        $reset = Reset::findOne(['uid' => $uid]);
+        if ($reset === null) {
+            throw new NotFoundHttpException();
+        }
+
+        return $reset;
+    }
+
+    /**
      * Create new reset process
      * @return Reset
      * @throws BadRequestHttpException
@@ -48,12 +63,12 @@ class ResetController extends BaseRestController
 //        if ( ! $username || ! $verificationToken) {
 //            throw new BadRequestHttpException('Missing username or verification_token');
 //        }
-
-        /*
-         * Validate reCaptcha $verificationToken before proceeding.
-         * This will throw an exception if not successful, checking response to
-         * be double sure an exception is thrown.
-         */
+//
+//        /*
+//         * Validate reCaptcha $verificationToken before proceeding.
+//         * This will throw an exception if not successful, checking response to
+//         * be double sure an exception is thrown.
+//         */
 //        $clientIp = Utils::getClientIp(\Yii::$app->request);
 //        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
 //            throw new BadRequestHttpException('reCaptcha failed verification');
@@ -108,7 +123,7 @@ class ResetController extends BaseRestController
         }
 
         $type = \Yii::$app->request->getBodyParam('type', null);
-        $methodId = \Yii::$app->request->getBodyParam('method_id', null);
+        $methodId = \Yii::$app->request->getBodyParam('uid', null);
 
         if ($type === null) {
             throw new BadRequestHttpException('Invalid reset type', 1462989664);
