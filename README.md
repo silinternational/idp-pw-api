@@ -12,15 +12,13 @@ Backend API for Identity Provider Password Management
 2. Docker Compose >= 1.5
 
 ### Mac
-1. VirtualBox
-2. Docker Toolbox >= 1.9.1
+1. Docker for Mac Beta
 
 ### Windows
 1. VirtualBox
 2. Vagrant
 3. Alternative to using vagrant you can install Docker Toolbox, but Docker Compose
    still has issues with Windows and doesn't support interactive mode at this time.
-
 
 ## Setup
 1. Clone this repo
@@ -39,14 +37,8 @@ Backend API for Identity Provider Password Management
 8. You'll probably also want the web interface for this application which you can 
    clone at ```link coming soon```
 
-### Additional setup for Linux
+### Additional setup for Linux & Mac
 1. Add entry to ```/etc/hosts``` for ```120.0.0.1 idp-pw-api.local```
-2. Run ```docker build -t idp-pw-api .```
-3. Run ```make start```
-
-### Additional setup for Mac
-1. Get IP address for your default docker-machine env ```docker-machine ip default```
-   and add entry to ```/etc/hosts``` for ```<docker machine ip> idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
 3. Run ```make start```
 
@@ -65,3 +57,42 @@ To simplify common tasks there is a Makefile in place. The most common tasks wil
 - ```make clean``` - Remove all containers
 - ```make composerupdate``` - ```make start``` will run a ```composer install```, but to update composer
     you need to run ```make composerupdate```
+
+## Component Architecture
+With the goal of being reusable, this application is developed with a component based architecture that allows swapping out specific components to suit your needs. All components must implement common interfaces to support this and new components can be developed to implement the interface as needed.
+
+### Common Interfaces and Classes
+The interfaces for components as well as some common classes are maintained in the [idp-pw-api-common](https://github.com/silinternational/idp-pw-api-common) repository.
+
+### Configuration
+All components must extend from [\yii\base\Component](http://www.yiiframework.com/doc-2.0/guide-structure-application-components.html) so that they can be configured in the ```components``` section of the application configuration. This also allows them to be accessed via ```\Yii::$app->componentId```. While each component has a defind interface for methods to implement, what properties it needs for configuration are up to each implementation as appropriate. See [our common/config/local.php.dist](https://github.com/silinternational/idp-pw-api/blob/develop/application/common/config/local.php.dist) for examples of configurations. 
+
+### Authentication Component
+We use SAML for authentication but this component can be replaced to support whatever method is needed. For example an auth component could be written to implement OAuth or use Google, etc. 
+
+* Component ID: ```auth```
+* Implement interface: ```Sil\IdpPw\Common\Auth\AuthnInterface```
+* Example implementation: [idp-pw-api-auth-saml](https://github.com/silinternational/idp-pw-api-auth-saml)
+
+### Password Store Component
+You can store your passwords wherever you like, whether it is LDAP, Active Directory, a database, or even Redis. 
+
+* Component ID: ```passwordstore```
+* Implement interface: ```Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface```
+* Example implementation: [idp-pw-api-passwordstore-ldap](https://github.com/silinternational/idp-pw-api-passwordstore-ldap)
+
+### Personnel Component
+The personnel component is used to look up informaton about users from your companies personnel system. This includes verifying that they are an active employee, getting information about them like name, email, employee id, if they have a supervisor and what their supervisors email address is and if the personnel system is aware of spouses it can also provide the spouse's email address.
+
+* Component ID: ```personnel```
+* Implement interface: ```Sil\IdpPw\Common\Personnel\PersonnelInterface```
+* Example implementation: [idp-pw-api-personnel-insite](https://github.com/silinternational/idp-pw-api-personnel-insite)
+
+### Phone Verification Component
+This component is used for performing phone based verification of users. 
+
+* Component ID: ```phone```
+* Implement interface: ```Sil\IdpPw\Common\PhoneVerification\PhoneVerificationInterface```
+* Example implementation: [idp-pw-api-phoneverification-nexmo](https://github.com/silinternational/idp-pw-api-phoneverification-nexmo)
+
+The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging. 
