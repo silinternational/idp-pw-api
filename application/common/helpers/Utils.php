@@ -31,7 +31,7 @@ class Utils
      */
     public static function getIso8601($timestamp = null)
     {
-        $timestamp = $timestamp ?: time();
+        $timestamp = $timestamp !== null ? $timestamp : time();
         $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
         return date('c', $timestamp);
     }

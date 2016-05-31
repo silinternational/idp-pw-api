@@ -142,6 +142,7 @@ return [
             ],
             'zxcvbn' => [
                 'minScore' => 2,
+                'enabled' => true,
             ]
         ],
         'recaptcha' => [
