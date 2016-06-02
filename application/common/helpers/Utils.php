@@ -350,4 +350,24 @@ class Utils
         return (filter_var($ip, FILTER_VALIDATE_IP, $flags) !== false);
     }
 
+    /**
+     * Call Zxcvbn API and return full score object array
+     * @param string $password
+     * @return array
+     * @throws \Exception
+     */
+    public static function getZxcvbnScore($password)
+    {
+        try {
+            $zxcvbn = new \Zxcvbn\Score([
+                'description_override' => [
+                    'baseUrl' => \Yii::$app->params['zxcvbn']['apiBaseUrl'],
+                ]
+            ]);
+            return $zxcvbn->getFull(['password' => $password]);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
 }

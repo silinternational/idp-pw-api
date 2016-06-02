@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e9dae884263a3899fc969751675be5bf",
-    "content-hash": "e8ea1079a1629ee93eba1c2fd7ee3ecd",
+    "hash": "6b65f3da36d4c7df253ab0f7c272ec53",
+    "content-hash": "818c1cbcc3f266806a6833ef0701227e",
     "packages": [
         {
             "name": "bjeavons/zxcvbn-php",
@@ -660,16 +660,16 @@
         },
         {
             "name": "guzzlehttp/guzzle-services",
-            "version": "0.5.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle-services.git",
-                "reference": "5402867628d266748db88f05c90ede54fd1d884c"
+                "reference": "8adb1d160b19eeb8320d2f846bc3b8dac8a878a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle-services/zipball/5402867628d266748db88f05c90ede54fd1d884c",
-                "reference": "5402867628d266748db88f05c90ede54fd1d884c",
+                "url": "https://api.github.com/repos/guzzle/guzzle-services/zipball/8adb1d160b19eeb8320d2f846bc3b8dac8a878a4",
+                "reference": "8adb1d160b19eeb8320d2f846bc3b8dac8a878a4",
                 "shasum": ""
             },
             "require": {
@@ -702,7 +702,7 @@
                 }
             ],
             "description": "Provides an implementation of the Guzzle Command library that uses Guzzle service descriptions to describe web services, serialize requests, and parse responses into easy to use model structures.",
-            "time": "2014-12-23 19:13:18"
+            "time": "2016-01-31 05:11:31"
         },
         {
             "name": "guzzlehttp/log-subscriber",
@@ -1115,12 +1115,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c5bfcbdb02684851e3215545502d0be51d3e4e13"
+                "reference": "96f1ef760845211c8acbb15970e706db1e4b2c5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c5bfcbdb02684851e3215545502d0be51d3e4e13",
-                "reference": "c5bfcbdb02684851e3215545502d0be51d3e4e13",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/96f1ef760845211c8acbb15970e706db1e4b2c5e",
+                "reference": "96f1ef760845211c8acbb15970e706db1e4b2c5e",
                 "shasum": ""
             },
             "conflict": {
@@ -1180,7 +1180,7 @@
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.16|>=7,<7.1|>=7.1,<7.2|>=7.2,<7.3|>=7.3,<7.4|>=7.4,<7.5|>=7.5,<7.6|>=7.6,<7.6.1",
+                "typo3/cms": ">=6.2,<6.2.25|>=7,<7.1|>=7.1,<7.2|>=7.2,<7.3|>=7.3,<7.4|>=7.4,<7.5|>=7.5,<7.6|>=7.6,<7.6.8|>=8,<8.1.1",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.7|>=3,<3.0.1",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -1226,7 +1226,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-05-10 10:37:23"
+            "time": "2016-05-25 05:33:34"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -1504,6 +1504,52 @@
                 "yii2"
             ],
             "time": "2015-08-19 15:07:38"
+        },
+        {
+            "name": "silinternational/zxcvbn-api-client-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/zxcvbn-api-client-php.git",
+                "reference": "025fd1e5dba452baa0e9ba4bf75298b3c7908062"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/zxcvbn-api-client-php/zipball/025fd1e5dba452baa0e9ba4bf75298b3c7908062",
+                "reference": "025fd1e5dba452baa0e9ba4bf75298b3c7908062",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.0",
+                "guzzlehttp/guzzle-services": "dev-master",
+                "guzzlehttp/retry-subscriber": "^2.0.2",
+                "php": ">=5.4.0",
+                "roave/security-advisories": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.24"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zxcvbn\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phillip Shipley",
+                    "email": "phillip_shipley@sil.org"
+                }
+            ],
+            "description": "PHP client library for interacting with Zxcvbn API. See https://github.com/wcjr/zxcvbn-api",
+            "keywords": [
+                "zxcvbn"
+            ],
+            "time": "2016-06-01 19:34:54"
         },
         {
             "name": "silintl/insite-people-search",
@@ -3747,9 +3793,11 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "guzzlehttp/guzzle-services": 20,
         "silinternational/idp-pw-api-common": 20,
         "silinternational/idp-pw-api-auth-saml": 20,
         "silinternational/idp-pw-api-phoneverification-nexmo": 20,
+        "silinternational/zxcvbn-api-client-php": 20,
         "roave/security-advisories": 20,
         "fillup/phpmyadmin-minimal": 20
     },
