@@ -24,13 +24,13 @@ return [
             'minUpper' => [
                 'value' => 1,
                 'phpRegex' => '',
-                'jsRegex' => '([A-Z].*){0,0}',
+                'jsRegex' => '([A-Z].*){1,}',
                 'enabled' => true
             ],
             'minSpecial' => [
                 'value' => 1,
                 'phpRegex' => '',
-                'jsRegex' => '([\W_].*){0,0}',
+                'jsRegex' => '([\W_].*){1,}',
                 'enabled' => true
             ],
             'zxcvbn' => [

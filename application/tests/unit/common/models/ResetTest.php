@@ -238,7 +238,9 @@ class ResetTest extends DbTestCase
         $reset->setType(Reset::TYPE_SPOUSE);
         $this->assertEquals(Reset::TYPE_SPOUSE, $reset->type);
 
-        $reset->setType(Reset::TYPE_METHOD, 1);
+        $method = $this->methods('method1');
+
+        $reset->setType(Reset::TYPE_METHOD, $method->uid);
         $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
         $this->assertEquals(1, $reset->method_id);
 

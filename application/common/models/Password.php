@@ -82,6 +82,7 @@ class Password extends Model
                     'Your password does not meet the minimum strength of {minScore}',
                     ['minScore' => $this->config['zxcvbn']['minScore']]
                 ),
+                'when' => function() { return $this->config['zxcvbn']['enabled']; }
             ],
         ];
     }
@@ -102,13 +103,11 @@ class Password extends Model
     /**
      * @param int $userId
      * @param string $username
-     * @return array
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
     public function save($userId, $username)
     {
-
         /*
          * Temp code for dev/testing
          */
@@ -116,7 +115,6 @@ class Password extends Model
         $user->pw_expires = Utils::getDatetime(time() + \Yii::$app->params['passwordLifetime']);
         $user->pw_last_changed = Utils::getDatetime();
         $user->save();
-        return [];
 
 //        $log = [
 //            'action' => 'save password',
@@ -147,8 +145,6 @@ class Password extends Model
 //            \Yii::error($log);
 //            throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
 //        }
-//
-//        return [];
     }
 
 
