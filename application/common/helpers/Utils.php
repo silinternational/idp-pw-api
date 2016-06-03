@@ -361,7 +361,7 @@ class Utils
         try {
             $zxcvbn = new \Zxcvbn\Score([
                 'description_override' => [
-                    'baseUrl' => \Yii::$app->params['zxcvbn']['apiBaseUrl'],
+                    'baseUrl' => \Yii::$app->params['password']['zxcvbn']['apiBaseUrl'],
                 ]
             ]);
             return $zxcvbn->getFull(['password' => $password]);

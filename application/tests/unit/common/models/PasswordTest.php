@@ -1,26 +1,18 @@
 <?php
 namespace tests\unit\common\models;
 
+use common\helpers\Utils;
 use common\models\Password;
 use yii\codeception\TestCase;
-use ZxcvbnPhp\Zxcvbn;
 
 class PasswordTest extends TestCase
 {
 
     public function testZxcvbn()
     {
-        $this->markTestSkipped('Skipped for now');
-
         $testData = $this->getTestData();
-
         foreach($testData as $testCase) {
-            $zxcvbn = new Zxcvbn();
-            $strength = $zxcvbn->passwordStrength($testCase['password']);
-//            if ($testCase['password'] == '1John 3:16') {
-//                die(print_r($strength, true));
-//            }
-
+            $strength = Utils::getZxcvbnScore($testCase['password']);
             $this->assertEquals($testCase['zxcvbn'], $strength['score'], 'Zxcvbn score mismatch for password ' . $testCase['password']);
         }
     }

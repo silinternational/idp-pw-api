@@ -20,9 +20,7 @@
     "silinternational/idp-pw-api-auth-saml": "dev-master",
     "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
     "silinternational/zxcvbn-api-client-php": "dev-master",
-    "google/recaptcha": "^1.1.2",
-    "bjeavons/zxcvbn-php": "^0.1.4",
-    "d3th/yii2-zxcvbn-validator": "^v0.1.0"
+    "google/recaptcha": "^1.1.2"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

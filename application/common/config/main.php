@@ -28,7 +28,7 @@ $supportPhone = Env::get('SUPPORT_PHONE');
 $supportEmail = Env::get('SUPPORT_EMAIL');
 $supportUrl = Env::get('SUPPORT_URL');
 $supportFeedback = Env::get('SUPPORT_FEEDBACK');
-$zxcvbnApiEndpoint = Env::get('ZXCVBN_API_ENDPOINT');
+$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 
 return [
     'id' => 'app-common',
@@ -144,7 +144,7 @@ return [
             'zxcvbn' => [
                 'minScore' => 2,
                 'enabled' => true,
-                'apiEndpoint' => $zxcvbnApiEndpoint,
+                'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
         ],
         'recaptcha' => [
