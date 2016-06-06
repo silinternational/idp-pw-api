@@ -113,31 +113,31 @@ return [
         'password' => [
             'minLength' => [
                 'value' => 10,
-                'phpRegex' => '.{10,}',
+                'phpRegex' => '/.{10,}/',
                 'jsRegex' => '.{10,}',
                 'enabled' => true
             ],
             'maxLength' => [
                 'value' => 255,
-                'phpRegex' => '.{0,255}',
+                'phpRegex' => '/.{0,255}/',
                 'jsRegex' => '.{0,255}',
                 'enabled' => true
             ],
             'minNum' => [
                 'value' => 2,
-                'phpRegex' => '(\d.*){2,}',
+                'phpRegex' => '/(\d.*){2,}/',
                 'jsRegex' => '(\d.*){2,}',
                 'enabled' => true
             ],
             'minUpper' => [
                 'value' => 0,
-                'phpRegex' => '([A-Z].*){0,}',
+                'phpRegex' => '/([A-Z].*){0,}/',
                 'jsRegex' => '([A-Z].*){0,}',
                 'enabled' => false
             ],
             'minSpecial' => [
                 'value' => 0,
-                'phpRegex' => '([\W_].*){0,}',
+                'phpRegex' => '/([\W_].*){0,}/',
                 'jsRegex' => '([\W_].*){0,}',
                 'enabled' => false
             ],

@@ -13,26 +13,49 @@ class PasswordTest extends TestCase
         $testData = $this->getTestData();
         foreach($testData as $testCase) {
             $strength = Utils::getZxcvbnScore($testCase['password']);
-            $this->assertEquals($testCase['zxcvbn'], $strength['score'], 'Zxcvbn score mismatch for password ' . $testCase['password']);
+            $this->assertEquals($testCase['zxcvbnScore'], $strength['score'], 'Zxcvbn score mismatch for password ' . $testCase['password']);
         }
     }
 
-//    public function testValidation()
-//    {
-//        $testData = $this->getTestData();
-//
-//        foreach ($testData as $testCase) {
-//            $password = Password::create($testCase['password']);
-//            $this->assertEquals($testCase['zxcvbn'], Zxcvbn:: )
-//        }
-//    }
+    public function testValidation()
+    {
+        $testData = $this->getTestData();
+
+        foreach ($testData as $testCase) {
+            $password = Password::create($testCase['password']);
+            $valid = $password->validate();
+            $errors = $password->getErrors('password');
+            $validationErrorsString = join('|', array_values($errors));
+
+            $this->assertEquals($testCase['overall'], $valid, 'Failed validating test case: '. $testCase['password']);
+
+            $minLengthStatus = ! substr_count($validationErrorsString, 'code 100') > 0;
+            $this->assertEquals($testCase['minLength'], $minLengthStatus, 'Failed validating test case: '. $testCase['password']);
+
+            $maxLengthStatus = ! substr_count($validationErrorsString, 'code 110') > 0;
+            $this->assertEquals($testCase['maxLength'], $maxLengthStatus, 'Failed validating test case: '. $testCase['password']);
+
+            $minNumStatus = ! substr_count($validationErrorsString, 'code 120') > 0;
+            $this->assertEquals($testCase['minNum'], $minNumStatus, 'Failed validating test case: '. $testCase['password']);
+
+            $minUpperStatus = ! substr_count($validationErrorsString, 'code 130') > 0;
+            $this->assertEquals($testCase['minUpper'], $minUpperStatus, 'Failed validating test case: '. $testCase['password']);
+
+            $minSpecialStatus = ! substr_count($validationErrorsString, 'code 140') > 0;
+            $this->assertEquals($testCase['minSpecial'], $minSpecialStatus, 'Failed validating test case: '. $testCase['password']);
+
+            $zxcvbnStatus = ! substr_count($validationErrorsString, 'code 150') > 0;
+            $this->assertEquals($testCase['zxcvbnPass'], $zxcvbnStatus, 'Failed validating test case: '. $testCase['password']);
+        }
+    }
 
     private function getTestData()
     {
         return [
             [
                 'password' => 'asdf1234',
-                'zxcvbn' => 0,
+                'zxcvbnScore' => 0,
+                'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
                 'minNum' => true,
@@ -41,8 +64,9 @@ class PasswordTest extends TestCase
                 'overall' => false,
             ],
             [
-                'password' => 'Complex-ish p$ssw!or',
-                'zxcvbn' => 4,
+                'password' => 'Complex-ish p$ssw!or12',
+                'zxcvbnScore' => 4,
+                'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
                 'minNum' => true,
@@ -52,17 +76,19 @@ class PasswordTest extends TestCase
             ],
             [
                 'password' => 'ALL CAPS QUERTY 1234',
-                'zxcvbn' => 4,
+                'zxcvbnScore' => 4,
+                'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
                 'minNum' => true,
                 'minUpper' => true,
-                'minSpecial' => false,
-                'overall' => false,
+                'minSpecial' => true,
+                'overall' => true,
             ],
             [
                 'password' => 'password',
-                'zxcvbn' => 0,
+                'zxcvbnScore' => 0,
+                'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
                 'minNum' => false,
@@ -72,7 +98,8 @@ class PasswordTest extends TestCase
             ],
             [
                 'password' => '1John 3:16',
-                'zxcvbn' => 3,
+                'zxcvbnScore' => 3,
+                'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
                 'minNum' => true,
@@ -82,17 +109,19 @@ class PasswordTest extends TestCase
             ],
             [
                 'password' => 'luv kitties4!',
-                'zxcvbn' => 4,
+                'zxcvbnScore' => 4,
+                'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
+                'minNum' => false,
+                'minUpper' => false,
                 'minSpecial' => true,
-                'overall' => true,
+                'overall' => false,
             ],
             [
                 'password' => 'jesus',
-                'zxcvbn' => 0,
+                'zxcvbnScore' => 0,
+                'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
                 'minNum' => false,
@@ -102,7 +131,8 @@ class PasswordTest extends TestCase
             ],
             [
                 'password' => 'Je$u$12345',
-                'zxcvbn' => 1,
+                'zxcvbnScore' => 1,
+                'zxcvbnPass' => false,
                 'minLength' => true,
                 'maxLength' => true,
                 'minNum' => true,

@@ -2,9 +2,8 @@
 namespace common\models;
 
 use common\helpers\Utils;
-use d3th\validators\ZxcvbnPasswordValidator;
+use common\helpers\ZxcvbnPasswordValidator;
 use yii\base\Model;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -30,56 +29,60 @@ class Password extends Model
         return [
             [
                 'password', 'match', 'pattern' => $this->config['minLength']['phpRegex'],
+                'skipOnError' => false,
                 'message' => \Yii::t(
                     'app',
-                    'Your password does not meet the minimum length of {minLength}',
-                    ['minScore' => $this->config['minLength']['value']]
+                    'Your password does not meet the minimum length of {minLength} (code 100)',
+                    ['minLength' => $this->config['minLength']['value']]
                 ),
                 'when' => function() { return $this->config['minLength']['enabled']; }
             ],
             [
                 'password', 'match', 'pattern' => $this->config['maxLength']['phpRegex'],
+                'skipOnError' => false,
                 'message' => \Yii::t(
                     'app',
-                    'Your password exceeds the maximum length of {maxLength}',
+                    'Your password exceeds the maximum length of {maxLength} (code 110)',
                     ['maxLength' => $this->config['maxLength']['value']]
                 ),
                 'when' => function() { return $this->config['maxLength']['enabled']; }
             ],
             [
                 'password', 'match', 'pattern' => $this->config['minNum']['phpRegex'],
+                'skipOnError' => false,
                 'message' => \Yii::t(
                     'app',
-                    'Your password must contain at least {minNum} numbers',
+                    'Your password must contain at least {minNum} numbers (code 120)',
                     ['minNum' => $this->config['minNum']['value']]
                 ),
                 'when' => function() { return $this->config['minNum']['enabled']; }
             ],
             [
                 'password', 'match', 'pattern' => $this->config['minUpper']['phpRegex'],
+                'skipOnError' => false,
                 'message' => \Yii::t(
                     'app',
-                    'Your password must contain at least {minUpper} upper case letters',
+                    'Your password must contain at least {minUpper} upper case letters (code 130)',
                     ['minUpper' => $this->config['minUpper']['value']]
                 ),
                 'when' => function() { return $this->config['minUpper']['enabled']; }
             ],
             [
                 'password', 'match', 'pattern' => $this->config['minSpecial']['phpRegex'],
+                'skipOnError' => false,
                 'message' => \Yii::t(
                     'app',
-                    'Your password must contain at least {minSpecial} special characters',
+                    'Your password must contain at least {minSpecial} special characters (code 140)',
                     ['minSpecial' => $this->config['minSpecial']['value']]
                 ),
                 'when' => function() { return $this->config['minSpecial']['enabled']; }
             ],
             [
-                'password',
-                ZxcvbnPasswordValidator::className(),
-                'minScore' => $this->config['zxcvbn']['minScore'],
+                'password', ZxcvbnPasswordValidator::className(), 'minScore' => $this->config['zxcvbn']['minScore'],
+                'skipOnError' => false,
                 'message' => \Yii::t(
                     'app',
-                    'Your password does not meet the minimum strength of {minScore}',
+                    'Your password does not meet the minimum strength of {minScore} (code 150)',
                     ['minScore' => $this->config['zxcvbn']['minScore']]
                 ),
                 'when' => function() { return $this->config['zxcvbn']['enabled']; }
@@ -108,6 +111,11 @@ class Password extends Model
      */
     public function save($userId, $username)
     {
+
+        if ( ! $this->validate()) {
+            $errors = join(', ', $this->getErrors('password'));
+            throw new BadRequestHttpException('New password validation failed: ' . $errors);
+        }
         /*
          * Temp code for dev/testing
          */
