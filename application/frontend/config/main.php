@@ -1,7 +1,13 @@
 <?php
 
+use Sil\PhpEnv\Env;
+
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieKey = getenv('FRONT_COOKIE_KEY') ?: null;
+$frontCookieKey = Env::get('FRONT_COOKIE_KEY');
+$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', false);
+
+$sessionLifetime = 1800; // 30 minutes
+
 const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
 
 return [
@@ -13,7 +19,16 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
-            'authTimeout' => 1800, // 30 minutes
+            'authTimeout' => $sessionLifetime,
+            'absoluteAuthTimeout' => $sessionLifetime,
+        ],
+        'session' => [
+            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
+                'lifetime' => $sessionLifetime,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => $frontCookieSecure,
+            ],
         ],
         'log' => [
 
