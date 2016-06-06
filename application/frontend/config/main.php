@@ -38,7 +38,7 @@ return [
         ],
         'request' => [
             'enableCookieValidation' => true,
-            'enableCsrfValidation' => true,
+            'enableCsrfValidation' => false,
             'cookieValidationKey' => $frontCookieKey,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
