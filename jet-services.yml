@@ -6,6 +6,11 @@ db:
         MYSQL_USER: idpmgmt
         MYSQL_PASSWORD: idpmgmt
 
+zxcvbn:
+    image: wcjr/zxcvbn-api:1.0.0
+    ports:
+        - "3000"
+
 api:
     build:
         image: silintl/insite-pw-api
