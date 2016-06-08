@@ -220,10 +220,16 @@ class Utils
 
         $config['idpName'] = $params['idpName'];
         $config['idpUsernameHint'] = $params['idpUsernameHint'];
-        $config['support'] = $params['support'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
-        $config['password'] = [];
 
+        $config['support'] = [];
+        foreach ($params['support'] as $supportOption => $value) {
+            if ( ! empty($value)) {
+                $config['support'][$supportOption] = $value;
+            }
+        }
+
+        $config['password'] = [];
         $passwordRuleFields = [
             'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
         ];

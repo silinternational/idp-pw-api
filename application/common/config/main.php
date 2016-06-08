@@ -154,7 +154,7 @@ return [
         'support' => [
             'phone' => $supportPhone,
             'email' => $supportEmail,
-            'url' => $supportEmail,
+            'url' => $supportUrl,
             'feedbackUrl' => $supportFeedback,
         ],
     ],

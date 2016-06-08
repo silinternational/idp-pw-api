@@ -105,17 +105,17 @@ class Password extends Model
 
     /**
      * @param int $userId
-     * @param string $username
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public function save($userId, $username)
+    public function save($userId)
     {
 
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
             throw new BadRequestHttpException('New password validation failed: ' . $errors);
         }
+
         /*
          * Temp code for dev/testing
          */

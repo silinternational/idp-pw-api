@@ -1,8 +1,9 @@
 Hi there,
 <p>
     Someone recently requested to add this email address, <?php echo \yii\helpers\Html::encode($toAddress); ?>,
-    as a method for verifying themselves should they need to reset their <?php echo \yii\helpers\Html::encode($idpName); ?>
-    account. If this was you, you can use the reset code below to set a new password.
+    as a method for verifying themselves should they need to reset their
+    <?php echo \yii\helpers\Html::encode($idpName); ?> account. If this was you, you can use the reset code
+    below to set a new password.
 </p>
 <p>
     Reset Code: <?php echo \yii\helpers\Html::encode($code); ?>
