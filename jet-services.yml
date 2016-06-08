@@ -17,6 +17,7 @@ api:
         dockerfile_path: ./Dockerfile
     links:
         - db
+        - zxcvbn
     environment:
         MYSQL_HOST: db
         MYSQL_DATABASE: test
