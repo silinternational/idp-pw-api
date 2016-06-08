@@ -31,7 +31,7 @@ class Utils
      */
     public static function getIso8601($timestamp = null)
     {
-        $timestamp = $timestamp ?: time();
+        $timestamp = $timestamp !== null ? $timestamp : time();
         $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
         return date('c', $timestamp);
     }
@@ -220,10 +220,16 @@ class Utils
 
         $config['idpName'] = $params['idpName'];
         $config['idpUsernameHint'] = $params['idpUsernameHint'];
-        $config['support'] = $params['support'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
-        $config['password'] = [];
 
+        $config['support'] = [];
+        foreach ($params['support'] as $supportOption => $value) {
+            if ( ! empty($value)) {
+                $config['support'][$supportOption] = $value;
+            }
+        }
+
+        $config['password'] = [];
         $passwordRuleFields = [
             'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
         ];
@@ -348,6 +354,26 @@ class Utils
     {
         $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
         return (filter_var($ip, FILTER_VALIDATE_IP, $flags) !== false);
+    }
+
+    /**
+     * Call Zxcvbn API and return full score object array
+     * @param string $password
+     * @return array
+     * @throws \Exception
+     */
+    public static function getZxcvbnScore($password)
+    {
+        try {
+            $zxcvbn = new \Zxcvbn\Score([
+                'description_override' => [
+                    'baseUrl' => \Yii::$app->params['password']['zxcvbn']['apiBaseUrl'],
+                ]
+            ]);
+            return $zxcvbn->getFull(['password' => $password]);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
 }

@@ -14,7 +14,7 @@ RUN mkdir -p /opt/ssl
 COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
 
 # get s3-expand
-RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/master/s3-expand -o /usr/local/bin/s3-expand
+RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/1.5/s3-expand -o /usr/local/bin/s3-expand
 RUN chmod a+x /usr/local/bin/s3-expand
 
 # It is expected that /data is = application/ in project folder

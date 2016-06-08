@@ -12,15 +12,15 @@
     "yiisoft/yii2-bootstrap": "*",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
+    "guzzlehttp/guzzle-services": "dev-master",
     "silinternational/php-env": "^0.1.1",
     "silinternational/yii2-jsonsyslog": "*",
     "silinternational/idp-pw-api-common": "dev-master",
     "silinternational/idp-pw-api-personnel-insite": "^0.0.4",
     "silinternational/idp-pw-api-auth-saml": "dev-master",
     "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
-    "google/recaptcha": "^1.1.2",
-    "bjeavons/zxcvbn-php": "^0.1.4",
-    "d3th/yii2-zxcvbn-validator": "^v0.1.0"
+    "silinternational/zxcvbn-api-client-php": "dev-master",
+    "google/recaptcha": "^1.1.2"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

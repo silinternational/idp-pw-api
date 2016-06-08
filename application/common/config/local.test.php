@@ -1,40 +1,46 @@
 <?php
 
+use Sil\PhpEnv\Env;
+
+$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
+
 return [
     'params' => [
         'password' => [
             'minLength' => [
                 'value' => 10,
-                'phpRegex' => '',
+                'phpRegex' => '/.{10,}/',
                 'jsRegex' => '.{10,}',
                 'enabled' => true
             ],
             'maxLength' => [
                 'value' => 255,
-                'phpRegex' => '',
+                'phpRegex' => '/.{0,255}/',
                 'jsRegex' => '.{0,255}',
                 'enabled' => true
             ],
             'minNum' => [
                 'value' => 2,
-                'phpRegex' => '',
+                'phpRegex' => '/(\d.*){2,}/',
                 'jsRegex' => '(\d.*){2,}',
                 'enabled' => true
             ],
             'minUpper' => [
                 'value' => 1,
-                'phpRegex' => '',
-                'jsRegex' => '([A-Z].*){0,0}',
+                'phpRegex' => '/([A-Z].*){1,}/',
+                'jsRegex' => '([A-Z].*){1,}',
                 'enabled' => true
             ],
             'minSpecial' => [
                 'value' => 1,
-                'phpRegex' => '',
-                'jsRegex' => '([\W_].*){0,0}',
+                'phpRegex' => '/([\W_].*){1,}/',
+                'jsRegex' => '([\W_].*){1,}',
                 'enabled' => true
             ],
             'zxcvbn' => [
                 'minScore' => 2,
+                'enabled' => true,
+                'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
         ],
     ],

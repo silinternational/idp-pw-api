@@ -28,6 +28,7 @@ $supportPhone = Env::get('SUPPORT_PHONE');
 $supportEmail = Env::get('SUPPORT_EMAIL');
 $supportUrl = Env::get('SUPPORT_URL');
 $supportFeedback = Env::get('SUPPORT_FEEDBACK');
+$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 
 return [
     'id' => 'app-common',
@@ -112,36 +113,38 @@ return [
         'password' => [
             'minLength' => [
                 'value' => 10,
-                'phpRegex' => '',
+                'phpRegex' => '/.{10,}/',
                 'jsRegex' => '.{10,}',
                 'enabled' => true
             ],
             'maxLength' => [
                 'value' => 255,
-                'phpRegex' => '',
+                'phpRegex' => '/.{0,255}/',
                 'jsRegex' => '.{0,255}',
                 'enabled' => true
             ],
             'minNum' => [
                 'value' => 2,
-                'phpRegex' => '',
+                'phpRegex' => '/(\d.*){2,}/',
                 'jsRegex' => '(\d.*){2,}',
                 'enabled' => true
             ],
             'minUpper' => [
                 'value' => 0,
-                'phpRegex' => '',
-                'jsRegex' => '([A-Z].*){0,0}',
+                'phpRegex' => '/([A-Z].*){0,}/',
+                'jsRegex' => '([A-Z].*){0,}',
                 'enabled' => false
             ],
             'minSpecial' => [
                 'value' => 0,
-                'phpRegex' => '',
-                'jsRegex' => '([\W_].*){0,0}',
+                'phpRegex' => '/([\W_].*){0,}/',
+                'jsRegex' => '([\W_].*){0,}',
                 'enabled' => false
             ],
             'zxcvbn' => [
                 'minScore' => 2,
+                'enabled' => true,
+                'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
         ],
         'recaptcha' => [
@@ -151,7 +154,7 @@ return [
         'support' => [
             'phone' => $supportPhone,
             'email' => $supportEmail,
-            'url' => $supportEmail,
+            'url' => $supportUrl,
             'feedbackUrl' => $supportFeedback,
         ],
     ],
