@@ -42,7 +42,7 @@ upTestDb:
 	docker-compose up -d testDb
 
 bounce:
-    docker-compose up -d api
+	docker-compose up -d api
 
 clean:
 	docker-compose kill
