@@ -297,7 +297,7 @@ class User extends UserBase implements IdentityInterface
      * Finds an identity by the given ID.
      *
      * @param string|integer $id the ID to be looked for
-     * @return IdentityInterface|null the identity object that matches the given ID.
+     * @return User|null the identity object that matches the given ID.
      */
     public static function findIdentity($id)
     {
@@ -306,14 +306,15 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Finds an identity by the given token.
-     * This method is not supported in this app right now but is required by Yii IdentityInterface
      *
      * @param string $token the token to be looked for
-     * @return IdentityInterface|null the identity object that matches the given token.
+     * @return User|null the identity object that matches the given token.
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return null;
+        return static::find()->where(['access_token' => $token])
+            ->andWhere(['>', 'access_token_expiration', Utils::getDatetime()])
+            ->one();
     }
 
     /**

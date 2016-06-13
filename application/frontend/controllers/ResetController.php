@@ -30,7 +30,10 @@ class ResetController extends BaseRestController
                         'roles' => ['?'],
                     ],
                 ]
-            ]
+            ],
+            'authenticator' => [
+                'only' => [''], // Bypass authentication for all actions
+            ],
         ]);
     }
 

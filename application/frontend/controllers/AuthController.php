@@ -1,31 +1,45 @@
 <?php
 namespace frontend\controllers;
 
+use common\helpers\Utils;
+use common\models\User;
+use frontend\components\BaseRestController;
 use Sil\IdpPw\Common\Auth\RedirectException;
 use Sil\IdpPw\Common\Auth\User as AuthUser;
-use common\models\User;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\Controller;
+use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 
-class AuthController extends Controller
+class AuthController extends BaseRestController
 {
     /**
-     * @param \yii\base\Action $action
-     * @return bool
-     * @throws \yii\web\BadRequestHttpException
+     * Access Control Filter
+     * NEEDS TO BE UPDATED FOR EVERY ACTION
      */
-    public function beforeAction($action)
+    public function behaviors()
     {
-        /*
-         * Disable CSRF validation for login since user is redirected to an IdP for logging in
-         */
-        if ($action->id == 'login') {
-            // can this be changed to use a URL parameter for the
-            // token for this action and we can pass to idp and back?
-            $this->enableCsrfValidation = false;
-        }
-        return parent::beforeAction($action);
+        return ArrayHelper::merge(parent::behaviors(), [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['me'],
+                        'roles' => ['?'],
+                    ],
+                ]
+            ],
+            'authenticator' => [
+                'except' => ['login'] // bypass authentication for /config
+            ]
+        ]);
     }
 
     public function actionLogin()
@@ -59,16 +73,40 @@ class AuthController extends Controller
              * Use employeeId since username or email could change.
              */
             $user = User::findOrCreate(null, null, $authUser->employeeId);
-            // Initialize session for user
-            if (\Yii::$app->user->login($user)) {
-                $log['status'] = 'success';
-                \Yii::warning($log, 'application');
 
-                $afterLogin = $this->getAfterLoginUrl($returnTo);
-                return $this->redirect($afterLogin);
-            } else {
-                throw new UnauthorizedHttpException('Unable to perform user login', 1459966846);
+            /*
+             * Create access_token and update user
+             */
+            $user->access_token = Utils::generateRandomString(32);
+            $user->access_token_expiration = Utils::getDatetime(
+                time() + \Yii::$app->user->absoluteAuthTimeout
+            );
+            if ( ! $user->save()) {
+                throw new ServerErrorHttpException('Unable to create access token', 1465833228);
             }
+
+            $state = \Yii::$app->request->get('state');
+            $afterLogin = $this->getAfterLoginUrl($returnTo);
+            $url = $afterLogin . sprintf(
+                '?state=%s&token_type=Bearer&expires_in=%s&acces_token=%s',
+                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $user->access_token
+            );
+
+            $log['status'] = 'success';
+            \Yii::warning($log, 'application');
+
+            return $this->redirect($url);
+
+            // Initialize session for user
+//            if (\Yii::$app->user->login($user)) {
+//                $log['status'] = 'success';
+//                \Yii::warning($log, 'application');
+//
+//                $afterLogin = $this->getAfterLoginUrl($returnTo);
+//                return $this->redirect($afterLogin);
+//            } else {
+//                throw new UnauthorizedHttpException('Unable to perform user login', 1459966846);
+//            }
         } catch (RedirectException $e) {
             /*
              * Login triggered redirect to IdP to login, so return a redirect to it
@@ -96,9 +134,20 @@ class AuthController extends Controller
         }
 
         /*
+         * Clear access_token
+         */
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+        $user->access_token = null;
+        $user->access_token_expiration = null;
+        if ( ! $user->save()) {
+            throw new ServerErrorHttpException('Unable to log user out', 1465838419);
+        }
+
+        /*
          * Get AuthUser for call to auth component
          */
-        $authUser = \Yii::$app->user->identity->getAuthUser();
+        $authUser = $user->getAuthUser();
 
         /*
          * Kill local session

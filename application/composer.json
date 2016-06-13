@@ -18,6 +18,7 @@
     "silinternational/idp-pw-api-common": "dev-master",
     "silinternational/idp-pw-api-personnel-insite": "^0.0.4",
     "silinternational/idp-pw-api-auth-saml": "dev-master",
+    "silinternational/idp-pw-api-passwordstore-ldap": "dev-master",
     "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
     "silinternational/zxcvbn-api-client-php": "dev-master",
     "google/recaptcha": "^1.1.2"
