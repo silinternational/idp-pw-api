@@ -31,13 +31,13 @@ class AuthController extends BaseRestController
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['me'],
+                        'actions' => ['login'],
                         'roles' => ['?'],
                     ],
                 ]
             ],
             'authenticator' => [
-                'except' => ['login'] // bypass authentication for /config
+                'except' => ['login'] // bypass authentication for /auth/login
             ]
         ]);
     }
@@ -50,7 +50,6 @@ class AuthController extends BaseRestController
          * Before redirecting user after login this will be prefixed with ui_url
          */
         $returnTo = \Yii::$app->request->get('ReturnTo', '');
-
         if ( ! \Yii::$app->user->isGuest) {
             $afterLogin = $this->getAfterLoginUrl($returnTo);
             return $this->redirect($afterLogin);
@@ -62,7 +61,6 @@ class AuthController extends BaseRestController
         $log = ['action' => 'login'];
 
         try {
-            $returnTo = Url::to(['auth/login', 'ReturnTo' => $returnTo], true);
             /** @var AuthUser $authUser */
             $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
 
@@ -85,8 +83,20 @@ class AuthController extends BaseRestController
                 throw new ServerErrorHttpException('Unable to create access token', 1465833228);
             }
 
+            /*
+             * State is a CSRF token provided by UI
+             */
             $state = \Yii::$app->request->get('state');
-            $afterLogin = $this->getAfterLoginUrl($returnTo);
+
+            /*
+             * Relay state holds the return to path from UI
+             */
+            $relayState = \Yii::$app->request->post('RelayState', '/');
+
+            /*
+             * build url to redirect user to
+             */
+            $afterLogin = $this->getAfterLoginUrl($relayState);
             $url = $afterLogin . sprintf(
                 '?state=%s&token_type=Bearer&expires_in=%s&acces_token=%s',
                 Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $user->access_token
@@ -96,17 +106,7 @@ class AuthController extends BaseRestController
             \Yii::warning($log, 'application');
 
             return $this->redirect($url);
-
-            // Initialize session for user
-//            if (\Yii::$app->user->login($user)) {
-//                $log['status'] = 'success';
-//                \Yii::warning($log, 'application');
-//
-//                $afterLogin = $this->getAfterLoginUrl($returnTo);
-//                return $this->redirect($afterLogin);
-//            } else {
-//                throw new UnauthorizedHttpException('Unable to perform user login', 1459966846);
-//            }
+            
         } catch (RedirectException $e) {
             /*
              * Login triggered redirect to IdP to login, so return a redirect to it
