@@ -60,6 +60,16 @@ Vagrant.configure(2) do |config|
     curl -LsS https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
 
+    # Create /home/vagrant/.bash_profile for env vars
+    echo << EOF > /home/vagrant/.bash_profile
+COMPOSER_HOME=/home/vagrant/.composer; export COMPOSER_HOME
+COMPOSER_CONFIG_FILE="${COMPOSER_HOME}/config.json"; export COMPOSER_CONFIG_FILE
+COMPOSER_CACHE_DIR="${COMPOSER_HOME}/cache"; export COMPOSER_CACHE_DIR
+# Get GID for DOCKER_UIDGID env var
+GID=`id -g`
+DOCKER_UIDGID="${UID}:${GID}"; export DOCKER_UIDGID
+EOF
+
     # Run docker-compose (which will update preloaded images, and
     # pulls any images not preloaded)
     cd /vagrant
@@ -75,11 +85,11 @@ Vagrant.configure(2) do |config|
     # pulls any images not preloaded)
     cd /vagrant
 
-    # Get GID for DOCKER_UIDGID env var
-    GID=`id -g`
+    # Ensure env vars are loaded from bash_profile
+    source /home/vagrant/.bash_profile
 
     # Start services
-    DOCKER_UIDGID="${UID}:${GID}" make start
+    make start
 
   SHELL
 
