@@ -21,15 +21,17 @@ return [
             'enableAutoLogin' => false,
             'authTimeout' => $sessionLifetime,
             'absoluteAuthTimeout' => $sessionLifetime,
+            'enableSession' => false,
+            'loginUrl' => null,
         ],
-        'session' => [
-            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
-                'lifetime' => $sessionLifetime,
-                'path' => '/',
-                'httponly' => true,
-                'secure' => $frontCookieSecure,
-            ],
-        ],
+//        'session' => [
+//            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
+//                'lifetime' => $sessionLifetime,
+//                'path' => '/',
+//                'httponly' => true,
+//                'secure' => $frontCookieSecure,
+//            ],
+//        ],
         'log' => [
 
         ],

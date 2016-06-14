@@ -47,6 +47,8 @@ services:
         container_name: cli
         volumes_from:
             - data
+        volumes:
+            - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
         user: "${DOCKER_UIDGID}"
         env_file:

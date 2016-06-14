@@ -5,6 +5,8 @@ use frontend\components\BaseRestController;
 
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\web\ForbiddenHttpException;
+use yii\web\UnauthorizedHttpException;
 
 class UserController extends BaseRestController
 {
@@ -29,7 +31,7 @@ class UserController extends BaseRestController
                         'roles' => ['?'],
                     ],
                 ]
-            ]
+            ],
         ]);
     }
 
@@ -40,4 +42,5 @@ class UserController extends BaseRestController
     {
         return \Yii::$app->user->identity;
     }
+    
 }
