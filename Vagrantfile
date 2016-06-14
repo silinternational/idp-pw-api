@@ -1,3 +1,4 @@
+#@IgnoreInspection BashAddShebang
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -39,7 +40,7 @@ Vagrant.configure(2) do |config|
   # information on available options.
 
   # Set synced folder permissions
-  config.vm.synced_folder "./", "/vagrant", :mount_options => [ "dmode=755,fmode=755," ], owner: "33", group: "33"
+  config.vm.synced_folder "./", "/vagrant", :mount_options => [ "dmode=755,fmode=755," ]
 
   # This provisioner runs on the first `vagrant up`.
   config.vm.provision "install", type: "shell", inline: <<-SHELL
@@ -61,7 +62,8 @@ Vagrant.configure(2) do |config|
     chmod +x /usr/local/bin/docker-compose
 
     # Create /home/vagrant/.bash_profile for env vars
-    echo << EOF > /home/vagrant/.bash_profile
+    cat << EOF > /home/vagrant/.bash_profile
+#!/bin/bash
 COMPOSER_HOME=/home/vagrant/.composer; export COMPOSER_HOME
 COMPOSER_CONFIG_FILE="${COMPOSER_HOME}/config.json"; export COMPOSER_CONFIG_FILE
 COMPOSER_CACHE_DIR="${COMPOSER_HOME}/cache"; export COMPOSER_CACHE_DIR
@@ -69,6 +71,9 @@ COMPOSER_CACHE_DIR="${COMPOSER_HOME}/cache"; export COMPOSER_CACHE_DIR
 GID=`id -g`
 DOCKER_UIDGID="${UID}:${GID}"; export DOCKER_UIDGID
 EOF
+
+    chown vagrant:vagrant /home/vagrant/.bash_profile
+    chmod +x /home/vagrant/.bash_profile
 
     # Run docker-compose (which will update preloaded images, and
     # pulls any images not preloaded)
