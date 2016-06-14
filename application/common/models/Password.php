@@ -20,7 +20,7 @@ class Password extends Model
 
     public function init()
     {
-        //$this->passwordStore = \Yii::$app->passwordStore;
+        $this->passwordStore = \Yii::$app->passwordStore;
         $this->config = \Yii::$app->params['password'];
     }
 

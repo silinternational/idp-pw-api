@@ -23,6 +23,8 @@ filter:
         - application/tests/codeception/console/_support/*
         - application/tests/functional/FunctionalTester.php
         - application/tests/unit/UnitTester.php
+        - application/tests/_support/*
+        - application/tests/_support/_generated/*
 
 ########### [End of project-specific section] ############
 

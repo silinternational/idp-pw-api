@@ -53,7 +53,7 @@ class PasswordController extends BaseRestController
         }
 
         $password = Password::create($newPassword);
-        $password->save(\Yii::$app->user->getId(), \Yii::$app->user->identity->idp_username);
+        $password->save(\Yii::$app->user->getId());
 
         return \Yii::$app->user->identity->getPasswordMeta();
     }
