@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 
@@ -61,6 +62,27 @@ class AuthController extends BaseRestController
         $log = ['action' => 'login'];
 
         try {
+            /*
+             * Grab client_id for use in token after successful login
+             */
+            $clientId = \Yii::$app->request->get('client_id');
+            if ($clientId === null) {
+                $clientId = \Yii::$app->session->get('clientId');
+                if ($clientId === null) {
+                    throw new BadRequestHttpException('Missing client_id');
+                }
+            }
+            \Yii::$app->session->set('clientId', $clientId);
+
+            /*
+             * Grab state for use in response after successful login
+             */
+            $state = \Yii::$app->request->get('state');
+            if ($state === null) {
+                $state = \Yii::$app->session->get('state');
+            }
+            \Yii::$app->session->set('state', $state);
+
             /** @var AuthUser $authUser */
             $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
 
@@ -75,18 +97,17 @@ class AuthController extends BaseRestController
             /*
              * Create access_token and update user
              */
-            $user->access_token = Utils::generateRandomString(32);
+            $accessToken = Utils::generateRandomString(32);
+            /*
+             * Store combination of clientId and accessToken for bearer auth
+             */
+            $user->access_token = $clientId . $accessToken;
             $user->access_token_expiration = Utils::getDatetime(
                 time() + \Yii::$app->user->absoluteAuthTimeout
             );
             if ( ! $user->save()) {
                 throw new ServerErrorHttpException('Unable to create access token', 1465833228);
             }
-
-            /*
-             * State is a CSRF token provided by UI
-             */
-            $state = \Yii::$app->request->get('state');
 
             /*
              * Relay state holds the return to path from UI
@@ -98,15 +119,23 @@ class AuthController extends BaseRestController
              */
             $afterLogin = $this->getAfterLoginUrl($relayState);
             $url = $afterLogin . sprintf(
-                '?state=%s&token_type=Bearer&expires_in=%s&acces_token=%s',
-                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $user->access_token
+                '?state=%s&token_type=Bearer&expires_in=%s&access_token=%s',
+                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
             );
 
             $log['status'] = 'success';
             \Yii::warning($log, 'application');
 
+            /*
+             * Kill session
+             */
+            \Yii::$app->user->logout(true);
+
+            /*
+             * Redirect to UI
+             */
             return $this->redirect($url);
-            
+
         } catch (RedirectException $e) {
             /*
              * Login triggered redirect to IdP to login, so return a redirect to it
@@ -130,7 +159,7 @@ class AuthController extends BaseRestController
              */
             \Yii::$app->user->logout(true);
 
-            return $this->redirect(\Yii::$app->params['ui_url']);
+            return $this->redirect(\Yii::$app->params['uiUrl']);
         }
 
         /*
@@ -158,12 +187,12 @@ class AuthController extends BaseRestController
          * Log user out of IdP
          */
         try {
-            \Yii::$app->auth->logout(\Yii::$app->params['ui_url'], $authUser);
+            \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
         } catch (RedirectException $e) {
             return $this->redirect($e->getUrl());
         }
 
-        return $this->redirect(\Yii::$app->params['ui_url']);
+        return $this->redirect(\Yii::$app->params['uiUrl']);
     }
 
     public function getAfterLoginUrl($returnTo)
@@ -177,6 +206,6 @@ class AuthController extends BaseRestController
         } else {
             $path = '';
         }
-        return \Yii::$app->params['ui_url'] . $path;
+        return \Yii::$app->params['uiUrl'] . $path;
     }
 }

@@ -103,7 +103,8 @@ class MethodTest extends DbTestCase
 
     public function testCreateAndSendVerificationInvalidType()
     {
-        $this->setExpectedException('\Exception', '', 1461375342);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461375342);
         Method::createAndSendVerification(
             1,
             'invalid type',
@@ -113,7 +114,8 @@ class MethodTest extends DbTestCase
 
     public function testCreateAndSendVerificationInvalidEmail()
     {
-        $this->setExpectedException('\Exception', '', 1461459797);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461459797);
         Method::createAndSendVerification(
             1,
             Method::TYPE_EMAIL,
@@ -123,7 +125,8 @@ class MethodTest extends DbTestCase
 
     public function testCreateAndSendVerificationInvalidPhone()
     {
-        $this->setExpectedException('\Exception', '', 1461375342);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461375342);
         Method::createAndSendVerification(
             1,
             Method::TYPE_PHONE,
@@ -163,7 +166,8 @@ class MethodTest extends DbTestCase
         $this->assertEquals($mockPhones[0]['code'], $method->verification_code);
         $this->assertEquals(0, $method->verification_attempts);
 
-        $this->setExpectedException('\Exception', '', 1461442988);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
 
         $this->assertEquals(0, $method->verified);
@@ -171,7 +175,8 @@ class MethodTest extends DbTestCase
         $this->assertNotNull($method->verification_code);
         $this->assertNotNull($method->verification_expires);
 
-        $this->setExpectedException('\Exception', '', 1461442988);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
         $this->assertEquals(2, $method->verification_attempts);
     }

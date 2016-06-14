@@ -70,7 +70,7 @@ class UserTest extends DbTestCase
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->setExpectedException('\Sil\IdpPw\Common\Personnel\NotFoundException');
+        $this->expectException(\Sil\IdpPw\Common\Personnel\NotFoundException::class);
         User::findOrCreate('doesnt_exist');
     }
 

@@ -46,7 +46,7 @@ class SiteController extends Controller
         /**
          * Redirect to Doorman UI
          */
-        return $this->redirect(\Yii::$app->params['ui_url'], 301);
+        return $this->redirect(\Yii::$app->params['uiUrl'], 301);
     }
 
     public function actionSystemStatus()

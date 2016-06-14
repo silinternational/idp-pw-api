@@ -3,7 +3,6 @@
 use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieKey = Env::get('FRONT_COOKIE_KEY');
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', false);
 
 $sessionLifetime = 1800; // 30 minutes
@@ -19,19 +18,17 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
-            'authTimeout' => $sessionLifetime,
-            'absoluteAuthTimeout' => $sessionLifetime,
             'enableSession' => false,
             'loginUrl' => null,
         ],
-//        'session' => [
-//            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
-//                'lifetime' => $sessionLifetime,
-//                'path' => '/',
-//                'httponly' => true,
-//                'secure' => $frontCookieSecure,
-//            ],
-//        ],
+        'session' => [
+            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
+                'lifetime' => $sessionLifetime,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => $frontCookieSecure,
+            ],
+        ],
         'log' => [
 
         ],
@@ -39,16 +36,14 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'enableCookieValidation' => true,
             'enableCsrfValidation' => false,
-            'cookieValidationKey' => $frontCookieKey,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
                 /*
@@ -98,7 +93,7 @@ return [
                  * User  routes
                  */
                 'GET /user/me' => 'user/me',
-
+                'OPTIONS /user/me' => 'user/options',
             ]
         ]
     ],

@@ -162,7 +162,8 @@ class ResetTest extends DbTestCase
 
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
-        $this->setExpectedException('\Exception', '', 1461173406);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461173406);
         $reset->send();
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }
@@ -193,7 +194,8 @@ class ResetTest extends DbTestCase
 
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
-        $this->setExpectedException('\Exception', '', 1461173477);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461173477);
         $reset->send();
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }

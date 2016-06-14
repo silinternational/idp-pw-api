@@ -44,8 +44,9 @@ class UserBase extends \yii\db\ActiveRecord
         return [
             [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created'], 'required'],
             [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
-            [['uid', 'employee_id', 'access_token'], 'string', 'max' => 32],
+            [['uid', 'employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
+            [['access_token'], 'string', 'max' => 64],
             [['uid'], 'unique'],
             [['employee_id'], 'unique'],
             [['email'], 'unique'],

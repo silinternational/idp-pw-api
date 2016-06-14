@@ -378,7 +378,7 @@ class User extends UserBase implements IdentityInterface
 
     public function getPasswordMeta()
     {
-        $thisUser = User::findOne(['id' => $this->id]);
+        $thisUser = self::findOne(['id' => $this->id]);
         return [
             'last_changed' => Utils::getIso8601($thisUser->pw_last_changed),
             'expires' => Utils::getIso8601($thisUser->pw_expires),
