@@ -25,11 +25,6 @@ class UserController extends BaseRestController
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    [
-                        'allow' => true,
-                        'actions' => ['me'],
-                        'roles' => ['?'],
-                    ],
                 ]
             ],
         ]);

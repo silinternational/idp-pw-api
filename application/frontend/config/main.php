@@ -24,14 +24,14 @@ return [
             'enableSession' => false,
             'loginUrl' => null,
         ],
-//        'session' => [
-//            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
-//                'lifetime' => $sessionLifetime,
-//                'path' => '/',
-//                'httponly' => true,
-//                'secure' => $frontCookieSecure,
-//            ],
-//        ],
+        'session' => [
+            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
+                'lifetime' => $sessionLifetime,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => $frontCookieSecure,
+            ],
+        ],
         'log' => [
 
         ],
@@ -48,7 +48,7 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
                 /*
@@ -98,7 +98,7 @@ return [
                  * User  routes
                  */
                 'GET /user/me' => 'user/me',
-
+                'OPTIONS /user/me' => 'user/options',
             ]
         ]
     ],
