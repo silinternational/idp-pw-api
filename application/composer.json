@@ -28,7 +28,7 @@
     "yiisoft/yii2-faker": "*",
     "roave/security-advisories": "dev-master",
     "fillup/phpmyadmin-minimal": "dev-master",
-    "codeception/codeception": "2.0.*",
+    "codeception/codeception": "2.2.*",
     "codeception/specify": "0.*",
     "codeception/verify": "0.*"
   },
