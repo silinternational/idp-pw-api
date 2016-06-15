@@ -2,9 +2,9 @@
 namespace frontend\components;
 
 use yii\filters\AccessControl;
+use yii\filters\Cors;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
-use yii\filters\Cors;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\web\ForbiddenHttpException;

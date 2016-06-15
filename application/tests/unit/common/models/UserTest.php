@@ -1,15 +1,14 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\models\Method;
-use common\models\User;
-use common\models\Reset;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
-use yii\codeception\DbTestCase;
-
-use tests\unit\fixtures\common\models\UserFixture;
+use common\models\Method;
+use common\models\Reset;
+use common\models\User;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
+use tests\unit\fixtures\common\models\UserFixture;
+use yii\codeception\DbTestCase;
 
 /**
  * Class UserTest
