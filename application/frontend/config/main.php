@@ -52,11 +52,13 @@ return [
                 'GET /auth/login' => 'auth/login',
                 'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
+                'OPTIONS /auth/logout' => 'auth/options',
 
                 /*
                  * Config routes
                  */
                 'GET /config' => 'config/index',
+                'OPTIONS /config' => 'config/options',
 
                 /*
                  * Method routes
