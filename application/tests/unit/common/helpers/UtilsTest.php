@@ -158,15 +158,6 @@ class UtilsTest extends TestCase
         $this->assertFalse(Utils::isArrayEntryTruthy(['key' => null], 'key'));
         $this->assertFalse(Utils::isArrayEntryTruthy(['key' => 0], 'key'));
     }
-
-    public function testGetCurrentUser()
-    {
-        $this->assertNull(Utils::getCurrentUser());
-    }
-
     
-    
-    
-
     
 }

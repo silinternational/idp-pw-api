@@ -9,6 +9,7 @@ use Sil\IdpPw\Common\Auth\User as AuthUser;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -32,13 +33,13 @@ class AuthController extends BaseRestController
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['login'],
+                        'actions' => ['login', 'logout'],
                         'roles' => ['?'],
                     ],
                 ]
             ],
             'authenticator' => [
-                'except' => ['login'] // bypass authentication for /auth/login
+                'except' => ['login', 'logout'] // bypass authentication for /auth/login
             ]
         ]);
     }
@@ -153,43 +154,35 @@ class AuthController extends BaseRestController
 
     public function actionLogout()
     {
-        if (\Yii::$app->user->isGuest) {
+        $accessToken = \Yii::$app->request->get('access_token');
+        if ($accessToken !== null) {
             /*
-             * User not logged in, but lets kill session anyway and redirect to UI
+             * Clear access_token
              */
-            \Yii::$app->user->logout(true);
+            $user = User::findOne(['access_token' => $accessToken]);
+            $user->access_token = null;
+            $user->access_token_expiration = null;
+            if ( ! $user->save()) {
+                \Yii::error([
+                    'action' => 'user logout',
+                    'status' => 'error',
+                    'error' => Json::encode($user->getFirstErrors()),
+                ]);
+            }
 
-            return $this->redirect(\Yii::$app->params['uiUrl']);
-        }
+            /*
+             * Get AuthUser for call to auth component
+             */
+            $authUser = $user->getAuthUser();
 
-        /*
-         * Clear access_token
-         */
-        /** @var User $user */
-        $user = \Yii::$app->user->identity;
-        $user->access_token = null;
-        $user->access_token_expiration = null;
-        if ( ! $user->save()) {
-            throw new ServerErrorHttpException('Unable to log user out', 1465838419);
-        }
-
-        /*
-         * Get AuthUser for call to auth component
-         */
-        $authUser = $user->getAuthUser();
-
-        /*
-         * Kill local session
-         */
-        \Yii::$app->user->logout(true);
-
-        /*
-         * Log user out of IdP
-         */
-        try {
-            \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
-        } catch (RedirectException $e) {
-            return $this->redirect($e->getUrl());
+            /*
+             * Log user out of IdP
+             */
+            try {
+                \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
+            } catch (RedirectException $e) {
+                return $this->redirect($e->getUrl());
+            }
         }
 
         return $this->redirect(\Yii::$app->params['uiUrl']);
