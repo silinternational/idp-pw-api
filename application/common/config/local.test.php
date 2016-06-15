@@ -61,5 +61,11 @@ return [
             'class' => 'tests\mock\phone\Component',
             'codeLength' => 4,
         ],
+        'user' => [
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => false,
+            'enableSession' => false,
+            'loginUrl' => null,
+        ],
     ],
 ];

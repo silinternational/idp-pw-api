@@ -111,6 +111,7 @@ return [
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],
+        'accessTokenLifetime' => 1800, // 30 minutes
         'passwordLifetime' => 15552000, // 6 months
         'password' => [
             'minLength' => [

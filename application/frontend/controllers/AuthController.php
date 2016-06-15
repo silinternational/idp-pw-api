@@ -103,7 +103,7 @@ class AuthController extends BaseRestController
              */
             $user->access_token = $clientId . $accessToken;
             $user->access_token_expiration = Utils::getDatetime(
-                time() + \Yii::$app->user->absoluteAuthTimeout
+                time() + \Yii::$app->params['accessTokenLifetime']
             );
             if ( ! $user->save()) {
                 throw new ServerErrorHttpException('Unable to create access token', 1465833228);

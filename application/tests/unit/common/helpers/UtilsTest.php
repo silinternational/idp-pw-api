@@ -139,5 +139,34 @@ class UtilsTest extends TestCase
         $this->assertEquals($expectedSupport, $config['support']);
     }
 
+    public function testGetIso8601()
+    {
+        $expected = '2016-06-15T13:09:28+00:00';
+        $timestamp = 1465996168;
+
+        $this->assertEquals($expected, Utils::getIso8601($timestamp));
+    }
+
+    public function testIsArrayEntryTruthy()
+    {
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => true], 'key'));
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => 'string'], 'key'));
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => ['array']], 'key'));
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => 1], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => false], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => ''], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => null], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => 0], 'key'));
+    }
+
+    public function testGetCurrentUser()
+    {
+        $this->assertNull(Utils::getCurrentUser());
+    }
+
+    
+    
+    
+
     
 }
