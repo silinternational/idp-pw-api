@@ -12,7 +12,7 @@ class PasswordTest extends TestCase
     {
         $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
         $testData = $this->getTestData();
-        foreach($testData as $testCase) {
+        foreach ($testData as $testCase) {
             $strength = Utils::getZxcvbnScore($testCase['password']);
             $this->assertEquals(
                 $testCase['zxcvbnScore'], $strength['score'],
@@ -35,48 +35,48 @@ class PasswordTest extends TestCase
             $this->assertEquals(
                 $testCase['overall'],
                 $valid,
-                'Failed validating test case: '. $testCase['password']
+                'Failed validating test case: ' . $testCase['password']
             );
 
             $minLengthStatus = ! substr_count($validationErrorsString, 'code 100') > 0;
             $this->assertEquals(
                 $testCase['minLength'],
                 $minLengthStatus,
-                'Failed validating test case: '. $testCase['password']
+                'Failed validating test case: ' . $testCase['password']
             );
 
             $maxLengthStatus = ! substr_count($validationErrorsString, 'code 110') > 0;
             $this->assertEquals(
                 $testCase['maxLength'],
                 $maxLengthStatus,
-                'Failed validating test case: '. $testCase['password']
+                'Failed validating test case: ' . $testCase['password']
             );
 
             $minNumStatus = ! substr_count($validationErrorsString, 'code 120') > 0;
             $this->assertEquals(
                 $testCase['minNum'],
                 $minNumStatus,
-                'Failed validating test case: '. $testCase['password']
+                'Failed validating test case: ' . $testCase['password']
             );
 
             $minUpperStatus = ! substr_count($validationErrorsString, 'code 130') > 0;
             $this->assertEquals(
                 $testCase['minUpper'],
-                $minUpperStatus, 'Failed validating test case: '. $testCase['password']
+                $minUpperStatus, 'Failed validating test case: ' . $testCase['password']
             );
 
             $minSpecialStatus = ! substr_count($validationErrorsString, 'code 140') > 0;
             $this->assertEquals(
                 $testCase['minSpecial'],
                 $minSpecialStatus,
-                'Failed validating test case: '. $testCase['password']
+                'Failed validating test case: ' . $testCase['password']
             );
 
             $zxcvbnStatus = ! substr_count($validationErrorsString, 'code 150') > 0;
             $this->assertEquals(
                 $testCase['zxcvbnPass'],
                 $zxcvbnStatus,
-                'Failed validating test case: '. $testCase['password']
+                'Failed validating test case: ' . $testCase['password']
             );
         }
     }

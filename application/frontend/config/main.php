@@ -22,7 +22,7 @@ return [
             'loginUrl' => null,
         ],
         'session' => [
-            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
+            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
                 'lifetime' => $sessionLifetime,
                 'path' => '/',
                 'httponly' => true,
