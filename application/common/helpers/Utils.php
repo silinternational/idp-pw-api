@@ -59,6 +59,7 @@ class Utils
     /**
      * Check if user is logged in and if so return the identity model
      * @return null|\common\models\User
+     * @codeCoverageIgnore
      */
     public static function getCurrentUser()
     {
@@ -255,6 +256,7 @@ class Utils
      * @param string $ipAddress
      * @return bool
      * @throws \Exception
+     * @codeCoverageIgnore
      */
     public static function isRecaptchaResponseValid($verificationToken, $ipAddress)
     {
@@ -277,6 +279,7 @@ class Utils
      * Get Client IP address by looking through headers for proxied requests
      * @param Request $request
      * @return string
+     * @codeCoverageIgnore
      */
     public static function getClientIp(Request $request)
     {
@@ -320,6 +323,7 @@ class Utils
      * @param string $password
      * @return array
      * @throws \Exception
+     * @codeCoverageIgnore
      */
     public static function getZxcvbnScore($password)
     {

@@ -3,7 +3,7 @@ return [
     [
         'firstName' => 'First',
         'lastName' => 'Last',
-        'email' => 'first_last@domain.com',
+        'email' => 'first_last@organization.org',
         'employeeId' => '111111',
         'username' => 'first_last',
         'supervisorEmail' => 'supervisor@domain.org',

@@ -9,6 +9,7 @@ use yii\base\InvalidConfigException;
 /**
  * Class ZxcvbnPasswordValidator
  * @package common\helpers
+ * @codeCoverageIgnore
  */
 class ZxcvbnPasswordValidator extends Validator
 {
