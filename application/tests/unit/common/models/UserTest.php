@@ -74,7 +74,7 @@ class UserTest extends DbTestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1459974492);
-        $user = User::findOrCreate();
+        User::findOrCreate();
     }
 
     public function testFindOrCreateNew()
@@ -227,7 +227,7 @@ class UserTest extends DbTestCase
         // test exception after unsetting email
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1456690741);
-        $personnelUser = $user->getPersonnelUserFromInterface();
+        $user->getPersonnelUserFromInterface();
     }
 
     public function testFindIdentity()
