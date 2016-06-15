@@ -62,6 +62,7 @@ return [
             'codeLength' => 4,
         ],
         'user' => [
+            'class' => 'common\models\User',
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
             'enableSession' => false,
