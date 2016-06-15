@@ -68,5 +68,18 @@ return [
             'enableSession' => false,
             'loginUrl' => null,
         ],
+        'passwordStore' => [
+            'class' => '\Sil\IdpPw\PasswordStore\Ldap',
+            'host' => '',
+            'port' => 389,
+            'baseDn' => '',
+            'adminUsername' => '',
+            'adminPassword' => '',
+            'useTls' => true,
+            'useSsl' => false,
+            'employeeIdAttribute' => 'gisEisPersonId',
+            'passwordLastChangeDateAttribute' => 'pwdchangedtime',
+            'passwordExpireDateAttribute' => 'modifytimestamp',
+        ],
     ],
 ];

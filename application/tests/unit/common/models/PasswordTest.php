@@ -10,7 +10,7 @@ class PasswordTest extends TestCase
 
     public function testZxcvbn()
     {
-        $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
+        //$this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
         $testData = $this->getTestData();
         foreach($testData as $testCase) {
             $strength = Utils::getZxcvbnScore($testCase['password']);
@@ -23,7 +23,7 @@ class PasswordTest extends TestCase
 
     public function testValidation()
     {
-        $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
+        //$this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
         $testData = $this->getTestData();
 
         foreach ($testData as $testCase) {

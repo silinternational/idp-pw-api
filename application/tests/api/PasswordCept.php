@@ -37,7 +37,7 @@ $I->seeResponseCodeIs(404);
 $I = new ApiTester($scenario);
 $I->wantTo('check response when making authenticated put request');
 $I->haveHttpHeader('Authorization', 'Bearer user1');
-$I->sendPUT('/password',['password' => 'newPassword']);
+$I->sendPUT('/password',['password' => 'newPassword33']);
 $I->seeResponseCodeIs(200);
 
 $I = new ApiTester($scenario);
