@@ -1,7 +1,7 @@
 <?php
 
 $I = new ApiTester($scenario);
-$I->wantTo('check response');
+$I->wantTo('check response when making get request');
 $I->sendGET('/config');
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();

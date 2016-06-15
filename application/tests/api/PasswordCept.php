@@ -34,11 +34,11 @@ $I->sendPOST('/password');
 $I->seeResponseCodeIs(404);
 
 // this test will fail
-//$I = new ApiTester($scenario);
-//$I->wantTo('check response when making authenticated put request');
-//$I->haveHttpHeader('Authorization', 'Bearer user1');
-//$I->sendPUT('/password',['password' => 'newPassword']);
-//$I->seeResponseCodeIs(200);
+$I = new ApiTester($scenario);
+$I->wantTo('check response when making authenticated put request');
+$I->haveHttpHeader('Authorization', 'Bearer user1');
+$I->sendPUT('/password',['password' => 'newPassword']);
+$I->seeResponseCodeIs(200);
 
 $I = new ApiTester($scenario);
 $I->wantTo('check response when making authenticated delete request');
@@ -64,9 +64,8 @@ $I->haveHttpHeader('Authorization', 'Bearer user11');
 $I->sendPATCH('/password');
 $I->seeResponseCodeIs(404);
 
-// this test will fail
-//$I = new ApiTester($scenario);
-//$I->wantTo('check response when making authenticated options request');
-//$I->haveHttpHeader('Authorization', 'Bearer user11');
-//$I->sendOPTIONS('/password');
-//$I->seeResponseCodeIs(200);
+$I = new ApiTester($scenario);
+$I->wantTo('check response when making authenticated options request');
+$I->haveHttpHeader('Authorization', 'Bearer user11');
+$I->sendOPTIONS('/password');
+$I->seeResponseCodeIs(200);

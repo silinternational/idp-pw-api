@@ -54,14 +54,12 @@ $I->haveHttpHeader('Authorization', 'Bearer user1');
 $I->sendPATCH('/user/me');
 $I->seeResponseCodeIs(404);
 
-// this test will fail
 $I = new ApiTester($scenario);
 $I->wantTo('check response when making authenticated options request');
 $I->haveHttpHeader('Authorization', 'Bearer user1');
 $I->sendOPTIONS('/user/me');
 $I->seeResponseCodeIs(200);
 
-// this test will fail
 $I = new ApiTester($scenario);
 $I->wantTo('check response when making unauthenticated options request');
 $I->haveHttpHeader('Authorization', 'Bearer user1');

@@ -2,7 +2,10 @@
 
 namespace tests\api;
 
-use tests\codeception\common\fixtures\UserFixture;
+//use tests\codeception\common\fixtures\UserFixture;
+use tests\api\fixtures\UserFixture;
+use tests\api\fixtures\MethodFixture;
+use tests\api\fixtures\ResetFixture;
 use Codeception\Module;
 use yii\test\FixtureTrait;
 
@@ -54,6 +57,14 @@ class FixtureHelper extends Module
             'user' => [
                 'class' => UserFixture::className(),
                 'dataFile' => '@tests/api/fixtures/data/User.php',
+            ],
+            'method' => [
+                'class' => MethodFixture::className(),
+                'dataFile' => '@tests/api/fixtures/data/Method.php',
+            ],
+            'reset' => [
+                'class' => ResetFixture::className(),
+                'dataFile' => '@tests/api/fixtures/data/Reset.php',
             ],
         ];
     }
