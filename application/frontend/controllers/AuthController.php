@@ -160,28 +160,30 @@ class AuthController extends BaseRestController
              * Clear access_token
              */
             $user = User::findOne(['access_token' => $accessToken]);
-            $user->access_token = null;
-            $user->access_token_expiration = null;
-            if ( ! $user->save()) {
-                \Yii::error([
-                    'action' => 'user logout',
-                    'status' => 'error',
-                    'error' => Json::encode($user->getFirstErrors()),
-                ]);
-            }
+            if ($user != null) {
+                $user->access_token = null;
+                $user->access_token_expiration = null;
+                if (!$user->save()) {
+                    \Yii::error([
+                        'action' => 'user logout',
+                        'status' => 'error',
+                        'error' => Json::encode($user->getFirstErrors()),
+                    ]);
+                }
 
-            /*
-             * Get AuthUser for call to auth component
-             */
-            $authUser = $user->getAuthUser();
+                /*
+                 * Get AuthUser for call to auth component
+                 */
+                $authUser = $user->getAuthUser();
 
-            /*
-             * Log user out of IdP
-             */
-            try {
-                \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
-            } catch (RedirectException $e) {
-                return $this->redirect($e->getUrl());
+                /*
+                 * Log user out of IdP
+                 */
+                try {
+                    \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
+                } catch (RedirectException $e) {
+                    return $this->redirect($e->getUrl());
+                }
             }
         }
 

@@ -1,15 +1,14 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\models\Method;
-use common\models\User;
-use common\models\Reset;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
-use yii\codeception\DbTestCase;
-
-use tests\unit\fixtures\common\models\UserFixture;
+use common\models\Method;
+use common\models\Reset;
+use common\models\User;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
+use tests\unit\fixtures\common\models\UserFixture;
+use yii\codeception\DbTestCase;
 
 /**
  * Class UserTest
@@ -74,7 +73,7 @@ class UserTest extends DbTestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1459974492);
-        $user = User::findOrCreate();
+        User::findOrCreate();
     }
 
     public function testFindOrCreateNew()
@@ -227,7 +226,7 @@ class UserTest extends DbTestCase
         // test exception after unsetting email
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1456690741);
-        $personnelUser = $user->getPersonnelUserFromInterface();
+        $user->getPersonnelUserFromInterface();
     }
 
     public function testFindIdentity()
