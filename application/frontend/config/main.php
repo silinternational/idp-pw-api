@@ -96,6 +96,8 @@ return [
                  */
                 'GET /user/me' => 'user/me',
                 'OPTIONS /user/me' => 'user/options',
+
+                '/<url:.*>' => 'site/index',
             ]
         ]
     ],
