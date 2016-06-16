@@ -34,6 +34,8 @@ services:
         container_name: api
         volumes_from:
             - data
+        volumes:
+            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         ports:
             - "8080:80"
         depends_on:

@@ -47,19 +47,6 @@ class SiteController extends BaseRestController
         ]);
     }
 
-//    public function behaviors()
-//    {
-//        return ArrayHelper::merge(parent::behaviors(), [
-//            [
-//                'class' => 'yii\filters\ContentNegotiator',
-//                'formats' => [
-//                    'application/json' => Response::FORMAT_JSON,
-//                    'application/xml'  => Response::FORMAT_XML,
-//                ]
-//            ]
-//        ]);
-//    }
-
     /**
      * @inheritdoc
      */
@@ -78,10 +65,6 @@ class SiteController extends BaseRestController
             throw new UnauthorizedHttpException();
         }
         throw new MethodNotAllowedHttpException();
-        /**
-         * Redirect to Doorman UI
-         */
-        return $this->redirect(\Yii::$app->params['uiUrl'], 301);
     }
 
     public function actionSystemStatus()

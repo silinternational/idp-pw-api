@@ -1543,12 +1543,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "dacae71d57bef9a4b48d2beca71a4395db1d3098"
+                "reference": "33d330750cbd46739947966b6094f6149201b985"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/dacae71d57bef9a4b48d2beca71a4395db1d3098",
-                "reference": "dacae71d57bef9a4b48d2beca71a4395db1d3098",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/33d330750cbd46739947966b6094f6149201b985",
+                "reference": "33d330750cbd46739947966b6094f6149201b985",
                 "shasum": ""
             },
             "require": {
@@ -1576,7 +1576,7 @@
                 }
             ],
             "description": "LDAP Password Store component for IdP PW API",
-            "time": "2016-06-08 19:35:00"
+            "time": "2016-06-16 18:58:04"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -3164,16 +3164,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.4.5",
+            "version": "5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "744a50838ef373be00fb658ce9544905cf587c17"
+                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/744a50838ef373be00fb658ce9544905cf587c17",
-                "reference": "744a50838ef373be00fb658ce9544905cf587c17",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
+                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
                 "shasum": ""
             },
             "require": {
@@ -3238,7 +3238,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-15 07:20:05"
+            "time": "2016-06-16 06:01:15"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

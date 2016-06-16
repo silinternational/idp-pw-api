@@ -66,23 +66,12 @@ class AuthController extends BaseRestController
             /*
              * Grab client_id for use in token after successful login
              */
-            $clientId = \Yii::$app->request->get('client_id');
-            if ($clientId === null) {
-                $clientId = \Yii::$app->session->get('clientId');
-                if ($clientId === null) {
-                    throw new BadRequestHttpException('Missing client_id');
-                }
-            }
-            \Yii::$app->session->set('clientId', $clientId);
+            $clientId = $this->getClientIdOrFail();
 
             /*
              * Grab state for use in response after successful login
              */
-            $state = \Yii::$app->request->get('state');
-            if ($state === null) {
-                $state = \Yii::$app->session->get('state');
-            }
-            \Yii::$app->session->set('state', $state);
+            $state = $this->getRequestState();
 
             /** @var AuthUser $authUser */
             $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
@@ -94,35 +83,9 @@ class AuthController extends BaseRestController
              * Use employeeId since username or email could change.
              */
             $user = User::findOrCreate(null, null, $authUser->employeeId);
+            $accessToken = $user->createAccessToken($clientId);
 
-            /*
-             * Create access_token and update user
-             */
-            $accessToken = Utils::generateRandomString(32);
-            /*
-             * Store combination of clientId and accessToken for bearer auth
-             */
-            $user->access_token = $clientId . $accessToken;
-            $user->access_token_expiration = Utils::getDatetime(
-                time() + \Yii::$app->params['accessTokenLifetime']
-            );
-            if ( ! $user->save()) {
-                throw new ServerErrorHttpException('Unable to create access token', 1465833228);
-            }
-
-            /*
-             * Relay state holds the return to path from UI
-             */
-            $relayState = \Yii::$app->request->post('RelayState', '/');
-
-            /*
-             * build url to redirect user to
-             */
-            $afterLogin = $this->getAfterLoginUrl($relayState);
-            $url = $afterLogin . sprintf(
-                '?state=%s&token_type=Bearer&expires_in=%s&access_token=%s',
-                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
-            );
+            $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken);
 
             $log['status'] = 'success';
             \Yii::warning($log, 'application');
@@ -135,7 +98,7 @@ class AuthController extends BaseRestController
             /*
              * Redirect to UI
              */
-            return $this->redirect($url);
+            return $this->redirect($loginSuccessUrl);
 
         } catch (RedirectException $e) {
             /*
@@ -202,5 +165,64 @@ class AuthController extends BaseRestController
             $path = '';
         }
         return \Yii::$app->params['uiUrl'] . $path;
+    }
+
+    /**
+     * Get client_id from request or session and then store in session
+     * @return string
+     * @throws BadRequestHttpException
+     */
+    public function getClientIdOrFail()
+    {
+        $clientId = \Yii::$app->request->get('client_id');
+        if ($clientId === null) {
+            $clientId = \Yii::$app->session->get('clientId');
+            if ($clientId === null) {
+                throw new BadRequestHttpException('Missing client_id');
+            }
+        }
+        \Yii::$app->session->set('clientId', $clientId);
+
+        return $clientId;
+    }
+
+    /**
+     * Get state from request or session and then store in session
+     * @return string
+     */
+    public function getRequestState()
+    {
+        $state = \Yii::$app->request->get('state');
+        if ($state === null) {
+            $state = \Yii::$app->session->get('state');
+        }
+        \Yii::$app->session->set('state', $state);
+
+        return $state;
+    }
+
+    /**
+     * Build URL to redirect user to after successful login
+     * @param string $state
+     * @param string $accessToken
+     * @return string
+     */
+    public function getLoginSuccessRedirectUrl($state, $accessToken)
+    {
+        /*
+             * Relay state holds the return to path from UI
+             */
+        $relayState = \Yii::$app->request->post('RelayState', '/');
+
+        /*
+         * build url to redirect user to
+         */
+        $afterLogin = $this->getAfterLoginUrl($relayState);
+        $url = $afterLogin . sprintf(
+                '?state=%s&token_type=Bearer&expires_in=%s&access_token=%s',
+                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
+            );
+
+        return $url;
     }
 }
