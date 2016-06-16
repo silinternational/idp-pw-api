@@ -4,5 +4,5 @@ modules:
         - ApiHelper
         - tests\api\FixtureHelper
         - REST:
-            url: http://idp-pw-api.local:8080
+            url: http://api
             depends: PhpBrowser
