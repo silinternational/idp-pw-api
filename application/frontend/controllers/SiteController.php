@@ -2,32 +2,63 @@
 namespace frontend\controllers;
 
 use common\models\Reset;
+use frontend\components\BaseRestController;
 use Yii;
-use yii\web\Controller;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\web\MethodNotAllowedHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends BaseRestController
 {
 
     public $layout = false;
 
+    /**
+     * Access Control Filter
+     * REMEMBER: NEEDS TO BE UPDATED FOR EVERY ACTION
+     * @return array
+     */
     public function behaviors()
     {
         return ArrayHelper::merge(parent::behaviors(), [
-            [
-                'class' => 'yii\filters\ContentNegotiator',
-                'formats' => [
-                    'application/json' => Response::FORMAT_JSON,
-                    'application/xml'  => Response::FORMAT_XML,
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['system-status'],
+                        'roles' => ['?'],
+                    ],
                 ]
+            ],
+            'authenticator' => [
+                'except' => ['system-status'] // bypass authentication for /auth/login
             ]
         ]);
     }
+
+//    public function behaviors()
+//    {
+//        return ArrayHelper::merge(parent::behaviors(), [
+//            [
+//                'class' => 'yii\filters\ContentNegotiator',
+//                'formats' => [
+//                    'application/json' => Response::FORMAT_JSON,
+//                    'application/xml'  => Response::FORMAT_XML,
+//                ]
+//            ]
+//        ]);
+//    }
 
     /**
      * @inheritdoc
@@ -43,6 +74,10 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        if (\Yii::$app->user->isGuest) {
+            throw new UnauthorizedHttpException();
+        }
+        throw new MethodNotAllowedHttpException();
         /**
          * Redirect to Doorman UI
          */
