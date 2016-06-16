@@ -55,11 +55,12 @@ class AuthCest
     public function test5(ApiTester $I)
     {
         $I->wantTo('check response logging out when logged out');
+        $I->stopFollowingRedirects();
         $I->haveHttpHeader('Authorization', 'Bearer user22');
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(401);
         $I->sendGET('/auth/logout?access_token=user22');
-        $I->seeResponseCodeIs(401);
+        $I->seeResponseCodeIs(302);
         $I->haveHttpHeader('Authorization', 'Bearer user2');
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(401);

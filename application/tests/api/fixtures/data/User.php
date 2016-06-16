@@ -43,6 +43,8 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
+        'access_token' => 'user3',
+        'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
     'user4' => [
         'id' => 4,

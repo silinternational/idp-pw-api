@@ -79,7 +79,7 @@ class Password extends Model
             ],
             [
                 'password', ZxcvbnPasswordValidator::className(), 'minScore' => $this->config['zxcvbn']['minScore'],
-                'skipOnError' => false,
+                'skipOnError' => true,
                 'message' => \Yii::t(
                     'app',
                     'Your password does not meet the minimum strength of {minScore} (code 150)',

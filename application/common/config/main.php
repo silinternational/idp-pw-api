@@ -122,7 +122,7 @@ return [
             ],
             'maxLength' => [
                 'value' => 255,
-                'phpRegex' => '/.{0,255}/',
+                'phpRegex' => '/^.{0,255}$/',
                 'jsRegex' => '.{0,255}',
                 'enabled' => true
             ],

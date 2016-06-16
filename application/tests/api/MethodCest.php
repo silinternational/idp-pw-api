@@ -1,16 +1,9 @@
 <?php
 
+use tests\api\FixtureHelper;
 
-class MethodCest
+class MethodCest extends BaseCest
 {
-    public function _before(ApiTester $I)
-    {
-    }
-
-    public function _after(ApiTester $I)
-    {
-    }
-
     // tests
 
     public function test1(ApiTester $I)
@@ -63,10 +56,37 @@ class MethodCest
         ]);
     }
 
+    public function test62(ApiTester $I)
+    {
+        $I->wantTo('check response for only verified methods when making authenticated get request');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendGET('/method');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'id' => "11111111111111111111111111111111",
+            'type' => "phone",
+            'value' => "1,1234567890",
+        ]);
+        $I->seeResponseContainsJson([
+            'id' => "22222222222222222222222222222222",
+            'type' => "email",
+            'value' => "email-1456769679@domain.org",
+        ]);
+        $I->cantSeeResponseContainsJson([
+            'value' => 'email-1456769721@domain.org'
+        ]);
+        $I->cantSeeResponseContainsJson([
+            'value' => '1,1234567891'
+        ]);
+        $I->cantSeeResponseContainsJson([
+            'value' => 'email-145676972@domain.org'
+        ]);
+    }
+
     public function test7(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated post request');
-        $I->sendPOST('/method',['type'=>'email','value'=>'shep@gmail.com']);
+        $I->sendPOST('/method',['type'=>'email','value'=>'user@domain.com']);
         $I->seeResponseCodeIs(401);
     }
 
@@ -74,11 +94,23 @@ class MethodCest
     {
         $I->wantTo('check response when making authenticated post request');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/method',['type'=>'email','value'=>'shep@gmail.com']);
+        $I->sendPOST('/method',['type'=>'email','value'=>'user@domain.com']);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'type' => "email",
-            'value' => "shep@gmail.com"
+            'value' => "user@domain.com"
+        ]);
+    }
+
+    public function test82(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated post request for existing method');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPOST('/method',['type'=>'phone','value'=>'1,1234567890']);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'type' => "phone",
+            'value' => "1,1234567890"
         ]);
     }
 
@@ -104,15 +136,10 @@ class MethodCest
 
     public function test11(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated get request');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->wantTo('check response when making authenticated get request as other user');
+        $I->haveHttpHeader('Authorization', 'Bearer user2');
         $I->sendGET('/method/11111111111111111111111111111111');
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
-            'id' => "11111111111111111111111111111111",
-            'type' => "phone",
-            'value' => "1,1234567890"
-        ]);
+        $I->seeResponseCodeIs(404);
     }
 
     public function test12(ApiTester $I)
@@ -139,7 +166,7 @@ class MethodCest
 
     public function test15(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated put request');
+        $I->wantTo('check response when making authenticated put request with valid code to a validated method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/11111111111111111111111111111111',['code'=>'1234']);
         $I->seeResponseCodeIs(200);
@@ -148,6 +175,79 @@ class MethodCest
             'type' => "phone",
             'value' => "1,1234567890"
         ]);
+    }
+
+    public function test152(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated put request as other user');
+        $I->haveHttpHeader('Authorization', 'Bearer user2');
+        $I->sendPUT('/method/11111111111111111111111111111111',['code'=>'1234']);
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test153(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated put request with invalid code and expired verification time');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPUT('/method/33333333333333333333333333333333',['code'=>'13245']);
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test154(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated put request with invalid code and unexpired verification time');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+    }
+
+    public function test155(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated put request with valid code to an unvalidated method');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'123456789']);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'id' => "33333333333333333333333333333335",
+            'type' => "email",
+            'value' => "email-145676972@domain.org"
+        ]);
+    }
+
+    public function test156(ApiTester $I)
+    {
+        $I->wantTo('check response when making unauthenticated put request with valid code to an unvalidated method');
+        $I->haveHttpHeader('Authorization', 'Bearer user2');
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'123456789']);
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test157(ApiTester $I)
+    {
+        $I->wantTo('check response when making multiple authenticated put request with invalid code and unexpired verification time');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(400);
+        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->seeResponseCodeIs(429);
     }
 
     public function test16(ApiTester $I)
@@ -163,6 +263,14 @@ class MethodCest
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendDELETE('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(200);
+    }
+
+    public function test172(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated delete request as other user');
+        $I->haveHttpHeader('Authorization', 'Bearer user2');
+        $I->sendDELETE('/method/11111111111111111111111111111111');
+        $I->seeResponseCodeIs(404);
     }
 
     public function test18(ApiTester $I)
