@@ -9,6 +9,7 @@ use yii\base\InvalidConfigException;
 /**
  * Class ZxcvbnPasswordValidator
  * @package common\helpers
+ * @codeCoverageIgnore
  */
 class ZxcvbnPasswordValidator extends Validator
 {
@@ -28,7 +29,7 @@ class ZxcvbnPasswordValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!in_array($this->minScore, [1, 2, 3, 4])) {
+        if ( ! in_array($this->minScore, [1, 2, 3, 4])) {
             throw new InvalidConfigException('The "minScore" property must be in range 1-4.');
         }
 
@@ -42,10 +43,9 @@ class ZxcvbnPasswordValidator extends Validator
         $score = ArrayHelper::getValue($strength, 'score');
 
         if ($score < $this->minScore) {
-            $message = $this->message !== null ? $this->message :
-                \Yii::t(
+            $message = $this->message !== null ? $this->message : \Yii::t(
                     'application',
-                    'Password did not meet minimum strength of {minScore}.'.
+                    'Password did not meet minimum strength of {minScore}.' .
                     'Try adding some words but avoid common phrases.',
                     ['minScore' => $this->minScore]
                 );

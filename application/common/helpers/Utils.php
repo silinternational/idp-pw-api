@@ -47,47 +47,6 @@ class Utils
     }
 
     /**
-     * Utility function to extract attribute values from SAML attributes and
-     * return as a simple array
-     * @param $attributes array the SAML attributes returned
-     * @param $map array configuration map of attribute names with field and element values
-     * @return array
-     */
-    public static function extractSamlAttributes($attributes, $map)
-    {
-        $attrs = [];
-
-        foreach ($map as $attr => $details) {
-            if (isset($details['element'])) {
-                if (isset($attributes[$details['field']][$details['element']])) {
-                    $attrs[$attr] = $attributes[$details['field']][$details['element']];
-                }
-            } else {
-                if (isset($attributes[$details['field']])) {
-                    $attrs[$attr] = $attributes[$details['field']];
-                }
-            }
-        }
-
-        return $attrs;
-    }
-
-    /**
-     * Check if given array of $attributes includes all keys from $map
-     * @param array $attributes
-     * @param array $map
-     * @throws \Exception
-     */
-    public static function assertHasRequiredSamlAttributes($attributes, $map)
-    {
-        foreach ($map as $key => $value) {
-            if ( ! array_key_exists($key, $attributes)) {
-                throw new \Exception(sprintf('SAML attributes missing attribute: %s', $key), 1454436522);
-            }
-        }
-    }
-
-    /**
      * @param array $array
      * @param string $key
      * @return bool
@@ -100,6 +59,7 @@ class Utils
     /**
      * Check if user is logged in and if so return the identity model
      * @return null|\common\models\User
+     * @codeCoverageIgnore
      */
     public static function getCurrentUser()
     {
@@ -296,6 +256,7 @@ class Utils
      * @param string $ipAddress
      * @return bool
      * @throws \Exception
+     * @codeCoverageIgnore
      */
     public static function isRecaptchaResponseValid($verificationToken, $ipAddress)
     {
@@ -318,6 +279,7 @@ class Utils
      * Get Client IP address by looking through headers for proxied requests
      * @param Request $request
      * @return string
+     * @codeCoverageIgnore
      */
     public static function getClientIp(Request $request)
     {
@@ -361,6 +323,7 @@ class Utils
      * @param string $password
      * @return array
      * @throws \Exception
+     * @codeCoverageIgnore
      */
     public static function getZxcvbnScore($password)
     {

@@ -30,7 +30,10 @@ class ResetController extends BaseRestController
                         'roles' => ['?'],
                     ],
                 ]
-            ]
+            ],
+            'authenticator' => [
+                'only' => [''], // Bypass authentication for all actions
+            ],
         ]);
     }
 
@@ -60,19 +63,19 @@ class ResetController extends BaseRestController
         $username = \Yii::$app->request->post('username');
         $verificationToken = \Yii::$app->request->post('verification_token');
 
-//        if ( ! $username || ! $verificationToken) {
-//            throw new BadRequestHttpException('Missing username or verification_token');
-//        }
-//
-//        /*
-//         * Validate reCaptcha $verificationToken before proceeding.
-//         * This will throw an exception if not successful, checking response to
-//         * be double sure an exception is thrown.
-//         */
-//        $clientIp = Utils::getClientIp(\Yii::$app->request);
-//        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
-//            throw new BadRequestHttpException('reCaptcha failed verification');
-//        }
+        if ( ! $username || ! $verificationToken) {
+            throw new BadRequestHttpException('Missing username or verification_token');
+        }
+
+        /*
+         * Validate reCaptcha $verificationToken before proceeding.
+         * This will throw an exception if not successful, checking response to
+         * be double sure an exception is thrown.
+         */
+        $clientIp = Utils::getClientIp(\Yii::$app->request);
+        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            throw new BadRequestHttpException('reCaptcha failed verification');
+        }
 
         /*
          * Check if $username looks like an email address

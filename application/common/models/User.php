@@ -10,6 +10,7 @@ use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class User
@@ -59,7 +60,7 @@ class User extends UserBase implements IdentityInterface
             'last_name',
             'idp_username',
             'email',
-            'password_meta' => function ($model) {
+            'password_meta' => function($model) {
                 return $model->getPasswordMeta();
             }
         ];
@@ -297,7 +298,7 @@ class User extends UserBase implements IdentityInterface
      * Finds an identity by the given ID.
      *
      * @param string|integer $id the ID to be looked for
-     * @return IdentityInterface|null the identity object that matches the given ID.
+     * @return User|null the identity object that matches the given ID.
      */
     public static function findIdentity($id)
     {
@@ -306,14 +307,15 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Finds an identity by the given token.
-     * This method is not supported in this app right now but is required by Yii IdentityInterface
      *
      * @param string $token the token to be looked for
-     * @return IdentityInterface|null the identity object that matches the given token.
+     * @return User|null the identity object that matches the given token.
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return null;
+        return static::find()->where(['access_token' => $token])
+            ->andWhere(['>', 'access_token_expiration', Utils::getDatetime()])
+            ->one();
     }
 
     /**
@@ -377,10 +379,53 @@ class User extends UserBase implements IdentityInterface
 
     public function getPasswordMeta()
     {
-        $thisUser = User::findOne(['id' => $this->id]);
+        $thisUser = self::findOne(['id' => $this->id]);
         return [
             'last_changed' => Utils::getIso8601($thisUser->pw_last_changed),
             'expires' => Utils::getIso8601($thisUser->pw_expires),
         ];
+    }
+
+    /**
+     * @param string $newPassword
+     * @throws ServerErrorHttpException
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function setPassword($newPassword)
+    {
+        $password = Password::create($newPassword);
+        $password->save($this->employee_id);
+
+        $this->pw_last_changed = Utils::getDatetime();
+        $this->pw_expires = Utils::getDatetime(time() + \Yii::$app->params['passwordLifetime']);
+        
+        if ( ! $this->save()) {
+            throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
+        }
+    }
+
+    /**
+     * @param string $clientId
+     * @return string
+     * @throws ServerErrorHttpException
+     */
+    public function createAccessToken($clientId)
+    {
+        /*
+             * Create access_token and update user
+             */
+        $accessToken = Utils::generateRandomString(32);
+        /*
+         * Store combination of clientId and accessToken for bearer auth
+         */
+        $this->access_token = $clientId . $accessToken;
+        $this->access_token_expiration = Utils::getDatetime(
+            time() + \Yii::$app->params['accessTokenLifetime']
+        );
+        if ( ! $this->save()) {
+            throw new ServerErrorHttpException('Unable to create access token', 1465833228);
+        }
+
+        return $accessToken;
     }
 }

@@ -41,7 +41,8 @@ rmTestDb:
 upTestDb:
 	docker-compose up -d testDb
 
-bounce: start
+bounce:
+	docker-compose up -d api
 
 clean:
 	docker-compose kill

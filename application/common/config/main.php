@@ -22,6 +22,7 @@ $idpUsernameHint = Env::get('IDP_USERNAME_HINT', $idpName . ' username, ex: firs
 $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
+$uiCorsOrigin = Env::get('UI_CORS_ORIGIN');
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
 $supportPhone = Env::get('SUPPORT_PHONE');
@@ -102,14 +103,16 @@ return [
         'fromEmail' => $fromEmail,
         'fromName' => $fromName,
         'helpCenterUrl' => $helpCenterUrl,
-        'ui_url' => $uiUrl,
+        'uiUrl' => $uiUrl,
+        'uiCorsOrigin' => $uiCorsOrigin,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
             'disableDuration' => 900, // 15 minutes
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],
-        'passwordLifetime' => 15552000, // 6 months
+        'accessTokenLifetime' => 1800, // 30 minutes
+        'passwordLifetime' => 31104000, // 12 months
         'password' => [
             'minLength' => [
                 'value' => 10,
@@ -119,7 +122,7 @@ return [
             ],
             'maxLength' => [
                 'value' => 255,
-                'phpRegex' => '/.{0,255}/',
+                'phpRegex' => '/^.{0,255}$/',
                 'jsRegex' => '.{0,255}',
                 'enabled' => true
             ],

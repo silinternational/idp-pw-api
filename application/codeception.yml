@@ -22,7 +22,3 @@ coverage:
             - common/*
             - console/*
             - frontend/*
-    blacklist:
-        include:
-            - vendor/*
-            - tests/*
