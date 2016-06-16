@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\Password;
+use common\models\User;
 use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -52,10 +53,11 @@ class PasswordController extends BaseRestController
             throw new BadRequestHttpException('Password is required');
         }
 
-        $password = Password::create($newPassword);
-        $password->save(\Yii::$app->user->getId());
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+        $user->setPassword($newPassword);
 
-        return \Yii::$app->user->identity->getPasswordMeta();
+        return $user->getPasswordMeta();
     }
 
     

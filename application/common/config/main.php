@@ -112,7 +112,7 @@ return [
             'maxAttempts' => 10,
         ],
         'accessTokenLifetime' => 1800, // 30 minutes
-        'passwordLifetime' => 15552000, // 6 months
+        'passwordLifetime' => 31104000, // 12 months
         'password' => [
             'minLength' => [
                 'value' => 10,
