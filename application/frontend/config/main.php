@@ -97,6 +97,14 @@ return [
                 'GET /user/me' => 'user/me',
                 'OPTIONS /user/me' => 'user/options',
 
+                /*
+                 * Status route
+                 */
+                'GET /site/system-status' => 'site/system-status',
+
+                /*
+                 * Catch all to throw 401 or 405
+                 */
                 '/<url:.*>' => 'site/index',
             ]
         ]

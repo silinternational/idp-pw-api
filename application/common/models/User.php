@@ -403,4 +403,29 @@ class User extends UserBase implements IdentityInterface
             throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
         }
     }
+
+    /**
+     * @param string $clientId
+     * @return string
+     * @throws ServerErrorHttpException
+     */
+    public function createAccessToken($clientId)
+    {
+        /*
+             * Create access_token and update user
+             */
+        $accessToken = Utils::generateRandomString(32);
+        /*
+         * Store combination of clientId and accessToken for bearer auth
+         */
+        $this->access_token = $clientId . $accessToken;
+        $this->access_token_expiration = Utils::getDatetime(
+            time() + \Yii::$app->params['accessTokenLifetime']
+        );
+        if ( ! $this->save()) {
+            throw new ServerErrorHttpException('Unable to create access token', 1465833228);
+        }
+
+        return $accessToken;
+    }
 }
