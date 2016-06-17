@@ -3,7 +3,6 @@
 use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieKey = Env::get('FRONT_COOKIE_KEY');
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', false);
 
 $sessionLifetime = 1800; // 30 minutes
@@ -19,11 +18,11 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
-            'authTimeout' => $sessionLifetime,
-            'absoluteAuthTimeout' => $sessionLifetime,
+            'enableSession' => false,
+            'loginUrl' => null,
         ],
         'session' => [
-            'cookieParams' => [ // http://us2.php.net/manual/en/function.session-set-cookie-params.php
+            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
                 'lifetime' => $sessionLifetime,
                 'path' => '/',
                 'httponly' => true,
@@ -37,16 +36,14 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'enableCookieValidation' => true,
             'enableCsrfValidation' => false,
-            'cookieValidationKey' => $frontCookieKey,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
                 /*
@@ -55,11 +52,13 @@ return [
                 'GET /auth/login' => 'auth/login',
                 'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
+                'OPTIONS /auth/logout' => 'auth/options',
 
                 /*
                  * Config routes
                  */
                 'GET /config' => 'config/index',
+                'OPTIONS /config' => 'config/options',
 
                 /*
                  * Method routes
@@ -96,7 +95,17 @@ return [
                  * User  routes
                  */
                 'GET /user/me' => 'user/me',
+                'OPTIONS /user/me' => 'user/options',
 
+                /*
+                 * Status route
+                 */
+                'GET /site/system-status' => 'site/system-status',
+
+                /*
+                 * Catch all to throw 401 or 405
+                 */
+                '/<url:.*>' => 'site/index',
             ]
         ]
     ],

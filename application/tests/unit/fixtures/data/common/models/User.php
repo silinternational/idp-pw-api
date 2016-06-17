@@ -1,5 +1,7 @@
 <?php
 
+use common\helpers\Utils;
+
 return [
     'user1' => [
         'id' => 1,
@@ -13,6 +15,8 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
+        'access_token' => 'user1',
+        'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
     'user2' => [
         'id' => 2,
@@ -26,6 +30,8 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
+        'access_token' => 'user2',
+        'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
     'user3' => [
         'id' => 3,
@@ -39,5 +45,7 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
+        'access_token' => 'user3',
+        'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
 ];
