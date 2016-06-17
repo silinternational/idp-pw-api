@@ -28,4 +28,4 @@
 - name: deploy_production_api
   service: ecsdeploy
   tag: master
-  command: "-c insite-pw -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 300"
+  command: "-c idp-pw-production -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 300"
