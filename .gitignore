@@ -11,3 +11,4 @@ local.env
 
 # other files
 /application/ocular.phar
+phpinfo.php
