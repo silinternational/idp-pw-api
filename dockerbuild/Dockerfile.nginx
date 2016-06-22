@@ -1,0 +1,6 @@
+FROM nginx:1.10-alpine
+
+COPY dockerbuild/nginx.conf /etc/nginx/nginx.conf
+COPY dockerbuild/site.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80

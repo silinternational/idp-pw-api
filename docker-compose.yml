@@ -29,20 +29,33 @@ services:
            MYSQL_USER: idpmgmt
            MYSQL_PASSWORD: idpmgmt
 
-    api:
-        build: ./
-        container_name: api
+    nginx:
+        build:
+            context: ./
+            dockerfile: ./dockerbuild/Dockerfile.nginx
+        depends_on:
+            - php
+        links:
+            - php
+        ports:
+            - "8080:80"
+
+    php:
+        build:
+            context: ./
+            dockerfile: ./dockerbuild/Dockerfile.php-fpm
         volumes_from:
             - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         ports:
-            - "8080:80"
+            - "9000"
         depends_on:
             - db
         env_file:
             - ./common.env
             - ./local.env
+        command: php-fpm7
 
     cli:
         image: silintl/php7:latest

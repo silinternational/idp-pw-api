@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ash
 
 if [[ "x" == "x$LOGENTRIES_KEY" ]]; then
     echo "Missing LOGENTRIES_KEY environment variable";
@@ -14,4 +14,4 @@ fi
 /data/yii migrate --interactive=0 --migrationPath=console/migrations-local
 
 # Run apache in foreground
-apache2ctl -D FOREGROUND
+php-fpm7 -F

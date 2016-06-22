@@ -1,0 +1,49 @@
+FROM alpine:latest
+
+RUN apk update
+RUN apk add rsyslog
+RUN apk add curl php7 php7-ctype php7-curl php7-dom php7-fpm php7-intl php7-json php7-ldap php7-mbstring \
+            php7-mcrypt php7-openssl php7-pdo_mysql php7-phar php7-session php7-zip php7-zlib \
+    --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+    && ln -s /usr/bin/php7 /usr/bin/php
+
+# Install extra utils
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/bin/composer \
+    && chmod a+x /usr/bin/composer \
+    && composer global require fxp/composer-asset-plugin:^1.1.4 \
+    && curl -o /usr/bin/whenavail https://bitbucket.org/silintl/docker-whenavail/raw/master/whenavail \
+    && chmod a+x /usr/bin/whenavail \
+    && curl -o /usr/bin/s3-expand https://raw.githubusercontent.com/silinternational/s3-expand/master/expand.sh \
+    && chmod a+x /usr/bin/s3-expand
+
+COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
+RUN mkdir -p /opt/ssl
+COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
+
+RUN mkdir -p /data
+WORKDIR /data
+
+COPY application/composer.json /data/
+COPY application/composer.lock /data/
+COPY application/vendor /data/
+
+# Install/cleanup composer dependencies
+RUN composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader
+
+# It is expected that /data is = application/ in project folder
+COPY application/ /data/
+
+# Fix folder permissions
+RUN chown -R nobody:nobody \
+    console/runtime/ \
+    frontend/runtime/ \
+    frontend/web/assets/
+
+COPY dockerbuild/php-fpm.conf /etc/php7/php-fpm.conf
+COPY dockerbuild/www.conf /etc/php7/php-fpm.d/www.conf
+COPY dockerbuild/php.ini /etc/php7/php.ini
+
+EXPOSE 9000
+#ENTRYPOINT ["s3-expand"]
+CMD ["/data/run.sh"]

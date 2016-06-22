@@ -4,7 +4,7 @@ test: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
 api: upDb composer yiimigrate yiimigratelocal
-	docker-compose up -d api zxcvbn
+	docker-compose up -d nginx php zxcvbn
 
 composer:
 	docker-compose run --rm --user="0:0" cli composer install
@@ -42,7 +42,7 @@ upTestDb:
 	docker-compose up -d testDb
 
 bounce:
-	docker-compose up -d api
+	docker-compose up -d php
 
 clean:
 	docker-compose kill
