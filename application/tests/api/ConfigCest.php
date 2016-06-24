@@ -10,12 +10,10 @@ class ConfigCest extends BaseCest
         $I->sendGET('/config');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['idpName' => 'SIL']);
-        $I->seeResponseContainsJson([
-            'support' => [
-                'email' => 'info@insitehome.org',
-            ]
-        ]);
+        $body = json_decode($I->grabResponse(), true);
+        if ( ! array_key_exists('idpName', $body) || ! array_key_exists('support', $body)) {
+            throw new \Exception('Config response does not include keys expected', 1466799197);
+        }
     }
 
     public function test12(ApiTester $I)
@@ -25,12 +23,10 @@ class ConfigCest extends BaseCest
         $I->sendGET('/config');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['idpName' => 'SIL']);
-        $I->seeResponseContainsJson([
-            'support' => [
-                'email' => 'info@insitehome.org',
-            ]
-        ]);
+        $body = json_decode($I->grabResponse(), true);
+        if ( ! array_key_exists('idpName', $body) || ! array_key_exists('support', $body)) {
+            throw new \Exception('Config response does not include keys expected', 1466799198);
+        }
     }
 
     public function test2(ApiTester $I)

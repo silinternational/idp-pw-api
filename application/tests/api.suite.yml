@@ -6,7 +6,7 @@ modules:
         - ApiHelper
         - tests\api\FixtureHelper
         - REST:
-            url: http://apitest/index-test.php
+            url: http://localhost/index-test.php
             depends: PhpBrowser
     coverage:
       #c3_url: 'http://apitest/index-test.php/'

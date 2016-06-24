@@ -99,33 +99,36 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when changing the password (PUT request) to something that does not meet minLength requirement');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'newPasswo']);
+        $I->sendPUT('/password',['password' => 'A!dswo']);
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
-            'message' => 'New password validation failed: Your password does not meet the minimum length of 10 (code 100), Your password must contain at least 2 numbers (code 120)'
-        ]);
+        $body = json_decode($I->grabResponse(), true);
+        if (substr_count($body['message'], 'code 100') <= 0) {
+            throw new \Exception('Expected error code not present in message', 1466798390);
+        }
     }
 
     public function test13(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that does not meet minNumber requirement');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'asdfasdfasdfasdf1']);
+        $I->sendPUT('/password',['password' => 'A!sdfasdfasdfasdf1']);
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
-            'message' => 'New password validation failed: Your password must contain at least 2 numbers (code 120)'
-        ]);
+        $body = json_decode($I->grabResponse(), true);
+        if (substr_count($body['message'], 'code 120') <= 0) {
+            throw new \Exception('Expected error code not present in message', 1466798391);
+        }
     }
 
     public function test15(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 1');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'asdfgh1234']);
+        $I->sendPUT('/password',['password' => 'Je$u$12345']);
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
-            'message' => 'New password validation failed: Your password does not meet the minimum strength of 2 (code 150)'
-        ]);
+        $body = json_decode($I->grabResponse(), true);
+        if (substr_count($body['message'], 'code 150') <= 0) {
+            throw new \Exception('Expected error code not present in message', 1466798392);
+        }
     }
 
 //    public function test16(ApiTester $I)
@@ -150,8 +153,9 @@ class PasswordCest extends BaseCest
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/password',['password' => 'Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non123. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehi. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehi']);
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
-            'message' => 'New password validation failed: Your password exceeds the maximum length of 255 (code 110)'
-        ]);
+        $body = json_decode($I->grabResponse(), true);
+        if (substr_count($body['message'], 'code 110') <= 0) {
+            throw new \Exception('Expected error code not present in message', 1466798393);
+        }
     }
 }
