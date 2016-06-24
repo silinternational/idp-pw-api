@@ -44,6 +44,24 @@ services:
             - ./common.env
             - ./local.env
 
+    apitest:
+        build:
+            context: ./
+            dockerfile: Dockerfile-apitest
+        container_name: apitest
+        volumes_from:
+            - data
+        volumes:
+            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+            - ./dockerbuild/php.ini:/etc/php/7.0/apache2/php.ini
+        ports:
+            - "8000:80"
+        depends_on:
+            - db
+        env_file:
+            - ./common.env
+            - ./local.env
+
     cli:
         image: silintl/php7:latest
         container_name: cli
@@ -52,7 +70,7 @@ services:
         volumes:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
-        user: "${DOCKER_UIDGID}"
+        #user: "${DOCKER_UIDGID}"
         env_file:
             - ./common.env
             - ./local.env

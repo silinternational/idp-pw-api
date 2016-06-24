@@ -3,6 +3,11 @@ start: api
 test: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
+testapi: upDb
+	docker-compose up -d apitest
+	docker-compose up -d api zxcvbn
+	docker-compose run --rm cli bash -c './vendor/bin/codecept run api'
+
 api: upDb composer yiimigrate yiimigratelocal
 	docker-compose up -d api zxcvbn
 

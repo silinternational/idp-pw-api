@@ -12,6 +12,13 @@ class ResetCest extends BaseCest
         $I->seeResponseCodeIs(405);
     }
 
+    public function test2(ApiTester $I)
+    {
+        $I->wantTo('check response when making unauthenticated GET request to /reset');
+        $I->sendGET('/reset');
+        $I->seeResponseCodeIs(401);
+    }
+
     public function test12(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to /reset');
@@ -34,20 +41,6 @@ class ResetCest extends BaseCest
         $I->seeResponseCodeIs(200);
     }
 
-    public function test15(ApiTester $I)
-    {
-        $I->wantTo('check response when making authenticated OPTIONS request to /reset');
-        $I->sendOPTIONS('/reset');
-        $I->seeResponseCodeIs(200);
-    }
-
-    public function test2(ApiTester $I)
-    {
-        $I->wantTo('check response when making unauthenticated GET request to /reset');
-        $I->sendGET('/reset');
-        $I->seeResponseCodeIs(401);
-    }
-
     public function test3(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request for obtaining reset object');
@@ -65,14 +58,23 @@ class ResetCest extends BaseCest
 
     public function test4(ApiTester $I)
     {
-        $I->wantTo('check response when making unauthenticated GET request for obtaining reset object');
+        $I->wantTo('check response when making unauthenticated GET request for obtaining reset object and verify methods are masked out');
         $I->sendGET('/reset/11111111111111111111111111111111');
         $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'uid' => "11111111111111111111111111111111",
+            'methods' => [
+                'type' => "primary",
+                'value' => "f****_l**t@o***********.o**",
+                'type' => "spouse",
+                'value' => "s****e@d*****.o**",
+            ]
+        ]);
     }
 
     public function test5(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated PUT request for updating a reset object');
+        $I->wantTo('check response when making PUT request for updating a reset object method');
         $I->sendPUT('/reset/11111111111111111111111111111111',[
             'uid' => '22222222222222222222222222222222',
             'type' => 'phone',
@@ -83,7 +85,7 @@ class ResetCest extends BaseCest
 
     public function test6(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated PUT request for updating a reset object');
+        $I->wantTo('check response when making PUT request for updating a reset object method supervisor');
         $I->sendPUT('/reset/11111111111111111111111111111111',[
             'type' => 'supervisor',
             'value' => '****@sil.com'
@@ -126,7 +128,6 @@ class ResetCest extends BaseCest
         $I->sendPUT('/reset/11111111111111111111111111111111/resend');
         $I->seeResponseCodeIs(200);
     }
-
 
     public function test8(ApiTester $I)
     {

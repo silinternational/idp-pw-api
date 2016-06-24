@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
   # information on available options.
 
   # Set synced folder permissions
-  config.vm.synced_folder "./", "/vagrant", :mount_options => [ "dmode=755,fmode=755," ]
+  config.vm.synced_folder "./", "/vagrant", :mount_options => [ "dmode=755,fmode=755," ], owner: 33, group: 33
 
   # This provisioner runs on the first `vagrant up`.
   config.vm.provision "install", type: "shell", inline: <<-SHELL

@@ -8,3 +8,13 @@ paths:
 
 settings:
   colors: true
+
+coverage:
+  #c3_url: 'http://apitest/index-test.php/'
+  enabled: true
+  remote: true
+#  include:
+#    - ../frontend/controllers/*
+
+config:
+  #test_entry_url: http://apitest/index-test.php

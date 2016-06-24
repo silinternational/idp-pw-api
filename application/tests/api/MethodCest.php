@@ -43,19 +43,6 @@ class MethodCest extends BaseCest
 
     public function test6(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated GET request for obtaining the methods of a user');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendGET('/method');
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
-            'id' => "11111111111111111111111111111111",
-            'type' => "phone",
-            'value' => "1,1234567890",
-        ]);
-    }
-
-    public function test62(ApiTester $I)
-    {
         $I->wantTo('check response that only verified methods exist when making authenticated GET request for obtaining the methods of a user');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendGET('/method');

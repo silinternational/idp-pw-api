@@ -1,8 +1,18 @@
 class_name: ApiTester
+paths:
+    log: _output
 modules:
     enabled:
         - ApiHelper
         - tests\api\FixtureHelper
         - REST:
-            url: http://api
+            url: http://apitest/index-test.php
             depends: PhpBrowser
+    coverage:
+      #c3_url: 'http://apitest/index-test.php/'
+      enabled: true
+      remote: true
+      #remote_config: '../../codeception.yml'
+      include:
+          - common/*
+          - frontend/*
