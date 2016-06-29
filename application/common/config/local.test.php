@@ -61,21 +61,8 @@ return [
             'class' => 'tests\mock\phone\Component',
             'codeLength' => 4,
         ],
-//        'user' => [
-//            'class' => 'common\models\User',
-//        ],
         'passwordStore' => [
-            'class' => '\Sil\IdpPw\PasswordStore\Ldap',
-            'host' => '',
-            'port' => 389,
-            'baseDn' => '',
-            'adminUsername' => '',
-            'adminPassword' => '',
-            'useTls' => true,
-            'useSsl' => false,
-            'employeeIdAttribute' => 'gisEisPersonId',
-            'passwordLastChangeDateAttribute' => 'pwdchangedtime',
-            'passwordExpireDateAttribute' => 'modifytimestamp',
+            'class' => 'tests\mock\passwordstore\Component',
         ],
     ],
 ];

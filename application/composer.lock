@@ -1503,12 +1503,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "1ec4036d8e55f293b8e34b8e825222d3b4570940"
+                "reference": "f5592d97cf6f9b283e318885997cb6e490a3a381"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/1ec4036d8e55f293b8e34b8e825222d3b4570940",
-                "reference": "1ec4036d8e55f293b8e34b8e825222d3b4570940",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/f5592d97cf6f9b283e318885997cb6e490a3a381",
+                "reference": "f5592d97cf6f9b283e318885997cb6e490a3a381",
                 "shasum": ""
             },
             "require": {
@@ -1535,7 +1535,7 @@
                 }
             ],
             "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-05-17 14:07:11"
+            "time": "2016-06-29 20:20:03"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
