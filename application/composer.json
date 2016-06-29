@@ -26,8 +26,7 @@
     "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
     "silinternational/zxcvbn-api-client-php": "dev-master",
     "google/recaptcha": "^1.1.2",
-    "adldap2/adldap2": "dev-master",
-    "codeception/c3": "2.*"
+    "adldap2/adldap2": "dev-master"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

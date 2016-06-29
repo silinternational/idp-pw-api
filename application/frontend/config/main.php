@@ -44,7 +44,7 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'enableStrictParsing' => true,
-            'showScriptName' => true,
+            'showScriptName' => false,
             'rules' => [
                 /*
                  * Auth routes
