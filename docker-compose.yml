@@ -44,6 +44,25 @@ services:
             - ./common.env
             - ./local.env
 
+    apitest:
+        build: ./
+        container_name: apitest
+        volumes_from:
+            - data
+        volumes:
+            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+        ports:
+            - "8000:80"
+        depends_on:
+            - testDb
+        env_file:
+            - ./common.env
+            - ./local.env
+        environment:
+            MYSQL_HOST: testDb
+            MYSQL_DATABASE: test
+        command: ["/data/run-tests-api.sh"]
+
     cli:
         image: silintl/php7:latest
         container_name: cli
@@ -52,7 +71,7 @@ services:
         volumes:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
-        user: "${DOCKER_UIDGID}"
+        #user: "${DOCKER_UIDGID}"
         env_file:
             - ./common.env
             - ./local.env

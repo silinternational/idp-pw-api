@@ -95,7 +95,7 @@ class EmailQueueTest extends DbTestCase
         \Yii::$app->mailer->useFileTransport = false;
         \Yii::$app->mailer->transport = [
             'class' => 'Swift_SmtpTransport',
-            'host' => 'fake.domain.com'
+            'host' => '127.0.0.1'
         ];
 
         $data = [
@@ -124,7 +124,7 @@ class EmailQueueTest extends DbTestCase
         \Yii::$app->mailer->useFileTransport = false;
         \Yii::$app->mailer->transport = [
             'class' => 'Swift_SmtpTransport',
-            'host' => 'fake.domain.com'
+            'host' => '127.0.0.1'
         ];
 
         $data = [

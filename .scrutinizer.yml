@@ -16,6 +16,7 @@ filter:
         - application/tests/acceptance/AcceptanceTester.php
         - application/tests/acceptance/FunctionalTester.php
         - application/tests/acceptance/UnitTester.php
+        - application/tests/api/*
         - application/tests/codeception/bin/_bootstrap.php
         - application/tests/codeception/common/_bootstrap.php
         - application/tests/codeception/common/_support/*
