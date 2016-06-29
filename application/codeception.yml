@@ -16,11 +16,9 @@ modules:
             password: ''
             dump: tests/_data/dump.sql
 coverage:
-    #c3_url: 'http://apitest/index-test.php/'
-    #remote_config: '../application/codeception.yml'
     enabled: true
-    remote: true
     whitelist:
         include:
             - common/*
+            - console/*
             - frontend/*
