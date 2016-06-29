@@ -45,22 +45,23 @@ services:
             - ./local.env
 
     apitest:
-        build:
-            context: ./
-            dockerfile: Dockerfile-apitest
+        build: ./
         container_name: apitest
         volumes_from:
             - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-            - ./dockerbuild/php.ini:/etc/php/7.0/apache2/php.ini
         ports:
             - "8000:80"
         depends_on:
-            - db
+            - testDb
         env_file:
             - ./common.env
             - ./local.env
+        environment:
+            MYSQL_HOST: testDb
+            MYSQL_DATABASE: test
+        command: ["/data/run-tests-api.sh"]
 
     cli:
         image: silintl/php7:latest
