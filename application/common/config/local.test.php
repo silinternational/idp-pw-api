@@ -15,7 +15,7 @@ return [
             ],
             'maxLength' => [
                 'value' => 255,
-                'phpRegex' => '/.{0,255}/',
+                'phpRegex' => '/^.{0,255}$/',
                 'jsRegex' => '.{0,255}',
                 'enabled' => true
             ],
@@ -61,12 +61,8 @@ return [
             'class' => 'tests\mock\phone\Component',
             'codeLength' => 4,
         ],
-        'user' => [
-            'class' => 'common\models\User',
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => false,
-            'enableSession' => false,
-            'loginUrl' => null,
+        'passwordStore' => [
+            'class' => 'tests\mock\passwordstore\Component',
         ],
     ],
 ];
