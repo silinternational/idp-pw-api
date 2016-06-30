@@ -21,14 +21,14 @@ class AuthCest extends BaseCest
         $I->seeResponseCodeIs(302);
     }
 
-    public function test3(ApiTester $I)
-    {
-        $I->wantTo('check response when making a POST request for logging in with client_id');
-        $I->stopFollowingRedirects();
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/auth/login?client_id=asdf');
-        $I->seeResponseCodeIs(405);
-    }
+//    public function test3(ApiTester $I)
+//    {
+//        $I->wantTo('check response when making a POST request for logging in with client_id');
+//        $I->stopFollowingRedirects();
+//        $I->haveHttpHeader('Authorization', 'Bearer user1');
+//        $I->sendPOST('/auth/login?client_id=asdf');
+//        $I->seeResponseCodeIs(405);
+//    }
 
     public function test33(ApiTester $I)
     {

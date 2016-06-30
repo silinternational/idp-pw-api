@@ -50,6 +50,7 @@ return [
                  * Auth routes
                  */
                 'GET /auth/login' => 'auth/login',
+                'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
                 'OPTIONS /auth/logout' => 'auth/options',
 
