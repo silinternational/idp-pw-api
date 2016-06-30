@@ -339,4 +339,29 @@ class Utils
         }
     }
 
+    /**
+     * Get client_id from request or session and then store in session
+     * @return string
+     * @throws BadRequestHttpException
+     */
+    public static function getClientIdOrFail()
+    {
+        $clientId = null;
+        if (\Yii::$app->request->isPut) {
+            $clientId = \Yii::$app->request->getBodyParam('client_id');
+        } else {
+            $clientId = \Yii::$app->request->get('client_id');
+        }
+
+        if ($clientId === null) {
+            $clientId = \Yii::$app->session->get('clientId');
+            if ($clientId === null) {
+                throw new BadRequestHttpException('Missing client_id');
+            }
+        }
+        \Yii::$app->session->set('clientId', $clientId);
+
+        return $clientId;
+    }
+
 }

@@ -114,6 +114,12 @@ class Password extends Model
 
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
+            \Yii::error([
+                'action' => 'save password',
+                'status' => 'error',
+                'user_id' => $userId,
+                'error' => $this->getErrors('password'),
+            ]);
             throw new BadRequestHttpException('New password validation failed: ' . $errors);
         }
         

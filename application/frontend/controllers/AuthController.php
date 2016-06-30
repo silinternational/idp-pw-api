@@ -66,7 +66,7 @@ class AuthController extends BaseRestController
             /*
              * Grab client_id for use in token after successful login
              */
-            $clientId = $this->getClientIdOrFail();
+            $clientId = Utils::getClientIdOrFail();
 
             /*
              * Grab state for use in response after successful login
@@ -165,25 +165,6 @@ class AuthController extends BaseRestController
             $path = '';
         }
         return \Yii::$app->params['uiUrl'] . $path;
-    }
-
-    /**
-     * Get client_id from request or session and then store in session
-     * @return string
-     * @throws BadRequestHttpException
-     */
-    public function getClientIdOrFail()
-    {
-        $clientId = \Yii::$app->request->get('client_id');
-        if ($clientId === null) {
-            $clientId = \Yii::$app->session->get('clientId');
-            if ($clientId === null) {
-                throw new BadRequestHttpException('Missing client_id');
-            }
-        }
-        \Yii::$app->session->set('clientId', $clientId);
-
-        return $clientId;
     }
 
     /**
