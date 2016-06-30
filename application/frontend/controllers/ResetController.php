@@ -239,11 +239,6 @@ class ResetController extends BaseRestController
                 $log['error'] = 'Unable to log user in after successful reset verification';
                 \Yii::error($log);
                 throw $e;
-//                throw new ServerErrorHttpException(
-//                    $log['error'],
-//                    1462990877,
-//                    $e
-//                );
             }
         }
 
