@@ -149,6 +149,13 @@ class Password extends Model
         } catch (\Exception $e) {
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
+            $previous = $e->getPrevious();
+            if ($previous instanceof \Exception) {
+                $log['previous'] = [
+                    'code' => $previous->getCode(),
+                    'message' => $previous->getMessage(),
+                ];
+            }
             \Yii::error($log);
             throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
         }
