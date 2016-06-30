@@ -2,6 +2,7 @@
 namespace common\models;
 
 use Sil\IdpPw\Common\Auth\User as AuthUser;
+use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use Sil\IdpPw\Common\Personnel\NotFoundException;
 use Sil\IdpPw\Common\Personnel\PersonnelInterface;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
@@ -377,12 +378,32 @@ class User extends UserBase implements IdentityInterface
         return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
     }
 
+    /**
+     * @return array
+     * @throws ServerErrorHttpException
+     */
     public function getPasswordMeta()
     {
-        $thisUser = self::findOne(['id' => $this->id]);
+        /*
+         * If password metadata is missing, fetch from passwordStore and update
+         */
+        if ($this->pw_last_changed === null) {
+            /** @var UserPasswordMeta $pwMeta */
+            $pwMeta = \Yii::$app->passwordStore->getMeta($this->employee_id);
+
+            $lastChangedTimestamp = strtotime($pwMeta->passwordLastChangeDate);
+            $this->pw_last_changed = Utils::getDatetime($lastChangedTimestamp);
+            $expiresTimestamp = strtotime($this->pw_last_changed) + \Yii::$app->params['passwordLifetime'];
+            $this->pw_expires = Utils::getDatetime($expiresTimestamp);
+
+            if ( ! $this->save()) {
+                throw new ServerErrorHttpException('Unable to update user record with password metadata', 1467297721);
+            }
+        }
+
         return [
-            'last_changed' => Utils::getIso8601($thisUser->pw_last_changed),
-            'expires' => Utils::getIso8601($thisUser->pw_expires),
+            'last_changed' => Utils::getIso8601($this->pw_last_changed),
+            'expires' => Utils::getIso8601($this->pw_expires),
         ];
     }
 

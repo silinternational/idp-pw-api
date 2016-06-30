@@ -132,7 +132,7 @@ class ResetCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PUT request to validate a reset code');
-        $I->sendPUT('/reset/33333333333333333333333333333333/validate',['code' => '333']);
+        $I->sendPUT('/reset/33333333333333333333333333333333/validate',['code' => '333', 'client_id' => 'abc123']);
         $I->seeResponseCodeIs(200);
     }
 
@@ -140,8 +140,15 @@ class ResetCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated PUT request to validate a reset code');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/reset/33333333333333333333333333333333/validate',['code' => '333']);
+        $I->sendPUT('/reset/33333333333333333333333333333333/validate',['code' => '333', 'client_id' => 'abc123']);
         $I->seeResponseCodeIs(200);
+    }
+
+    public function test84(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to validate a reset code without client_id');
+        $I->sendPUT('/reset/33333333333333333333333333333333/validate',['code' => '333']);
+        $I->seeResponseCodeIs(400);
     }
 
     public function test83(ApiTester $I)

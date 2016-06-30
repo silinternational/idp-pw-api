@@ -207,9 +207,12 @@ class ResetController extends BaseRestController
             );
 
             /*
-             * Reset verified successfully, log user in
+             * Reset verified successfully, create access token for user
              */
-            if (\Yii::$app->user->login($reset->user)) {
+            try {
+                $clientId = Utils::getClientIdOrFail();
+                $accessToken = $reset->user->createAccessToken($clientId);
+
                 $log['status'] = 'success';
                 \Yii::warning($log);
 
@@ -228,16 +231,15 @@ class ResetController extends BaseRestController
                 /*
                  * return empty object so that it gets json encoded to {}
                  */
-                return new \stdClass();
+                return [
+                    'access_token' => $accessToken,
+                ];
+            } catch (\Exception $e) {
+                $log['status'] = 'error';
+                $log['error'] = 'Unable to log user in after successful reset verification';
+                \Yii::error($log);
+                throw $e;
             }
-
-            $log['status'] = 'error';
-            $log['error'] = 'Unable to log user in after successful reset verification';
-            \Yii::error($log);
-            throw new ServerErrorHttpException(
-                $log['error'],
-                1462990877
-            );
         }
 
         EventLog::log(
