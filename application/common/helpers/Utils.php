@@ -364,4 +364,14 @@ class Utils
         return $clientId;
     }
 
+    /**
+     * Return HMAC SHA256 of access token
+     * @param string $accessToken
+     * @return string
+     */
+    public static function getAccessTokenHash($accessToken)
+    {
+        return hash_hmac('sha256', $accessToken, \Yii::$app->params['accessTokenHashKey']);
+    }
+
 }

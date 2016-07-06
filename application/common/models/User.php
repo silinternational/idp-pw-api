@@ -314,7 +314,8 @@ class User extends UserBase implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::find()->where(['access_token' => $token])
+        $accessTokenHash = Utils::getAccessTokenHash($token);
+        return static::find()->where(['access_token' => $accessTokenHash])
             ->andWhere(['>', 'access_token_expiration', Utils::getDatetime()])
             ->one();
     }
@@ -435,11 +436,11 @@ class User extends UserBase implements IdentityInterface
         /*
              * Create access_token and update user
              */
-        $accessToken = Utils::generateRandomString(32);
+        $accessToken = $clientId . Utils::generateRandomString(32);
         /*
          * Store combination of clientId and accessToken for bearer auth
          */
-        $this->access_token = $clientId . $accessToken;
+        $this->access_token = Utils::getAccessTokenHash($accessToken);
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );

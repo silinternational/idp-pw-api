@@ -122,7 +122,8 @@ class AuthController extends BaseRestController
             /*
              * Clear access_token
              */
-            $user = User::findOne(['access_token' => $accessToken]);
+            $accessTokenHash = Utils::getAccessTokenHash($accessToken);
+            $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
                 $user->access_token = null;
                 $user->access_token_expiration = null;

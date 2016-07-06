@@ -30,6 +30,7 @@ $supportEmail = Env::get('SUPPORT_EMAIL');
 $supportUrl = Env::get('SUPPORT_URL');
 $supportFeedback = Env::get('SUPPORT_FEEDBACK');
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
+$accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
 
 return [
     'id' => 'app-common',
@@ -111,6 +112,7 @@ return [
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],
+        'accessTokenHashKey' => $accessTokenHashKey,
         'accessTokenLifetime' => 1800, // 30 minutes
         'passwordLifetime' => 31104000, // 12 months
         'password' => [
