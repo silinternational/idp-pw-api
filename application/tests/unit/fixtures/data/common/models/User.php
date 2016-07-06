@@ -15,7 +15,7 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
-        'access_token' => 'user1',
+        'access_token' => Utils::getAccessTokenHash('user1'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
     'user2' => [
@@ -30,7 +30,7 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
-        'access_token' => 'user2',
+        'access_token' => Utils::getAccessTokenHash('user2'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
     'user3' => [
@@ -45,7 +45,7 @@ return [
         'last_login' => null,
         'pw_last_changed' => null,
         'pw_expires' => null,
-        'access_token' => 'user3',
+        'access_token' => Utils::getAccessTokenHash('user3'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
     ],
 ];
