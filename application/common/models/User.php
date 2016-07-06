@@ -436,11 +436,11 @@ class User extends UserBase implements IdentityInterface
         /*
              * Create access_token and update user
              */
-        $accessToken = $clientId . Utils::generateRandomString(32);
+        $accessToken = Utils::generateRandomString(32);
         /*
          * Store combination of clientId and accessToken for bearer auth
          */
-        $this->access_token = Utils::getAccessTokenHash($accessToken);
+        $this->access_token = Utils::getAccessTokenHash($clientId . $accessToken);
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );
