@@ -239,8 +239,9 @@ class UserTest extends DbTestCase
     public function testFindIdentityByAccessToken()
     {
         $expected = $this->users('user1');
-        $user = User::findIdentityByAccessToken($expected->access_token);
+        $user = User::findIdentityByAccessToken('user1');
         $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expected->uid, $user->uid);
     }
 
     public function testGetAuthKey()
