@@ -13,6 +13,9 @@ class Password extends Model
     /** @var string */
     public $password;
 
+    /** @var  string */
+    public $employeeId;
+
     /** @var \Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface */
     public $passwordStore;
 
@@ -93,23 +96,24 @@ class Password extends Model
 
     /**
      * Shortcut method to initialize a Password object
+     * @param string $employeeId
      * @param string $newPassword
      * @return Password
      */
-    public static function create($newPassword)
+    public static function create($employeeId, $newPassword)
     {
         $password = new Password();
         $password->password = $newPassword;
+        $password->employeeId = $employeeId;
 
         return $password;
     }
 
     /**
-     * @param int $userId
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public function save($userId)
+    public function save()
     {
 
         if ( ! $this->validate()) {
@@ -117,7 +121,7 @@ class Password extends Model
             \Yii::error([
                 'action' => 'save password',
                 'status' => 'error',
-                'user_id' => $userId,
+                'employee_id' => $this->employeeId,
                 'error' => $this->getErrors('password'),
             ]);
             throw new BadRequestHttpException('New password validation failed: ' . $errors);
@@ -125,7 +129,7 @@ class Password extends Model
         
         $log = [
             'action' => 'save password',
-            'user_id' => $userId,
+            'employee_id' => $this->employeeId,
         ];
 
         /*
@@ -143,7 +147,7 @@ class Password extends Model
          * Update password
          */
         try {
-            $this->passwordStore->set($userId, $this->password);
+            $this->passwordStore->set($this->employeeId, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
         } catch (\Exception $e) {

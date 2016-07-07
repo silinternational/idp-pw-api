@@ -415,8 +415,8 @@ class User extends UserBase implements IdentityInterface
      */
     public function setPassword($newPassword)
     {
-        $password = Password::create($newPassword);
-        $password->save($this->employee_id);
+        $password = Password::create($this->employee_id, $newPassword);
+        $password->save();
 
         $this->pw_last_changed = Utils::getDatetime();
         $this->pw_expires = Utils::getDatetime(time() + \Yii::$app->params['passwordLifetime']);
