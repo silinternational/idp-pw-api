@@ -92,6 +92,9 @@ class Reset extends ResetBase
          */
         $reset = $user->reset;
         if ($reset === null) {
+            /*
+             * Create new reset
+             */
             $reset = new Reset();
             $reset->user_id = $user->id;
             /*
@@ -121,6 +124,11 @@ class Reset extends ResetBase
                 ],
                 $user->id
             );
+        } else {
+            /*
+             * change method back to primary if they are requesting to start reset again
+             */
+            $reset->setType(self::TYPE_PRIMARY);
         }
 
         return $reset;
@@ -223,7 +231,7 @@ class Reset extends ResetBase
              */
             $subject = \Yii::t(
                 'app',
-                '{{idpName}} password reset request',
+                '{idpName} password reset request',
                 [
                     'idpName' => \Yii::$app->params['idpName'],
                 ]

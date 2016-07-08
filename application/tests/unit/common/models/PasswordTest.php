@@ -27,7 +27,7 @@ class PasswordTest extends TestCase
         $testData = $this->getTestData();
 
         foreach ($testData as $testCase) {
-            $password = Password::create($testCase['password']);
+            $password = Password::create(1234, $testCase['password']);
             $valid = $password->validate();
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));

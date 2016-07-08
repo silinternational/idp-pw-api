@@ -169,7 +169,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return \stdClass
+     * @return array
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException

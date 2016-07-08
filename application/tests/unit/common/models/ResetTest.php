@@ -95,6 +95,16 @@ class ResetTest extends DbTestCase
         $this->assertEquals($existing->id, $new->id);
     }
 
+    public function testFindOrCreateExistingResetTypeToPrimary()
+    {
+        $existing = $this->resets('reset1');
+        $existing->setType(Reset::TYPE_SPOUSE);
+
+        $new = Reset::findOrCreate($existing->user);
+        $this->assertEquals($existing->id, $new->id);
+        $this->assertEquals(Reset::TYPE_PRIMARY, $new->type);
+    }
+
     public function testSendPhone()
     {
         $reset = $this->resets('reset2');
