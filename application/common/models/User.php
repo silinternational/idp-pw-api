@@ -56,6 +56,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function fields()
     {
+        /** @var User $model */
         return [
             'first_name',
             'last_name',
@@ -434,8 +435,8 @@ class User extends UserBase implements IdentityInterface
     public function createAccessToken($clientId)
     {
         /*
-             * Create access_token and update user
-             */
+         * Create access_token and update user
+         */
         $accessToken = Utils::generateRandomString(32);
         /*
          * Store combination of clientId and accessToken for bearer auth
