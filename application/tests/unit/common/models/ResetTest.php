@@ -95,6 +95,16 @@ class ResetTest extends DbTestCase
         $this->assertEquals($existing->id, $new->id);
     }
 
+    public function testFindOrCreateExistingResetTypeToPrimary()
+    {
+        $existing = $this->resets('reset1');
+        $existing->setType(Reset::TYPE_SPOUSE);
+
+        $new = Reset::findOrCreate($existing->user);
+        $this->assertEquals($existing->id, $new->id);
+        $this->assertEquals(Reset::TYPE_PRIMARY, $new->type);
+    }
+
     public function testSendPhone()
     {
         $reset = $this->resets('reset2');
@@ -162,7 +172,8 @@ class ResetTest extends DbTestCase
 
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
-        $this->setExpectedException('\Exception', '', 1461173406);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461173406);
         $reset->send();
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }
@@ -193,7 +204,8 @@ class ResetTest extends DbTestCase
 
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
-        $this->setExpectedException('\Exception', '', 1461173477);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(1461173477);
         $reset->send();
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }
@@ -238,7 +250,9 @@ class ResetTest extends DbTestCase
         $reset->setType(Reset::TYPE_SPOUSE);
         $this->assertEquals(Reset::TYPE_SPOUSE, $reset->type);
 
-        $reset->setType(Reset::TYPE_METHOD, 1);
+        $method = $this->methods('method1');
+
+        $reset->setType(Reset::TYPE_METHOD, $method->uid);
         $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
         $this->assertEquals(1, $reset->method_id);
 

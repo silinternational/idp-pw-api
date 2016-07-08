@@ -16,6 +16,7 @@ class EmailUtils
             $files = FileHelper::findFiles($path);
             foreach ($files as $file) {
                 $contents = file_get_contents($file);
+                $contents = quoted_printable_decode($contents);
                 if (substr_count($contents, $uniqueContent) > 0) {
                     return true;
                 }

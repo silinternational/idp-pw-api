@@ -26,13 +26,14 @@ class Utils
     }
 
     /**
-     * @param integer|null $timestamp
+     * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
      * @return string
      */
     public static function getIso8601($timestamp = null)
     {
-        $timestamp = $timestamp ?: time();
-        return date('c', strtotime($timestamp));
+        $timestamp = $timestamp !== null ? $timestamp : time();
+        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
+        return date('c', $timestamp);
     }
 
     /**
@@ -43,47 +44,6 @@ class Utils
     {
         $security = new Security();
         return $security->generateRandomString($length);
-    }
-
-    /**
-     * Utility function to extract attribute values from SAML attributes and
-     * return as a simple array
-     * @param $attributes array the SAML attributes returned
-     * @param $map array configuration map of attribute names with field and element values
-     * @return array
-     */
-    public static function extractSamlAttributes($attributes, $map)
-    {
-        $attrs = [];
-
-        foreach ($map as $attr => $details) {
-            if (isset($details['element'])) {
-                if (isset($attributes[$details['field']][$details['element']])) {
-                    $attrs[$attr] = $attributes[$details['field']][$details['element']];
-                }
-            } else {
-                if (isset($attributes[$details['field']])) {
-                    $attrs[$attr] = $attributes[$details['field']];
-                }
-            }
-        }
-
-        return $attrs;
-    }
-
-    /**
-     * Check if given array of $attributes includes all keys from $map
-     * @param array $attributes
-     * @param array $map
-     * @throws \Exception
-     */
-    public static function assertHasRequiredSamlAttributes($attributes, $map)
-    {
-        foreach ($map as $key => $value) {
-            if ( ! array_key_exists($key, $attributes)) {
-                throw new \Exception(sprintf('SAML attributes missing attribute: %s', $key), 1454436522);
-            }
-        }
     }
 
     /**
@@ -99,6 +59,7 @@ class Utils
     /**
      * Check if user is logged in and if so return the identity model
      * @return null|\common\models\User
+     * @codeCoverageIgnore
      */
     public static function getCurrentUser()
     {
@@ -219,10 +180,16 @@ class Utils
 
         $config['idpName'] = $params['idpName'];
         $config['idpUsernameHint'] = $params['idpUsernameHint'];
-        $config['support'] = $params['support'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
-        $config['password'] = [];
 
+        $config['support'] = [];
+        foreach ($params['support'] as $supportOption => $value) {
+            if ( ! empty($value)) {
+                $config['support'][$supportOption] = $value;
+            }
+        }
+
+        $config['password'] = [];
         $passwordRuleFields = [
             'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
         ];
@@ -289,6 +256,7 @@ class Utils
      * @param string $ipAddress
      * @return bool
      * @throws \Exception
+     * @codeCoverageIgnore
      */
     public static function isRecaptchaResponseValid($verificationToken, $ipAddress)
     {
@@ -311,6 +279,7 @@ class Utils
      * Get Client IP address by looking through headers for proxied requests
      * @param Request $request
      * @return string
+     * @codeCoverageIgnore
      */
     public static function getClientIp(Request $request)
     {
@@ -347,6 +316,61 @@ class Utils
     {
         $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
         return (filter_var($ip, FILTER_VALIDATE_IP, $flags) !== false);
+    }
+
+    /**
+     * Call Zxcvbn API and return full score object array
+     * @param string $password
+     * @return array
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
+    public static function getZxcvbnScore($password)
+    {
+        try {
+            $zxcvbn = new \Zxcvbn\Score([
+                'description_override' => [
+                    'baseUrl' => \Yii::$app->params['password']['zxcvbn']['apiBaseUrl'],
+                ]
+            ]);
+            return $zxcvbn->getFull(['password' => $password]);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Get client_id from request or session and then store in session
+     * @return string
+     * @throws BadRequestHttpException
+     */
+    public static function getClientIdOrFail()
+    {
+        if (\Yii::$app->request->isPut) {
+            $clientId = \Yii::$app->request->getBodyParam('client_id');
+        } else {
+            $clientId = \Yii::$app->request->get('client_id');
+        }
+
+        if ($clientId === null) {
+            $clientId = \Yii::$app->session->get('clientId');
+            if ($clientId === null) {
+                throw new BadRequestHttpException('Missing client_id');
+            }
+        }
+        \Yii::$app->session->set('clientId', $clientId);
+
+        return $clientId;
+    }
+
+    /**
+     * Return HMAC SHA256 of access token
+     * @param string $accessToken
+     * @return string
+     */
+    public static function getAccessTokenHash($accessToken)
+    {
+        return hash_hmac('sha256', $accessToken, \Yii::$app->params['accessTokenHashKey']);
     }
 
 }

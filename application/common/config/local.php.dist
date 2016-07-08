@@ -42,5 +42,20 @@ return [
 //            'apiSecret' => '',
 //            'from' => '',
 //        ],
+        'passwordStore' => [
+            'class' => '\Sil\IdpPw\PasswordStore\Ldap',
+            'host' => '',
+            'port' => 636,
+            'baseDn' => '',
+            'adminUsername' => '',
+            'adminPassword' => '',
+            'useTls' => false,
+            'useSsl' => true,
+            'userPasswordAttribute' => 'userPassword',
+            'employeeIdAttribute' => 'gisEisPersonId',
+            'passwordLastChangeDateAttribute' => 'pwdchangedtime',
+            'passwordExpireDateAttribute' => 'modifytimestamp',
+
+        ],
     ]
 ];

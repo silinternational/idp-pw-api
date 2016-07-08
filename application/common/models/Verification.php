@@ -4,6 +4,7 @@ namespace common\models;
 use common\models\User;
 use Sil\IdpPw\Common\PhoneVerification\NotMatchException;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 class Verification extends Model
 {
@@ -21,6 +22,7 @@ class Verification extends Model
      * @param null|integer $eventLogUserId
      * @param null|string $eventLogTopic
      * @param null|string $eventLogDetails
+     * @param array $additionalEmailParameters
      */
     public static function sendEmail(
         $toAddress,
@@ -31,10 +33,11 @@ class Verification extends Model
         $ccAddress = null,
         $eventLogUserId = null,
         $eventLogTopic = null,
-        $eventLogDetails = null
+        $eventLogDetails = null,
+        $additionalEmailParameters = []
     ) {
-        $body = \Yii::$app->mailer->render(
-            $view,
+
+        $parameters = ArrayHelper::merge(
             [
                 'idpName' => \Yii::$app->params['idpName'],
                 'name' => $forUser->first_name,
@@ -42,7 +45,14 @@ class Verification extends Model
                 'toAddress' => $toAddress,
                 'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
                 'fromName' => \Yii::$app->params['fromName'],
-            ]
+            ],
+            $additionalEmailParameters
+        );
+
+
+        $body = \Yii::$app->mailer->render(
+            $view,
+            $parameters
         );
 
         EmailQueue::sendOrQueue(

@@ -58,15 +58,106 @@ class UtilsTest extends TestCase
 
     public function testGetFrontendConfig()
     {
+        \Yii::$app->params = [
+            'idpName' => 'My IdP',
+            'idpUsernameHint' => 'IdP Account',
+            'adminEmail' => 'admin@domain.com',
+            'fromEmail' => 'from@domain.com',
+            'fromName' => 'From Me',
+            'helpCenterUrl' => 'https://url',
+            'ui_url' => 'https://ui',
+            'reset' => [
+                'lifetimeSeconds' => 3600, // 1 hour
+                'disableDuration' => 900, // 15 minutes
+                'codeLength' => 6,
+                'maxAttempts' => 10,
+            ],
+            'passwordLifetime' => 15552000, // 6 months
+            'password' => [
+                'minLength' => [
+                    'value' => 10,
+                    'phpRegex' => '/.{10,}/',
+                    'jsRegex' => '.{10,}',
+                    'enabled' => true
+                ],
+                'maxLength' => [
+                    'value' => 255,
+                    'phpRegex' => '/.{0,255}/',
+                    'jsRegex' => '.{0,255}',
+                    'enabled' => true
+                ],
+                'minNum' => [
+                    'value' => 2,
+                    'phpRegex' => '/(\d.*){2,}/',
+                    'jsRegex' => '(\d.*){2,}',
+                    'enabled' => true
+                ],
+                'minUpper' => [
+                    'value' => 0,
+                    'phpRegex' => '/([A-Z].*){0,}/',
+                    'jsRegex' => '([A-Z].*){0,}',
+                    'enabled' => false
+                ],
+                'minSpecial' => [
+                    'value' => 0,
+                    'phpRegex' => '/([\W_].*){0,}/',
+                    'jsRegex' => '([\W_].*){0,}',
+                    'enabled' => false
+                ],
+                'zxcvbn' => [
+                    'minScore' => 2,
+                    'enabled' => true,
+                    'apiBaseUrl' => 'http://zxcvbn',
+                ]
+            ],
+            'recaptcha' => [
+                'siteKey' => 'key',
+                'secretKey' => 'secret',
+            ],
+            'support' => [
+                'phone' => '123-123-1234',
+                'email' => 'email@domain.com',
+                'url' => 'http://url',
+                'feedbackUrl' => null,
+            ],
+        ];
+
         $params = \Yii::$app->params;
         $config = Utils::getFrontendConfig();
         $this->assertEquals($params['idpName'], $config['idpName']);
         $this->assertEquals($params['idpUsernameHint'], $config['idpUsernameHint']);
-        $this->assertEquals($params['support'], $config['support']);
         $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
         $this->assertEquals($config['password']['zxcvbn'], $params['password']['zxcvbn']);
         $this->assertTrue(is_array($config['password']));
+
+        $expectedSupport = [
+            'phone' => '123-123-1234',
+            'email' => 'email@domain.com',
+            'url' => 'http://url',
+        ];
+
+        $this->assertEquals($expectedSupport, $config['support']);
     }
 
+    public function testGetIso8601()
+    {
+        $expected = '2016-06-15T13:09:28+00:00';
+        $timestamp = 1465996168;
+
+        $this->assertEquals($expected, Utils::getIso8601($timestamp));
+    }
+
+    public function testIsArrayEntryTruthy()
+    {
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => true], 'key'));
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => 'string'], 'key'));
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => ['array']], 'key'));
+        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => 1], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => false], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => ''], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => null], 'key'));
+        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => 0], 'key'));
+    }
+    
     
 }

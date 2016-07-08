@@ -71,12 +71,6 @@ class Reset extends ResetBase
     {
         return [
             'uid',
-            'hasSupervisor' => function($model) {
-                return $model->user->hasSupervisor();
-            },
-            'hasSpouse' => function($model) {
-                return $model->user->hasSpouse();
-            },
             'methods' => function($model) {
                 return $model->user->getMaskedMethods();
             },
@@ -98,6 +92,9 @@ class Reset extends ResetBase
          */
         $reset = $user->reset;
         if ($reset === null) {
+            /*
+             * Create new reset
+             */
             $reset = new Reset();
             $reset->user_id = $user->id;
             /*
@@ -127,6 +124,11 @@ class Reset extends ResetBase
                 ],
                 $user->id
             );
+        } else {
+            /*
+             * change method back to primary if they are requesting to start reset again
+             */
+            $reset->setType(self::TYPE_PRIMARY);
         }
 
         return $reset;
@@ -229,7 +231,7 @@ class Reset extends ResetBase
              */
             $subject = \Yii::t(
                 'app',
-                '{{idpName}} password reset request',
+                '{idpName} password reset request',
                 [
                     'idpName' => \Yii::$app->params['idpName'],
                 ]
@@ -259,6 +261,8 @@ class Reset extends ResetBase
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
+        $resetUrl = sprintf('%s/reset/%s/verify/%s', \Yii::$app->params['uiUrl'], $this->uid, $this->code);
+
         // Send email verification
         Verification::sendEmail(
             $toAddress,
@@ -270,7 +274,8 @@ class Reset extends ResetBase
             $this->user->id,
             self::TOPIC_RESET_EMAIL_SENT,
             'Password reset email for ' . $this->user->getDisplayName() .
-            ' sent to ' . $toAddress
+            ' sent to ' . $toAddress,
+            ['resetUrl' => $resetUrl]
         );
     }
 
@@ -478,7 +483,7 @@ class Reset extends ResetBase
         }
     }
 
-    public function setType($type, $methodId = null)
+    public function setType($type, $methodUid = null)
     {
         $previousType = $this->type;
         /*
@@ -487,23 +492,23 @@ class Reset extends ResetBase
         if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
             $this->type = $type;
             $this->method_id = null;
-        } elseif ($type == self::TYPE_METHOD) {
+        } elseif (in_array($type, [self::TYPE_METHOD, Method::TYPE_EMAIL, Method::TYPE_PHONE])) {
             /*
              * If type is method but methodId is missing, throw error
              */
-            if ($methodId === null) {
-                throw new BadRequestHttpException('Method ID required for reset type method', 1462988984);
+            if ($methodUid === null) {
+                throw new BadRequestHttpException('Method UID required for reset type method', 1462988984);
             }
 
             /*
              * Make sure user owns requested method before update
              */
-            $method = Method::findOne(['id' => $methodId, 'user_id' => $this->user_id]);
+            $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id]);
             if ($method === null) {
                 throw new NotFoundHttpException('Method not found', 1462989221);
             }
             $this->type = self::TYPE_METHOD;
-            $this->method_id = $methodId;
+            $this->method_id = $method->id;
         } else {
             throw new BadRequestHttpException('Unknown reset type requested', 1462989489);
         }

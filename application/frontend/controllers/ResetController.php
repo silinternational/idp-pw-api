@@ -30,8 +30,26 @@ class ResetController extends BaseRestController
                         'roles' => ['?'],
                     ],
                 ]
-            ]
+            ],
+            'authenticator' => [
+                'only' => [''], // Bypass authentication for all actions
+            ],
         ]);
+    }
+
+    /**
+     * @param String $uid
+     * @return Reset
+     * @throws NotFoundHttpException
+     */
+    public function actionView($uid)
+    {
+        $reset = Reset::findOne(['uid' => $uid]);
+        if ($reset === null) {
+            throw new NotFoundHttpException();
+        }
+
+        return $reset;
     }
 
     /**
@@ -60,10 +78,22 @@ class ResetController extends BaseRestController
         }
 
         /*
+         * Check if $username looks like an email address
+         */
+        $usernameIsEmail = false;
+        if (substr_count($username, '@')) {
+            $usernameIsEmail = true;
+        }
+
+        /*
          * Find or create user
          */
-        $user = User::findOrCreate($username);
-
+        if ($usernameIsEmail) {
+            $user = User::findOrCreate(null, $username);
+        } else {
+            $user = User::findOrCreate($username);
+        }
+        
         /*
          * Find or create a reset
          */
@@ -96,7 +126,7 @@ class ResetController extends BaseRestController
         }
 
         $type = \Yii::$app->request->getBodyParam('type', null);
-        $methodId = \Yii::$app->request->getBodyParam('method_id', null);
+        $methodId = \Yii::$app->request->getBodyParam('uid', null);
 
         if ($type === null) {
             throw new BadRequestHttpException('Invalid reset type', 1462989664);
@@ -139,7 +169,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return \stdClass
+     * @return array
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -177,9 +207,12 @@ class ResetController extends BaseRestController
             );
 
             /*
-             * Reset verified successfully, log user in
+             * Reset verified successfully, create access token for user
              */
-            if (\Yii::$app->user->login($reset->user)) {
+            try {
+                $clientId = Utils::getClientIdOrFail();
+                $accessToken = $reset->user->createAccessToken($clientId);
+
                 $log['status'] = 'success';
                 \Yii::warning($log);
 
@@ -198,16 +231,15 @@ class ResetController extends BaseRestController
                 /*
                  * return empty object so that it gets json encoded to {}
                  */
-                return new \stdClass();
+                return [
+                    'access_token' => $accessToken,
+                ];
+            } catch (\Exception $e) {
+                $log['status'] = 'error';
+                $log['error'] = 'Unable to log user in after successful reset verification';
+                \Yii::error($log);
+                throw $e;
             }
-
-            $log['status'] = 'error';
-            $log['error'] = 'Unable to log user in after successful reset verification';
-            \Yii::error($log);
-            throw new ServerErrorHttpException(
-                $log['error'],
-                1462990877
-            );
         }
 
         EventLog::log(

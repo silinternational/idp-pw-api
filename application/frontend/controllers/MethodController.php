@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use common\exception\InvalidCodeException;
 use common\models\Method;
+use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
@@ -42,7 +43,29 @@ class MethodController extends BaseRestController
     {
         /** @var User $user */
         $user = \Yii::$app->user->identity;
-        return $user->getVerifiedMethods();
+
+        $verifiedMethods = $user->getVerifiedMethods();
+
+        $verifiedMethods[] = [
+            'type' => Reset::TYPE_PRIMARY,
+            'value' => $user->email,
+        ];
+
+        if ($user->hasSpouse()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SPOUSE,
+                'value' => $user->getSpouseEmail(),
+            ];
+        }
+
+        if ($user->hasSupervisor()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SUPERVISOR,
+                'value' => $user->getSupervisorEmail(),
+            ];
+        }
+
+        return $verifiedMethods;
     }
 
     /**

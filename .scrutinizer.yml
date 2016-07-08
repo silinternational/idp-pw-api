@@ -16,6 +16,7 @@ filter:
         - application/tests/acceptance/AcceptanceTester.php
         - application/tests/acceptance/FunctionalTester.php
         - application/tests/acceptance/UnitTester.php
+        - application/tests/api/*
         - application/tests/codeception/bin/_bootstrap.php
         - application/tests/codeception/common/_bootstrap.php
         - application/tests/codeception/common/_support/*
@@ -23,6 +24,8 @@ filter:
         - application/tests/codeception/console/_support/*
         - application/tests/functional/FunctionalTester.php
         - application/tests/unit/UnitTester.php
+        - application/tests/_support/*
+        - application/tests/_support/_generated/*
 
 ########### [End of project-specific section] ############
 
@@ -146,6 +149,9 @@ build_failure_conditions:
     - 'project.metric("scrutinizer.quality", < 6)'
 
 build:
+    environment:
+        php: 7.0.6
+        
     dependencies:
         before:
             - cd application/ && composer install

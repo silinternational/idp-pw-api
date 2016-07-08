@@ -1,14 +1,17 @@
-clean:
-	docker-compose kill
-	docker-compose rm -f
-
 start: api
 
-test: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
+test:
+	make testunit && make testapi
+
+testunit: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
+testapi: upTestDb yiimigratetestDb yiimigratetestDblocal
+	docker-compose up -d zxcvbn
+	docker-compose run --rm apitest
+
 api: upDb composer yiimigrate yiimigratelocal
-	docker-compose up -d api
+	docker-compose up -d api zxcvbn
 
 composer:
 	docker-compose run --rm --user="0:0" cli composer install
@@ -45,5 +48,9 @@ rmTestDb:
 upTestDb:
 	docker-compose up -d testDb
 
-bounce: start
+bounce:
+	docker-compose up -d api
 
+clean:
+	docker-compose kill
+	docker-compose rm -f

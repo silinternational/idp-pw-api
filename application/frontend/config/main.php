@@ -1,7 +1,12 @@
 <?php
 
+use Sil\PhpEnv\Env;
+
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieKey = getenv('FRONT_COOKIE_KEY') ?: null;
+$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', false);
+
+$sessionLifetime = 1800; // 30 minutes
+
 const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
 
 return [
@@ -13,7 +18,16 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
-            'authTimeout' => 1800, // 30 minutes
+            'enableSession' => false,
+            'loginUrl' => null,
+        ],
+        'session' => [
+            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
+                'lifetime' => $sessionLifetime,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => $frontCookieSecure,
+            ],
         ],
         'log' => [
 
@@ -22,16 +36,14 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'enableCookieValidation' => true,
-            'enableCsrfValidation' => true,
-            'cookieValidationKey' => $frontCookieKey,
+            'enableCsrfValidation' => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
                 /*
@@ -40,11 +52,13 @@ return [
                 'GET /auth/login' => 'auth/login',
                 'POST /auth/login' => 'auth/login',
                 'GET /auth/logout' => 'auth/logout',
+                'OPTIONS /auth/logout' => 'auth/options',
 
                 /*
                  * Config routes
                  */
                 'GET /config' => 'config/index',
+                'OPTIONS /config' => 'config/options',
 
                 /*
                  * Method routes
@@ -67,6 +81,7 @@ return [
                 /*
                  * Reset routes
                  */
+                'GET /reset/' . UID_ROUTE_PATTERN => 'reset/view',
                 'POST /reset' => 'reset/create',
                 'PUT /reset/' . UID_ROUTE_PATTERN => 'reset/update',
                 'PUT /reset/' . UID_ROUTE_PATTERN . '/resend' => 'reset/resend',
@@ -80,7 +95,17 @@ return [
                  * User  routes
                  */
                 'GET /user/me' => 'user/me',
+                'OPTIONS /user/me' => 'user/options',
 
+                /*
+                 * Status route
+                 */
+                'GET /site/system-status' => 'site/system-status',
+
+                /*
+                 * Catch all to throw 401 or 405
+                 */
+                '/<url:.*>' => 'site/index',
             ]
         ]
     ],

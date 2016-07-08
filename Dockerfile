@@ -13,10 +13,19 @@ COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
 RUN mkdir -p /opt/ssl
 COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
 
-# It is expected that /data is = application/ in project folder
-COPY application/ /data/
+# get s3-expand
+RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/1.5/s3-expand -o /usr/local/bin/s3-expand
+RUN chmod a+x /usr/local/bin/s3-expand
 
 WORKDIR /data
+
+# Install/cleanup composer dependencies
+COPY application/composer.json /data/
+COPY application/composer.lock /data/
+RUN composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader
+
+# It is expected that /data is = application/ in project folder
+COPY application/ /data/
 
 # Fix folder permissions
 RUN chown -R www-data:www-data \
@@ -24,8 +33,6 @@ RUN chown -R www-data:www-data \
     frontend/runtime/ \
     frontend/web/assets/
 
-# Install/cleanup composer dependencies
-RUN composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader
-
 EXPOSE 80
+ENTRYPOINT ["/usr/local/bin/s3-expand"]
 CMD ["/data/run.sh"]

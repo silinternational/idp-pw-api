@@ -18,6 +18,8 @@ use Yii;
  * @property string $last_login
  * @property string $pw_last_changed
  * @property string $pw_expires
+ * @property string $access_token
+ * @property string $access_token_expiration
  *
  * @property EventLog[] $eventLogs
  * @property Method[] $methods
@@ -41,12 +43,14 @@ class UserBase extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created'], 'required'],
-            [['created', 'last_login', 'pw_last_changed', 'pw_expires'], 'safe'],
+            [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
             [['uid', 'employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
+            [['access_token'], 'string', 'max' => 64],
             [['uid'], 'unique'],
             [['employee_id'], 'unique'],
             [['email'], 'unique'],
+            [['access_token'], 'unique'],
         ];
     }
 
@@ -67,6 +71,8 @@ class UserBase extends \yii\db\ActiveRecord
             'last_login' => Yii::t('app', 'Last Login'),
             'pw_last_changed' => Yii::t('app', 'Pw Last Changed'),
             'pw_expires' => Yii::t('app', 'Pw Expires'),
+            'access_token' => Yii::t('app', 'Access Token'),
+            'access_token_expiration' => Yii::t('app', 'Access Token Expiration'),
         ];
     }
 
