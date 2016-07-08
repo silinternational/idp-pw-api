@@ -346,7 +346,6 @@ class Utils
      */
     public static function getClientIdOrFail()
     {
-        $clientId = null;
         if (\Yii::$app->request->isPut) {
             $clientId = \Yii::$app->request->getBodyParam('client_id');
         } else {
