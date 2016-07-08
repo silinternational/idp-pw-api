@@ -128,7 +128,7 @@ class Reset extends ResetBase
             /*
              * change method back to primary if they are requesting to start reset again
              */
-            $reset->setType(Reset::TYPE_PRIMARY);
+            $reset->setType(self::TYPE_PRIMARY);
         }
 
         return $reset;
