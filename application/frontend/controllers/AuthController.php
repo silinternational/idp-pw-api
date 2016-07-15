@@ -200,9 +200,14 @@ class AuthController extends BaseRestController
          * build url to redirect user to
          */
         $afterLogin = $this->getAfterLoginUrl($relayState);
+        if (strpos( $afterLogin, '?')) {
+            $joinChar = '&';
+        } else {
+            $joinChar = '?';
+        }
         $url = $afterLogin . sprintf(
-                '?state=%s&token_type=Bearer&expires_in=%s&access_token=%s',
-                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
+                '%sstate=%s&token_type=Bearer&expires_in=%s&access_token=%s',
+                $joinChar, Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
             );
 
         return $url;
