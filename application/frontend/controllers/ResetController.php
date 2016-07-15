@@ -93,6 +93,11 @@ class ResetController extends BaseRestController
         } else {
             $user = User::findOrCreate($username);
         }
+
+        /*
+         * Clear out expired resets
+         */
+        Reset::deleteExpired();
         
         /*
          * Find or create a reset

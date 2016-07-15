@@ -205,9 +205,10 @@ class User extends UserBase implements IdentityInterface
         }
         
         /*
-         * Then get all other methods
+         * Then get other verified methods
          */
-        foreach ($this->methods as $method) {
+        $verifiedMethods = $this->getVerifiedMethods();
+        foreach ($verifiedMethods as $method) {
             $methods[] = [
                 'uid' => $method->uid,
                 'type' => $method->type,

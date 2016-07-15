@@ -88,6 +88,11 @@ class Reset extends ResetBase
     public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $methodId = null)
     {
         /*
+         * Clean up expired resets
+         */
+        Reset::deleteExpired();
+
+        /*
          * Find existing or create new Reset
          */
         $reset = $user->reset;
@@ -501,9 +506,9 @@ class Reset extends ResetBase
             }
 
             /*
-             * Make sure user owns requested method before update
+             * Make sure user owns requested method and it is verified before update
              */
-            $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id]);
+            $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id, 'verified' => 1]);
             if ($method === null) {
                 throw new NotFoundHttpException('Method not found', 1462989221);
             }
@@ -582,6 +587,33 @@ class Reset extends ResetBase
                 'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
             ]);
             throw new ServerErrorHttpException($errorPrefix);
+        }
+    }
+
+    /**
+     * Delete all expired Reset records
+     */
+    public static function deleteExpired()
+    {
+        try {
+            $deleted = self::deleteAll([
+                ['<', 'expires', Utils::getDatetime()]
+            ]);
+
+            if ($deleted > 0) {
+                \Yii::warning([
+                    'action' => 'delete expired resets',
+                    'status' => 'success',
+                    'deleted count' => $deleted,
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'delete expired resets',
+                'status' => 'error',
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
         }
     }
 }
