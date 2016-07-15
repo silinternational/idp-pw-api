@@ -67,9 +67,11 @@ return [
                 'GET /method/' . UID_ROUTE_PATTERN => 'method/view',
                 'POST /method' => 'method/create',
                 'PUT /method/' . UID_ROUTE_PATTERN => 'method/update',
+                'PUT /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/resend',
                 'DELETE /method/' . UID_ROUTE_PATTERN => 'method/delete',
                 'OPTIONS /method' => 'method/options',
                 'OPTIONS /method/' . UID_ROUTE_PATTERN => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/options',
 
                 /*
                  * Password routes

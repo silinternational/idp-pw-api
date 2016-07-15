@@ -9,6 +9,7 @@ use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
@@ -88,6 +89,7 @@ class MethodController extends BaseRestController
      * Create new unverified method and send verification
      * @return Method
      * @throws BadRequestHttpException
+     * @throws ConflictHttpException
      * @throws \Exception
      */
     public function actionCreate()
@@ -110,7 +112,18 @@ class MethodController extends BaseRestController
          */
         $method = Method::findOne(['value' => $value, 'user_id' => \Yii::$app->user->getId()]);
         if ($method !== null) {
-            return $method;
+            /*
+             * if not verified yet, resend verification
+             */
+            if ($method->verified === 0) {
+                $method->sendVerification();
+                return $method;
+            } else {
+                /*
+                 * method exists and is verified, throw conflict
+                 */
+                throw new ConflictHttpException('Method already exists');
+            }
         }
 
         /*
@@ -224,5 +237,36 @@ class MethodController extends BaseRestController
         }
 
         return [];
+    }
+
+    /**
+     * @param string $uid
+     * @return \stdClass
+     * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
+     * @throws \Exception
+     */
+    public function actionResend($uid)
+    {
+        $method = Method::findOne([
+            'uid' => $uid,
+            'user_id' => \Yii::$app->user->getId(),
+        ]);
+
+        if ($method === null) {
+            throw new NotFoundHttpException();
+        } elseif ($method->verified === 1) {
+            throw new BadRequestHttpException('Method already verified');
+        }
+
+        /*
+         * resend verification
+         */
+        $method->sendVerification();
+
+        /*
+         * Return empty object
+         */
+        return new \stdClass();
     }
 }
