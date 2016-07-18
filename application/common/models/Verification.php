@@ -17,6 +17,7 @@ class Verification extends Model
      * @param string $subject
      * @param string $view Full view path with alias, ex: @common/mail/reset/self
      * @param string $code
+     * @param string $expireTime
      * @param User $forUser
      * @param null|string $ccAddress
      * @param null|integer $eventLogUserId
@@ -29,6 +30,7 @@ class Verification extends Model
         $subject,
         $view,
         $code,
+        $expireTime,
         $forUser,
         $ccAddress = null,
         $eventLogUserId = null,
@@ -42,6 +44,7 @@ class Verification extends Model
                 'idpName' => \Yii::$app->params['idpName'],
                 'name' => $forUser->first_name,
                 'code' => $code,
+                'expireTime' => $expireTime,
                 'toAddress' => $toAddress,
                 'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
                 'fromName' => \Yii::$app->params['fromName'],

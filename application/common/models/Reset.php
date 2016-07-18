@@ -269,11 +269,13 @@ class Reset extends ResetBase
         $resetUrl = sprintf('%s/reset/%s/verify/%s', \Yii::$app->params['uiUrl'], $this->uid, $this->code);
 
         // Send email verification
+        $friendlyExpiration = Utils::getFriendlyDate($this->expires);
         Verification::sendEmail(
             $toAddress,
             $subject,
             '@common/mail/reset/' . $view,
             $this->code,
+            $friendlyExpiration,
             $this->user,
             $ccAddress,
             $this->user->id,
