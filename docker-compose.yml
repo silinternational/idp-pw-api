@@ -42,8 +42,6 @@ services:
 
     apitest:
         build: ./
-        volumes_from:
-            - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         ports:
