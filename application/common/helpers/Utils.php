@@ -219,12 +219,16 @@ class Utils
             if (empty($params['password'][$rule])) {
                 throw new ServerErrorHttpException('Missing configuration for ' . $rule);
             }
-            $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
-            $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
-            $config['password'][$rule]['enabled'] = $params['password'][$rule]['enabled'];
+
+            if ($params['password'][$rule]['enabled']) {
+                $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
+                $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
+            }
         }
 
-        $config['password']['zxcvbn'] = $params['password']['zxcvbn'];
+        $config['password']['zxcvbn'] = [
+            'minScore' => $params['password']['zxcvbn']['minScore'],
+        ];
 
         return $config;
     }
