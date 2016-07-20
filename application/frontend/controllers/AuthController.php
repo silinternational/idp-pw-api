@@ -106,11 +106,18 @@ class AuthController extends BaseRestController
              */
             return $this->redirect($e->getUrl());
         } catch (\Exception $e) {
+            /*
+             * log exception
+             */
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $log['code'] = $e->getCode();
             \Yii::error($log, 'application');
-            throw new UnauthorizedHttpException($e->getMessage(), $e->getCode());
+
+            /*
+             * redirect to login error page
+             */
+            return $this->redirect(\Yii::$app->params['uiUrl'] . '/auth/error');
         }
 
     }
