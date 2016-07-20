@@ -523,7 +523,7 @@ class Reset extends ResetBase
         /*
          * Generate new verification code
          */
-        Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+        $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
 
         /*
          * Save changes
