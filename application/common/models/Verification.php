@@ -104,7 +104,7 @@ class Verification extends Model
      */
     public static function isEmailCodeValid($code, $userProvided)
     {
-        return $code == $userProvided;
+        return strval($code) === strval($userProvided);
     }
 
     /**
