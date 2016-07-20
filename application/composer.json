@@ -1,26 +1,51 @@
 {
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=5.4.0",
-        "yiisoft/yii2": "2.0.6",
-        "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*"
+  "minimum-stability": "stable",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://bitbucket.org/silintl/insite-people-search.git"
     },
-    "require-dev": {
-        "yiisoft/yii2-codeception": "*",
-        "yiisoft/yii2-debug": "*",
-        "yiisoft/yii2-gii": "*",
-        "yiisoft/yii2-faker": "*",
-        "roave/security-advisories": "dev-master",
-        "fillup/phpmyadmin-minimal": "dev-master"
-    },
-    "config": {
-        "process-timeout": 1800
-    },
-    "extra": {
-        "asset-installer-paths": {
-            "npm-asset-library": "vendor/npm",
-            "bower-asset-library": "vendor/bower"
-        }
+    {
+      "type": "vcs",
+      "url": "https://github.com/fillup/Adldap2.git"
     }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": "2.0.6",
+    "yiisoft/yii2-bootstrap": "*",
+    "yiisoft/yii2-swiftmailer": "*",
+    "yiisoft/yii2-gii": "*",
+    "guzzlehttp/guzzle-services": "dev-master",
+    "silinternational/php-env": "^0.1.1",
+    "silinternational/yii2-jsonsyslog": "*",
+    "silinternational/idp-pw-api-common": "dev-master",
+    "silinternational/idp-pw-api-personnel-insite": "^0.0.5",
+    "silinternational/idp-pw-api-auth-saml": "dev-master",
+    "silinternational/idp-pw-api-passwordstore-ldap": "dev-master",
+    "silinternational/idp-pw-api-phoneverification-nexmo": "dev-master",
+    "silinternational/zxcvbn-api-client-php": "dev-master",
+    "google/recaptcha": "^1.1.2",
+    "adldap2/adldap2": "dev-master",
+    "fillup/fake-bower-assets": "dev-master"
+  },
+  "require-dev": {
+    "yiisoft/yii2-codeception": "*",
+    "yiisoft/yii2-debug": "*",
+    "yiisoft/yii2-faker": "*",
+    "roave/security-advisories": "dev-master",
+    "fillup/phpmyadmin-minimal": "dev-master",
+    "codeception/codeception": "^2.2",
+    "codeception/specify": "0.*",
+    "codeception/verify": "0.*"
+  },
+  "config": {
+    "process-timeout": 1800
+  },
+  "extra": {
+    "asset-installer-paths": {
+      "npm-asset-library": "vendor/npm",
+      "bower-asset-library": "vendor/bower"
+    }
+  }
 }

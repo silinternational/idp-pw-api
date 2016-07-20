@@ -1,3 +1,4 @@
+#@IgnoreInspection BashAddShebang
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -38,6 +39,9 @@ Vagrant.configure(2) do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
+  # Set synced folder permissions
+  config.vm.synced_folder "./", "/vagrant", :mount_options => [ "dmode=755,fmode=755," ], owner: 33, group: 33
+
   # This provisioner runs on the first `vagrant up`.
   config.vm.provision "install", type: "shell", inline: <<-SHELL
     # Add Docker apt repository
@@ -54,15 +58,27 @@ Vagrant.configure(2) do |config|
     sudo groupadd docker
     sudo usermod -aG docker vagrant
     # Install Docker Compose
-    curl -LsS https://github.com/docker/compose/releases/download/1.6.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    curl -LsS https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
+
+    # Create /home/vagrant/.bash_profile for env vars
+    cat << EOF > /home/vagrant/.bash_profile
+#!/bin/bash
+COMPOSER_HOME=/home/vagrant/.composer; export COMPOSER_HOME
+COMPOSER_CONFIG_FILE="${COMPOSER_HOME}/config.json"; export COMPOSER_CONFIG_FILE
+COMPOSER_CACHE_DIR="${COMPOSER_HOME}/cache"; export COMPOSER_CACHE_DIR
+# Get GID for DOCKER_UIDGID env var
+GID=`id -g`
+DOCKER_UIDGID="${UID}:${GID}"; export DOCKER_UIDGID
+EOF
+
+    chown vagrant:vagrant /home/vagrant/.bash_profile
+    chmod +x /home/vagrant/.bash_profile
 
     # Run docker-compose (which will update preloaded images, and
     # pulls any images not preloaded)
     cd /vagrant
 
-    # Build doorman-api image for use by api, cron, and division services
-    docker build -t idp-pw-api .
   SHELL
 
   # This provisioner runs on every `vagrant reload' (as well as the first
@@ -74,11 +90,11 @@ Vagrant.configure(2) do |config|
     # pulls any images not preloaded)
     cd /vagrant
 
-    # Get GID for DOCKER_UIDGID env var
-    GID=`id -g`
+    # Ensure env vars are loaded from bash_profile
+    source /home/vagrant/.bash_profile
 
     # Start services
-    DOCKER_UIDGID="${UID}:${GID}" docker-compose up -d
+    make start
 
   SHELL
 

@@ -1,0 +1,32 @@
+db:
+    image: silintl/mariadb:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: r00tp@ss!
+        MYSQL_DATABASE: test
+        MYSQL_USER: idpmgmt
+        MYSQL_PASSWORD: idpmgmt
+
+zxcvbn:
+    image: wcjr/zxcvbn-api:1.0.0
+    ports:
+        - "3000"
+
+api:
+    build:
+        image: silintl/idp-pw-api
+        dockerfile_path: ./Dockerfile
+        cached: true
+    links:
+        - db
+        - zxcvbn
+    environment:
+        MYSQL_HOST: db
+        MYSQL_DATABASE: test
+        MYSQL_USER: idpmgmt
+        MYSQL_PASSWORD: idpmgmt
+    working_dir: /data
+    command: /data/run-tests.sh
+
+
+
+

@@ -5,4 +5,10 @@
 .idea/
 
 # local config files
+local.php
 local.env
+*.aes
+
+# other files
+/application/ocular.phar
+phpinfo.php

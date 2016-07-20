@@ -1,0 +1,61 @@
+<?php
+
+return [
+    'components' => [
+        'personnel' => [
+            // Example:
+            'class' => '\Sil\IdpPw\Common\Personnel\Insite',
+            'insitePeopleSearchBaseUrl' => '',
+            'insitePeopleSearchApiKey' => '',
+            'insitePeopleSearchApiSecret' => '',
+        ],
+        'auth' => [
+            'class' => '\Sil\IdpPw\Auth\Saml',
+            'signRequest' => true,
+            'checkResponseSigning' => true,
+            'requireEncryptedAssertion' => true,
+            'idpCertificate' => '',
+            'spCertificate' => '',
+            'spPrivateKey' => '',
+            'assertionConsumerServiceUrl' => 'http://idp-pw-api.local:8080/auth/login',
+            'entityId' => 'idp-pw-api.local',
+            'ssoUrl' => '',
+            'sloUrl' => '',
+            'attributeMap' => [
+                'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
+                'first_name' => ['field' => 'givenName', 'element' => 0 ],
+                'last_name' => ['field' => 'sn', 'element' => 0 ],
+                'email' => ['field' => 'mail', 'element' => 0 ],
+                'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
+            ]
+        ],
+        'phone' => [
+            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Verify',
+            'apiKey' => '',
+            'apiSecret' => '',
+            'codeLength' => 4,
+            'brand' => 'Verification',
+        ],
+//        'phone' => [
+//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Sms',
+//            'apiKey' => '',
+//            'apiSecret' => '',
+//            'from' => '',
+//        ],
+        'passwordStore' => [
+            'class' => '\Sil\IdpPw\PasswordStore\Ldap',
+            'host' => '',
+            'port' => 636,
+            'baseDn' => '',
+            'adminUsername' => '',
+            'adminPassword' => '',
+            'useTls' => false,
+            'useSsl' => true,
+            'userPasswordAttribute' => 'userPassword',
+            'employeeIdAttribute' => 'gisEisPersonId',
+            'passwordLastChangeDateAttribute' => 'pwdchangedtime',
+            'passwordExpireDateAttribute' => 'modifytimestamp',
+
+        ],
+    ]
+];
