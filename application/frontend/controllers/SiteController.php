@@ -1,13 +1,10 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\Reset;
 use frontend\components\BaseRestController;
-use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\MethodNotAllowedHttpException;
-use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 
@@ -73,7 +70,7 @@ class SiteController extends BaseRestController
          * Check for DB connection
          */
         try {
-            Reset::find()->all();
+            \Yii::$app->db->open();
             return [];
         } catch (\Exception $e) {
             throw new ServerErrorHttpException(
