@@ -91,7 +91,7 @@ class ResetTest extends DbTestCase
     {
         $existing = $this->resets('reset1');
         $new = Reset::findOrCreate($existing->user);
-
+        
         $this->assertEquals($existing->id, $new->id);
     }
 

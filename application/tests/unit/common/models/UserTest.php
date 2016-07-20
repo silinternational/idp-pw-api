@@ -184,7 +184,7 @@ class UserTest extends DbTestCase
         $user = $this->users('user1');
         $methods = $user->getMaskedMethods();
         $this->assertTrue(is_array($methods));
-        $this->assertEquals(6, count($methods));
+        $this->assertEquals(5, count($methods));
 
         foreach ($methods as $method) {
             if ($method['type'] == 'primary') {
@@ -198,7 +198,7 @@ class UserTest extends DbTestCase
             } elseif ($method['type'] == 'email' && $method['uid'] == '22222222222222222222222222222222') {
                 $this->assertEquals('e**************9@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '33333333333333333333333333333333') {
-                $this->assertEquals('e**************1@d*****.o**', $method['value']);
+                $this->fail('Unverified method present in getMaskedMethods call');
             }
 
         }

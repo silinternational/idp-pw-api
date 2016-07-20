@@ -106,11 +106,18 @@ class AuthController extends BaseRestController
              */
             return $this->redirect($e->getUrl());
         } catch (\Exception $e) {
+            /*
+             * log exception
+             */
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $log['code'] = $e->getCode();
             \Yii::error($log, 'application');
-            throw new UnauthorizedHttpException($e->getMessage(), $e->getCode());
+
+            /*
+             * redirect to login error page
+             */
+            return $this->redirect(\Yii::$app->params['uiUrl'] . '/auth/error');
         }
 
     }
@@ -200,9 +207,14 @@ class AuthController extends BaseRestController
          * build url to redirect user to
          */
         $afterLogin = $this->getAfterLoginUrl($relayState);
+        if (strpos( $afterLogin, '?')) {
+            $joinChar = '&';
+        } else {
+            $joinChar = '?';
+        }
         $url = $afterLogin . sprintf(
-                '?state=%s&token_type=Bearer&expires_in=%s&access_token=%s',
-                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
+                '%sstate=%s&token_type=Bearer&expires_in=%s&access_token=%s',
+                $joinChar, Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
             );
 
         return $url;

@@ -166,11 +166,13 @@ class Method extends MethodBase
      */
     public function sendVerificationEmail()
     {
+        $friendlyExpireTime = Utils::getFriendlyDate($this->verification_expires);
         Verification::sendEmail(
             $this->value,
             'Verification required - New account recovery method added',
             '@common/mail/method/verify',
             $this->verification_code,
+            $friendlyExpireTime,
             $this->user,
             null,
             $this->user->getId(),

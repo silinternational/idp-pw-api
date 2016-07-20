@@ -12,6 +12,7 @@ class Utils
 {
 
     const DT_FORMAT = 'Y-m-d H:i:s';
+    const FRIENDLY_DT_FORMAT = 'l F j, Y g:iA T';
     const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
@@ -28,12 +29,32 @@ class Utils
     /**
      * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
      * @return string
+     * @throws \Exception
      */
     public static function getIso8601($timestamp = null)
     {
         $timestamp = $timestamp !== null ? $timestamp : time();
         $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
+        if ($timestamp === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865840);
+        }
         return date('c', $timestamp);
+    }
+
+    /**
+     * Return human readable date time
+     * @param int|string $timestamp Either a unix timestamp or a date in string format
+     * @return bool|string
+     * @throws \Exception
+     */
+    public static function getFriendlyDate($timestamp = null)
+    {
+        $timestamp = $timestamp !== null ? $timestamp : time();
+        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
+        if ($timestamp === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865838);
+        }
+        return date(self::FRIENDLY_DT_FORMAT, $timestamp);
     }
 
     /**
@@ -198,12 +219,16 @@ class Utils
             if (empty($params['password'][$rule])) {
                 throw new ServerErrorHttpException('Missing configuration for ' . $rule);
             }
-            $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
-            $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
-            $config['password'][$rule]['enabled'] = $params['password'][$rule]['enabled'];
+
+            if ($params['password'][$rule]['enabled']) {
+                $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
+                $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
+            }
         }
 
-        $config['password']['zxcvbn'] = $params['password']['zxcvbn'];
+        $config['password']['zxcvbn'] = [
+            'minScore' => $params['password']['zxcvbn']['minScore'],
+        ];
 
         return $config;
     }

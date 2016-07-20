@@ -1,4 +1,6 @@
 <?php
+use common\helpers\Utils;
+
 return [
     'reset1' => [
         'id' => 1,
@@ -8,7 +10,7 @@ return [
         'method_id' => null,
         'code' => null,
         'attempts' => 0,
-        'expires' => '2016-03-01 12:00:00',
+        'expires' => Utils::getDatetime(time() + 900),
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],
@@ -20,7 +22,7 @@ return [
         'method_id' => 1,
         'code' => null,
         'attempts' => 0,
-        'expires' => '2016-03-01 12:00:00',
+        'expires' => Utils::getDatetime(time() + 900),
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],
@@ -32,7 +34,7 @@ return [
         'method_id' => 2,
         'code' => null,
         'attempts' => 0,
-        'expires' => '2016-03-01 12:00:00',
+        'expires' => Utils::getDatetime(time() + 900),
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],

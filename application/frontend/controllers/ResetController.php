@@ -6,6 +6,7 @@ use common\models\EventLog;
 use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
+use Sil\IdpPw\Common\Personnel\NotFoundException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -54,9 +55,10 @@ class ResetController extends BaseRestController
 
     /**
      * Create new reset process
-     * @return Reset
+     * @return Reset|\stdClass
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
      */
     public function actionCreate()
     {
@@ -86,13 +88,25 @@ class ResetController extends BaseRestController
         }
 
         /*
-         * Find or create user
+         * Find or create user, if user not found return empty object
          */
-        if ($usernameIsEmail) {
-            $user = User::findOrCreate(null, $username);
-        } else {
-            $user = User::findOrCreate($username);
+        try {
+            if ($usernameIsEmail) {
+                $user = User::findOrCreate(null, $username);
+            } else {
+                $user = User::findOrCreate($username);
+            }
+        } catch (NotFoundException $e) {
+            return new \stdClass();
+        } catch (\Exception $e) {
+            throw new ServerErrorHttpException('Unable to create new reset', 1469036552);
         }
+
+
+        /*
+         * Clear out expired resets
+         */
+        Reset::deleteExpired();
         
         /*
          * Find or create a reset

@@ -92,11 +92,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated POST request for creating an already existing method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPOST('/method',['type'=>'phone','value'=>'1,1234567890']);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
-            'type' => "phone",
-            'value' => "1,1234567890"
-        ]);
+        $I->seeResponseCodeIs(409);
     }
 
     public function test9(ApiTester $I)
