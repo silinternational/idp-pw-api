@@ -521,6 +521,11 @@ class Reset extends ResetBase
         }
 
         /*
+         * Generate new verification code
+         */
+        Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+
+        /*
          * Save changes
          */
         $this->saveOrError('Set type of reset', 'Unable to update reset type.');
