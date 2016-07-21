@@ -40,6 +40,17 @@ services:
             - ./common.env
             - ./local.env
 
+    cron:
+        build: ./
+        volumes_from:
+            - data
+        depends_on:
+            - db
+        env_file:
+            - ./common.env
+            - ./local.env
+        command: /data/run-cron.sh
+
     apitest:
         build: ./
         volumes:

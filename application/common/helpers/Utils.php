@@ -43,8 +43,8 @@ class Utils
 
     /**
      * Return human readable date time
-     * @param int|string $timestamp Either a unix timestamp or a date in string format
-     * @return bool|string
+     * @param int|string|null $timestamp Either a unix timestamp or a date in string format
+     * @return string
      * @throws \Exception
      */
     public static function getFriendlyDate($timestamp = null)
