@@ -223,7 +223,7 @@ class ResetTest extends DbTestCase
         $this->assertEquals(1, EmailUtils::getEmailFilesCount());
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('email-1456769679@domain.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('password change for your'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
         $this->assertEquals($attempts + 1, $reset->attempts);
 
     }

@@ -13,6 +13,10 @@ COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
 RUN mkdir -p /opt/ssl
 COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
 
+# Copy in cron configuration
+COPY dockerbuild/idp-cron /etc/cron.d/
+RUN chmod 0644 /etc/cron.d/idp-cron
+
 # get s3-expand
 RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/1.5/s3-expand -o /usr/local/bin/s3-expand
 RUN chmod a+x /usr/local/bin/s3-expand
