@@ -92,11 +92,24 @@ class Reset extends ResetBase
          */
         self::deleteExpired();
 
+        $log = [
+            'action' => 'findOrCreate reset',
+            'user_id' => $user->id,
+            'type' => $type,
+            'method_id' => $methodId,
+            'ip_address' => 'initiated outside web request context',
+        ];
+
+        if (\Yii::$app->request) {
+            $log['ip_address'] = Utils::getClientIp(\Yii::$app->request);
+        }
+
         /*
          * Find existing or create new Reset
          */
         $reset = $user->reset;
         if ($reset === null) {
+            $log['existing reset'] = 'no';
             /*
              * Create new reset
              */
@@ -113,6 +126,10 @@ class Reset extends ResetBase
             if ($type == self::TYPE_METHOD && $methodId !== null) {
                 $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId, 'verified' => 1]);
                 if ( ! $method) {
+                    $log['status'] = 'error';
+                    $log['error'] = 'Requested method not found';
+                    \Yii::error($log);
+
                     throw new NotFoundHttpException('Requested method not found', 1456608142);
                 }
                 $reset->method_id = $methodId;
@@ -121,6 +138,7 @@ class Reset extends ResetBase
              * Save new Reset
              */
             $reset->saveOrError('create new reset', 'Unable to create new reset.');
+
             EventLog::log(
                 'ResetCreated',
                 [
@@ -130,11 +148,18 @@ class Reset extends ResetBase
                 $user->id
             );
         } else {
+            $log['existing reset'] = 'yes';
             /*
              * change method back to primary if they are requesting to start reset again
              */
             $reset->setType(self::TYPE_PRIMARY);
         }
+
+        $log['status'] = 'success';
+        $log['attempts_count'] = $reset->attempts;
+        $log['expires'] = $reset->expires;
+        $log['disable_until'] = $reset->disable_until;
+        \Yii::warning($log);
 
         return $reset;
     }
