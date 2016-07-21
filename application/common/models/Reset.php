@@ -90,7 +90,7 @@ class Reset extends ResetBase
         /*
          * Clean up expired resets
          */
-        Reset::deleteExpired();
+        self::deleteExpired();
 
         /*
          * Find existing or create new Reset
@@ -241,7 +241,7 @@ class Reset extends ResetBase
                     'idpName' => \Yii::$app->params['idpName'],
                 ]
             );
-            $this->sendEmail($this->method->value, $subject, 'self');
+            $this->sendEmail($this->method->value, $subject, 'on-behalf');
         } elseif ($this->method->type == Method::TYPE_PHONE) {
             $this->sendPhone();
         } else {
@@ -603,9 +603,9 @@ class Reset extends ResetBase
     public static function deleteExpired()
     {
         try {
-            $deleted = self::deleteAll([
+            $deleted = self::deleteAll(
                 ['<', 'expires', Utils::getDatetime()]
-            ]);
+            );
 
             if ($deleted > 0) {
                 \Yii::warning([

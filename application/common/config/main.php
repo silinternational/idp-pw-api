@@ -106,6 +106,7 @@ return [
         'helpCenterUrl' => $helpCenterUrl,
         'uiUrl' => $uiUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
+        'emailQueueBatchSize' => 5,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
             'disableDuration' => 900, // 15 minutes
