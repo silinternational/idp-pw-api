@@ -12,24 +12,24 @@ class CronController extends Controller
     public function actionSendQueuedEmail()
     {
         try {
-            echo "starting cron/send-queued-email" . PHP_EOL;
+            echo 'starting cron/send-queued-email' . PHP_EOL;
 
             $batchSize = \Yii::$app->params['emailQueueBatchSize'];
             $queued = EmailQueue::find()->orderBy(['last_attempt' => SORT_ASC])->limit($batchSize)->all();
 
             if ($queued === null) {
-                echo "no queued emails to send" . PHP_EOL;
+                echo 'no queued emails to send' . PHP_EOL;
                 return;
             }
 
-            echo "starting to process " . count($queued) . " queued emails..." . PHP_EOL;
+            echo 'starting to process ' . count($queued) . ' queued emails...' . PHP_EOL;
 
             /** @var EmailQueue $email */
             foreach ($queued as $email) {
                 $email->retry();
             }
         } catch (\Exception $e) {
-            echo "error occured" . PHP_EOL;
+            echo 'error occured' . PHP_EOL;
             \Yii::error([
                 'action' => 'cron/sendQueuedEmail',
                 'status' => 'error',
@@ -38,6 +38,6 @@ class CronController extends Controller
             ]);
         }
 
-        echo "done" . PHP_EOL;
+        echo 'done' . PHP_EOL;
     }
 }
