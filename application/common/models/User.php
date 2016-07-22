@@ -396,8 +396,7 @@ class User extends UserBase implements IdentityInterface
 
             $lastChangedTimestamp = strtotime($pwMeta->passwordLastChangeDate);
             $this->pw_last_changed = Utils::getDatetime($lastChangedTimestamp);
-            $expiresTimestamp = strtotime($this->pw_last_changed) + \Yii::$app->params['passwordLifetime'];
-            $this->pw_expires = Utils::getDatetime($expiresTimestamp);
+            $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
 
             if ( ! $this->save()) {
                 throw new ServerErrorHttpException('Unable to update user record with password metadata', 1467297721);
@@ -421,7 +420,7 @@ class User extends UserBase implements IdentityInterface
         $password->save();
 
         $this->pw_last_changed = Utils::getDatetime();
-        $this->pw_expires = Utils::getDatetime(time() + \Yii::$app->params['passwordLifetime']);
+        $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
         
         if ( ! $this->save()) {
             throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);

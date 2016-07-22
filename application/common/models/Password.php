@@ -151,25 +151,10 @@ class Password extends Model
             $this->passwordStore->set($this->employeeId, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
-        } catch (PasswordReuseException $e) {
-            $log['status'] = 'error';
-            $log['error'] = $e->getMessage();
-            $previous = $e->getPrevious();
-            if ($previous instanceof \Exception) {
-                $log['previous'] = [
-                    'code' => $previous->getCode(),
-                    'message' => $previous->getMessage(),
-                ];
-            }
-            \Yii::error($log);
-            throw new BadRequestHttpException(
-                \Yii::t(
-                    'app',
-                    'Unable to update password. If this password has been used before please use something different.'
-                ),
-                1469194882
-            );
         } catch (\Exception $e) {
+            /*
+             * Log error
+             */
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $previous = $e->getPrevious();
@@ -180,7 +165,23 @@ class Password extends Model
                 ];
             }
             \Yii::error($log);
-            throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
+
+            /*
+             * Throw exception based on exception type
+             */
+            if ($e instanceof  PasswordReuseException) {
+                throw new BadRequestHttpException(
+                    \Yii::t(
+                        'app',
+                        'Unable to update password. ' .
+                            'If this password has been used before please use something different.'
+                    ),
+                    1469194882
+                );
+            } else {
+                throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
+            }
+
         }
     }
 
