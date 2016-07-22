@@ -3,6 +3,7 @@ namespace common\models;
 
 use common\helpers\Utils;
 use common\helpers\ZxcvbnPasswordValidator;
+use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
 use yii\base\Model;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -150,6 +151,24 @@ class Password extends Model
             $this->passwordStore->set($this->employeeId, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
+        } catch (PasswordReuseException $e) {
+            $log['status'] = 'error';
+            $log['error'] = $e->getMessage();
+            $previous = $e->getPrevious();
+            if ($previous instanceof \Exception) {
+                $log['previous'] = [
+                    'code' => $previous->getCode(),
+                    'message' => $previous->getMessage(),
+                ];
+            }
+            \Yii::error($log);
+            throw new BadRequestHttpException(
+                \Yii::t(
+                    'app',
+                    'Unable to update password. If this password has been used before please use something different.'
+                ),
+                1469194882
+            );
         } catch (\Exception $e) {
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();

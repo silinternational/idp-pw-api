@@ -1418,12 +1418,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "b953d6832cbab74e65b3901728190d48d555ce6f"
+                "reference": "aba4b813b11242ed17c5c6fadfa99062091ad7d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/b953d6832cbab74e65b3901728190d48d555ce6f",
-                "reference": "b953d6832cbab74e65b3901728190d48d555ce6f",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/aba4b813b11242ed17c5c6fadfa99062091ad7d1",
+                "reference": "aba4b813b11242ed17c5c6fadfa99062091ad7d1",
                 "shasum": ""
             },
             "require": {
@@ -1451,7 +1451,7 @@
                 }
             ],
             "description": "LDAP Password Store component for IdP PW API",
-            "time": "2016-07-22 13:03:29"
+            "time": "2016-07-22 13:36:42"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
