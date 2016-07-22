@@ -17,7 +17,7 @@ class CronController extends Controller
             $batchSize = \Yii::$app->params['emailQueueBatchSize'];
             $queued = EmailQueue::find()->orderBy(['last_attempt' => SORT_ASC])->limit($batchSize)->all();
 
-            if ($queued === null) {
+            if (empty($queued)) {
                 echo 'no queued emails to send' . PHP_EOL;
                 return;
             }
