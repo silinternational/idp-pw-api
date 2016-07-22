@@ -181,7 +181,7 @@ class Password extends Model
             } else {
                 throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
             }
-            
+
         }
     }
 

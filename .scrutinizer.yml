@@ -168,13 +168,13 @@ build:
                 command: mkdir -p runtime/mail
             -
                 command: ./yii migrate --interactive=0
-                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt' }
+                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt', MAILER_USERFILES: true, ALERTS_EMAIL_ENABLED: false, ALERTS_EMAIL: alerts@nowhere.com }
             -
                 command: ./yii migrate --interactive=0 --migrationPath=console/migrations-test
-                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt' }
+                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt', MAILER_USERFILES: true, ALERTS_EMAIL_ENABLED: false, ALERTS_EMAIL: alerts@nowhere.com }
             -
                 command: ./vendor/bin/codecept run unit --coverage --coverage-xml
-                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt' }
+                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt', MAILER_USERFILES: true, ALERTS_EMAIL_ENABLED: false, ALERTS_EMAIL: alerts@nowhere.com }
                 coverage:
                     file: ./application/tests/_output/coverage.xml
                     format: php-clover
