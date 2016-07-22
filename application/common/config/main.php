@@ -14,6 +14,8 @@ $mailerHost = Env::get('MAILER_HOST');
 $mailerUsername = Env::get('MAILER_USERNAME');
 $mailerPassword = Env::get('MAILER_PASSWORD');
 $adminEmail = Env::get('ADMIN_EMAIL');
+$alertsEmail = Env::get('ALERTS_EMAIL');
+$alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
 $fromEmail = Env::get('FROM_EMAIL');
 $fromName = Env::get('FROM_NAME');
 $appEnv = Env::get('APP_ENV');
@@ -57,9 +59,9 @@ return [
                     ],
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
                     'prefix' => function($message) use ($appEnv) {
-                        $prefixData = array(
+                        $prefixData = [
                             'env' => $appEnv,
-                        );
+                        ];
 
                         // There is no user when a console command is run
                         try {
@@ -72,6 +74,45 @@ return [
                         }
                         return \yii\helpers\Json::encode($prefixData);
                     },
+                ],
+                [
+                    'class' => 'yii\log\EmailTarget',
+                    'levels' => ['error'],
+                    'except' => [
+                        'yii\web\HttpException:401',
+                        'yii\web\HttpException:404',
+                    ],
+                    'logVars' => [], // Disable logging of _SERVER, _POST, etc.
+                    'message' => [
+                        'from' => $fromEmail,
+                        'to' => $alertsEmail,
+                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv .']',
+                    ],
+                    'prefix' => function($message) use ($appEnv) {
+                        $prefix = 'env=' . $appEnv . PHP_EOL;
+
+                        // There is no user when a console command is run
+                        try {
+                            $appUser = \Yii::$app->user;
+                        } catch (\Exception $e) {
+                            $appUser = Null;
+                        }
+                        if ($appUser && ! \Yii::$app->user->isGuest){
+                            $prefix .= 'user='.\Yii::$app->user->identity->email . PHP_EOL;
+                        }
+
+                        // Try to get requested url and method
+                        try {
+                            $request = \Yii::$app->request;
+                            $prefix .= "Requested URL: " . $request->getUrl() . PHP_EOL;
+                            $prefix .= "Request method: " . $request->getMethod() . PHP_EOL;
+                        } catch (\Exception $e) {
+                            $prefix .= 'Requested URL: not available';
+                        }
+
+                        return PHP_EOL . $prefix;
+                    },
+                    'enabled' => $alertsEmailEnabled,
                 ],
             ],
         ],
