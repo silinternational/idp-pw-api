@@ -115,7 +115,7 @@ return [
         ],
         'accessTokenHashKey' => $accessTokenHashKey,
         'accessTokenLifetime' => 1800, // 30 minutes
-        'passwordLifetime' => 31104000, // 12 months
+        'passwordLifetime' => 'P1Y', // See http://php.net/manual/en/dateinterval.construct.php
         'password' => [
             'minLength' => [
                 'value' => 10,

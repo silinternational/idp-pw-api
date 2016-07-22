@@ -398,4 +398,19 @@ class Utils
         return hash_hmac('sha256', $accessToken, \Yii::$app->params['accessTokenHashKey']);
     }
 
+    /**
+     * Calculate expiration date based on
+     * @param string $changeDate
+     * @return string
+     */
+    public static function calculatePasswordExpirationDate($changeDate)
+    {
+        $passwordLifetime = \Yii::$app->params['passwordLifetime'];
+        $dateInterval = new \DateInterval($passwordLifetime);
+        $dateTime = new \DateTime($changeDate);
+        $expireDate = $dateTime->add($dateInterval);
+
+        return $expireDate->format(self::DT_FORMAT);
+    }
+
 }
