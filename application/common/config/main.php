@@ -104,8 +104,8 @@ return [
                         // Try to get requested url and method
                         try {
                             $request = \Yii::$app->request;
-                            $prefix .= "Requested URL: " . $request->getUrl() . PHP_EOL;
-                            $prefix .= "Request method: " . $request->getMethod() . PHP_EOL;
+                            $prefix .= 'Requested URL: ' . $request->getUrl() . PHP_EOL;
+                            $prefix .= 'Request method: ' . $request->getMethod() . PHP_EOL;
                         } catch (\Exception $e) {
                             $prefix .= 'Requested URL: not available';
                         }
