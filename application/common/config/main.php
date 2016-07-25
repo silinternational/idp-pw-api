@@ -1,6 +1,7 @@
 <?php
 
 use Sil\PhpEnv\Env;
+use Sil\Log\EmailTarget;
 
 /*
  * Get config settings from ENV vars or set defaults
@@ -76,7 +77,7 @@ return [
                     },
                 ],
                 [
-                    'class' => 'yii\log\EmailTarget',
+                    'class' => 'Sil\Log\EmailTarget',
                     'levels' => ['error'],
                     'except' => [
                         'yii\web\HttpException:401',
