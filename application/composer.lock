@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1910f741a2c920693a204f6606e9a1c6",
-    "content-hash": "a84c36379a0e1757e124cf1c156e30d5",
+    "hash": "0543bc23cef5c107a13eea33fc78b517",
+    "content-hash": "939fbed6b86b026db21ee870543582d2",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -72,82 +72,6 @@
                 "source": "https://github.com/Adldap2/Adldap2"
             },
             "time": "2016-06-08 15:55:24"
-        },
-        {
-            "name": "bower-asset/bootstrap",
-            "version": "v3.3.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.9.1,<4.0"
-            },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": [
-                    "less/bootstrap.less",
-                    "dist/js/bootstrap.js"
-                ],
-                "bower-asset-ignore": [
-                    "/.*",
-                    "_config.yml",
-                    "CNAME",
-                    "composer.json",
-                    "CONTRIBUTING.md",
-                    "docs",
-                    "js/tests",
-                    "test-infra"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-            "keywords": [
-                "css",
-                "framework",
-                "front-end",
-                "js",
-                "less",
-                "mobile-first",
-                "responsive",
-                "web"
-            ]
-        },
-        {
-            "name": "bower-asset/typeahead.js",
-            "version": "v0.11.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twitter/typeahead.js.git",
-                "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twitter/typeahead.js/zipball/588440f66559714280628a4f9799f0c4eb880a4a",
-                "reference": "588440f66559714280628a4f9799f0c4eb880a4a",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.7"
-            },
-            "require-dev": {
-                "bower-asset/jasmine-ajax": "~1.3.1",
-                "bower-asset/jasmine-jquery": "~1.5.2",
-                "bower-asset/jquery": "~1.7"
-            },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": "dist/typeahead.bundle.js"
-            }
         },
         {
             "name": "cebe/markdown",
@@ -322,23 +246,26 @@
         },
         {
             "name": "fillup/fake-bower-assets",
-            "version": "dev-master",
+            "version": "2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fillup/fake-bower-assets.git",
-                "reference": "205b182bb78641a26b6fe99a9fc28f262ae93271"
+                "reference": "9845d8e91eea0922fd6446ba99c68682c9f46a38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fillup/fake-bower-assets/zipball/205b182bb78641a26b6fe99a9fc28f262ae93271",
-                "reference": "205b182bb78641a26b6fe99a9fc28f262ae93271",
+                "url": "https://api.github.com/repos/fillup/fake-bower-assets/zipball/9845d8e91eea0922fd6446ba99c68682c9f46a38",
+                "reference": "9845d8e91eea0922fd6446ba99c68682c9f46a38",
                 "shasum": ""
             },
             "replace": {
-                "bower-asset/jquery": "2.1.1",
+                "bower-asset/bootstrap": "3.3.6",
+                "bower-asset/jquery": "2.2.2",
                 "bower-asset/jquery.inputmask": "3.2.2",
                 "bower-asset/punycode": "1.3.1",
-                "bower-asset/yii2-pjax": "2.0.1"
+                "bower-asset/typeahead.js": "0.11.1",
+                "bower-asset/yii2-pjax": "2.0.1",
+                "yiisoft/yii2-bootstrap": "2.0.6"
             },
             "type": "metapackage",
             "notification-url": "https://packagist.org/downloads/",
@@ -352,7 +279,7 @@
                 }
             ],
             "description": "Use Composer \"replace\" to fake out installing bower-asset dependencies that aren't really needed",
-            "time": "2016-07-25 20:11:39"
+            "time": "2016-07-27 13:10:36"
         },
         {
             "name": "fillup/nexmo",
@@ -1419,12 +1346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "f6dc67a6a72e5d3f6c1b43be853bb9461860996a"
+                "reference": "60e4ffc95f6212ae837e06ea1d64117e4608b7f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/f6dc67a6a72e5d3f6c1b43be853bb9461860996a",
-                "reference": "f6dc67a6a72e5d3f6c1b43be853bb9461860996a",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/60e4ffc95f6212ae837e06ea1d64117e4608b7f8",
+                "reference": "60e4ffc95f6212ae837e06ea1d64117e4608b7f8",
                 "shasum": ""
             },
             "require": {
@@ -1452,7 +1379,7 @@
                 }
             ],
             "description": "LDAP Password Store component for IdP PW API",
-            "time": "2016-07-25 13:57:24"
+            "time": "2016-07-27 12:42:11"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -1579,12 +1506,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/yii2-email-log-target.git",
-                "reference": "34f8f9c6f16518e1b5c1c77eaee42f20690cf5ad"
+                "reference": "fe36825d2c40c5ce0d24cff012e27752690902de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/yii2-email-log-target/zipball/34f8f9c6f16518e1b5c1c77eaee42f20690cf5ad",
-                "reference": "34f8f9c6f16518e1b5c1c77eaee42f20690cf5ad",
+                "url": "https://api.github.com/repos/silinternational/yii2-email-log-target/zipball/fe36825d2c40c5ce0d24cff012e27752690902de",
+                "reference": "fe36825d2c40c5ce0d24cff012e27752690902de",
                 "shasum": ""
             },
             "require": {
@@ -1608,7 +1535,7 @@
                 "log",
                 "yii2"
             ],
-            "time": "2016-07-25 19:57:02"
+            "time": "2016-07-27 12:53:52"
         },
         {
             "name": "silinternational/yii2-jsonsyslog",
@@ -1721,6 +1648,9 @@
                 "psr-4": {
                     "silintl\\InsitePeopleSearch\\": "src/"
                 }
+            },
+            "support": {
+                "source": "https://bitbucket.org/silintl/insite-people-search/src/8a1e3956fc0e3cafcf96e3ee111737aade627f7f/?at=0.0.2"
             },
             "time": "2016-07-20 14:50:49"
         },
@@ -1922,56 +1852,6 @@
                 "yii2"
             ],
             "time": "2016-07-11 13:36:42"
-        },
-        {
-            "name": "yiisoft/yii2-bootstrap",
-            "version": "2.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "3fd2b8c950cce79d60e9702d6bcb24eb3c80f6c5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/3fd2b8c950cce79d60e9702d6bcb24eb3c80f6c5",
-                "reference": "3fd2b8c950cce79d60e9702d6bcb24eb3c80f6c5",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/bootstrap": "3.3.* | 3.2.* | 3.1.*",
-                "yiisoft/yii2": ">=2.0.6"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                },
-                "asset-installer-paths": {
-                    "npm-asset-library": "vendor/npm",
-                    "bower-asset-library": "vendor/bower"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "yii\\bootstrap\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Qiang Xue",
-                    "email": "qiang.xue@gmail.com"
-                }
-            ],
-            "description": "The Twitter Bootstrap extension for the Yii framework",
-            "keywords": [
-                "bootstrap",
-                "yii2"
-            ],
-            "time": "2016-03-17 03:29:28"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -2843,16 +2723,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "900370c81280cc0d942ffbc5912d80464eaee7e9"
+                "reference": "5f3f7e736d6319d5f1fc402aff8b026da26709a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/900370c81280cc0d942ffbc5912d80464eaee7e9",
-                "reference": "900370c81280cc0d942ffbc5912d80464eaee7e9",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/5f3f7e736d6319d5f1fc402aff8b026da26709a3",
+                "reference": "5f3f7e736d6319d5f1fc402aff8b026da26709a3",
                 "shasum": ""
             },
             "require": {
@@ -2861,7 +2741,7 @@
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-token-stream": "^1.4.2",
                 "sebastian/code-unit-reverse-lookup": "~1.0",
-                "sebastian/environment": "^1.3.2",
+                "sebastian/environment": "^1.3.2 || ^2.0",
                 "sebastian/version": "~1.0|~2.0"
             },
             "require-dev": {
@@ -2902,7 +2782,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-03 05:03:56"
+            "time": "2016-07-26 14:39:29"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3087,16 +2967,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.4.7",
+            "version": "5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6c8a756c17a1a92a066c99860eb57922e8b723da"
+                "reference": "3132365e1430c091f208e120b8845d39c25f20e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6c8a756c17a1a92a066c99860eb57922e8b723da",
-                "reference": "6c8a756c17a1a92a066c99860eb57922e8b723da",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3132365e1430c091f208e120b8845d39c25f20e6",
+                "reference": "3132365e1430c091f208e120b8845d39c25f20e6",
                 "shasum": ""
             },
             "require": {
@@ -3108,7 +2988,7 @@
                 "myclabs/deep-copy": "~1.3",
                 "php": "^5.6 || ^7.0",
                 "phpspec/prophecy": "^1.3.1",
-                "phpunit/php-code-coverage": "^4.0",
+                "phpunit/php-code-coverage": "^4.0.1",
                 "phpunit/php-file-iterator": "~1.4",
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-timer": "^1.0.6",
@@ -3161,7 +3041,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-07-21 06:55:27"
+            "time": "2016-07-26 14:48:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4427,7 +4307,6 @@
         "silinternational/idp-pw-api-phoneverification-nexmo": 20,
         "silinternational/zxcvbn-api-client-php": 20,
         "adldap2/adldap2": 20,
-        "fillup/fake-bower-assets": 20,
         "roave/security-advisories": 20,
         "fillup/phpmyadmin-minimal": 20
     },

@@ -13,7 +13,6 @@
   "require": {
     "php": ">=5.4.0",
     "yiisoft/yii2": "^2.0.9",
-    "yiisoft/yii2-bootstrap": "*",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
     "guzzlehttp/guzzle-services": "dev-master",
@@ -28,7 +27,7 @@
     "silinternational/zxcvbn-api-client-php": "dev-master",
     "google/recaptcha": "^1.1.2",
     "adldap2/adldap2": "dev-master",
-    "fillup/fake-bower-assets": "dev-master"
+    "fillup/fake-bower-assets": "2.0.9"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",
