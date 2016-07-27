@@ -34,19 +34,19 @@
   - name: deploy_staging_api
     service: ecsdeploy
     tag: develop
-    command: "-c staging1 -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 300"
+    command: "-c staging1 -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
 
   - name: deploy_staging_cron
     service: ecsdeploy
     tag: develop
-    command: "-c staging1 -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 300"
+    command: "-c staging1 -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
 
   - name: deploy_production_api
     service: ecsdeploy
     tag: master
-    command: "-c idp-pw-production -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 300"
+    command: "-c idp-pw-production -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
 
   - name: deploy_production_cron
     service: ecsdeploy
     tag: master
-    command: "-c idp-pw-production -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 300"
+    command: "-c idp-pw-production -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
