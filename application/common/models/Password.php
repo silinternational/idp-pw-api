@@ -182,8 +182,8 @@ class Password extends Model
                 throw new ServerErrorHttpException(
                     \Yii::t(
                         'app',
-                        'Unable to update password. ' .
-                            'If this password has been used before please use something different.'
+                        'Unable to update password, please wait a minute and try again. If this problem ' .
+                            'persists, please contact support.'
                     ), 
                     1463165209
                 );

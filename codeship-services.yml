@@ -24,7 +24,7 @@ api:
         MYSQL_DATABASE: test
         MYSQL_USER: idpmgmt
         MYSQL_PASSWORD: idpmgmt
-        MAILER_USERFILES: true
+        MAILER_USEFILES: true
         ALERTS_EMAIL_ENABLED: false
         ALERTS_EMAIL: alerts@nowhere.com
     working_dir: /data
