@@ -19,6 +19,12 @@ class Component extends YiiComponent implements PhoneVerificationInterface
      */
     public function send($phoneNumber, $code)
     {
+        /*
+         * Check for given number that should trigger exception
+         */
+        if ($phoneNumber == '14044044044') {
+            throw new \Exception();
+        }
 
         // Look up code by phone number to support "generated" numbers
         $data = include __DIR__ . '/data.php';
@@ -58,5 +64,10 @@ class Component extends YiiComponent implements PhoneVerificationInterface
         }
 
         throw new NotMatchException();
+    }
+
+    public function format($phoneNumber)
+    {
+        return $phoneNumber;
     }
 }
