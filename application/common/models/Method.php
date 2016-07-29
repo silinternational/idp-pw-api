@@ -5,6 +5,8 @@ use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class Method
@@ -49,7 +51,7 @@ class Method extends MethodBase
                 ],
 
                 [// Phone number validation when type is phone
-                    'value', 'match', 'pattern' => '/[0-9,]{8,16}/',
+                    'value', 'match', 'pattern' => '/^[\-0-9,\(\) \.#*\+]{8,32}$/',
                     'when' => function() { return $this->type === self::TYPE_PHONE; }
                 ],
 
@@ -92,7 +94,7 @@ class Method extends MethodBase
      */
     public function getRawPhoneNumber()
     {
-        return preg_replace('/,/', '', $this->value);
+        return Utils::stripNonNumbers($this->value);
     }
 
     /**
@@ -114,7 +116,23 @@ class Method extends MethodBase
         $method = new Method();
         $method->user_id = $userId;
         $method->type = $type;
-        $method->value = $value;
+
+        /*
+         * Try to get national formatted version of number if phone
+         */
+        if ($type == self::TYPE_PHONE) {
+            try {
+                $method->value = \Yii::$app->phone->format(Utils::stripNonNumbers($value));
+            } catch (\Exception $e) {
+                $log['status'] ='error';
+                $log['error'] = $e->getMessage();
+                \Yii::error($log);
+
+                throw new BadRequestHttpException($e->getMessage(), $e->getCode());
+            }
+        } else {
+            $method->value = $value;
+        }
 
         if ($type == self::TYPE_PHONE) {
             $log['value'] = Utils::maskPhone($value);
@@ -134,8 +152,25 @@ class Method extends MethodBase
 
         /*
          * Method saved, send verification
+         * If sending fails, delete method, log it, and return error to user
          */
-        $method->sendVerification();
+        try {
+            $method->sendVerification();
+        } catch (\Exception $e) {
+            $methodDeleted = $method->delete();
+            $log['status'] = 'error';
+            $log['error'] = $e->getMessage();
+            $log['code'] = $e->getCode();
+            $log['method deleted'] = $methodDeleted ? 'yes' : 'no';
+            \Yii::error($log);
+
+            throw new ServerErrorHttpException(
+                'Unable to create new verification method. Please check the value you entered and try again. ' .
+                sprintf('Error code:  %s', $e->getCode()),
+                1469736442,
+                $e
+            );
+        }
 
         $log['status'] = 'success';
         \Yii::warning($log);
@@ -269,4 +304,5 @@ class Method extends MethodBase
             }
         }
     }
+
 }
