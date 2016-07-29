@@ -413,4 +413,14 @@ class Utils
         return $expireDate->format(self::DT_FORMAT);
     }
 
+    /**
+     * Remove all non-numeric characters
+     * @param string $value
+     * @return string
+     */
+    public static function stripNonNumbers($value)
+    {
+        return preg_replace('/[^0-9]/', '', $value);
+    }
+
 }

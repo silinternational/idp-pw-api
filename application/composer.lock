@@ -283,16 +283,16 @@
         },
         {
             "name": "fillup/nexmo",
-            "version": "1.0.2",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fillup/nexmo.git",
-                "reference": "1c068068c2fd5f8257e1bc397f201ad2d48439fc"
+                "reference": "0efe7d21d8d85a4a9c327a068a6b1fbdfff01ba3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fillup/nexmo/zipball/1c068068c2fd5f8257e1bc397f201ad2d48439fc",
-                "reference": "1c068068c2fd5f8257e1bc397f201ad2d48439fc",
+                "url": "https://api.github.com/repos/fillup/nexmo/zipball/0efe7d21d8d85a4a9c327a068a6b1fbdfff01ba3",
+                "reference": "0efe7d21d8d85a4a9c327a068a6b1fbdfff01ba3",
                 "shasum": ""
             },
             "require": {
@@ -318,7 +318,7 @@
                 }
             ],
             "description": "Nexmo API client built with Guzzle Web Service descriptions",
-            "time": "2016-05-18 22:49:13"
+            "time": "2016-07-28 17:46:31"
         },
         {
             "name": "forevermatt/calc-api-sig",
@@ -1306,12 +1306,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "dae24a0164f9a75fa030f067babc4729160aaf83"
+                "reference": "554d80e313be3bd9e4fc93021b586ffec6f7749d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/dae24a0164f9a75fa030f067babc4729160aaf83",
-                "reference": "dae24a0164f9a75fa030f067babc4729160aaf83",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/554d80e313be3bd9e4fc93021b586ffec6f7749d",
+                "reference": "554d80e313be3bd9e4fc93021b586ffec6f7749d",
                 "shasum": ""
             },
             "require": {
@@ -1338,7 +1338,7 @@
                 }
             ],
             "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-07-25 15:59:15"
+            "time": "2016-07-28 17:38:06"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
@@ -1432,16 +1432,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-phoneverification-nexmo.git",
-                "reference": "20bc7109f78197d533c6cadea5c70eb3b76989ff"
+                "reference": "786c087da31755d3438f8f2c5f54bf7b3ad01019"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/20bc7109f78197d533c6cadea5c70eb3b76989ff",
-                "reference": "20bc7109f78197d533c6cadea5c70eb3b76989ff",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/786c087da31755d3438f8f2c5f54bf7b3ad01019",
+                "reference": "786c087da31755d3438f8f2c5f54bf7b3ad01019",
                 "shasum": ""
             },
             "require": {
-                "fillup/nexmo": "~1.0",
+                "fillup/nexmo": "^1.0.4",
                 "php": ">=5.4.0",
                 "silinternational/idp-pw-api-common": "dev-master"
             },
@@ -1465,7 +1465,7 @@
                 }
             ],
             "description": "PhoneVerification component for IdP PW API that uses Nexmo services for SMS/Voice verification",
-            "time": "2016-07-28 14:16:54"
+            "time": "2016-07-29 15:00:12"
         },
         {
             "name": "silinternational/php-env",
