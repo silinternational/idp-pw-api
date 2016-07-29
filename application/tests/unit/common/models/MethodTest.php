@@ -9,6 +9,7 @@ use yii\codeception\DbTestCase;
 use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\UserFixture;
 use tests\unit\fixtures\common\models\MethodFixture;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class MethodTest
@@ -192,6 +193,33 @@ class MethodTest extends DbTestCase
 
         $method2 = Method::findOne(['uid' => $method->uid]);
         $this->assertNull($method2);
+    }
+
+    public function testCreateAndSendVerificationSendVerificationFails()
+    {
+        /*
+         * Delete all methods to start clean
+         */
+        Method::deleteAll();
+
+        /*
+         * Attempt to create new method, it should fail when sending verification and
+         * delete itself and return an exception
+         */
+        $this->expectException(ServerErrorHttpException::class);
+        $this->expectExceptionCode(1469736442);
+        $user = $this->users('user1');
+        Method::createAndSendVerification(
+            $user->id,
+            Method::TYPE_PHONE,
+            '14044044044'
+        );
+
+        /*
+         * Make sure a record for this method does not exist
+         */
+        $found = Method::findOne(['value' => '14044044044']);
+        $this->assertNull($found);
     }
 
 }
