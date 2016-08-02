@@ -2,6 +2,7 @@
 namespace common\helpers;
 
 use yii\base\Security;
+use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
@@ -124,13 +125,18 @@ class Utils
     /**
      * @param string $email an email address
      * @return string with most letters changed to asterisks
-     * @throws \Exception
+     * @throws BadRequestHttpException
      */
     public static function maskEmail($email)
     {
         $validator = new EmailValidator();
         if ( ! $validator->validate($email)) {
-            throw new \Exception('Invalid email address provided', 1461459797);
+            \Yii::warning([
+                'action' => 'mask email',
+                'status' => 'error',
+                'error' => 'Invalid email address provided: ' . Html::encode($email),
+            ]);
+            throw new BadRequestHttpException('Invalid email address provided.', 1461459797);
         }
 
         list($part1, $domain) = explode('@', $email);
