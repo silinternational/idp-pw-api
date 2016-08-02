@@ -221,21 +221,6 @@ class Method extends MethodBase
                 return $existMethod;
             }
         }
-//        foreach ($existing as $existMethod) {
-//            if ($existMethod->type === self::TYPE_PHONE) {
-//                if (Utils::stripNonNumbers($existMethod->value) === Utils::stripNonNumbers($value)) {
-//                    $existMethod->sendVerification();
-//                    return $existMethod;
-//                }
-//            } elseif ($existMethod->type === self::TYPE_EMAIL) {
-//                if (mb_strtolower($existMethod->value) === mb_strtolower($value)) {
-//                    $existMethod->sendVerification();
-//                    return $existMethod;
-//                }
-//            } else {
-//                throw new BadRequestHttpException('Invalid method type provided', 1470169304);
-//            }
-//        }
 
         return null;
     }
