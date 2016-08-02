@@ -1,4 +1,5 @@
 <?php
+use common\helpers\Utils;
 return [
     'method1' => [
         'id' => 1,
@@ -36,4 +37,17 @@ return [
         'verification_expires' => '2000-01-01 00:00:00',
         'created' => '2000-01-01 00:00:00',
     ],
+    'method4' => [
+        'id' => 4,
+        'uid' => '44444444444444444444444444444444',
+        'user_id' => 1,
+        'type' => 'email',
+        'value' => 'email-1470167362@domain.org',
+        'verified' => 0,
+        'verification_code' => 654987,
+        'verification_attempts' => null,
+        'verification_expires' => Utils::getDatetime(time()+1800),
+        'created' => '2000-01-01 00:00:00',
+    ],
+    
 ];

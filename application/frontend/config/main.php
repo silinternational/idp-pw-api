@@ -3,7 +3,7 @@
 use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', false);
+$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
 
 $sessionLifetime = 1800; // 30 minutes
 
