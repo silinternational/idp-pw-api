@@ -164,12 +164,12 @@ class Password extends Model
                     'message' => $previous->getMessage(),
                 ];
             }
-            \Yii::error($log);
 
             /*
              * Throw exception based on exception type
              */
             if ($e instanceof  PasswordReuseException) {
+                \Yii::warning($log);
                 throw new BadRequestHttpException(
                     \Yii::t(
                         'app',
@@ -179,6 +179,7 @@ class Password extends Model
                     1469194882
                 );
             } else {
+                \Yii::error($log);
                 throw new ServerErrorHttpException(
                     \Yii::t(
                         'app',

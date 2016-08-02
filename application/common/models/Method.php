@@ -4,6 +4,7 @@ namespace common\models;
 use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -103,9 +104,19 @@ class Method extends MethodBase
      * @param string $value
      * @return Method
      * @throws \Exception
+     * @throws BadRequestHttpException
      */
     public static function createAndSendVerification($userId, $type, $value)
     {
+        /*
+         * Check for existing unverified method first. To be safe, getting all of same type
+         * and comparing sanitized value. If found, resend rather than create new.
+         */
+        $existing = self::checkForExistingAndResend($userId, $type, $value);
+        if ($existing !== null) {
+            return $existing;
+        }
+
         $log = [
             'class' => __CLASS__,
             'method' => __METHOD__,
@@ -130,8 +141,10 @@ class Method extends MethodBase
 
                 throw new BadRequestHttpException($e->getMessage(), $e->getCode());
             }
+        } elseif ($type == self::TYPE_EMAIL) {
+            $method->value = mb_strtolower($value);
         } else {
-            $method->value = $value;
+            throw new BadRequestHttpException('Invalid method type provided', 1470169372);
         }
 
         if ($type == self::TYPE_PHONE) {
@@ -179,21 +192,73 @@ class Method extends MethodBase
     }
 
     /**
+     * Checks for an existing unverified method and resends verification code if found
+     * @param integer $userId
+     * @param string $type
+     * @param string $value
+     * @return Method|null
+     * @throws BadRequestHttpException
+     */
+    public static function checkForExistingAndResend($userId, $type, $value)
+    {
+        $existing = self::find()->where([
+            'user_id' => $userId,
+            'type' => $type,
+            'verified' => 0,
+        ])->andWhere([
+            '>=', 'verification_expires', Utils::getDatetime()
+        ])->all();
+
+
+        $checkFunction = 'mb_strtolower';
+        if ($type == self::TYPE_PHONE) {
+            $checkFunction = 'Utils::stripNonNumbers';
+        }
+        /** @var Method $existMethod */
+        foreach ($existing as $existMethod) {
+            if ($checkFunction($existMethod->value) === $checkFunction($value)) {
+                $existMethod->sendVerification();
+                return $existMethod;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Send verification to either email or phone based on $this->type
      * @throws \Exception
      */
     public function sendVerification()
     {
+        /*
+         * Count as verification attempt and send verification code
+         */
+        $this->verification_attempts++;
+        if ( ! $this->save()) {
+            throw new ServerErrorHttpException(
+                'Unable to save method after incrementing attempts',
+                1461441850
+            );
+        }
+
         if ($this->type == self::TYPE_EMAIL) {
             $this->sendVerificationEmail();
         } elseif ($this->type == self::TYPE_PHONE) {
+            /*
+             * Save verification code to db again in case phone provider generated a new one
+             */
             $this->verification_code = $this->sendVerificationPhone();
             if ( ! $this->save()) {
-                throw new \Exception('Unable to save method after sending phone verification', 1461441850);
+                throw new ServerErrorHttpException(
+                    sprintf('Unable to save method after sending %s verification', $this->type),
+                    1461441851
+                );
             }
         } else {
-            throw new \Exception('Invalid method type', 1461432437);
+            throw new BadRequestHttpException('Invalid method type', 1461432437);
         }
+
     }
 
     /**
@@ -279,6 +344,11 @@ class Method extends MethodBase
         $this->verified = 1;
 
         if ( ! $this->save()) {
+            \Yii::error([
+                'action' => 'validate and set method as verified',
+                'status' => 'error',
+                'error' => $this->getFirstErrors(),
+            ]);
             throw new \Exception('Unable to set method as verified', 1461442990);
         }
     }

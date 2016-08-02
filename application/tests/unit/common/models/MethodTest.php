@@ -105,7 +105,7 @@ class MethodTest extends DbTestCase
     public function testCreateAndSendVerificationInvalidType()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionCode(1461375342);
+        $this->expectExceptionCode(1470169372);
         Method::createAndSendVerification(
             1,
             'invalid type',
@@ -165,21 +165,21 @@ class MethodTest extends DbTestCase
         );
 
         $this->assertEquals($mockPhones[0]['code'], $method->verification_code);
-        $this->assertEquals(0, $method->verification_attempts);
+        $this->assertEquals(1, $method->verification_attempts);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
 
         $this->assertEquals(0, $method->verified);
-        $this->assertEquals(1, $method->verification_attempts);
+        $this->assertEquals(2, $method->verification_attempts);
         $this->assertNotNull($method->verification_code);
         $this->assertNotNull($method->verification_expires);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
-        $this->assertEquals(2, $method->verification_attempts);
+        $this->assertEquals(3, $method->verification_attempts);
     }
 
     public function testDeleteExpiredUnverifiedMethods()
@@ -220,6 +220,21 @@ class MethodTest extends DbTestCase
          */
         $found = Method::findOne(['value' => '14044044044']);
         $this->assertNull($found);
+    }
+
+    public function testCreateAndSendVerificationExistingUnverifiedMethod()
+    {
+        $existing = $this->methods('method4');
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(1, $method->verification_attempts);
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(2, $method->verification_attempts);
     }
 
 }
