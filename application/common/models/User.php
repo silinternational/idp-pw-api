@@ -93,14 +93,29 @@ class User extends UserBase implements IdentityInterface
         /*
          * Always call Personnel system in case employee is no longer employed
          */
-        /** @var PersonnelUser $personnelUser */
-        if ( ! is_null($employeeId)) {
-            $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
-        } elseif ( ! is_null($username)) {
-            $personnelUser = \Yii::$app->personnel->findByUsername($username);
-        } else {
-            $personnelUser = \Yii::$app->personnel->findByEmail($email);
+        try {
+            /** @var PersonnelUser $personnelUser */
+            if ( ! is_null($employeeId)) {
+                $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
+            } elseif ( ! is_null($username)) {
+                $personnelUser = \Yii::$app->personnel->findByUsername($username);
+            } else {
+                $personnelUser = \Yii::$app->personnel->findByEmail($email);
+            }
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'personnel find user',
+                'status' => 'error',
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            throw new ServerErrorHttpException(
+                'There was a problem retrieving your information from the personnel system. Please wait a few ' .
+                'minutes and try again.',
+                1470164077
+            );
         }
+
 
         $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
         if ( ! $user) {
@@ -111,9 +126,11 @@ class User extends UserBase implements IdentityInterface
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
             if ( ! $user->save()) {
-                /*
-                 * add logging with model validation errors
-                 */
+                \Yii::error([
+                    'action' => 'create new user',
+                    'status' => 'error',
+                    'error' => $user->getFirstErrors(),
+                ]);
                 throw new \Exception('Unable to create new user', 1456760294);
             }
         } else {
@@ -159,9 +176,11 @@ class User extends UserBase implements IdentityInterface
             if ($this->save()) {
                 return true;
             } else {
-                /*
-                 * add logging with model validation errors
-                 */
+                \Yii::error([
+                    'action' => 'update user profile',
+                    'status' => 'error',
+                    'error' => $this->getFirstErrors(),
+                ]);
                 throw new \Exception('Unable to update profile', 1456760819);
             }
         }
@@ -312,7 +331,7 @@ class User extends UserBase implements IdentityInterface
      * Finds an identity by the given token.
      *
      * @param string $token the token to be looked for
-     * @return User|null the identity object that matches the given token.
+     * @return User|array the identity object that matches the given token.
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
@@ -423,6 +442,11 @@ class User extends UserBase implements IdentityInterface
         $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
         
         if ( ! $this->save()) {
+            \Yii::error([
+                'action' => 'set password for user',
+                'status' => 'error',
+                'error' => $this->getFirstErrors(),
+            ]);
             throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
         }
     }
@@ -446,6 +470,11 @@ class User extends UserBase implements IdentityInterface
             time() + \Yii::$app->params['accessTokenLifetime']
         );
         if ( ! $this->save()) {
+            \Yii::error([
+                'action' => 'create access token for user',
+                'status' => 'error',
+                'error' => $this->getFirstErrors(),
+            ]);
             throw new ServerErrorHttpException('Unable to create access token', 1465833228);
         }
 

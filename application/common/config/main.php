@@ -80,6 +80,7 @@ return [
                     'class' => 'Sil\Log\EmailTarget',
                     'levels' => ['error'],
                     'except' => [
+                        'yii\web\HttpException:400',
                         'yii\web\HttpException:401',
                         'yii\web\HttpException:404',
                     ],
