@@ -331,7 +331,7 @@ class User extends UserBase implements IdentityInterface
      * Finds an identity by the given token.
      *
      * @param string $token the token to be looked for
-     * @return User|array the identity object that matches the given token.
+     * @return User|null the identity object that matches the given token.
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {

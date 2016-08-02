@@ -4,6 +4,7 @@ namespace common\models;
 use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -103,6 +104,7 @@ class Method extends MethodBase
      * @param string $value
      * @return Method
      * @throws \Exception
+     * @throws BadRequestHttpException
      */
     public static function createAndSendVerification($userId, $type, $value)
     {
@@ -139,8 +141,10 @@ class Method extends MethodBase
 
                 throw new BadRequestHttpException($e->getMessage(), $e->getCode());
             }
+        } elseif ($type == self::TYPE_EMAIL) {
+            $method->value = mb_strtolower($value);
         } else {
-            $method->value = strtolower($value);
+            throw new BadRequestHttpException('Invalid method type provided', 1470169372);
         }
 
         if ($type == self::TYPE_PHONE) {
@@ -193,10 +197,11 @@ class Method extends MethodBase
      * @param string $type
      * @param string $value
      * @return Method|null
+     * @throws BadRequestHttpException
      */
     public static function checkForExistingAndResend($userId, $type, $value)
     {
-        $existing = Method::find()->where([
+        $existing = self::find()->where([
             'user_id' => $userId,
             'type' => $type,
             'verified' => 0,
@@ -204,20 +209,33 @@ class Method extends MethodBase
             '>=', 'verification_expires', Utils::getDatetime()
         ])->all();
 
+
+        $checkFunction = 'mb_strtolower';
+        if ($type == self::TYPE_PHONE) {
+            $checkFunction = 'Utils::stripNonNumbers';
+        }
         /** @var Method $existMethod */
         foreach ($existing as $existMethod) {
-            if ($existMethod->type === self::TYPE_PHONE) {
-                if (Utils::stripNonNumbers($existMethod->value) === Utils::stripNonNumbers($value)) {
-                    $existMethod->sendVerification();
-                    return $existMethod;
-                }
-            } else {
-                if (strtolower($existMethod->value) === strtolower($value)) {
-                    $existMethod->sendVerification();
-                    return $existMethod;
-                }
+            if ($checkFunction($existMethod->value) === $checkFunction($value)) {
+                $existMethod->sendVerification();
+                return $existMethod;
             }
         }
+//        foreach ($existing as $existMethod) {
+//            if ($existMethod->type === self::TYPE_PHONE) {
+//                if (Utils::stripNonNumbers($existMethod->value) === Utils::stripNonNumbers($value)) {
+//                    $existMethod->sendVerification();
+//                    return $existMethod;
+//                }
+//            } elseif ($existMethod->type === self::TYPE_EMAIL) {
+//                if (mb_strtolower($existMethod->value) === mb_strtolower($value)) {
+//                    $existMethod->sendVerification();
+//                    return $existMethod;
+//                }
+//            } else {
+//                throw new BadRequestHttpException('Invalid method type provided', 1470169304);
+//            }
+//        }
 
         return null;
     }
@@ -232,21 +250,30 @@ class Method extends MethodBase
          * Count as verification attempt and send verification code
          */
         $this->verification_attempts++;
+        if ( ! $this->save()) {
+            throw new ServerErrorHttpException(
+                'Unable to save method after incrementing attempts',
+                1461441850
+            );
+        }
 
         if ($this->type == self::TYPE_EMAIL) {
             $this->sendVerificationEmail();
         } elseif ($this->type == self::TYPE_PHONE) {
+            /*
+             * Save verification code to db again in case phone provider generated a new one
+             */
             $this->verification_code = $this->sendVerificationPhone();
+            if ( ! $this->save()) {
+                throw new ServerErrorHttpException(
+                    sprintf('Unable to save method after sending %s verification', $this->type),
+                    1461441851
+                );
+            }
         } else {
             throw new BadRequestHttpException('Invalid method type', 1461432437);
         }
 
-        if ( ! $this->save()) {
-            throw new ServerErrorHttpException(
-                sprintf('Unable to save method after sending %s verification', $this->type),
-                1461441850
-            );
-        }
     }
 
     /**

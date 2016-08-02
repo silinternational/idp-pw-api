@@ -105,7 +105,7 @@ class MethodTest extends DbTestCase
     public function testCreateAndSendVerificationInvalidType()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionCode(1461375342);
+        $this->expectExceptionCode(1470169372);
         Method::createAndSendVerification(
             1,
             'invalid type',
