@@ -210,9 +210,13 @@ class Method extends MethodBase
         ])->all();
 
 
-        $checkFunction = 'mb_strtolower';
+        $checkFunction = function($value) {
+            return mb_strtolower($value);
+        };
         if ($type == self::TYPE_PHONE) {
-            $checkFunction = 'Utils::stripNonNumbers';
+            $checkFunction = function($value) {
+                return Utils::stripNonNumbers($value);
+            };
         }
         /** @var Method $existMethod */
         foreach ($existing as $existMethod) {
