@@ -44,9 +44,9 @@
   - name: deploy_production_api
     service: ecsdeploy
     tag: master
-    command: "-c idp-pw-production -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
+    command: "-c insite-pw-production -n insite-pw-api -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
 
   - name: deploy_production_cron
     service: ecsdeploy
     tag: master
-    command: "-c idp-pw-production -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
+    command: "-c insite-pw-production -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
