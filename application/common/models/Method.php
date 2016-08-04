@@ -198,6 +198,7 @@ class Method extends MethodBase
      * @param string $value
      * @return Method|null
      * @throws BadRequestHttpException
+     * @throws \Exception
      */
     public static function checkForExistingAndResend($userId, $type, $value)
     {
@@ -221,7 +222,17 @@ class Method extends MethodBase
         /** @var Method $existMethod */
         foreach ($existing as $existMethod) {
             if ($checkFunction($existMethod->value) === $checkFunction($value)) {
-                $existMethod->sendVerification();
+                try {
+                    $existMethod->sendVerification();
+                } catch (\Exception $e) {
+                    /*
+                     * If phone verification in process, treat as success so user can provide code
+                     */
+                    if ($e->getCode() != 1470317050) {
+                        throw $e;
+                    }
+                }
+
                 return $existMethod;
             }
         }
