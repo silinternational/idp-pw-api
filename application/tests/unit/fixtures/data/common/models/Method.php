@@ -49,5 +49,17 @@ return [
         'verification_expires' => Utils::getDatetime(time()+1800),
         'created' => '2000-01-01 00:00:00',
     ],
+    'method5' => [
+        'id' => 5,
+        'uid' => '55555555555555555555555555555555',
+        'user_id' => 1,
+        'type' => 'phone',
+        'value' => '1 (555) 444-5692',
+        'verified' => 0,
+        'verification_code' => 987456,
+        'verification_attempts' => null,
+        'verification_expires' => Utils::getDatetime(time()+1800),
+        'created' => '2000-01-01 00:00:00',
+    ],
     
 ];

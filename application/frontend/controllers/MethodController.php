@@ -204,9 +204,13 @@ class MethodController extends BaseRestController
         try {
             $method->validateAndSetAsVerified($code);
         } catch (InvalidCodeException $e) {
-            throw new BadRequestHttpException('Invalid verification code');
+            throw new BadRequestHttpException('Invalid verification code', 1470315942);
         } catch (\Exception $e) {
-            throw new ServerErrorHttpException('Unable to set method as verified');
+            throw new ServerErrorHttpException(
+                'Unable to set method as verified: ' . $e->getMessage(),
+                1470315941,
+                $e
+            );
         }
 
         return $method;
