@@ -211,9 +211,16 @@ class Method extends MethodBase
         ])->all();
 
 
+        /*
+         * Email check function
+         */
         $checkFunction = function($value) {
             return mb_strtolower($value);
         };
+
+        /*
+         * If type is phone use different check function
+         */
         if ($type == self::TYPE_PHONE) {
             $checkFunction = function($value) {
                 return Utils::stripNonNumbers($value);
@@ -380,7 +387,10 @@ class Method extends MethodBase
 
         foreach ($methods as $method) {
             try {
-                $method->delete();
+                $deleted = $method->delete();
+                if ($deleted === 0 || $deleted === false) {
+                    throw new \Exception('Expired method delete call failed', 1470324506);
+                }
             } catch (\Exception $e) {
                 \Yii::error([
                     'action' => 'delete expired unverified methods',
