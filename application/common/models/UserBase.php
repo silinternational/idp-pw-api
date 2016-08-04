@@ -20,6 +20,7 @@ use Yii;
  * @property string $pw_expires
  * @property string $access_token
  * @property string $access_token_expiration
+ * @property string $auth_type
  *
  * @property EventLog[] $eventLogs
  * @property Method[] $methods
@@ -44,6 +45,7 @@ class UserBase extends \yii\db\ActiveRecord
         return [
             [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created'], 'required'],
             [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
+            [['auth_type'], 'string'],
             [['uid', 'employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
             [['access_token'], 'string', 'max' => 64],
@@ -73,6 +75,7 @@ class UserBase extends \yii\db\ActiveRecord
             'pw_expires' => Yii::t('app', 'Pw Expires'),
             'access_token' => Yii::t('app', 'Access Token'),
             'access_token_expiration' => Yii::t('app', 'Access Token Expiration'),
+            'auth_type' => Yii::t('app', 'Auth Type'),
         ];
     }
 

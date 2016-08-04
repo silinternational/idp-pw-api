@@ -222,9 +222,24 @@ class MethodTest extends DbTestCase
         $this->assertNull($found);
     }
 
-    public function testCreateAndSendVerificationExistingUnverifiedMethod()
+    public function testCreateAndSendVerificationExistingUnverifiedMethodEmail()
     {
         $existing = $this->methods('method4');
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(1, $method->verification_attempts);
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(2, $method->verification_attempts);
+    }
+
+    public function testCreateAndSendVerificationExistingUnverifiedMethodPhone()
+    {
+        $existing = $this->methods('method5');
 
         $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
 

@@ -6,7 +6,6 @@ use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use Sil\IdpPw\Common\Personnel\NotFoundException;
 use Sil\IdpPw\Common\Personnel\PersonnelInterface;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
-use Yii;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
@@ -20,6 +19,10 @@ use yii\web\ServerErrorHttpException;
  */
 class User extends UserBase implements IdentityInterface
 {
+
+    const AUTH_TYPE_LOGIN = 'login';
+    const AUTH_TYPE_RESET = 'reset';
+
     /**
      * Holds personnelUser
      * @var PersonnelUser
@@ -449,6 +452,37 @@ class User extends UserBase implements IdentityInterface
             ]);
             throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
         }
+
+        /*
+         * Check for request to get user's IP address for logging
+         */
+        $ipAddress = Utils::getClientIp(\Yii::$app->request);
+        if (empty($ipAddress)) {
+            $ipAddress = 'Not web request';
+        }
+
+        /*
+         * Log password change
+         */
+        $scenario = ($this->auth_type === self::AUTH_TYPE_RESET) ?
+            PasswordChangeLog::SCENARIO_RESET : PasswordChangeLog::SCENARIO_CHANGE;
+        PasswordChangeLog::log(
+            $this->id,
+            $scenario,
+            $ipAddress
+        );
+
+        /*
+         * Log event
+         */
+        EventLog::log(
+            'PasswordChanged',
+            [
+                'Authentication method' => $this->auth_type,
+                'IP Address' => $ipAddress,
+            ],
+            $this->id
+        );
     }
 
     /**
@@ -456,7 +490,7 @@ class User extends UserBase implements IdentityInterface
      * @return string
      * @throws ServerErrorHttpException
      */
-    public function createAccessToken($clientId)
+    public function createAccessToken($clientId, $authType)
     {
         /*
          * Create access_token and update user
@@ -465,6 +499,7 @@ class User extends UserBase implements IdentityInterface
         /*
          * Store combination of clientId and accessToken for bearer auth
          */
+        $this->auth_type = $authType;
         $this->access_token = Utils::getAccessTokenHash($clientId . $accessToken);
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']

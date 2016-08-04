@@ -157,7 +157,7 @@ class Method extends MethodBase
 
         if ( ! $method->save()) {
             $log['status'] = 'failed';
-            $log['error'] = Json::encode($method->getFirstErrors());
+            $log['error'] = $method->getFirstErrors();
             \Yii::error($log);
 
             throw new \Exception('Unable to add new method', 1461375342);
@@ -198,6 +198,7 @@ class Method extends MethodBase
      * @param string $value
      * @return Method|null
      * @throws BadRequestHttpException
+     * @throws \Exception
      */
     public static function checkForExistingAndResend($userId, $type, $value)
     {
@@ -210,14 +211,35 @@ class Method extends MethodBase
         ])->all();
 
 
-        $checkFunction = 'mb_strtolower';
+        /*
+         * Email check function
+         */
+        $checkFunction = function($value) {
+            return mb_strtolower($value);
+        };
+
+        /*
+         * If type is phone use different check function
+         */
         if ($type == self::TYPE_PHONE) {
-            $checkFunction = 'Utils::stripNonNumbers';
+            $checkFunction = function($value) {
+                return Utils::stripNonNumbers($value);
+            };
         }
         /** @var Method $existMethod */
         foreach ($existing as $existMethod) {
             if ($checkFunction($existMethod->value) === $checkFunction($value)) {
-                $existMethod->sendVerification();
+                try {
+                    $existMethod->sendVerification();
+                } catch (\Exception $e) {
+                    /*
+                     * If phone verification in process, treat as success so user can provide code
+                     */
+                    if ($e->getCode() != 1470317050) {
+                        throw $e;
+                    }
+                }
+
                 return $existMethod;
             }
         }
@@ -364,11 +386,16 @@ class Method extends MethodBase
                                 ->all();
 
         foreach ($methods as $method) {
-            if ( ! $method->delete()) {
+            try {
+                $deleted = $method->delete();
+                if ($deleted === 0 || $deleted === false) {
+                    throw new \Exception('Expired method delete call failed', 1470324506);
+                }
+            } catch (\Exception $e) {
                 \Yii::error([
                     'action' => 'delete expired unverified methods',
                     'status' => 'failed',
-                    'error' => Json::encode($method->getFirstErrors()),
+                    'error' => $e->getMessage(),
                     'method_id' => $method->id,
                 ]);
             }

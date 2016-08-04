@@ -34,7 +34,7 @@ class PasswordChangeLogBase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'scenario', 'reset_type', 'method_type', 'masked_value', 'created', 'ip_address'], 'required'],
+            [['user_id', 'scenario', 'created', 'ip_address'], 'required'],
             [['user_id'], 'integer'],
             [['scenario', 'reset_type', 'method_type'], 'string'],
             [['created'], 'safe'],
