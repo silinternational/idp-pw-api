@@ -284,4 +284,28 @@ class ResetTest extends DbTestCase
         $this->assertTrue($reset->isDisabled());
     }
 
+    public function testGetMaskedValue()
+    {
+        $reset = $this->resets('reset1');
+        $this->assertEquals('f****_l**t@o***********.o**', $reset->getMaskedValue());
+
+        $reset->setType(Reset::TYPE_SUPERVISOR);
+        $this->assertEquals('s********r@d*****.o**', $reset->getMaskedValue());
+
+        $reset->setType(Reset::TYPE_SPOUSE);
+        $this->assertEquals('s****e@d*****.o**', $reset->getMaskedValue());
+
+        $method = $this->methods('method1');
+
+        $reset->setType(Reset::TYPE_METHOD, $method->uid);
+        $this->assertEquals('+1 #######890', $reset->getMaskedValue());
+
+        $method2 = $this->methods('method2');
+        $reset->setType(Reset::TYPE_METHOD, $method2->uid);
+
+        $reset = Reset::findOne(['id' => $reset->id]);
+
+        $this->assertEquals('e**************9@d*****.o**', $reset->getMaskedValue());
+    }
+
 }

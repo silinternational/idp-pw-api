@@ -648,4 +648,23 @@ class Reset extends ResetBase
             ]);
         }
     }
+
+    /**
+     * Return the masked value of whatever is used for this reset
+     * @return string
+     */
+    public function getMaskedValue()
+    {
+        if ($this->type === self::TYPE_METHOD) {
+            return $this->method->getMaskedValue();
+        } elseif ($this->type === self::TYPE_PRIMARY) {
+            return Utils::maskEmail($this->user->email);
+        } elseif ($this->type == self::TYPE_SUPERVISOR) {
+            return Utils::maskEmail($this->user->getSupervisorEmail());
+        } elseif ($this->type == self::TYPE_SPOUSE) {
+            return Utils::maskEmail($this->user->getSpouseEmail());
+        } else {
+            return 'Invalid reset type';
+        }
+    }
 }

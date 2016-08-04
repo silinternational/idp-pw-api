@@ -210,12 +210,24 @@ class ResetController extends BaseRestController
         $isValid = $reset->isUserProvidedCodeCorrect($code);
         if ($isValid === true) {
 
+            $ipAddress = Utils::getClientIp(\Yii::$app->request);
+            if ($reset->type === Reset::TYPE_METHOD) {
+                $methodType = $reset->method->type;
+            } else {
+                $methodType = null;
+            }
+
+            /*
+             * Log event with reset type/method details
+             */
             EventLog::log(
                 'ResetVerificationSuccessful',
                 [
-                    'reset_id' => $reset->id,
-                    'type' => $reset->type,
-                    'attempts' => $reset->attempts,
+                    'Reset Type' => $reset->type,
+                    'Attempts' => $reset->attempts,
+                    'IP Address' => $ipAddress,
+                    'Method type (if reset type is method)' => $methodType,
+                    'Method value' => $reset->getMaskedValue(),
                 ],
                 $reset->user_id
             );
@@ -225,7 +237,7 @@ class ResetController extends BaseRestController
              */
             try {
                 $clientId = Utils::getClientIdOrFail();
-                $accessToken = $reset->user->createAccessToken($clientId);
+                $accessToken = $reset->user->createAccessToken($clientId, User::AUTH_TYPE_RESET);
 
                 $log['status'] = 'success';
                 \Yii::warning($log);

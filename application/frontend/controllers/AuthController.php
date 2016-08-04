@@ -83,7 +83,7 @@ class AuthController extends BaseRestController
              * Use employeeId since username or email could change.
              */
             $user = User::findOrCreate(null, null, $authUser->employeeId);
-            $accessToken = $user->createAccessToken($clientId);
+            $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken);
 
