@@ -52,19 +52,19 @@ class MethodController extends BaseRestController
             'value' => $user->email,
         ];
 
-        if ($user->hasSpouse()) {
-            $verifiedMethods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => $user->getSpouseEmail(),
-            ];
-        }
-
-        if ($user->hasSupervisor()) {
-            $verifiedMethods[] = [
-                'type' => Reset::TYPE_SUPERVISOR,
-                'value' => $user->getSupervisorEmail(),
-            ];
-        }
+//        if ($user->hasSpouse()) {
+//            $verifiedMethods[] = [
+//                'type' => Reset::TYPE_SPOUSE,
+//                'value' => $user->getSpouseEmail(),
+//            ];
+//        }
+//
+//        if ($user->hasSupervisor()) {
+//            $verifiedMethods[] = [
+//                'type' => Reset::TYPE_SUPERVISOR,
+//                'value' => $user->getSupervisorEmail(),
+//            ];
+//        }
 
         return $verifiedMethods;
     }
@@ -204,9 +204,13 @@ class MethodController extends BaseRestController
         try {
             $method->validateAndSetAsVerified($code);
         } catch (InvalidCodeException $e) {
-            throw new BadRequestHttpException('Invalid verification code');
+            throw new BadRequestHttpException('Invalid verification code', 1470315942);
         } catch (\Exception $e) {
-            throw new ServerErrorHttpException('Unable to set method as verified');
+            throw new ServerErrorHttpException(
+                'Unable to set method as verified: ' . $e->getMessage(),
+                1470315941,
+                $e
+            );
         }
 
         return $method;

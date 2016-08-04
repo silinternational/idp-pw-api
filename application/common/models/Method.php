@@ -157,7 +157,7 @@ class Method extends MethodBase
 
         if ( ! $method->save()) {
             $log['status'] = 'failed';
-            $log['error'] = Json::encode($method->getFirstErrors());
+            $log['error'] = $method->getFirstErrors();
             \Yii::error($log);
 
             throw new \Exception('Unable to add new method', 1461375342);
@@ -368,11 +368,13 @@ class Method extends MethodBase
                                 ->all();
 
         foreach ($methods as $method) {
-            if ( ! $method->delete()) {
+            try {
+                $method->delete();
+            } catch (\Exception $e) {
                 \Yii::error([
                     'action' => 'delete expired unverified methods',
                     'status' => 'failed',
-                    'error' => Json::encode($method->getFirstErrors()),
+                    'error' => $e->getMessage(),
                     'method_id' => $method->id,
                 ]);
             }
