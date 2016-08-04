@@ -52,19 +52,19 @@ class MethodController extends BaseRestController
             'value' => $user->email,
         ];
 
-//        if ($user->hasSpouse()) {
-//            $verifiedMethods[] = [
-//                'type' => Reset::TYPE_SPOUSE,
-//                'value' => $user->getSpouseEmail(),
-//            ];
-//        }
-//
-//        if ($user->hasSupervisor()) {
-//            $verifiedMethods[] = [
-//                'type' => Reset::TYPE_SUPERVISOR,
-//                'value' => $user->getSupervisorEmail(),
-//            ];
-//        }
+        if ($user->hasSpouse()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SPOUSE,
+                'value' => $user->getSpouseEmail(),
+            ];
+        }
+
+        if ($user->hasSupervisor()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SUPERVISOR,
+                'value' => $user->getSupervisorEmail(),
+            ];
+        }
 
         return $verifiedMethods;
     }
