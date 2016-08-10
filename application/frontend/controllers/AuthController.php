@@ -134,7 +134,7 @@ class AuthController extends BaseRestController
             if ($user != null) {
                 $user->access_token = null;
                 $user->access_token_expiration = null;
-                if (!$user->save()) {
+                if ( ! $user->save()) {
                     \Yii::error([
                         'action' => 'user logout',
                         'status' => 'error',
