@@ -137,6 +137,7 @@ class Method extends MethodBase
             } catch (\Exception $e) {
                 $log['status'] ='error';
                 $log['error'] = $e->getMessage();
+                $log['value'] = Utils::stripNonNumbers($value);
                 \Yii::error($log);
 
                 throw new BadRequestHttpException($e->getMessage(), $e->getCode());
