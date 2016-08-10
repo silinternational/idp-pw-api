@@ -377,15 +377,23 @@ class Utils
      */
     public static function getClientIdOrFail()
     {
+        $request = \Yii::$app->request;
         if (\Yii::$app->request->isPut) {
-            $clientId = \Yii::$app->request->getBodyParam('client_id');
+            $clientId = $request->getBodyParam('client_id');
         } else {
-            $clientId = \Yii::$app->request->get('client_id');
+            $clientId = $request->get('client_id');
         }
 
         if ($clientId === null) {
             $clientId = \Yii::$app->session->get('clientId');
             if ($clientId === null) {
+                \Yii::error([
+                    'action' => 'login - get client id or fail',
+                    'status' => 'error',
+                    'request_method' => $request->getMethod(),
+                    'request_url' => $request->getAbsoluteUrl(),
+                    'body_params' => $request->getBodyParams(),
+                ]);
                 throw new BadRequestHttpException('Missing client_id');
             }
         }
