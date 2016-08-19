@@ -1266,12 +1266,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-auth-saml.git",
-                "reference": "22857918ab2562c22132028807e92c725dda31d9"
+                "reference": "828f37f90b4d5b783f554c373d95b3c1f9758f8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/22857918ab2562c22132028807e92c725dda31d9",
-                "reference": "22857918ab2562c22132028807e92c725dda31d9",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/828f37f90b4d5b783f554c373d95b3c1f9758f8e",
+                "reference": "828f37f90b4d5b783f554c373d95b3c1f9758f8e",
                 "shasum": ""
             },
             "require": {
@@ -1299,7 +1299,7 @@
                 }
             ],
             "description": "SAML Auth component for IdP PW API",
-            "time": "2016-07-25 15:58:54"
+            "time": "2016-08-19 15:29:20"
         },
         {
             "name": "silinternational/idp-pw-api-common",
@@ -1649,6 +1649,9 @@
                 "psr-4": {
                     "silintl\\InsitePeopleSearch\\": "src/"
                 }
+            },
+            "support": {
+                "source": "https://bitbucket.org/silintl/insite-people-search/src/8a1e3956fc0e3cafcf96e3ee111737aade627f7f/?at=0.0.2"
             },
             "time": "2016-07-20 14:50:49"
         },
