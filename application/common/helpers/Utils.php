@@ -393,6 +393,7 @@ class Utils
                     'request_method' => $request->getMethod(),
                     'request_url' => $request->getAbsoluteUrl(),
                     'body_params' => $request->getBodyParams(),
+                    'user_agent' => $request->getUserAgent(),
                 ]);
                 throw new BadRequestHttpException('Missing client_id');
             }
