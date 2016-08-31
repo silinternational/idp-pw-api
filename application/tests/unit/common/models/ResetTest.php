@@ -91,8 +91,18 @@ class ResetTest extends DbTestCase
     {
         $existing = $this->resets('reset1');
         $new = Reset::findOrCreate($existing->user);
-
+        
         $this->assertEquals($existing->id, $new->id);
+    }
+
+    public function testFindOrCreateExistingResetTypeToPrimary()
+    {
+        $existing = $this->resets('reset1');
+        $existing->setType(Reset::TYPE_SPOUSE);
+
+        $new = Reset::findOrCreate($existing->user);
+        $this->assertEquals($existing->id, $new->id);
+        $this->assertEquals(Reset::TYPE_PRIMARY, $new->type);
     }
 
     public function testSendPhone()
@@ -213,7 +223,7 @@ class ResetTest extends DbTestCase
         $this->assertEquals(1, EmailUtils::getEmailFilesCount());
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('email-1456769679@domain.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('password change for your'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
         $this->assertEquals($attempts + 1, $reset->attempts);
 
     }
@@ -272,6 +282,30 @@ class ResetTest extends DbTestCase
         }
 
         $this->assertTrue($reset->isDisabled());
+    }
+
+    public function testGetMaskedValue()
+    {
+        $reset = $this->resets('reset1');
+        $this->assertEquals('f****_l**t@o***********.o**', $reset->getMaskedValue());
+
+        $reset->setType(Reset::TYPE_SUPERVISOR);
+        $this->assertEquals('s********r@d*****.o**', $reset->getMaskedValue());
+
+        $reset->setType(Reset::TYPE_SPOUSE);
+        $this->assertEquals('s****e@d*****.o**', $reset->getMaskedValue());
+
+        $method = $this->methods('method1');
+
+        $reset->setType(Reset::TYPE_METHOD, $method->uid);
+        $this->assertEquals('+1 #######890', $reset->getMaskedValue());
+
+        $method2 = $this->methods('method2');
+        $reset->setType(Reset::TYPE_METHOD, $method2->uid);
+
+        $reset = Reset::findOne(['id' => $reset->id]);
+
+        $this->assertEquals('e**************9@d*****.o**', $reset->getMaskedValue());
     }
 
 }

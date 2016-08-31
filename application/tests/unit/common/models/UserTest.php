@@ -1,11 +1,13 @@
 <?php
 namespace tests\unit\common\models;
 
+use common\models\PasswordChangeLog;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
 use tests\unit\fixtures\common\models\MethodFixture;
+use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 use yii\codeception\DbTestCase;
@@ -25,6 +27,7 @@ class UserTest extends DbTestCase
             'users' => UserFixture::className(),
             'methods' => MethodFixture::className(),
             'resets' => ResetFixture::className(),
+            'password_change_logs' => PasswordChangeLogFixture::className(),
         ];
     }
 
@@ -103,7 +106,7 @@ class UserTest extends DbTestCase
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->expectException(\Sil\IdpPw\Common\Personnel\NotFoundException::class);
+        $this->expectException(\yii\web\ServerErrorHttpException::class);
         User::findOrCreate('doesnt_exist');
     }
 
@@ -184,7 +187,7 @@ class UserTest extends DbTestCase
         $user = $this->users('user1');
         $methods = $user->getMaskedMethods();
         $this->assertTrue(is_array($methods));
-        $this->assertEquals(6, count($methods));
+        $this->assertEquals(5, count($methods));
 
         foreach ($methods as $method) {
             if ($method['type'] == 'primary') {
@@ -198,7 +201,7 @@ class UserTest extends DbTestCase
             } elseif ($method['type'] == 'email' && $method['uid'] == '22222222222222222222222222222222') {
                 $this->assertEquals('e**************9@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '33333333333333333333333333333333') {
-                $this->assertEquals('e**************1@d*****.o**', $method['value']);
+                $this->fail('Unverified method present in getMaskedMethods call');
             }
 
         }
@@ -239,8 +242,9 @@ class UserTest extends DbTestCase
     public function testFindIdentityByAccessToken()
     {
         $expected = $this->users('user1');
-        $user = User::findIdentityByAccessToken($expected->access_token);
+        $user = User::findIdentityByAccessToken('user1');
         $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expected->uid, $user->uid);
     }
 
     public function testGetAuthKey()
@@ -281,6 +285,24 @@ class UserTest extends DbTestCase
         $pwMeta = $user->getPasswordMeta();
         $this->assertArrayHasKey('last_changed', $pwMeta);
         $this->assertArrayHasKey('expires', $pwMeta);
+    }
+
+    public function testPasswordChangeLog()
+    {
+        $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
+        PasswordChangeLog::deleteAll();
+        $user = $this->users('user1');
+        $user->setPassword('This is a new 123 password!');
+
+        $log = PasswordChangeLog::findOne(['user_id' => $user->id]);
+        $this->assertEquals(PasswordChangeLog::SCENARIO_CHANGE, $log->scenario);
+
+        PasswordChangeLog::deleteAll();
+        $user3 = $this->users('user3');
+        $user3->setPassword('This is a new 123 password!');
+
+        $log = PasswordChangeLog::findOne(['user_id' => $user3->id]);
+        $this->assertEquals(PasswordChangeLog::SCENARIO_RESET, $log->scenario);
     }
 
 

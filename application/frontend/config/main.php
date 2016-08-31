@@ -3,7 +3,7 @@
 use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', false);
+$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
 
 $sessionLifetime = 1800; // 30 minutes
 
@@ -67,9 +67,11 @@ return [
                 'GET /method/' . UID_ROUTE_PATTERN => 'method/view',
                 'POST /method' => 'method/create',
                 'PUT /method/' . UID_ROUTE_PATTERN => 'method/update',
+                'PUT /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/resend',
                 'DELETE /method/' . UID_ROUTE_PATTERN => 'method/delete',
                 'OPTIONS /method' => 'method/options',
                 'OPTIONS /method/' . UID_ROUTE_PATTERN => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/options',
 
                 /*
                  * Password routes

@@ -2,14 +2,12 @@ version: '2'
 services:
     data:
         image: silintl/data-volume:latest
-        container_name: data
         volumes:
             - ./application:/data
         user: "${DOCKER_UIDGID}"
 
     db:
         image: silintl/mariadb:latest
-        container_name: db
         ports:
             - "3306"
         environment:
@@ -20,7 +18,6 @@ services:
 
     testDb:
        image: silintl/mariadb:latest
-       container_name: testDb
        ports:
            - "3306"
        environment:
@@ -53,15 +50,41 @@ services:
             - ./common.env
             - ./local.env
 
+    cron:
+        build: ./
+        volumes_from:
+            - data
+        depends_on:
+            - db
+        env_file:
+            - ./common.env
+            - ./local.env
+        command: /data/run-cron.sh
+
+    apitest:
+        build: ./
+        volumes:
+            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+        ports:
+            - "8000:80"
+        depends_on:
+            - testDb
+        env_file:
+            - ./common.env
+            - ./local.env
+        environment:
+            MYSQL_HOST: testDb
+            MYSQL_DATABASE: test
+        command: ["/data/run-tests-api.sh"]
+
     cli:
         image: silintl/php7:latest
-        container_name: cli
         volumes_from:
             - data
         volumes:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
-        user: "${DOCKER_UIDGID}"
+        #user: "${DOCKER_UIDGID}"
         env_file:
             - ./common.env
             - ./local.env
@@ -69,7 +92,6 @@ services:
 
     zxcvbn:
         image: wcjr/zxcvbn-api:1.0.0
-        container_name: zxcvbn
         ports:
             - "3000"
 

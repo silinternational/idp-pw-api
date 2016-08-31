@@ -122,12 +122,16 @@ class UtilsTest extends TestCase
             ],
         ];
 
+        $expectedZxcvbn = [
+            'minScore' => 2,
+        ];
+
         $params = \Yii::$app->params;
         $config = Utils::getFrontendConfig();
         $this->assertEquals($params['idpName'], $config['idpName']);
         $this->assertEquals($params['idpUsernameHint'], $config['idpUsernameHint']);
         $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
-        $this->assertEquals($config['password']['zxcvbn'], $params['password']['zxcvbn']);
+        $this->assertEquals($expectedZxcvbn, $config['password']['zxcvbn']);
         $this->assertTrue(is_array($config['password']));
 
         $expectedSupport = [
@@ -158,6 +162,24 @@ class UtilsTest extends TestCase
         $this->assertFalse(Utils::isArrayEntryTruthy(['key' => null], 'key'));
         $this->assertFalse(Utils::isArrayEntryTruthy(['key' => 0], 'key'));
     }
-    
+
+    public function testGetFriendlyDate()
+    {
+        /*
+         * Test with timestamp
+         */
+        $expected = 'Monday July 18, 2016 6:17PM UTC';
+        $timestamp = 1468865838;
+
+        $this->assertEquals($expected, Utils::getFriendlyDate($timestamp));
+
+        /*
+         * Test with string
+         */
+        $expected = 'Monday July 18, 2016 2:17PM UTC';
+        $string = '2016-07-18 14:17:00';
+
+        $this->assertEquals($expected, Utils::getFriendlyDate($string));
+    }
     
 }

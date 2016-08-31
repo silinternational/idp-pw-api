@@ -42,6 +42,14 @@ return [
 //            'apiSecret' => '',
 //            'from' => '',
 //        ],
+//        'phone' => [
+//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\VerifyThenSms',
+//            'apiKey' => '',
+//            'apiSecret' => '',
+//            'from' => '',
+//            'codeLength' => 4,
+//            'brand' => 'Verification',
+//        ],
         'passwordStore' => [
             'class' => '\Sil\IdpPw\PasswordStore\Ldap',
             'host' => '',

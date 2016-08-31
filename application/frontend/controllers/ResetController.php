@@ -6,6 +6,7 @@ use common\models\EventLog;
 use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
+use Sil\IdpPw\Common\Personnel\NotFoundException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -54,9 +55,10 @@ class ResetController extends BaseRestController
 
     /**
      * Create new reset process
-     * @return Reset
+     * @return Reset|\stdClass
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
      */
     public function actionCreate()
     {
@@ -86,13 +88,25 @@ class ResetController extends BaseRestController
         }
 
         /*
-         * Find or create user
+         * Find or create user, if user not found return empty object
          */
-        if ($usernameIsEmail) {
-            $user = User::findOrCreate(null, $username);
-        } else {
-            $user = User::findOrCreate($username);
+        try {
+            if ($usernameIsEmail) {
+                $user = User::findOrCreate(null, $username);
+            } else {
+                $user = User::findOrCreate($username);
+            }
+        } catch (NotFoundException $e) {
+            return new \stdClass();
+        } catch (\Exception $e) {
+            throw new ServerErrorHttpException('Unable to create new reset', 1469036552);
         }
+
+
+        /*
+         * Clear out expired resets
+         */
+        Reset::deleteExpired();
         
         /*
          * Find or create a reset
@@ -169,7 +183,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return \stdClass
+     * @return array
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -196,20 +210,35 @@ class ResetController extends BaseRestController
         $isValid = $reset->isUserProvidedCodeCorrect($code);
         if ($isValid === true) {
 
+            $ipAddress = Utils::getClientIp(\Yii::$app->request);
+            if ($reset->type === Reset::TYPE_METHOD) {
+                $methodType = $reset->method->type;
+            } else {
+                $methodType = null;
+            }
+
+            /*
+             * Log event with reset type/method details
+             */
             EventLog::log(
                 'ResetVerificationSuccessful',
                 [
-                    'reset_id' => $reset->id,
-                    'type' => $reset->type,
-                    'attempts' => $reset->attempts,
+                    'Reset Type' => $reset->type,
+                    'Attempts' => $reset->attempts,
+                    'IP Address' => $ipAddress,
+                    'Method type (if reset type is method)' => $methodType,
+                    'Method value' => $reset->getMaskedValue(),
                 ],
                 $reset->user_id
             );
 
             /*
-             * Reset verified successfully, log user in
+             * Reset verified successfully, create access token for user
              */
-            if (\Yii::$app->user->login($reset->user)) {
+            try {
+                $clientId = Utils::getClientIdOrFail();
+                $accessToken = $reset->user->createAccessToken($clientId, User::AUTH_TYPE_RESET);
+
                 $log['status'] = 'success';
                 \Yii::warning($log);
 
@@ -228,16 +257,15 @@ class ResetController extends BaseRestController
                 /*
                  * return empty object so that it gets json encoded to {}
                  */
-                return new \stdClass();
+                return [
+                    'access_token' => $accessToken,
+                ];
+            } catch (\Exception $e) {
+                $log['status'] = 'error';
+                $log['error'] = 'Unable to log user in after successful reset verification';
+                \Yii::error($log);
+                throw $e;
             }
-
-            $log['status'] = 'error';
-            $log['error'] = 'Unable to log user in after successful reset verification';
-            \Yii::error($log);
-            throw new ServerErrorHttpException(
-                $log['error'],
-                1462990877
-            );
         }
 
         EventLog::log(

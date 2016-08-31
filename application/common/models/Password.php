@@ -3,6 +3,7 @@ namespace common\models;
 
 use common\helpers\Utils;
 use common\helpers\ZxcvbnPasswordValidator;
+use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
 use yii\base\Model;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -12,6 +13,9 @@ class Password extends Model
 {
     /** @var string */
     public $password;
+
+    /** @var  string */
+    public $employeeId;
 
     /** @var \Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface */
     public $passwordStore;
@@ -93,33 +97,40 @@ class Password extends Model
 
     /**
      * Shortcut method to initialize a Password object
+     * @param string $employeeId
      * @param string $newPassword
      * @return Password
      */
-    public static function create($newPassword)
+    public static function create($employeeId, $newPassword)
     {
         $password = new Password();
         $password->password = $newPassword;
+        $password->employeeId = $employeeId;
 
         return $password;
     }
 
     /**
-     * @param int $userId
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public function save($userId)
+    public function save()
     {
 
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
+            \Yii::error([
+                'action' => 'save password',
+                'status' => 'error',
+                'employee_id' => $this->employeeId,
+                'error' => $this->getErrors('password'),
+            ]);
             throw new BadRequestHttpException('New password validation failed: ' . $errors);
         }
         
         $log = [
             'action' => 'save password',
-            'user_id' => $userId,
+            'employee_id' => $this->employeeId,
         ];
 
         /*
@@ -137,14 +148,48 @@ class Password extends Model
          * Update password
          */
         try {
-            $this->passwordStore->set($userId, $this->password);
+            $this->passwordStore->set($this->employeeId, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
         } catch (\Exception $e) {
+            /*
+             * Log error
+             */
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
-            \Yii::error($log);
-            throw new ServerErrorHttpException(\Yii::t('app', 'Unable to update password'), 1463165209);
+            $previous = $e->getPrevious();
+            if ($previous instanceof \Exception) {
+                $log['previous'] = [
+                    'code' => $previous->getCode(),
+                    'message' => $previous->getMessage(),
+                ];
+            }
+
+            /*
+             * Throw exception based on exception type
+             */
+            if ($e instanceof  PasswordReuseException) {
+                \Yii::warning($log);
+                throw new BadRequestHttpException(
+                    \Yii::t(
+                        'app',
+                        'Unable to update password. ' .
+                            'If this password has been used before please use something different.'
+                    ),
+                    1469194882
+                );
+            } else {
+                \Yii::error($log);
+                throw new ServerErrorHttpException(
+                    \Yii::t(
+                        'app',
+                        'Unable to update password, please wait a minute and try again. If this problem ' .
+                            'persists, please contact support.'
+                    ), 
+                    1463165209
+                );
+            }
+
         }
     }
 

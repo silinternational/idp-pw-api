@@ -1,22 +1,34 @@
+<?php
+use yii\helpers\Html as yHtml;
+
+/**
+ * @var string $toAddress
+ * @var string $idpName
+ * @var string $expireTime
+ * @var string $code
+ * @var string $helpCenterUrl
+ * @var string $fromName
+ */
+?>
 Hi there,
 <p>
-    Someone recently requested to add this email address, <?php echo \yii\helpers\Html::encode($toAddress); ?>,
+    Someone recently requested to add this email address, <?php echo yHtml::encode($toAddress); ?>,
     as a method for verifying themselves should they need to reset their
-    <?php echo \yii\helpers\Html::encode($idpName); ?> account. If this was you, you can use the reset code
+    <?php echo yHtml::encode($idpName); ?> account. If this was you, you can use the reset code
     below to set a new password.
 </p>
 <p>
-    Reset Code: <?php echo \yii\helpers\Html::encode($code); ?>
+    Reset Code: <?php echo yHtml::encode($code); ?>
 </p>
 <p>
     If you did not request adding this email address to your account please delete this email.
 </p>
 <p>
     To keep your account secure, please don't forward this email to anyone.
-    See our Help Center for <a href="<?php echo \yii\helpers\Html::encode($helpCenterUrl); ?>">more security tips</a>.
+    See our Help Center for <a href="<?php echo yHtml::encode($helpCenterUrl); ?>">more security tips</a>.
 </p>
 <p>
     Thanks!
-    - <?php echo \yii\helpers\Html::encode($fromName); ?>
+    - <?php echo yHtml::encode($fromName); ?>
 </p>
     

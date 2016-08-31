@@ -66,7 +66,7 @@ class AuthController extends BaseRestController
             /*
              * Grab client_id for use in token after successful login
              */
-            $clientId = $this->getClientIdOrFail();
+            $clientId = Utils::getClientIdOrFail();
 
             /*
              * Grab state for use in response after successful login
@@ -83,7 +83,7 @@ class AuthController extends BaseRestController
              * Use employeeId since username or email could change.
              */
             $user = User::findOrCreate(null, null, $authUser->employeeId);
-            $accessToken = $user->createAccessToken($clientId);
+            $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken);
 
@@ -106,11 +106,18 @@ class AuthController extends BaseRestController
              */
             return $this->redirect($e->getUrl());
         } catch (\Exception $e) {
+            /*
+             * log exception
+             */
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $log['code'] = $e->getCode();
             \Yii::error($log, 'application');
-            throw new UnauthorizedHttpException($e->getMessage(), $e->getCode());
+
+            /*
+             * redirect to login error page
+             */
+            return $this->redirect(\Yii::$app->params['uiUrl'] . '/auth/error');
         }
 
     }
@@ -122,11 +129,12 @@ class AuthController extends BaseRestController
             /*
              * Clear access_token
              */
-            $user = User::findOne(['access_token' => $accessToken]);
+            $accessTokenHash = Utils::getAccessTokenHash($accessToken);
+            $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
                 $user->access_token = null;
                 $user->access_token_expiration = null;
-                if (!$user->save()) {
+                if ( ! $user->save()) {
                     \Yii::error([
                         'action' => 'user logout',
                         'status' => 'error',
@@ -168,25 +176,6 @@ class AuthController extends BaseRestController
     }
 
     /**
-     * Get client_id from request or session and then store in session
-     * @return string
-     * @throws BadRequestHttpException
-     */
-    public function getClientIdOrFail()
-    {
-        $clientId = \Yii::$app->request->get('client_id');
-        if ($clientId === null) {
-            $clientId = \Yii::$app->session->get('clientId');
-            if ($clientId === null) {
-                throw new BadRequestHttpException('Missing client_id');
-            }
-        }
-        \Yii::$app->session->set('clientId', $clientId);
-
-        return $clientId;
-    }
-
-    /**
      * Get state from request or session and then store in session
      * @return string
      */
@@ -218,9 +207,14 @@ class AuthController extends BaseRestController
          * build url to redirect user to
          */
         $afterLogin = $this->getAfterLoginUrl($relayState);
+        if (strpos( $afterLogin, '?')) {
+            $joinChar = '&';
+        } else {
+            $joinChar = '?';
+        }
         $url = $afterLogin . sprintf(
-                '?state=%s&token_type=Bearer&expires_in=%s&access_token=%s',
-                Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
+                '%sstate=%s&token_type=Bearer&expires_in=%s&access_token=%s',
+                $joinChar, Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
             );
 
         return $url;

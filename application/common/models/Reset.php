@@ -88,10 +88,31 @@ class Reset extends ResetBase
     public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $methodId = null)
     {
         /*
+         * Clean up expired resets
+         */
+        self::deleteExpired();
+
+        $log = [
+            'action' => 'findOrCreate reset',
+            'user_id' => $user->id,
+            'type' => $type,
+            'method_id' => $methodId,
+            'ip_address' => 'initiated outside web request context',
+        ];
+
+        if (\Yii::$app->request) {
+            $log['ip_address'] = Utils::getClientIp(\Yii::$app->request);
+        }
+
+        /*
          * Find existing or create new Reset
          */
         $reset = $user->reset;
         if ($reset === null) {
+            $log['existing reset'] = 'no';
+            /*
+             * Create new reset
+             */
             $reset = new Reset();
             $reset->user_id = $user->id;
             /*
@@ -105,6 +126,10 @@ class Reset extends ResetBase
             if ($type == self::TYPE_METHOD && $methodId !== null) {
                 $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId, 'verified' => 1]);
                 if ( ! $method) {
+                    $log['status'] = 'error';
+                    $log['error'] = 'Requested method not found';
+                    \Yii::error($log);
+
                     throw new NotFoundHttpException('Requested method not found', 1456608142);
                 }
                 $reset->method_id = $methodId;
@@ -113,6 +138,7 @@ class Reset extends ResetBase
              * Save new Reset
              */
             $reset->saveOrError('create new reset', 'Unable to create new reset.');
+
             EventLog::log(
                 'ResetCreated',
                 [
@@ -121,7 +147,19 @@ class Reset extends ResetBase
                 ],
                 $user->id
             );
+        } else {
+            $log['existing reset'] = 'yes';
+            /*
+             * change method back to primary if they are requesting to start reset again
+             */
+            $reset->setType(self::TYPE_PRIMARY);
         }
+
+        $log['status'] = 'success';
+        $log['attempts_count'] = $reset->attempts;
+        $log['expires'] = $reset->expires;
+        $log['disable_until'] = $reset->disable_until;
+        \Yii::warning($log);
 
         return $reset;
     }
@@ -223,12 +261,12 @@ class Reset extends ResetBase
              */
             $subject = \Yii::t(
                 'app',
-                '{{idpName}} password reset request',
+                '{idpName} password reset request',
                 [
                     'idpName' => \Yii::$app->params['idpName'],
                 ]
             );
-            $this->sendEmail($this->method->value, $subject, 'self');
+            $this->sendEmail($this->method->value, $subject, 'on-behalf');
         } elseif ($this->method->type == Method::TYPE_PHONE) {
             $this->sendPhone();
         } else {
@@ -253,14 +291,16 @@ class Reset extends ResetBase
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
-        $resetUrl = sprintf('%s/#/reset/%s/verify/%s', \Yii::$app->params['uiUrl'], $this->uid, $this->code);
+        $resetUrl = sprintf('%s/reset/%s/verify/%s', \Yii::$app->params['uiUrl'], $this->uid, $this->code);
 
         // Send email verification
+        $friendlyExpiration = Utils::getFriendlyDate($this->expires);
         Verification::sendEmail(
             $toAddress,
             $subject,
             '@common/mail/reset/' . $view,
             $this->code,
+            $friendlyExpiration,
             $this->user,
             $ccAddress,
             $this->user->id,
@@ -493,9 +533,9 @@ class Reset extends ResetBase
             }
 
             /*
-             * Make sure user owns requested method before update
+             * Make sure user owns requested method and it is verified before update
              */
-            $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id]);
+            $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id, 'verified' => 1]);
             if ($method === null) {
                 throw new NotFoundHttpException('Method not found', 1462989221);
             }
@@ -504,6 +544,11 @@ class Reset extends ResetBase
         } else {
             throw new BadRequestHttpException('Unknown reset type requested', 1462989489);
         }
+
+        /*
+         * Generate new verification code
+         */
+        $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
 
         /*
          * Save changes
@@ -574,6 +619,52 @@ class Reset extends ResetBase
                 'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
             ]);
             throw new ServerErrorHttpException($errorPrefix);
+        }
+    }
+
+    /**
+     * Delete all expired Reset records
+     */
+    public static function deleteExpired()
+    {
+        try {
+            $deleted = self::deleteAll(
+                ['<', 'expires', Utils::getDatetime()]
+            );
+
+            if ($deleted > 0) {
+                \Yii::warning([
+                    'action' => 'delete expired resets',
+                    'status' => 'success',
+                    'deleted count' => $deleted,
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'delete expired resets',
+                'status' => 'error',
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+        }
+    }
+
+    /**
+     * Return the masked value of whatever is used for this reset
+     * @return string
+     */
+    public function getMaskedValue()
+    {
+        if ($this->type === self::TYPE_METHOD) {
+            return $this->method->getMaskedValue();
+        } elseif ($this->type === self::TYPE_PRIMARY) {
+            return Utils::maskEmail($this->user->email);
+        } elseif ($this->type == self::TYPE_SUPERVISOR) {
+            return Utils::maskEmail($this->user->getSupervisorEmail());
+        } elseif ($this->type == self::TYPE_SPOUSE) {
+            return Utils::maskEmail($this->user->getSpouseEmail());
+        } else {
+            return 'Invalid reset type';
         }
     }
 }

@@ -27,7 +27,7 @@ class PasswordTest extends TestCase
         $testData = $this->getTestData();
 
         foreach ($testData as $testCase) {
-            $password = Password::create($testCase['password']);
+            $password = Password::create(1234, $testCase['password']);
             $valid = $password->validate();
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));
@@ -72,12 +72,19 @@ class PasswordTest extends TestCase
                 'Failed validating test case: ' . $testCase['password']
             );
 
-            $zxcvbnStatus = ! substr_count($validationErrorsString, 'code 150') > 0;
-            $this->assertEquals(
-                $testCase['zxcvbnPass'],
-                $zxcvbnStatus,
-                'Failed validating test case: ' . $testCase['password']
-            );
+            /*
+             * Zxcvbn validation is skipped if any other validation errors occur, so only assert
+             * failure if other tests pass and this should fail
+             */
+            if ($testCase['nonZxcvbnPass']) {
+                $zxcvbnStatus = ! substr_count($validationErrorsString, 'code 150') > 0;
+                $this->assertEquals(
+                    $testCase['zxcvbnPass'],
+                    $zxcvbnStatus,
+                    'Failed validating test case: ' . $testCase['password']
+                );
+            }
+
         }
     }
 
@@ -94,6 +101,7 @@ class PasswordTest extends TestCase
                 'minUpper' => false,
                 'minSpecial' => false,
                 'overall' => false,
+                'nonZxcvbnPass' => false,
             ],
             [
                 'password' => 'Complex-ish p$ssw!or12',
@@ -105,6 +113,7 @@ class PasswordTest extends TestCase
                 'minUpper' => true,
                 'minSpecial' => true,
                 'overall' => true,
+                'nonZxcvbnPass' => true,
             ],
             [
                 'password' => 'ALL CAPS QUERTY 1234',
@@ -116,6 +125,7 @@ class PasswordTest extends TestCase
                 'minUpper' => true,
                 'minSpecial' => true,
                 'overall' => true,
+                'nonZxcvbnPass' => true,
             ],
             [
                 'password' => 'password',
@@ -127,6 +137,7 @@ class PasswordTest extends TestCase
                 'minUpper' => false,
                 'minSpecial' => false,
                 'overall' => false,
+                'nonZxcvbnPass' => false,
             ],
             [
                 'password' => '1John 3:16',
@@ -138,6 +149,7 @@ class PasswordTest extends TestCase
                 'minUpper' => true,
                 'minSpecial' => true,
                 'overall' => true,
+                'nonZxcvbnPass' => true,
             ],
             [
                 'password' => 'luv kitties4!',
@@ -149,6 +161,7 @@ class PasswordTest extends TestCase
                 'minUpper' => false,
                 'minSpecial' => true,
                 'overall' => false,
+                'nonZxcvbnPass' => false,
             ],
             [
                 'password' => 'jesus',
@@ -160,6 +173,7 @@ class PasswordTest extends TestCase
                 'minUpper' => false,
                 'minSpecial' => false,
                 'overall' => false,
+                'nonZxcvbnPass' => false,
             ],
             [
                 'password' => 'Je$u$12345',
@@ -171,6 +185,7 @@ class PasswordTest extends TestCase
                 'minUpper' => true,
                 'minSpecial' => true,
                 'overall' => false,
+                'nonZxcvbnPass' => true,
             ],
 
         ];

@@ -9,6 +9,7 @@ use yii\codeception\DbTestCase;
 use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\UserFixture;
 use tests\unit\fixtures\common\models\MethodFixture;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class MethodTest
@@ -104,7 +105,7 @@ class MethodTest extends DbTestCase
     public function testCreateAndSendVerificationInvalidType()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionCode(1461375342);
+        $this->expectExceptionCode(1470169372);
         Method::createAndSendVerification(
             1,
             'invalid type',
@@ -164,21 +165,21 @@ class MethodTest extends DbTestCase
         );
 
         $this->assertEquals($mockPhones[0]['code'], $method->verification_code);
-        $this->assertEquals(0, $method->verification_attempts);
+        $this->assertEquals(1, $method->verification_attempts);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
 
         $this->assertEquals(0, $method->verified);
-        $this->assertEquals(1, $method->verification_attempts);
+        $this->assertEquals(2, $method->verification_attempts);
         $this->assertNotNull($method->verification_code);
         $this->assertNotNull($method->verification_expires);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
-        $this->assertEquals(2, $method->verification_attempts);
+        $this->assertEquals(3, $method->verification_attempts);
     }
 
     public function testDeleteExpiredUnverifiedMethods()
@@ -192,6 +193,63 @@ class MethodTest extends DbTestCase
 
         $method2 = Method::findOne(['uid' => $method->uid]);
         $this->assertNull($method2);
+    }
+
+    public function testCreateAndSendVerificationSendVerificationFails()
+    {
+        /*
+         * Delete all methods to start clean
+         */
+        Method::deleteAll();
+
+        /*
+         * Attempt to create new method, it should fail when sending verification and
+         * delete itself and return an exception
+         */
+        $this->expectException(ServerErrorHttpException::class);
+        $this->expectExceptionCode(1469736442);
+        $user = $this->users('user1');
+        Method::createAndSendVerification(
+            $user->id,
+            Method::TYPE_PHONE,
+            '14044044044'
+        );
+
+        /*
+         * Make sure a record for this method does not exist
+         */
+        $found = Method::findOne(['value' => '14044044044']);
+        $this->assertNull($found);
+    }
+
+    public function testCreateAndSendVerificationExistingUnverifiedMethodEmail()
+    {
+        $existing = $this->methods('method4');
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(1, $method->verification_attempts);
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(2, $method->verification_attempts);
+    }
+
+    public function testCreateAndSendVerificationExistingUnverifiedMethodPhone()
+    {
+        $existing = $this->methods('method5');
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(1, $method->verification_attempts);
+
+        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
+
+        $this->assertEquals($existing->uid, $method->uid);
+        $this->assertEquals(2, $method->verification_attempts);
     }
 
 }

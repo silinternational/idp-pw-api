@@ -1,0 +1,15 @@
+class_name: ApiTester
+paths:
+    log: _output
+modules:
+    enabled:
+        - ApiHelper
+        - tests\api\FixtureHelper
+        - REST:
+            url: http://localhost/index-test.php
+            depends: PhpBrowser
+    coverage:
+      enabled: true
+      include:
+          - common/*
+          - frontend/*

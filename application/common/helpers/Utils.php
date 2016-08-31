@@ -2,6 +2,7 @@
 namespace common\helpers;
 
 use yii\base\Security;
+use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
@@ -12,6 +13,7 @@ class Utils
 {
 
     const DT_FORMAT = 'Y-m-d H:i:s';
+    const FRIENDLY_DT_FORMAT = 'l F j, Y g:iA T';
     const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
@@ -28,12 +30,32 @@ class Utils
     /**
      * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
      * @return string
+     * @throws \Exception
      */
     public static function getIso8601($timestamp = null)
     {
         $timestamp = $timestamp !== null ? $timestamp : time();
         $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
+        if ($timestamp === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865840);
+        }
         return date('c', $timestamp);
+    }
+
+    /**
+     * Return human readable date time
+     * @param int|string|null $timestamp Either a unix timestamp or a date in string format
+     * @return string
+     * @throws \Exception
+     */
+    public static function getFriendlyDate($timestamp = null)
+    {
+        $timestamp = $timestamp !== null ? $timestamp : time();
+        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
+        if ($timestamp === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865838);
+        }
+        return date(self::FRIENDLY_DT_FORMAT, $timestamp);
     }
 
     /**
@@ -103,13 +125,18 @@ class Utils
     /**
      * @param string $email an email address
      * @return string with most letters changed to asterisks
-     * @throws \Exception
+     * @throws BadRequestHttpException
      */
     public static function maskEmail($email)
     {
         $validator = new EmailValidator();
         if ( ! $validator->validate($email)) {
-            throw new \Exception('Invalid email address provided', 1461459797);
+            \Yii::warning([
+                'action' => 'mask email',
+                'status' => 'error',
+                'error' => 'Invalid email address provided: ' . Html::encode($email),
+            ]);
+            throw new BadRequestHttpException('Invalid email address provided.', 1461459797);
         }
 
         list($part1, $domain) = explode('@', $email);
@@ -198,12 +225,16 @@ class Utils
             if (empty($params['password'][$rule])) {
                 throw new ServerErrorHttpException('Missing configuration for ' . $rule);
             }
-            $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
-            $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
-            $config['password'][$rule]['enabled'] = $params['password'][$rule]['enabled'];
+
+            if ($params['password'][$rule]['enabled']) {
+                $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
+                $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
+            }
         }
 
-        $config['password']['zxcvbn'] = $params['password']['zxcvbn'];
+        $config['password']['zxcvbn'] = [
+            'minScore' => $params['password']['zxcvbn']['minScore'],
+        ];
 
         return $config;
     }
@@ -337,6 +368,74 @@ class Utils
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * Get client_id from request or session and then store in session
+     * @return string
+     * @throws BadRequestHttpException
+     */
+    public static function getClientIdOrFail()
+    {
+        $request = \Yii::$app->request;
+        if (\Yii::$app->request->isPut) {
+            $clientId = $request->getBodyParam('client_id');
+        } else {
+            $clientId = $request->get('client_id');
+        }
+
+        if ($clientId === null) {
+            $clientId = \Yii::$app->session->get('clientId');
+            if ($clientId === null) {
+                \Yii::error([
+                    'action' => 'login - get client id or fail',
+                    'status' => 'error',
+                    'request_method' => $request->getMethod(),
+                    'request_url' => $request->getAbsoluteUrl(),
+                    'body_params' => $request->getBodyParams(),
+                    'user_agent' => $request->getUserAgent(),
+                ]);
+                throw new BadRequestHttpException('Missing client_id');
+            }
+        }
+        \Yii::$app->session->set('clientId', $clientId);
+
+        return $clientId;
+    }
+
+    /**
+     * Return HMAC SHA256 of access token
+     * @param string $accessToken
+     * @return string
+     */
+    public static function getAccessTokenHash($accessToken)
+    {
+        return hash_hmac('sha256', $accessToken, \Yii::$app->params['accessTokenHashKey']);
+    }
+
+    /**
+     * Calculate expiration date based on
+     * @param string $changeDate
+     * @return string
+     */
+    public static function calculatePasswordExpirationDate($changeDate)
+    {
+        $passwordLifetime = \Yii::$app->params['passwordLifetime'];
+        $dateInterval = new \DateInterval($passwordLifetime);
+        $dateTime = new \DateTime($changeDate);
+        $expireDate = $dateTime->add($dateInterval);
+
+        return $expireDate->format(self::DT_FORMAT);
+    }
+
+    /**
+     * Remove all non-numeric characters
+     * @param string $value
+     * @return string
+     */
+    public static function stripNonNumbers($value)
+    {
+        return preg_replace('/[^0-9]/', '', $value);
     }
 
 }

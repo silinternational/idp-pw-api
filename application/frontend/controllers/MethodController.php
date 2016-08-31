@@ -9,6 +9,7 @@ use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
@@ -88,6 +89,7 @@ class MethodController extends BaseRestController
      * Create new unverified method and send verification
      * @return Method
      * @throws BadRequestHttpException
+     * @throws ConflictHttpException
      * @throws \Exception
      */
     public function actionCreate()
@@ -110,7 +112,18 @@ class MethodController extends BaseRestController
          */
         $method = Method::findOne(['value' => $value, 'user_id' => \Yii::$app->user->getId()]);
         if ($method !== null) {
-            return $method;
+            /*
+             * if not verified yet, resend verification
+             */
+            if ($method->verified === 0) {
+                $method->sendVerification();
+                return $method;
+            } else {
+                /*
+                 * method exists and is verified, throw conflict
+                 */
+                throw new ConflictHttpException('Method already exists');
+            }
         }
 
         /*
@@ -191,9 +204,13 @@ class MethodController extends BaseRestController
         try {
             $method->validateAndSetAsVerified($code);
         } catch (InvalidCodeException $e) {
-            throw new BadRequestHttpException('Invalid verification code');
+            throw new BadRequestHttpException('Invalid verification code', 1470315942);
         } catch (\Exception $e) {
-            throw new ServerErrorHttpException('Unable to set method as verified');
+            throw new ServerErrorHttpException(
+                'Unable to set method as verified: ' . $e->getMessage(),
+                1470315941,
+                $e
+            );
         }
 
         return $method;
@@ -224,5 +241,36 @@ class MethodController extends BaseRestController
         }
 
         return [];
+    }
+
+    /**
+     * @param string $uid
+     * @return \stdClass
+     * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
+     * @throws \Exception
+     */
+    public function actionResend($uid)
+    {
+        $method = Method::findOne([
+            'uid' => $uid,
+            'user_id' => \Yii::$app->user->getId(),
+        ]);
+
+        if ($method === null) {
+            throw new NotFoundHttpException();
+        } elseif ($method->verified === 1) {
+            throw new BadRequestHttpException('Method already verified');
+        }
+
+        /*
+         * resend verification
+         */
+        $method->sendVerification();
+
+        /*
+         * Return empty object
+         */
+        return new \stdClass();
     }
 }

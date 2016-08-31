@@ -2,10 +2,10 @@
 namespace common\models;
 
 use Sil\IdpPw\Common\Auth\User as AuthUser;
+use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use Sil\IdpPw\Common\Personnel\NotFoundException;
 use Sil\IdpPw\Common\Personnel\PersonnelInterface;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
-use Yii;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
@@ -19,6 +19,10 @@ use yii\web\ServerErrorHttpException;
  */
 class User extends UserBase implements IdentityInterface
 {
+
+    const AUTH_TYPE_LOGIN = 'login';
+    const AUTH_TYPE_RESET = 'reset';
+
     /**
      * Holds personnelUser
      * @var PersonnelUser
@@ -55,6 +59,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function fields()
     {
+        /** @var User $model */
         return [
             'first_name',
             'last_name',
@@ -91,14 +96,29 @@ class User extends UserBase implements IdentityInterface
         /*
          * Always call Personnel system in case employee is no longer employed
          */
-        /** @var PersonnelUser $personnelUser */
-        if ( ! is_null($employeeId)) {
-            $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
-        } elseif ( ! is_null($username)) {
-            $personnelUser = \Yii::$app->personnel->findByUsername($username);
-        } else {
-            $personnelUser = \Yii::$app->personnel->findByEmail($email);
+        try {
+            /** @var PersonnelUser $personnelUser */
+            if ( ! is_null($employeeId)) {
+                $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
+            } elseif ( ! is_null($username)) {
+                $personnelUser = \Yii::$app->personnel->findByUsername($username);
+            } else {
+                $personnelUser = \Yii::$app->personnel->findByEmail($email);
+            }
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'personnel find user',
+                'status' => 'error',
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            throw new ServerErrorHttpException(
+                'There was a problem retrieving your information from the personnel system. Please wait a few ' .
+                'minutes and try again.',
+                1470164077
+            );
         }
+
 
         $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
         if ( ! $user) {
@@ -109,9 +129,11 @@ class User extends UserBase implements IdentityInterface
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
             if ( ! $user->save()) {
-                /*
-                 * add logging with model validation errors
-                 */
+                \Yii::error([
+                    'action' => 'create new user',
+                    'status' => 'error',
+                    'error' => $user->getFirstErrors(),
+                ]);
                 throw new \Exception('Unable to create new user', 1456760294);
             }
         } else {
@@ -157,9 +179,11 @@ class User extends UserBase implements IdentityInterface
             if ($this->save()) {
                 return true;
             } else {
-                /*
-                 * add logging with model validation errors
-                 */
+                \Yii::error([
+                    'action' => 'update user profile',
+                    'status' => 'error',
+                    'error' => $this->getFirstErrors(),
+                ]);
                 throw new \Exception('Unable to update profile', 1456760819);
             }
         }
@@ -203,9 +227,10 @@ class User extends UserBase implements IdentityInterface
         }
         
         /*
-         * Then get all other methods
+         * Then get other verified methods
          */
-        foreach ($this->methods as $method) {
+        $verifiedMethods = $this->getVerifiedMethods();
+        foreach ($verifiedMethods as $method) {
             $methods[] = [
                 'uid' => $method->uid,
                 'type' => $method->type,
@@ -313,7 +338,8 @@ class User extends UserBase implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::find()->where(['access_token' => $token])
+        $accessTokenHash = Utils::getAccessTokenHash($token);
+        return static::find()->where(['access_token' => $accessTokenHash])
             ->andWhere(['>', 'access_token_expiration', Utils::getDatetime()])
             ->one();
     }
@@ -377,12 +403,31 @@ class User extends UserBase implements IdentityInterface
         return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
     }
 
+    /**
+     * @return array
+     * @throws ServerErrorHttpException
+     */
     public function getPasswordMeta()
     {
-        $thisUser = self::findOne(['id' => $this->id]);
+        /*
+         * If password metadata is missing, fetch from passwordStore and update
+         */
+        if ($this->pw_last_changed === null) {
+            /** @var UserPasswordMeta $pwMeta */
+            $pwMeta = \Yii::$app->passwordStore->getMeta($this->employee_id);
+
+            $lastChangedTimestamp = strtotime($pwMeta->passwordLastChangeDate);
+            $this->pw_last_changed = Utils::getDatetime($lastChangedTimestamp);
+            $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
+
+            if ( ! $this->save()) {
+                throw new ServerErrorHttpException('Unable to update user record with password metadata', 1467297721);
+            }
+        }
+
         return [
-            'last_changed' => Utils::getIso8601($thisUser->pw_last_changed),
-            'expires' => Utils::getIso8601($thisUser->pw_expires),
+            'last_changed' => Utils::getIso8601($this->pw_last_changed),
+            'expires' => Utils::getIso8601($this->pw_expires),
         ];
     }
 
@@ -393,15 +438,51 @@ class User extends UserBase implements IdentityInterface
      */
     public function setPassword($newPassword)
     {
-        $password = Password::create($newPassword);
-        $password->save($this->employee_id);
+        $password = Password::create($this->employee_id, $newPassword);
+        $password->save();
 
         $this->pw_last_changed = Utils::getDatetime();
-        $this->pw_expires = Utils::getDatetime(time() + \Yii::$app->params['passwordLifetime']);
+        $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
         
         if ( ! $this->save()) {
+            \Yii::error([
+                'action' => 'set password for user',
+                'status' => 'error',
+                'error' => $this->getFirstErrors(),
+            ]);
             throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
         }
+
+        /*
+         * Check for request to get user's IP address for logging
+         */
+        $ipAddress = Utils::getClientIp(\Yii::$app->request);
+        if (empty($ipAddress)) {
+            $ipAddress = 'Not web request';
+        }
+
+        /*
+         * Log password change
+         */
+        $scenario = ($this->auth_type === self::AUTH_TYPE_RESET) ?
+            PasswordChangeLog::SCENARIO_RESET : PasswordChangeLog::SCENARIO_CHANGE;
+        PasswordChangeLog::log(
+            $this->id,
+            $scenario,
+            $ipAddress
+        );
+
+        /*
+         * Log event
+         */
+        EventLog::log(
+            'PasswordChanged',
+            [
+                'Authentication method' => $this->auth_type,
+                'IP Address' => $ipAddress,
+            ],
+            $this->id
+        );
     }
 
     /**
@@ -409,20 +490,26 @@ class User extends UserBase implements IdentityInterface
      * @return string
      * @throws ServerErrorHttpException
      */
-    public function createAccessToken($clientId)
+    public function createAccessToken($clientId, $authType)
     {
         /*
-             * Create access_token and update user
-             */
+         * Create access_token and update user
+         */
         $accessToken = Utils::generateRandomString(32);
         /*
          * Store combination of clientId and accessToken for bearer auth
          */
-        $this->access_token = $clientId . $accessToken;
+        $this->auth_type = $authType;
+        $this->access_token = Utils::getAccessTokenHash($clientId . $accessToken);
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );
         if ( ! $this->save()) {
+            \Yii::error([
+                'action' => 'create access token for user',
+                'status' => 'error',
+                'error' => $this->getFirstErrors(),
+            ]);
             throw new ServerErrorHttpException('Unable to create access token', 1465833228);
         }
 
