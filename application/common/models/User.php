@@ -8,6 +8,7 @@ use Sil\IdpPw\Common\Personnel\PersonnelInterface;
 use Sil\IdpPw\Common\Personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
+use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -106,6 +107,13 @@ class User extends UserBase implements IdentityInterface
                 $personnelUser = \Yii::$app->personnel->findByEmail($email);
             }
         } catch (\Exception $e) {
+            /*
+             * If user was not found just re-throw exception
+             */
+            if ($e instanceof NotFoundException) {
+                throw $e;
+            }
+
             \Yii::error([
                 'action' => 'personnel find user',
                 'status' => 'error',
