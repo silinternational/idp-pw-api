@@ -10,8 +10,6 @@ RUN mkdir -p /data
 # Copy in syslog config
 RUN rm -f /etc/rsyslog.d/*
 COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
-RUN mkdir -p /opt/ssl
-COPY dockerbuild/logentries.all.crt /opt/ssl/logentries.all.crt
 
 # Copy in cron configuration
 COPY dockerbuild/idp-cron /etc/cron.d/
