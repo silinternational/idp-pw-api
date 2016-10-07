@@ -81,7 +81,7 @@ services:
         command: ["true"]
 
     zxcvbn:
-        image: wcjr/zxcvbn-api:1.0.0
+        image: wcjr/zxcvbn-api:1.1.0
         ports:
             - "3000"
 
