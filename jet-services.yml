@@ -30,5 +30,5 @@ api:
     command: /data/run-tests.sh
 
 ecsdeploy:
-    image: silintl/ecs-deploy:latest
+    image: silintl/ecs-deploy:2.5.0
     encrypted_env_file: aws.env.encrypted
