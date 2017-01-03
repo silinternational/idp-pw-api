@@ -246,7 +246,7 @@ class ResetController extends BaseRestController
                  * Delete reset record, log errors, but let user proceed
                  */
                 if ( ! $reset->delete()) {
-                    \Yii::error([
+                    \Yii::warning([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,
                         'status' => 'error',
@@ -280,7 +280,7 @@ class ResetController extends BaseRestController
 
         $log['status'] = 'error';
         $log['error'] = 'Reset code verification failed';
-        \Yii::error($log);
+        \Yii::warning($log);
         throw new BadRequestHttpException('Invalid verification code', 1462991098);
     }
 }

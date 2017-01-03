@@ -138,7 +138,7 @@ class Method extends MethodBase
                 $log['status'] ='error';
                 $log['error'] = $e->getMessage();
                 $log['value'] = Utils::stripNonNumbers($value);
-                \Yii::error($log);
+                \Yii::warning($log);
 
                 throw new BadRequestHttpException($e->getMessage(), $e->getCode());
             }
@@ -159,7 +159,7 @@ class Method extends MethodBase
         if ( ! $method->save()) {
             $log['status'] = 'failed';
             $log['error'] = $method->getFirstErrors();
-            \Yii::error($log);
+            \Yii::warning($log);
 
             throw new \Exception('Unable to add new method', 1461375342);
         }
