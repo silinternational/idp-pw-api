@@ -388,7 +388,7 @@ class Utils
         if ($clientId === null) {
             $clientId = \Yii::$app->session->get('clientId');
             if ($clientId === null) {
-                \Yii::error([
+                \Yii::warning([
                     'action' => 'login - get client id or fail',
                     'status' => 'error',
                     'request_method' => $request->getMethod(),
