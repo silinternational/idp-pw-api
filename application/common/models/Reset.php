@@ -590,7 +590,7 @@ class Reset extends ResetBase
          * Check if reset is disabled and throw exception if it is
          */
         if ($this->isDisabled()) {
-            \Yii::error([
+            \Yii::warning([
                 'action' => $action . ' reset',
                 'reset_id' => $this->id,
                 'attempts' => $this->attempts,
