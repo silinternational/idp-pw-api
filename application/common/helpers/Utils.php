@@ -1,6 +1,7 @@
 <?php
 namespace common\helpers;
 
+use Sil\IdpPw\Common\Auth\RedirectException;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -374,7 +375,7 @@ class Utils
     /**
      * Get client_id from request or session and then store in session
      * @return string
-     * @throws BadRequestHttpException
+     * @throws RedirectException
      */
     public static function getClientIdOrFail()
     {
@@ -396,7 +397,7 @@ class Utils
                     'body_params' => $request->getBodyParams(),
                     'user_agent' => $request->getUserAgent(),
                 ]);
-                throw new BadRequestHttpException('Missing client_id');
+                throw new RedirectException(\Yii::$app->params['uiUrl'] . '/auth/error', 'Missing client_id');
             }
         }
         \Yii::$app->session->set('clientId', $clientId);

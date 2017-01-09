@@ -197,9 +197,18 @@ class ResetController extends BaseRestController
             throw new NotFoundHttpException();
         }
 
+        /*
+         * Validate required parameters are present or throw 400 error
+         */
         $code = \Yii::$app->request->getBodyParam('code', null);
         if ($code === null) {
             throw new BadRequestHttpException('Code is required', 1462989866);
+        }
+
+        try {
+            $clientId = Utils::getClientIdOrFail();
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException('Client ID is missing', 1483979025);
         }
 
         $log = [
@@ -236,7 +245,6 @@ class ResetController extends BaseRestController
              * Reset verified successfully, create access token for user
              */
             try {
-                $clientId = Utils::getClientIdOrFail();
                 $accessToken = $reset->user->createAccessToken($clientId, User::AUTH_TYPE_RESET);
 
                 $log['status'] = 'success';
