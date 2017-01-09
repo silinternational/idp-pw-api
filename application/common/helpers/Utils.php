@@ -1,6 +1,7 @@
 <?php
 namespace common\helpers;
 
+use Sil\IdpPw\Common\Auth\RedirectException;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;
