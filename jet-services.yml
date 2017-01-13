@@ -32,3 +32,7 @@ api:
 ecsdeploy:
     image: silintl/ecs-deploy:2.6.2
     encrypted_env_file: aws.env.encrypted
+
+tracker:
+    image: silintl/app-deployment-tracker-ga:latest
+    encrypted_env_file: tracking.env.encrypted 

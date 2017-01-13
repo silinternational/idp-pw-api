@@ -50,3 +50,8 @@
     service: ecsdeploy
     tag: master
     command: "-c insite-pw-production -n insite-pw-cron -i silintl/insite-pw-api -e CI_TIMESTAMP -t 600"
+
+  - name: track_deployment
+    service: tracker
+    tag: ^(master|develop)
+    command: "true" 

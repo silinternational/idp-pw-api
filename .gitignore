@@ -8,6 +8,7 @@
 local.php
 local.env
 *.aes
+tracking.env
 
 # other files
 /application/ocular.phar
