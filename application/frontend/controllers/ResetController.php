@@ -214,6 +214,7 @@ class ResetController extends BaseRestController
         $log = [
             'action' => 'Validate reset',
             'reset_id' => $reset->id,
+            'user' => $reset->user
         ];
 
         $isValid = $reset->isUserProvidedCodeCorrect($code);
