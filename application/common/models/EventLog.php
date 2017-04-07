@@ -52,7 +52,9 @@ class EventLog extends EventLogBase
                 ]);
             }
         } catch (\Exception $ex) {
-
+            /*
+             * ignore exception to continue execution in this function
+             */
         }
         
         if ( ! $eventLog->save()) {
