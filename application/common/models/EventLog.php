@@ -51,7 +51,7 @@ class EventLog extends EventLogBase
                     'details' => $details,
                 ]);
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
 
         }
         
