@@ -3,6 +3,7 @@
 
 # phpstorm project files
 .idea/
+nbproject/
 
 # local config files
 local.php

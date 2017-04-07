@@ -38,6 +38,23 @@ class EventLog extends EventLogBase
         $eventLog->topic = $topic;
         $eventLog->details = is_array($details) ? Json::encode($details) : $details;
 
+        /*
+         * Save event to LogEntries
+         */
+        try {
+            $user = User::findOne(['id' => $userId]);
+            if ($user !== null) {
+                \Yii::warning([
+                   'action' => 'eventlog',
+                    'user' => $user->email,
+                    'topic' => $topic,
+                    'details' => $details,
+                ]);
+            }
+        } catch (Exception $ex) {
+
+        }
+        
         if ( ! $eventLog->save()) {
             throw new \Exception('Unable to save event log entry', 1461182172);
         }
