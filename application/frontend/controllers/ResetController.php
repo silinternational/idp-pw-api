@@ -97,8 +97,20 @@ class ResetController extends BaseRestController
                 $user = User::findOrCreate($username);
             }
         } catch (NotFoundException $e) {
+            \Yii::warning([
+                'action' => 'create reset',
+                'username' => $username,
+                'status' => 'error',
+                'error' => 'user not found',
+            ]);
             return new \stdClass();
         } catch (\Exception $e) {
+            \Yii::error([
+               'action' => 'create reset',
+               'username' => $username,
+               'status' => 'error',
+               'error' => $e->getMessage(),
+            ]);
             throw new ServerErrorHttpException('Unable to create new reset', 1469036552);
         }
 
@@ -214,6 +226,7 @@ class ResetController extends BaseRestController
         $log = [
             'action' => 'Validate reset',
             'reset_id' => $reset->id,
+            'user' => $reset->user->email,
         ];
 
         $isValid = $reset->isUserProvidedCodeCorrect($code);
