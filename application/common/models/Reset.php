@@ -95,6 +95,7 @@ class Reset extends ResetBase
         $log = [
             'action' => 'findOrCreate reset',
             'user_id' => $user->id,
+            'user' => $user->email,
             'type' => $type,
             'method_id' => $methodId,
             'ip_address' => 'initiated outside web request context',
@@ -309,6 +310,13 @@ class Reset extends ResetBase
             ' sent to ' . $toAddress,
             ['resetUrl' => $resetUrl]
         );
+        
+        \Yii::warning([
+           'action' => 'reset send email',
+            'user' => $this->user->email,
+            'to_address' => $toAddress,
+            'subject' => $subject,
+        ]);
     }
 
     /**
@@ -319,10 +327,11 @@ class Reset extends ResetBase
     {
         // Initialize log
         $log = [
-            'action' => 'reset',
+            'action' => 'reset send phone',
             'method' => 'phone',
             'method_id' => $this->method_id,
             'previous_attempts' => $this->attempts,
+            'user' => $this->user->email,
         ];
 
         // Get phone number without comma
@@ -441,6 +450,7 @@ class Reset extends ResetBase
             'action' => 'disable reset',
             'reset_id' => $this->id,
             'attempts' => $this->attempts,
+            'user' => $this->user->email,
         ];
         $this->disable_until = Utils::getDatetime(time() + \Yii::$app->params['reset']['disableDuration']);
         $this->saveOrError($log['action'], 'Unable to save reset with disable_until.');
@@ -484,6 +494,7 @@ class Reset extends ResetBase
             'action' => 'enable reset',
             'reset_id' => $this->id,
             'status' => 'success',
+            'user' => $this->user->email,            
         ]);
     }
 
@@ -596,6 +607,7 @@ class Reset extends ResetBase
                 'attempts' => $this->attempts,
                 'status' => 'error',
                 'error' => 'Reset is currently disabled until ' . $this->disable_until,
+                'user' => $this->user->email,                
             ]);
             throw new TooManyRequestsHttpException();
         }
@@ -617,6 +629,7 @@ class Reset extends ResetBase
                 'type' => $this->type,
                 'status' => 'error',
                 'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
+                'user' => $this->user->email,                
             ]);
             throw new ServerErrorHttpException($errorPrefix);
         }

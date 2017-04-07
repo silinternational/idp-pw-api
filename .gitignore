@@ -3,6 +3,7 @@
 
 # phpstorm project files
 .idea/
+nbproject/
 
 # local config files
 local.php
@@ -12,3 +13,4 @@ local.env
 # other files
 /application/ocular.phar
 phpinfo.php
+/nbproject/private/
