@@ -69,18 +69,20 @@ class ResetController extends BaseRestController
             throw new BadRequestHttpException('Username is required');
         }
 
-        if ( ! $verificationToken && \Yii::$app->params['recaptcha']['required']) {
-            throw new BadRequestHttpException('Recaptcha verification code is required');
-        }
-
         /*
          * Validate reCaptcha $verificationToken before proceeding.
          * This will throw an exception if not successful, checking response to
          * be double sure an exception is thrown.
          */
-        $clientIp = Utils::getClientIp(\Yii::$app->request);
-        if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
-            throw new BadRequestHttpException('reCaptcha failed verification');
+        if (\Yii::$app->params['recaptcha']['required']) {
+            if ( ! $verificationToken) {
+                throw new BadRequestHttpException('Recaptcha verification code is required');
+            }
+            
+            $clientIp = Utils::getClientIp(\Yii::$app->request);
+            if (!Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+                throw new BadRequestHttpException('reCaptcha failed verification');
+            }
         }
 
         /*
