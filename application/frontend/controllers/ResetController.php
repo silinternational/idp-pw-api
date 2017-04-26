@@ -65,8 +65,12 @@ class ResetController extends BaseRestController
         $username = \Yii::$app->request->post('username');
         $verificationToken = \Yii::$app->request->post('verification_token');
 
-        if ( ! $username || ! $verificationToken) {
-            throw new BadRequestHttpException('Missing username or verification_token');
+        if ( ! $username) {
+            throw new BadRequestHttpException('Username is required');
+        }
+
+        if ( ! $verificationToken && \Yii::$app->params['recaptcha']['required']) {
+            throw new BadRequestHttpException('Recaptcha verification code is required');
         }
 
         /*
