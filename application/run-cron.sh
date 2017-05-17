@@ -7,6 +7,7 @@ else
     sed -i /etc/rsyslog.conf -e "s/LOGENTRIESKEY/${LOGENTRIES_KEY}/"
     # Start syslog
     rsyslogd
+    sleep 3
 fi
 
 # fix folder permissions
@@ -16,16 +17,16 @@ chown -R www-data:www-data \
   /data/frontend/web/assets/
 
 # Run database migrations
-output=$(/data/yii migrate --interactive=0)
+output=$(/data/yii migrate --interactive=0 2>&1)
 
 # If they failed, exit.
 rc=$?;
 if [[ $rc != 0 ]]; then
-    logger --priority user.err "Migrations failed with status ${rc} and output: ${output}"
+    logger --priority user.err --stderr "Migrations failed with status ${rc} and output: ${output}"
     exit $rc;
 fi
 
-output=$(/data/yii migrate --interactive=0 --migrationPath=console/migrations-local)
+output=$(/data/yii migrate --interactive=0 --migrationPath=console/migrations-local 2>&1)
 # If they failed, exit.
 rc=$?;
 if [[ $rc != 0 ]]; then
