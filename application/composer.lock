@@ -1684,16 +1684,16 @@
         },
         {
             "name": "silintl/insite-people-search",
-            "version": "1.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://bitbucket.org/silintl/insite-people-search.git",
-                "reference": "24deb15612d880c393d02c898e6ab0ddf23985dc"
+                "reference": "de2c832fe6df2ca8ff3e362fc41598a046e639dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://bitbucket.org/silintl/insite-people-search/get/24deb15612d880c393d02c898e6ab0ddf23985dc.zip",
-                "reference": "24deb15612d880c393d02c898e6ab0ddf23985dc",
+                "url": "https://bitbucket.org/silintl/insite-people-search/get/de2c832fe6df2ca8ff3e362fc41598a046e639dd.zip",
+                "reference": "de2c832fe6df2ca8ff3e362fc41598a046e639dd",
                 "shasum": ""
             },
             "require": {
@@ -1713,9 +1713,9 @@
             },
             "homepage": "https://bitbucket.org/silintl/insite-people-search",
             "support": {
-                "source": "https://bitbucket.org/silintl/insite-people-search/src/24deb15612d880c393d02c898e6ab0ddf23985dc/?at=develop"
+                "source": "https://bitbucket.org/silintl/insite-people-search/src/de2c832fe6df2ca8ff3e362fc41598a046e639dd/?at=1.1"
             },
-            "time": "2017-04-28T19:08:24+00:00"
+            "time": "2017-05-17T16:03:00+00:00"
         },
         {
             "name": "simplesamlphp/saml2",
