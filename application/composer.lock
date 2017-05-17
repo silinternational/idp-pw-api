@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "22a13d18dc04ff1fd4c58a0aa1abf721",
+    "content-hash": "9bd512b757b6bca3724c52ca7c51826e",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1533,24 +1533,24 @@
         },
         {
             "name": "silinternational/php-env",
-            "version": "0.1.1",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/php-env.git",
-                "reference": "4dd4aad8cdec438cecd3e779d2d434736cfdfd96"
+                "reference": "030821eebac6ff1379a1b0eb6cc4ca18bf3804e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/php-env/zipball/4dd4aad8cdec438cecd3e779d2d434736cfdfd96",
-                "reference": "4dd4aad8cdec438cecd3e779d2d434736cfdfd96",
+                "url": "https://api.github.com/repos/silinternational/php-env/zipball/030821eebac6ff1379a1b0eb6cc4ca18bf3804e0",
+                "reference": "030821eebac6ff1379a1b0eb6cc4ca18bf3804e0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.4"
             },
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "1.*",
-                "phpunit/phpunit": "4.*"
+                "phpunit/phpunit": "^6.1"
             },
             "type": "library",
             "autoload": {
@@ -1562,7 +1562,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-10-29T21:09:24+00:00"
+            "time": "2017-05-10T16:00:51+00:00"
         },
         {
             "name": "silinternational/yii2-email-log-target",

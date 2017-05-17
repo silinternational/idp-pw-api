@@ -15,7 +15,7 @@
     "yiisoft/yii2": "^2.0.9",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
-    "silinternational/php-env": "^0.1.1",
+    "silinternational/php-env": "^1.0.1",
     "silinternational/yii2-jsonsyslog": "*",
     "silinternational/yii2-email-log-target": "dev-master",
     "silinternational/idp-pw-api-common": "^1.0",
