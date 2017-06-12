@@ -36,6 +36,8 @@ services:
             - "8080:80"
         depends_on:
             - db
+            - memcache1
+            - memcache2
         env_file:
             - ./common.env
             - ./local.env
@@ -86,6 +88,16 @@ services:
         image: wcjr/zxcvbn-api:1.1.0
         ports:
             - "3000"
+
+    memcache1:
+        image: memcached:1.4-alpine
+        ports:
+            - "11211:11211"
+
+    memcache2:
+        image: memcached:1.4-alpine
+        ports:
+            - "11212:11211"
 
 networks:
     default:
