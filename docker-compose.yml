@@ -63,6 +63,8 @@ services:
             - "8000:80"
         depends_on:
             - testDb
+            - memcache1
+            - memcache2
         env_file:
             - ./common.env
             - ./local.env

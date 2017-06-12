@@ -65,5 +65,30 @@ return [
         'passwordStore' => [
             'class' => 'tests\mock\passwordstore\Component',
         ],
+        'sessionCache' => [
+            'class' => 'yii\caching\MemCache',
+            'servers' => [
+                [
+                    'host' => 'memcache1',
+                    'port' => 11211,
+                    'weight' => 100,
+                ],
+                [
+                    'host' => 'memcache2',
+                    'port' => 11211,
+                    'weight' => 50,
+                ],
+            ],
+        ],
+        'session' => [
+            'class' => 'yii\web\CacheSession',
+            'cache' => 'sessionCache',
+//            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
+//                'lifetime' => $sessionLifetime,
+//                'path' => '/',
+//                'httponly' => true,
+//                'secure' => $frontCookieSecure,
+//            ],
+        ],
     ],
 ];
