@@ -4,6 +4,13 @@ use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
+// default to match docker-compose.yml settings
+$memcacheHost1 = Env::get('MEMCACHE_HOST1', 'memcache1');
+$memcachePort1 = Env::get('MEMCACHE_PORT1', 11211);
+$memcacheWeight1 = Env::get('MEMCACHE_WEIGHT1', 100);
+$memcacheHost2 = Env::get('MEMCACHE_HOST2', 'memcache2');
+$memcachePort2 = Env::get('MEMCACHE_PORT2', 11211);
+$memcacheWeight2 = Env::get('MEMCACHE_WEIGHT2', 50);
 
 $sessionLifetime = 1800; // 30 minutes
 
@@ -21,13 +28,31 @@ return [
             'enableSession' => false,
             'loginUrl' => null,
         ],
-        'session' => [
-            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
-                'lifetime' => $sessionLifetime,
-                'path' => '/',
-                'httponly' => true,
-                'secure' => $frontCookieSecure,
+        'sessionCache' => [
+            'class' => 'yii\caching\MemCache',
+            'servers' => [
+                [
+                    'host' => $memcacheHost1,
+                    'port' => $memcachePort1,
+                    'weight' => $memcacheWeight1,
+                ],
+                [
+                    'host' => $memcacheHost2,
+                    'port' => $memcachePort2,
+                    'weight' => $memcacheWeight2,
+                ],
             ],
+        ],
+        'session' => [
+            'class' => 'yii\web\CacheSession',
+            'cache' => 'sessionCache',
+//            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
+//                'lifetime' => $sessionLifetime,
+//                'path' => '/',
+//                'httponly' => true,
+//                'secure' => $frontCookieSecure,
+//            ],
+
         ],
         'log' => [
 
