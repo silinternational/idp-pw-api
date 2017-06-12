@@ -11,6 +11,16 @@ zxcvbn:
     ports:
         - "3000"
 
+memcache1:
+    image: memcached:1.4-alpine
+    ports:
+        - "11211:11211"
+
+memcache2:
+    image: memcached:1.4-alpine
+    ports:
+        - "11212:11211"
+
 api:
     build:
         image: silintl/idp-pw-api
@@ -18,6 +28,8 @@ api:
         cached: true
     links:
         - db
+        - memcache1
+        - memcache2
         - zxcvbn
     environment:
         MYSQL_HOST: db
