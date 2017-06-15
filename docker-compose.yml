@@ -73,12 +73,9 @@ services:
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
-            MEMCACHE_HOST1: memcache1
-            MEMCACHE_PORT1: 11211
-            MEMCACHE_WEIGHT1: 100
-            MEMCACHE_HOST2: memcache2
-            MEMCACHE_PORT2: 11211
-            MEMCACHE_WEIGHT2: 50
+            MEMCACHE_CONFIG1_host: memcache1
+            MEMCACHE_CONFIG1_port: 11211
+            MEMCACHE_CONFIG1_weight: 100
 
         command: ["/data/run-tests-api.sh"]
 
