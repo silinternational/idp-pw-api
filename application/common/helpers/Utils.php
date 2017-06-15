@@ -366,7 +366,7 @@ class Utils
                     'baseUrl' => \Yii::$app->params['password']['zxcvbn']['apiBaseUrl'],
                 ]
             ]);
-            return $zxcvbn->getFull(['password' => $password]);
+            return $zxcvbn->getFull(['password' => $password])->toArray();
         } catch (\Exception $e) {
             throw $e;
         }

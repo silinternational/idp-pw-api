@@ -7,6 +7,7 @@ else
     sed -i /etc/rsyslog.conf -e "s/LOGENTRIESKEY/${LOGENTRIES_KEY}/"
     # Start syslog
     rsyslogd
+    sleep 3
 fi
 
 # fix folder permissions
@@ -16,11 +17,23 @@ chown -R www-data:www-data \
   /data/frontend/web/assets/
 
 # Run database migrations
-/data/yii migrate --interactive=0
-/data/yii migrate --interactive=0 --migrationPath=console/migrations-local
+output=$(/data/yii migrate --interactive=0 2>&1)
 
-# make sure rsyslog can read logentries cert
-chmod a+r /opt/ssl/logentries.all.crt
+# If they failed, exit.
+rc=$?;
+if [[ $rc != 0 ]]; then
+    logger --priority user.err --stderr "Migrations failed with status ${rc} and output: ${output}"
+    exit $rc;
+fi
+
+output=$(/data/yii migrate --interactive=0 --migrationPath=console/migrations-local 2>&1)
+# If they failed, exit.
+rc=$?;
+if [[ $rc != 0 ]]; then
+    logger --priority user.err "Migrations failed with status ${rc} and output: ${output}"
+    exit $rc;
+fi
+
 
 # Dump env to a file
 touch /etc/cron.d/idp
