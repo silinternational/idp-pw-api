@@ -66,6 +66,7 @@ services:
         depends_on:
             - testDb
             - memcache1
+            - memcache2
         env_file:
             - ./common.env
             - ./local.env
@@ -75,6 +76,9 @@ services:
             MEMCACHE_CONFIG1_host: memcache1
             MEMCACHE_CONFIG1_port: 11211
             MEMCACHE_CONFIG1_weight: 100
+            MEMCACHE_CONFIG2_host: memcache2
+            MEMCACHE_CONFIG2_port: 11211
+            MEMCACHE_CONFIG2_weight: 50
 
         command: ["/data/run-tests-api.sh"]
 
@@ -99,12 +103,12 @@ services:
     memcache1:
         image: memcached:1.4-alpine
         ports:
-            - "11211:11211"
+            - "11212:11211"
 
     memcache2:
         image: memcached:1.4-alpine
         ports:
-            - "11212:11211"
+            - "11213:11211"
 
 networks:
     default:
