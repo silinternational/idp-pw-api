@@ -59,6 +59,8 @@ services:
             - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+            # Keep test file from overwriting the local.php file on the host
+            - ./application/common/config/local.test.php:/data/common/config/local.php
         ports:
             - "8000:80"
         depends_on:
@@ -71,6 +73,13 @@ services:
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
+            MEMCACHE_HOST1: memcache1
+            MEMCACHE_PORT1: 11211
+            MEMCACHE_WEIGHT1: 100
+            MEMCACHE_HOST2: memcache2
+            MEMCACHE_PORT2: 11211
+            MEMCACHE_WEIGHT2: 50
+
         command: ["/data/run-tests-api.sh"]
 
     cli:
