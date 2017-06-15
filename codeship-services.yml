@@ -14,12 +14,12 @@ zxcvbn:
 memcache1:
     image: memcached:1.4-alpine
     ports:
-        - "11211:11211"
+        - "11212:11211"
 
 memcache2:
     image: memcached:1.4-alpine
     ports:
-        - "11212:11212"
+        - "11213:11211"
 
 api:
     build:
