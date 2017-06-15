@@ -39,6 +39,12 @@ api:
         MAILER_USEFILES: true
         ALERTS_EMAIL_ENABLED: false
         ALERTS_EMAIL: alerts@nowhere.com
+        MEMCACHE_CONFIG1_host: memcache1
+        MEMCACHE_CONFIG1_port: 11211
+        MEMCACHE_CONFIG1_weight: 100
+        MEMCACHE_CONFIG2_host: memcache2
+        MEMCACHE_CONFIG2_port: 11211
+        MEMCACHE_CONFIG2_weight: 50
     working_dir: /data
     command: /data/run-tests.sh
 
