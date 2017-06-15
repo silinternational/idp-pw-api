@@ -5,12 +5,15 @@ use Sil\PhpEnv\Env;
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
 // default to match docker-compose.yml settings
-$memcacheHost1 = Env::get('MEMCACHE_HOST1', 'memcache1');
-$memcachePort1 = Env::get('MEMCACHE_PORT1', 11211);
-$memcacheWeight1 = Env::get('MEMCACHE_WEIGHT1', 100);
-$memcacheHost2 = Env::get('MEMCACHE_HOST2', 'memcache2');
-$memcachePort2 = Env::get('MEMCACHE_PORT2', 11211);
-$memcacheWeight2 = Env::get('MEMCACHE_WEIGHT2', 50);
+$memcache1 = Env::getArrayFromPrefix('MEMCACHE_CONFIG1_');
+$memcache2 = Env::getArrayFromPrefix('MEMCACHE_CONFIG2_');
+$memcacheConfig = [];
+if ( is_array($memcache1) && ! empty($memcache1)) {
+    $memcacheConfig[] = $memcache1;
+}
+if ( is_array($memcache2) && ! empty($memcache2)) {
+    $memcacheConfig[] = $memcache2;
+}
 
 $sessionLifetime = 1800; // 30 minutes
 
@@ -30,28 +33,17 @@ return [
         ],
         'sessionCache' => [
             'class' => 'yii\caching\MemCache',
-            'servers' => [
-                [
-                    'host' => $memcacheHost1,
-                    'port' => $memcachePort1,
-                    'weight' => $memcacheWeight1,
-                ],
-                [
-                    'host' => $memcacheHost2,
-                    'port' => $memcachePort2,
-                    'weight' => $memcacheWeight2,
-                ],
-            ],
+            'servers' => $memcacheConfig,
         ],
         'session' => [
             'class' => 'yii\web\CacheSession',
             'cache' => 'sessionCache',
-//            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
-//                'lifetime' => $sessionLifetime,
-//                'path' => '/',
-//                'httponly' => true,
-//                'secure' => $frontCookieSecure,
-//            ],
+            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
+                'lifetime' => $sessionLifetime,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => $frontCookieSecure,
+            ],
 
         ],
         'log' => [
