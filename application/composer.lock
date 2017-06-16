@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed454ce3005088b46ded6b11aa897d80",
+    "content-hash": "17f06c3cb1ed0331cedeb69b77a1f687",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1448,16 +1448,16 @@
         },
         {
             "name": "silinternational/idp-pw-api-personnel-id-broker",
-            "version": "dev-develop",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-id-broker.git",
-                "reference": "d3edfb106dd20948b6df3e3d5375a267130f4c5c"
+                "reference": "b484f1815cdaec1685b80c70b4a2e79bfb6a51f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/d3edfb106dd20948b6df3e3d5375a267130f4c5c",
-                "reference": "d3edfb106dd20948b6df3e3d5375a267130f4c5c",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/b484f1815cdaec1685b80c70b4a2e79bfb6a51f9",
+                "reference": "b484f1815cdaec1685b80c70b4a2e79bfb6a51f9",
                 "shasum": ""
             },
             "require": {
@@ -1488,7 +1488,7 @@
                 }
             ],
             "description": "IdP Password Management personnel component for ID Broker",
-            "time": "2017-06-16 18:07:37"
+            "time": "2017-06-16T19:17:56+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -4700,7 +4700,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silinternational/idp-pw-api-personnel-id-broker": 20,
         "adldap2/adldap2": 20,
         "roave/security-advisories": 20,
         "fillup/phpmyadmin-minimal": 20
