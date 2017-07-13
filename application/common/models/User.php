@@ -184,6 +184,19 @@ class User extends UserBase implements IdentityInterface
         }
 
         if ($dirty) {
+
+            /*
+             * Check that $email is not already in use by another user
+             * If it is, refresh that user's profile from personnel in
+             * case their email address has also changed
+             */
+            if ($this->isEmailInUseByOtherUser($email)) {
+                self::refreshPersonnelDataForUserWithSpecificEmail($email);
+            }
+
+            /*
+             * Save updated profile
+             */
             if ($this->save()) {
                 return true;
             } else {
@@ -196,6 +209,67 @@ class User extends UserBase implements IdentityInterface
             }
         }
         return false;
+    }
+
+    /**
+     * In case where email address has been reassigned to $this user, refresh profile for user
+     * with email address currently in case their email address has changed too
+     * @param string $email
+     * @return bool Whether or not the profile was updated in the database
+     * @throws \Exception
+     */
+    public static function refreshPersonnelDataForUserWithSpecificEmail($email)
+    {
+        $user = self::findOne(['email' => $email]);
+        if ($user === null) {
+            throw new \Exception(
+                sprintf('User with email %s not found', $email),
+                1499817281
+            );
+        }
+
+        try {
+            /** @var PersonnelUser $personnelUser */
+            $personnelUser = \Yii::$app->personnel->findByEmployeeId($user->employee_id);
+        } catch (NotFoundException $e) {
+            /*
+             * User no longer exists in personnel system, so update their email to release for use by other users
+             */
+            $personnelUser = new PersonnelUser();
+            $personnelUser->firstName = $user->first_name;
+            $personnelUser->lastName = $user->last_name;
+            $personnelUser->username = $user->idp_username;
+            $personnelUser->email = sprintf('notfound-%s-%s', $user->email, time());
+
+            \Yii::error([
+                'action' => 'updateProfileForExistingUserWithEmailFromPersonnel',
+                'message' => sprintf(
+                    'When updating profile for existing user with email address % they could not be ' .
+                    'found in personnel so their email was updated to %s',
+                    $user->email,
+                    $personnelUser->email
+                 )
+            ]);
+        }
+
+        return $user->updateProfileIfNeeded(
+            $personnelUser->firstName,
+            $personnelUser->lastName,
+            $personnelUser->username,
+            $personnelUser->email
+        );
+    }
+
+    /**
+     * Check if email address is in use by a different user already
+     * @param string $email
+     * @return bool
+     */
+    public function isEmailInUseByOtherUser($email)
+    {
+        $user = self::findOne(['email' => $email]);
+
+        return $user !== null && $user->id != $this->id;
     }
 
     /**

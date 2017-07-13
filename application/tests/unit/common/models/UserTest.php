@@ -305,5 +305,35 @@ class UserTest extends DbTestCase
         $this->assertEquals(PasswordChangeLog::SCENARIO_RESET, $log->scenario);
     }
 
+    public function testIsEmailInUseByOtherUser()
+    {
+        $user1 = $this->users('user1');
+        $user2 = $this->users('user2');
+
+        $this->assertFalse($user1->isEmailInUseByOtherUser($user1->email));
+        $this->assertTrue($user1->isEmailInUseByOtherUser($user2->email));
+        $this->assertFalse($user1->isEmailInUseByOtherUser('made-up-email@domain.com'));
+
+    }
+
+    public function testRefreshPersonnelDataForUserWithSpecificEmail()
+    {
+        /*
+         * Test user who does not have updated information in personnel
+         */
+        $user1 = $this->users('user1');
+        User::refreshPersonnelDataForUserWithSpecificEmail($user1->email);
+        $notupdated = User::findOne(['id' => $user1->id]);
+        $this->assertEquals($user1->email, $notupdated->email);
+
+        /*
+         * Test refreshing user who has updated info in personnel
+         */
+        $user3 = $this->users('user3');
+        User::refreshPersonnelDataForUserWithSpecificEmail($user3->email);
+        $updated = User::findOne(['id' => $user3->id]);
+        $this->assertNotEquals($user3->email, $updated->email);
+    }
+
 
 }

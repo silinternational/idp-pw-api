@@ -18,4 +18,13 @@ return [
         'supervisorEmail' => null,
         'spouseEmail' => null,
     ],
+    [
+        'firstName' => 'First3',
+        'lastName' => 'Last3',
+        'email' => 'first_last3@domain.com',
+        'employeeId' => '333333',
+        'username' => 'first3_last3',
+        'supervisorEmail' => null,
+        'spouseEmail' => null,
+    ],
 ];
