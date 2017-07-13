@@ -220,7 +220,7 @@ class User extends UserBase implements IdentityInterface
      */
     public static function refreshPersonnelDataForUserWithSpecificEmail($email)
     {
-        $user = User::findOne(['email' => $email]);
+        $user = self::findOne(['email' => $email]);
         if ($user === null) {
             throw new \Exception(
                 sprintf('User with email %s not found', $email),
@@ -267,11 +267,9 @@ class User extends UserBase implements IdentityInterface
      */
     public function isEmailInUseByOtherUser($email)
     {
-        $user = User::findOne(['email' => $email]);
-        if ($user !== null && $user->id != $this->id) {
-            return true;
-        }
-        return false;
+        $user = self::findOne(['email' => $email]);
+
+        return $user !== null && $user->id != $this->id;
     }
 
     /**
