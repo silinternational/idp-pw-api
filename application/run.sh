@@ -7,6 +7,7 @@ else
     sed -i /etc/rsyslog.conf -e "s/LOGENTRIESKEY/${LOGENTRIES_KEY}/"
     # Start syslog
     rsyslogd
+    sleep 10
 fi
 
 # Run apache in foreground

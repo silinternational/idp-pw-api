@@ -3,11 +3,11 @@ set -x
 
 # Install composer dev dependencies
 cd /data
-composer install --prefer-dist --no-interaction --optimize-autoloader
+runny composer install --prefer-dist --no-interaction --optimize-autoloader
 
 # Copy test version of common/config/local.php if doesn't exist
 if [ ! -f /data/common/config/local.php ]; then
-    cp /data/common/config/local.test.php /data/common/config/local.php
+    runny cp /data/common/config/local.test.php /data/common/config/local.php
 fi
 
 mkdir -p /data/runtime/mail
@@ -21,7 +21,7 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 #php5enmod xdebug
 
 # Run codeception tests
-./vendor/bin/codecept run unit
+runny ./vendor/bin/codecept run unit
 
 ##### Disabled reporting of code coverage on 3/30 because scrutinizer isnt working with it yet
 
