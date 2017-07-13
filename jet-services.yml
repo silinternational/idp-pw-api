@@ -1,0 +1,38 @@
+db:
+    image: silintl/mariadb:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: r00tp@ss!
+        MYSQL_DATABASE: test
+        MYSQL_USER: idpmgmt
+        MYSQL_PASSWORD: idpmgmt
+
+zxcvbn:
+    image: wcjr/zxcvbn-api:1.1.0
+    ports:
+        - "3000"
+
+api:
+    build:
+        image: silintl/insite-pw-api
+        dockerfile_path: ./Dockerfile
+    links:
+        - db
+        - zxcvbn
+    environment:
+        MYSQL_HOST: db
+        MYSQL_DATABASE: test
+        MYSQL_USER: idpmgmt
+        MYSQL_PASSWORD: idpmgmt
+        MAILER_USEFILES: true
+        ALERTS_EMAIL_ENABLED: false
+        ALERTS_EMAIL: alerts@nowhere.com
+    working_dir: /data
+    command: /data/run-tests.sh
+
+ecsdeploy:
+    image: silintl/ecs-deploy:2.6.2
+    encrypted_env_file: aws.env.encrypted
+
+tracker:
+    image: silintl/app-deployment-tracker-ga:latest
+    encrypted_env_file: tracking.env.encrypted 
