@@ -41,7 +41,7 @@ class Verification extends Model
 
         $parameters = ArrayHelper::merge(
             [
-                'idpName' => \Yii::$app->params['idpName'],
+                'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
                 'name' => $forUser->first_name,
                 'code' => $code,
                 'expireTime' => $expireTime,

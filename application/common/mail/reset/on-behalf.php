@@ -3,7 +3,7 @@ use yii\helpers\Html as yHtml;
 
 /**
  * @var string $name
- * @var string $idpName
+ * @var string $idpDisplayName
  * @var string $expireTime
  * @var string $code
  * @var string $helpCenterUrl
@@ -13,7 +13,7 @@ use yii\helpers\Html as yHtml;
 Hi there,
 <p>
     <?php echo yHtml::encode($name); ?> recently requested a password change for their
-    <?php echo yHtml::encode($idpName); ?> account and they have requested your assistance.
+    <?php echo yHtml::encode($idpDisplayName); ?> account and they have requested your assistance.
 </p>
 <p>
     Please contact them directly to ensure that you are only providing the following reset code to them

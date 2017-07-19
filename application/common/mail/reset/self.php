@@ -2,7 +2,7 @@
 use yii\helpers\Html as yHtml;
 
 /**
- * @var string $idpName
+ * @var string $idpDisplayName
  * @var string $expireTime
  * @var string $resetUrl
  * @var string $helpCenterUrl
@@ -11,7 +11,7 @@ use yii\helpers\Html as yHtml;
 ?>
 Hi there,
 <p>
-    Someone recently requested a password change for your <?php echo yHtml::encode($idpName); ?>
+    Someone recently requested a password change for your <?php echo yHtml::encode($idpDisplayName); ?>
     account. If this was you, click the link below to set a new password. This link is valid until
     <?php echo yHtml::encode($expireTime); ?>.
 </p>
