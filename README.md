@@ -96,3 +96,4 @@ This component is used for performing phone based verification of users.
 * Example implementation: [idp-pw-api-phoneverification-nexmo](https://github.com/silinternational/idp-pw-api-phoneverification-nexmo)
 
 The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging. 
+

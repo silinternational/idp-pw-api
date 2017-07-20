@@ -59,7 +59,8 @@ class UtilsTest extends TestCase
     public function testGetFrontendConfig()
     {
         \Yii::$app->params = [
-            'idpName' => 'My IdP',
+            'idpName' => 'idp',
+            'idpDisplayName' => 'My IdP',
             'idpUsernameHint' => 'IdP Account',
             'adminEmail' => 'admin@domain.com',
             'fromEmail' => 'from@domain.com',
@@ -129,7 +130,7 @@ class UtilsTest extends TestCase
 
         $params = \Yii::$app->params;
         $config = Utils::getFrontendConfig();
-        $this->assertEquals($params['idpName'], $config['idpName']);
+        $this->assertEquals($params['idpDisplayName'], $config['idpName']);
         $this->assertEquals($params['idpUsernameHint'], $config['idpUsernameHint']);
         $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
         $this->assertEquals($expectedZxcvbn, $config['password']['zxcvbn']);

@@ -3,7 +3,7 @@ use yii\helpers\Html as yHtml;
 
 /**
  * @var string $toAddress
- * @var string $idpName
+ * @var string $idpDisplayName
  * @var string $expireTime
  * @var string $code
  * @var string $helpCenterUrl
@@ -14,7 +14,7 @@ Hi there,
 <p>
     Someone recently requested to add this email address, <?php echo yHtml::encode($toAddress); ?>,
     as a method for verifying themselves should they need to reset their
-    <?php echo yHtml::encode($idpName); ?> account. If this was you, you can use the reset code
+    <?php echo yHtml::encode($idpDisplayName); ?> account. If this was you, you can use the reset code
     below to set a new password.
 </p>
 <p>
