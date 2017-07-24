@@ -65,17 +65,25 @@ class Verification extends Model
          * local EmailQueue service
          */
         if (\Yii::$app->params['emailVerification']['useEmailService']) {
-            if ( ! isset(\Yii::$app->params['emailVerification']['baseUrl']) ||
-                 ! isset(\Yii::$app->params['emailVerification']['accessToken'])) {
-                throw new ServerErrorHttpException('Missing email service configuration', 1500916751);
+
+            $serviceConfig = \Yii::$app->params['emailVerification'];
+            $requiredParams = ['baseUrl', 'accessToken', 'assertValidIp', 'validIpRanges'];
+
+            foreach ($requiredParams as $param) {
+                if ( ! isset($serviceConfig[$param])) {
+                    throw new ServerErrorHttpException(
+                        'Missing email service configuration for ' . $param,
+                        1500916751
+                    );
+                }
             }
 
             $emailService = new EmailServiceClient(
-                \Yii::$app->params['emailVerification']['baseUrl'],
-                \Yii::$app->params['emailVerification']['accessToken'],
+                $serviceConfig['baseUrl'],
+                $serviceConfig['accessToken'],
                 [
-                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => \Yii::$app->params['emailVerification']['assertValidIp'],
-                    EmailServiceClient::TRUSTED_IPS_CONFIG => \Yii::$app->params['emailVerification']['validIpRanges'],
+                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => $serviceConfig['assertValidIp'],
+                    EmailServiceClient::TRUSTED_IPS_CONFIG => $serviceConfig['validIpRanges'],
                 ]
             );
 
