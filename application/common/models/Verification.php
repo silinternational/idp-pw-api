@@ -76,8 +76,8 @@ class Verification extends Model
                 \Yii::$app->params['emailVerification']['baseUrl'],
                 \Yii::$app->params['emailVerification']['accessToken'],
                 [
-                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => true,//\Yii::$app->params['emailVerification']['assertValidIp'],
-                    EmailServiceClient::TRUSTED_IPS_CONFIG => ['192.168.0.0/8'],//\Yii::$app->params['emailVerification']['validIpRanges'],
+                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => \Yii::$app->params['emailVerification']['assertValidIp'],
+                    EmailServiceClient::TRUSTED_IPS_CONFIG => \Yii::$app->params['emailVerification']['validIpRanges'],
                 ]
             );
 
