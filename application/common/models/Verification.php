@@ -1,8 +1,6 @@
 <?php
 namespace common\models;
 
-use common\models\User;
-use PharIo\Manifest\Email;
 use Sil\EmailService\Client\EmailServiceClient;
 use Sil\IdpPw\Common\PhoneVerification\NotMatchException;
 use yii\base\Model;
