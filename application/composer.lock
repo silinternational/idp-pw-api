@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4341a7cb3a16a91d3233d4f59fbd7975",
+    "content-hash": "2f8edbfd15db21eb4d952da0cb3050db",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1268,16 +1268,16 @@
         },
         {
             "name": "silinternational/email-service-php-client",
-            "version": "dev-develop",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/email-service-php-client.git",
-                "reference": "e6e0f9716a6bbd795040735c8a66a16b4c2d318a"
+                "reference": "5ca66edc63db3624768128e39125990dfab7dca9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/email-service-php-client/zipball/e6e0f9716a6bbd795040735c8a66a16b4c2d318a",
-                "reference": "e6e0f9716a6bbd795040735c8a66a16b4c2d318a",
+                "url": "https://api.github.com/repos/silinternational/email-service-php-client/zipball/5ca66edc63db3624768128e39125990dfab7dca9",
+                "reference": "5ca66edc63db3624768128e39125990dfab7dca9",
                 "shasum": ""
             },
             "require": {
@@ -1318,7 +1318,7 @@
                 "email",
                 "php client"
             ],
-            "time": "2017-07-24 14:46:53"
+            "time": "2017-07-24T20:22:26+00:00"
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
@@ -4796,7 +4796,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silinternational/email-service-php-client": 20,
         "adldap2/adldap2": 20,
         "roave/security-advisories": 20,
         "fillup/phpmyadmin-minimal": 20

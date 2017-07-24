@@ -15,7 +15,7 @@
     "yiisoft/yii2": "2.0.11.2",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
-    "silinternational/email-service-php-client": "dev-develop",
+    "silinternational/email-service-php-client": "^1.0",
     "silinternational/php-env": "^2.1.0",
     "silinternational/yii2-jsonsyslog": "^1.0.0",
     "silinternational/yii2-email-log-target": "^1.0.1",
