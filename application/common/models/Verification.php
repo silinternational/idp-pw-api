@@ -2,9 +2,12 @@
 namespace common\models;
 
 use common\models\User;
+use PharIo\Manifest\Email;
+use Sil\EmailService\Client\EmailServiceClient;
 use Sil\IdpPw\Common\PhoneVerification\NotMatchException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use yii\web\ServerErrorHttpException;
 
 class Verification extends Model
 {
@@ -24,6 +27,7 @@ class Verification extends Model
      * @param null|string $eventLogTopic
      * @param null|string $eventLogDetails
      * @param array $additionalEmailParameters
+     * @throws ServerErrorHttpException
      */
     public static function sendEmail(
         $toAddress,
@@ -58,16 +62,49 @@ class Verification extends Model
             $parameters
         );
 
-        EmailQueue::sendOrQueue(
-            $toAddress,
-            $subject,
-            $body,
-            $body,
-            $ccAddress,
-            $eventLogUserId,
-            $eventLogTopic,
-            $eventLogDetails
-        );
+        /*
+         * If configured to use external email service send through that instead of using
+         * local EmailQueue service
+         */
+        if (\Yii::$app->params['emailVerification']['useEmailService']) {
+            if ( ! isset(\Yii::$app->params['emailVerification']['baseUrl']) ||
+                 ! isset(\Yii::$app->params['emailVerification']['accessToken'])) {
+                throw new ServerErrorHttpException('Missing email service configuration', 1500916751);
+            }
+
+            $emailService = new EmailServiceClient(
+                \Yii::$app->params['emailVerification']['baseUrl'],
+                \Yii::$app->params['emailVerification']['accessToken'],
+                [
+                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => true,//\Yii::$app->params['emailVerification']['assertValidIp'],
+                    EmailServiceClient::TRUSTED_IPS_CONFIG => ['192.168.0.0/8'],//\Yii::$app->params['emailVerification']['validIpRanges'],
+                ]
+            );
+
+            $emailService->email([
+                'to_address' => $toAddress,
+                'cc_address' => $ccAddress,
+                'subject' => $subject,
+                'text_body' => $body,
+                'html_body' => $body,
+            ]);
+
+            if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
+                EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
+            }
+        } else {
+            EmailQueue::sendOrQueue(
+                $toAddress,
+                $subject,
+                $body,
+                $body,
+                $ccAddress,
+                $eventLogUserId,
+                $eventLogTopic,
+                $eventLogDetails
+            );
+        }
+
     }
 
     /**
