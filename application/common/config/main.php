@@ -38,6 +38,20 @@ $supportFeedback = Env::get('SUPPORT_FEEDBACK');
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
 
+/*
+ * If using Email Service, the following ENV vars should be set:
+ *   EMAIL_SERVICE_useEmailService=true
+ *   EMAIL_SERVICE_baseUrl=
+ *   EMAIL_SERVICE_accessToken=
+ *   EMAIL_SERVICE_assertValidIp=true
+ *   EMAIL_SERVICE_validIpRanges=127.0.0.1,10.0.55.0/24
+ */
+$emailServiceConfig = Env::getArrayFromPrefix('EMAIL_SERVICE_');
+if ( ! isset($emailServiceConfig['useEmailService'])) {
+    $emailServiceConfig['useEmailService'] = false;
+}
+$emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
+
 return [
     'id' => 'app-common',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
@@ -156,6 +170,7 @@ return [
         'logoUrl' => $logoUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
         'emailQueueBatchSize' => 5,
+        'emailVerification' => $emailServiceConfig,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
             'disableDuration' => 900, // 15 minutes
