@@ -100,7 +100,7 @@ return [
                 ],
                 [
                     'class' => EmailServiceTarget::class,
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error'],
                     'except' => [
                         'yii\web\HttpException:400',
                         'yii\web\HttpException:401',
