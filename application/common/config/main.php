@@ -1,6 +1,8 @@
 <?php
 
 use Sil\PhpEnv\Env;
+use Sil\JsonLog\target\EmailServiceTarget;
+use Sil\JsonLog\target\JsonSyslogTarget;
 use Sil\Log\EmailTarget;
 
 /*
@@ -47,8 +49,11 @@ $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
  *   EMAIL_SERVICE_validIpRanges=127.0.0.1,10.0.55.0/24
  */
 $emailServiceConfig = Env::getArrayFromPrefix('EMAIL_SERVICE_');
-if ( ! isset($emailServiceConfig['useEmailService'])) {
-    $emailServiceConfig['useEmailService'] = false;
+$emailServiceConfig['useEmailService'] = $emailServiceConfig['useEmailService'] ?? false;
+if ( ! $emailServiceConfig['useEmailService']) {
+    $emailServiceConfig['baseUrl'] = $emailServiceConfig['baseUrl'] ?? 'invalid';
+    $emailServiceConfig['accessToken'] = $emailServiceConfig['accessToken'] ?? 'invalid';
+    $emailServiceConfig['assertValidIp'] = $emailServiceConfig['assertValidIp'] ?? false;
 }
 $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
 
@@ -69,7 +74,7 @@ return [
             'traceLevel' => 0,
             'targets' => [
                 [
-                    'class' => 'Sil\JsonSyslog\JsonSyslogTarget',
+                    'class' => JsonSyslogTarget::class,
                     'levels' => ['error', 'warning'],
                     'except' => [
                         'yii\web\HttpException:401',
@@ -94,7 +99,52 @@ return [
                     },
                 ],
                 [
-                    'class' => 'Sil\Log\EmailTarget',
+                    'class' => EmailServiceTarget::class,
+                    'levels' => ['error', 'warning'],
+                    'except' => [
+                        'yii\web\HttpException:400',
+                        'yii\web\HttpException:401',
+                        'yii\web\HttpException:404',
+                        'yii\web\HttpException:409',
+                        'Sil\EmailService\Client\EmailServiceClientException',
+                    ],
+                    'logVars' => [], // Disable logging of _SERVER, _POST, etc.
+                    'message' => [
+                        'to' => $alertsEmail,
+                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv .']',
+                    ],
+                    'baseUrl' => $emailServiceConfig['baseUrl'],
+                    'accessToken' => $emailServiceConfig['accessToken'],
+                    'assertValidIp' => $emailServiceConfig['assertValidIp'],
+                    'validIpRanges' => $emailServiceConfig['validIpRanges'],
+                    'enabled' => $emailServiceConfig['useEmailService'] && $alertsEmailEnabled,
+                    'prefix' => function($message) use ($appEnv) {
+                        $prefix = 'env=' . $appEnv . PHP_EOL;
+
+                        // There is no user when a console command is run
+                        try {
+                            $appUser = \Yii::$app->user;
+                        } catch (\Exception $e) {
+                            $appUser = null;
+                        }
+                        if ($appUser && ! \Yii::$app->user->isGuest){
+                            $prefix .= 'user='.\Yii::$app->user->identity->email . PHP_EOL;
+                        }
+
+                        // Try to get requested url and method
+                        try {
+                            $request = \Yii::$app->request;
+                            $prefix .= 'Requested URL: ' . $request->getUrl() . PHP_EOL;
+                            $prefix .= 'Request method: ' . $request->getMethod() . PHP_EOL;
+                        } catch (\Exception $e) {
+                            $prefix .= 'Requested URL: not available';
+                        }
+
+                        return PHP_EOL . $prefix;
+                    },
+                ],
+                [
+                    'class' => EmailTarget::class,
                     'levels' => ['error'],
                     'except' => [
                         'yii\web\HttpException:400',
@@ -108,6 +158,7 @@ return [
                         'to' => $alertsEmail,
                         'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv .']',
                     ],
+                    'enabled' => $alertsEmailEnabled && ! $emailServiceConfig['useEmailService'],
                     'prefix' => function($message) use ($appEnv) {
                         $prefix = 'env=' . $appEnv . PHP_EOL;
 
@@ -132,7 +183,6 @@ return [
 
                         return PHP_EOL . $prefix;
                     },
-                    'enabled' => $alertsEmailEnabled,
                 ],
             ],
         ],

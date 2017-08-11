@@ -26,6 +26,15 @@ services:
            MYSQL_USER: idpmgmt
            MYSQL_PASSWORD: idpmgmt
 
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - "8081:80"
+        environment:
+            PMA_HOST: db
+            PMA_USER: idpmgmt
+            PMA_PASSWORD: idpmgmt
+
     api:
         build: ./
         volumes_from:

@@ -11,7 +11,7 @@ testapi: upTestDb yiimigratetestDb yiimigratetestDblocal
 	docker-compose run --rm apitest
 
 api: upDb composer yiimigrate yiimigratelocal
-	docker-compose up -d api zxcvbn cron
+	docker-compose up -d api zxcvbn cron phpmyadmin
 
 composer:
 	docker-compose run --rm --user="0:0" cli composer install
