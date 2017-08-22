@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use Exception;
 use frontend\components\BaseRestController;
 use Sil\EmailService\Client\EmailServiceClient;
 use yii\filters\AccessControl;
@@ -72,8 +73,7 @@ class SiteController extends BaseRestController
          */
         try {
             \Yii::$app->db->open();
-            return [];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServerErrorHttpException(
                 'Unable to connect to db, error code ' . $e->getCode(),
                 $e->getCode()
@@ -82,6 +82,7 @@ class SiteController extends BaseRestController
         
         try {
             $config = \Yii::$app->params['emailServiceStatus'];
+            
             if ($config['useEmailService']) {
                 $emailService = new EmailServiceClient(
                     $config['baseUrl'],
