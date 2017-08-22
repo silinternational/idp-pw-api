@@ -19,6 +19,13 @@ composer:
 composerupdate:
 	docker-compose run --rm --user="0:0" cli composer update
 
+dockerpullall:
+	docker pull phpmyadmin/phpmyadmin:latest
+	docker pull silintl/data-volume:latest
+	docker pull silintl/mariadb:latest
+	docker pull silintl/php7:latest
+	docker pull wcjr/zxcvbn-api:1.1.0
+
 rmDb:
 	docker-compose kill db
 	docker-compose rm -f db
