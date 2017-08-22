@@ -46,7 +46,7 @@ $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
  *   EMAIL_SERVICE_baseUrl=
  *   EMAIL_SERVICE_accessToken=
  *   EMAIL_SERVICE_assertValidIp=true
- *   EMAIL_SERVICE_validIpRanges=127.0.0.1,10.0.55.0/24
+ *   EMAIL_SERVICE_validIpRanges=127.0.0.1/32,10.0.55.0/24
  */
 $emailServiceConfig = Env::getArrayFromPrefix('EMAIL_SERVICE_');
 $emailServiceConfig['useEmailService'] = $emailServiceConfig['useEmailService'] ?? false;
