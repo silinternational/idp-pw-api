@@ -220,6 +220,7 @@ return [
         'logoUrl' => $logoUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
         'emailQueueBatchSize' => 5,
+        'emailServiceStatus' => $emailServiceConfig,
         'emailVerification' => $emailServiceConfig,
         'reset' => [
             'lifetimeSeconds' => 3600, // 1 hour
