@@ -3,7 +3,7 @@ start: api
 test:
 	make testunit && make testapi
 
-testunit: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
+testunit: composer email rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
 testapi: upTestDb yiimigratetestDb yiimigratetestDblocal
@@ -25,6 +25,9 @@ dockerpullall:
 	docker pull silintl/mariadb:latest
 	docker pull silintl/php7:latest
 	docker pull wcjr/zxcvbn-api:1.1.0
+
+email:
+	docker-compose up -d email
 
 rmDb:
 	docker-compose kill db

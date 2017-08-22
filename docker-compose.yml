@@ -91,6 +91,32 @@ services:
             - ./local.env
         command: ["true"]
 
+    email:
+        image: silintl/email-service:develop
+        depends_on:
+            - emaildb
+        env_file:
+            - ./common.env
+        ports:
+            - "8082:80"
+        environment:
+            API_ACCESS_KEYS: abc123
+            APP_NAME: pwmgr-test-email
+            APP_NAME: email-service
+            LOGENTRIES_KEY: b76dbda0-e6d8-4c94-9b16-58870ae0481c
+            MAILER_HOST: dummy
+            MAILER_USEFILES: "true"
+            MAILER_USERNAME: dummy
+            MAILER_PASSWORD: dummy
+            NOTIFICATION_EMAIL: matt_henderson@sil.org
+            FROM_NAME: Matt
+            FROM_EMAIL: matt_henderson@sil.org
+
+    emaildb:
+        image: silintl/mariadb:latest
+        env_file:
+            - ./common.env
+
     zxcvbn:
         image: wcjr/zxcvbn-api:1.1.0
         ports:
