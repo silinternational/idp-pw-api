@@ -45,6 +45,7 @@ services:
             - "8080:80"
         depends_on:
             - db
+            - email
         env_file:
             - ./common.env
             - ./local.env

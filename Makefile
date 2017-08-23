@@ -3,7 +3,7 @@ start: api
 test:
 	make testunit && make testapi
 
-testunit: composer email rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
+testunit: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
 testapi: upTestDb yiimigratetestDb yiimigratetestDblocal
