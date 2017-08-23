@@ -97,19 +97,18 @@ services:
             - emaildb
         env_file:
             - ./common.env
+            - ./email.local.env
         ports:
             - "8082:80"
         environment:
             API_ACCESS_KEYS: abc123
             APP_NAME: pwmgr-test-email
             APP_NAME: email-service
+            FROM_NAME: Test
             MAILER_HOST: dummy
             MAILER_USEFILES: "true"
             MAILER_USERNAME: dummy
             MAILER_PASSWORD: dummy
-            NOTIFICATION_EMAIL: matt_henderson@sil.org
-            FROM_NAME: Matt
-            FROM_EMAIL: matt_henderson@sil.org
 
     emaildb:
         image: silintl/mariadb:latest
