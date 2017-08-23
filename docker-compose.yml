@@ -87,6 +87,8 @@ services:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
         #user: "${DOCKER_UIDGID}"
+        depends_on:
+            - email
         env_file:
             - ./common.env
             - ./local.env
