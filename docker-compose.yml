@@ -49,12 +49,6 @@ services:
         env_file:
             - ./common.env
             - ./local.env
-        environment:
-            EMAIL_SERVICE_useEmailService: "true"
-            EMAIL_SERVICE_baseUrl: http://email/
-            EMAIL_SERVICE_accessToken: abc123
-            EMAIL_SERVICE_assertValidIp: "false"
-            EMAIL_SERVICE_validIpRanges: 10.20.31.0/24
 
     cron:
         build: ./
