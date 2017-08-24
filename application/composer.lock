@@ -1855,16 +1855,16 @@
         },
         {
             "name": "silinternational/yii2-json-log-targets",
-            "version": "0.3.1",
+            "version": "0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/yii2-json-log-targets.git",
-                "reference": "c30726ea6ea3efc5fe32698fe717f7b1592bd60a"
+                "reference": "6570e05e6c14a0923897d63f115c4049330ff31c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/yii2-json-log-targets/zipball/c30726ea6ea3efc5fe32698fe717f7b1592bd60a",
-                "reference": "c30726ea6ea3efc5fe32698fe717f7b1592bd60a",
+                "url": "https://api.github.com/repos/silinternational/yii2-json-log-targets/zipball/6570e05e6c14a0923897d63f115c4049330ff31c",
+                "reference": "6570e05e6c14a0923897d63f115c4049330ff31c",
                 "shasum": ""
             },
             "require": {
@@ -1897,7 +1897,7 @@
                 "target",
                 "yii2"
             ],
-            "time": "2017-08-18T15:41:37+00:00"
+            "time": "2017-08-24T13:42:24+00:00"
         },
         {
             "name": "silinternational/yii2-jsonsyslog",
