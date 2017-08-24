@@ -8,6 +8,7 @@ nbproject/
 # local config files
 local.php
 local.env
+*.local.env
 *.aes
 tracking.env
 

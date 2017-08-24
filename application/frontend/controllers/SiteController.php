@@ -1,7 +1,9 @@
 <?php
 namespace frontend\controllers;
 
+use Exception;
 use frontend\components\BaseRestController;
+use Sil\EmailService\Client\EmailServiceClient;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\MethodNotAllowedHttpException;
@@ -71,14 +73,32 @@ class SiteController extends BaseRestController
          */
         try {
             \Yii::$app->db->open();
-            return [];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServerErrorHttpException(
                 'Unable to connect to db, error code ' . $e->getCode(),
                 $e->getCode()
             );
         }
-
+        
+        try {
+            $config = \Yii::$app->params['emailServiceStatus'];
+            
+            if ($config['useEmailService']) {
+                $emailService = new EmailServiceClient(
+                    $config['baseUrl'],
+                    $config['accessToken'],
+                    [
+                        EmailServiceClient::ASSERT_VALID_IP_CONFIG => $config['assertValidIp'],
+                        EmailServiceClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'],
+                    ]
+                );
+                
+                $emailService->getSiteStatus();
+            }
+        } catch (Exception $e) {
+            \Yii::error($e->getMessage());
+            throw new ServerErrorHttpException('Problem with email service.');
+        }
     }
 
 }

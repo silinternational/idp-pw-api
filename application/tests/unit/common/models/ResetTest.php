@@ -125,6 +125,10 @@ class ResetTest extends DbTestCase
 
     public function testSendPrimary()
     {
+        /* Since these tests depend on emails being written to files, don't
+         * use the email service for now.  */
+        \Yii::$app->params['emailVerification']['useEmailService'] = false;
+
         EmailUtils::removeEmailFiles();
         $reset = $this->resets('reset1');
         $attempts = $reset->attempts;
@@ -148,6 +152,10 @@ class ResetTest extends DbTestCase
 
     public function testSendSupervisorHasSupervisor()
     {
+        /* Since these tests depend on emails being written to files, don't
+         * use the email service for now.  */
+        \Yii::$app->params['emailVerification']['useEmailService'] = false;
+
         EmailUtils::removeEmailFiles();
         $reset = $this->resets('reset1');
         $reset->type = Reset::TYPE_SUPERVISOR;
@@ -180,6 +188,10 @@ class ResetTest extends DbTestCase
 
     public function testSendSpouseHasSpouse()
     {
+        /* Since these tests depend on emails being written to files, don't
+         * use the email service for now.  */
+        \Yii::$app->params['emailVerification']['useEmailService'] = false;
+
         EmailUtils::removeEmailFiles();
         $reset = $this->resets('reset1');
         $reset->type = Reset::TYPE_SPOUSE;
@@ -212,6 +224,10 @@ class ResetTest extends DbTestCase
 
     public function testSendMethodEmail()
     {
+        /* Since these tests depend on emails being written to files, don't
+         * use the email service for now.  */
+        \Yii::$app->params['emailVerification']['useEmailService'] = false;
+
         EmailUtils::removeEmailFiles();
         $reset = $this->resets('reset3');
         $attempts = $reset->attempts;

@@ -75,10 +75,6 @@ EOF
     chown vagrant:vagrant /home/vagrant/.bash_profile
     chmod +x /home/vagrant/.bash_profile
 
-    # Run docker-compose (which will update preloaded images, and
-    # pulls any images not preloaded)
-    cd /vagrant
-
   SHELL
 
   # This provisioner runs on every `vagrant reload' (as well as the first
@@ -86,15 +82,8 @@ EOF
   config.vm.provision "recompose", type: "shell",
      run: "always", inline: <<-SHELL
 
-    # Run docker-compose (which will update preloaded images, and
-    # pulls any images not preloaded)
-    cd /vagrant
-
     # Ensure env vars are loaded from bash_profile
     source /home/vagrant/.bash_profile
-
-    # Start services
-    make start
 
   SHELL
 

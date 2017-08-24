@@ -45,6 +45,7 @@ services:
             - "8080:80"
         depends_on:
             - db
+            - email
         env_file:
             - ./common.env
             - ./local.env
@@ -86,10 +87,44 @@ services:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
         #user: "${DOCKER_UIDGID}"
+        depends_on:
+            - email
         env_file:
             - ./common.env
             - ./local.env
         command: ["true"]
+
+    email:
+        image: silintl/email-service:develop
+        depends_on:
+            - emaildb
+            - emailcron
+        env_file:
+            - ./common.env
+            - ./email.common.env
+            - ./email.local.env
+        ports:
+            - "8082:80"
+
+    emailcron:
+        image: silintl/email-service:develop
+        depends_on:
+            - emaildb
+        env_file:
+            - ./common.env
+            - ./email.common.env
+            - ./email.local.env
+        command: /data/run-cron.sh
+
+    emaildb:
+        image: silintl/mariadb:latest
+        env_file:
+            - ./common.env
+        environment:
+            MYSQL_ROOT_PASSWORD: not-a-secret
+            MYSQL_DATABASE: email
+            MYSQL_USER: email
+            MYSQL_PASSWORD: email
 
     zxcvbn:
         image: wcjr/zxcvbn-api:1.1.0
