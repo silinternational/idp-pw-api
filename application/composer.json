@@ -17,19 +17,19 @@
     "yiisoft/yii2-gii": "*",
     "silinternational/email-service-php-client": "^2.0.0",
     "silinternational/php-env": "^2.1.0",
-    "silinternational/yii2-json-log-targets": "^0.3.0",
+    "silinternational/yii2-json-log-targets": "^1.0.0",
     "silinternational/yii2-email-log-target": "^1.0.1",
     "silinternational/idp-pw-api-common": "^1.0",
-    "silinternational/idp-pw-api-personnel-insite": "^2.0",
+    "silinternational/idp-pw-api-personnel-insite": "^2.0.1",
     "silinternational/idp-pw-api-personnel-id-broker": "^1.0.1",
-    "silinternational/idp-pw-api-auth-saml": "^1.0",
+    "silinternational/idp-pw-api-auth-saml": "^1.0.1",
     "silinternational/idp-pw-api-passwordstore-ldap": "^2.0",
     "silinternational/idp-pw-api-passwordstore-id-broker": "^2.0",
     "silinternational/idp-pw-api-phoneverification-nexmo": "^2.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",
     "google/recaptcha": "^1.1.2",
     "adldap2/adldap2": "dev-master",
-    "fillup/fake-bower-assets": "*"
+    "fillup/fake-bower-assets": "2.0.9"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",
