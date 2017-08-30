@@ -72,6 +72,10 @@ class MethodTest extends DbTestCase
 
     public function testCreateAndSendVerificationEmail()
     {
+        /* Since these tests depend on emails being written to files, don't
+         * use the email service for now.  */
+        \Yii::$app->params['emailVerification']['useEmailService'] = false;
+
         EmailUtils::removeEmailFiles();
         $user = $this->users('user1');
 
