@@ -120,7 +120,9 @@ return [
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
                     'enabled' => $emailServiceConfig['useEmailService'] && $alertsEmailEnabled,
                     'prefix' => function($message) use ($appEnv) {
-                        $prefix = 'env=' . $appEnv . PHP_EOL;
+                        $prefixData = [
+                            'env' => $appEnv,
+                        ];
 
                         // There is no user when a console command is run
                         try {
@@ -129,19 +131,19 @@ return [
                             $appUser = null;
                         }
                         if ($appUser && ! \Yii::$app->user->isGuest){
-                            $prefix .= 'user='.\Yii::$app->user->identity->email . PHP_EOL;
+                            $prefixData['user'] = \Yii::$app->user->identity->email;
                         }
 
                         // Try to get requested url and method
                         try {
                             $request = \Yii::$app->request;
-                            $prefix .= 'Requested URL: ' . $request->getUrl() . PHP_EOL;
-                            $prefix .= 'Request method: ' . $request->getMethod() . PHP_EOL;
+                            $prefixData['url'] = $request->getUrl();
+                            $prefixData['method'] = $request->getMethod();
                         } catch (\Exception $e) {
-                            $prefix .= 'Requested URL: not available';
+                            $prefixData['url'] = 'not available';
                         }
 
-                        return PHP_EOL . $prefix;
+                        return $prefixData;
                     },
                 ],
                 [
