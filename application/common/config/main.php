@@ -283,5 +283,9 @@ return [
             'url' => $supportUrl,
             'feedbackUrl' => $supportFeedback,
         ],
+        'mfa' => [
+            'idBrokerBaseUrl' => Env::get('ID_BROKER_BASE_URI'),
+            'accessToken' => Env::get('ID_BROKER_ACCESS_TOKEN'),
+        ],
     ],
 ];
