@@ -286,6 +286,7 @@ return [
         'mfa' => [
             'idBrokerBaseUrl' => Env::get('ID_BROKER_BASE_URI'),
             'accessToken' => Env::get('ID_BROKER_ACCESS_TOKEN'),
+            'assert_valid_broker_ip' => false,
         ],
     ],
 ];

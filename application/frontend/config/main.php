@@ -100,6 +100,14 @@ return [
                 'OPTIONS /user/me' => 'user/options',
 
                 /*
+                 * MFA routes
+                 */
+                'GET /mfa'                      => 'mfa/index',
+                'POST /mfa'                     => 'mfa/create',
+                'DELETE /mfa/<mfaId:\w+>'       => 'mfa/delete',
+                'POST /mfa/<mfaId:(\d+)>/verify'  => 'mfa/verify',
+
+                /*
                  * Status route
                  */
                 'GET /site/system-status' => 'site/system-status',
