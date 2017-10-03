@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use frontend\components\BaseRestController;
@@ -6,7 +7,6 @@ use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 
 class MfaController extends BaseRestController
 {
@@ -40,8 +40,11 @@ class MfaController extends BaseRestController
 
     public function actionIndex()
     {
-
-        return $this->getMfaList();
+        try {
+            return $this->idBrokerClient->mfaList(\Yii::$app->user->identity->employee_id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function actionCreate()
@@ -51,19 +54,20 @@ class MfaController extends BaseRestController
             throw new BadRequestHttpException('Type is required');
         }
 
-        return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type);
+        try {
+            return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function actionDelete($mfaId)
     {
-        $mfaList = $this->getMfaList();
-        foreach ($mfaList as $mfa) {
-            if ($mfa['id'] === (int)$mfaId) {
-                return $this->idBrokerClient->mfaDelete($mfaId);
-            }
+        try {
+            return $this->idBrokerClient->mfaDelete($mfaId, \Yii::$app->user->identity->employee_id);
+        } catch (\Exception $e) {
+            throw $e;
         }
-
-        throw new NotFoundHttpException();
     }
 
     public function actionVerify($mfaId)
@@ -73,23 +77,13 @@ class MfaController extends BaseRestController
             throw new BadRequestHttpException('Value is required');
         }
 
-        $mfaList = $this->getMfaList();
-        foreach ($mfaList as $mfa) {
-            if ($mfa['id'] === (int)$mfaId) {
-                try {
-                    return $this->idBrokerClient->mfaVerify($mfaId, $value);
-                } catch (\Exception $e) {
-                    return $e;
-                }
-            }
+        try {
+            $this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value);
+            \Yii::$app->response->statusCode = 204;
+            return;
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException();
         }
-
-        throw new NotFoundHttpException();
-    }
-
-    private function getMfaList()
-    {
-        return $this->idBrokerClient->mfaList(\Yii::$app->user->identity->employee_id);
     }
 
 }

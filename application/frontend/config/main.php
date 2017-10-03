@@ -102,10 +102,13 @@ return [
                 /*
                  * MFA routes
                  */
-                'GET /mfa'                      => 'mfa/index',
-                'POST /mfa'                     => 'mfa/create',
-                'DELETE /mfa/<mfaId:\w+>'       => 'mfa/delete',
-                'POST /mfa/<mfaId:(\d+)>/verify'  => 'mfa/verify',
+                'GET /mfa'                          => 'mfa/index',
+                'POST /mfa'                         => 'mfa/create',
+                'DELETE /mfa/<mfaId:(\d+)>'         => 'mfa/delete',
+                'POST /mfa/<mfaId:(\d+)>/verify'    => 'mfa/verify',
+                'OPTIONS /mfa'                      => 'mfa/options',
+                'OPTIONS /mfa/<mfaId:(\d+)>'        => 'mfa/options',
+                'OPTIONS /mfa/<mfaId:(\d+)>/verify' => 'mfa/options',
 
                 /*
                  * Status route
