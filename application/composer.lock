@@ -1677,12 +1677,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-id-broker.git",
-                "reference": "c825cd46ce86db74074acebec2b2a7c2fa9b4a34"
+                "reference": "dc18676962a71db49da3d18c48b69f5aa45d32a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/c825cd46ce86db74074acebec2b2a7c2fa9b4a34",
-                "reference": "c825cd46ce86db74074acebec2b2a7c2fa9b4a34",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/dc18676962a71db49da3d18c48b69f5aa45d32a1",
+                "reference": "dc18676962a71db49da3d18c48b69f5aa45d32a1",
                 "shasum": ""
             },
             "require": {
@@ -1714,7 +1714,7 @@
                 }
             ],
             "description": "Id Broker Password Store component for IdP PW API",
-            "time": "2017-10-03T18:41:36+00:00"
+            "time": "2017-10-17T15:56:31+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
