@@ -85,11 +85,13 @@ class MfaController extends BaseRestController
         }
 
         try {
-            $this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value);
-            \Yii::$app->response->statusCode = 204;
-            return;
+            if ($this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value)) {
+                \Yii::$app->response->statusCode = 204;
+                return;
+            }
+            throw new BadRequestHttpException('Invalid code provided');
         } catch (\Exception $e) {
-            throw new BadRequestHttpException();
+            throw new BadRequestHttpException($e->getMessage());
         }
     }
 

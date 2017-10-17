@@ -10,5 +10,8 @@ else
     sleep 10
 fi
 
+# Run database migrations
+runny /data/yii migrate --interactive=0
+
 # Run apache in foreground
 apache2ctl -D FOREGROUND
