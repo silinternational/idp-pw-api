@@ -61,8 +61,10 @@ class MfaController extends BaseRestController
             throw new BadRequestHttpException('Type is required');
         }
 
+        $label = \Yii::$app->request->getBodyParam('label');
+
         try {
-            return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type);
+            return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
         } catch (\Exception $e) {
             throw $e;
         }
