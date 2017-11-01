@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "48eb5089718ed714e62fc47716b7448f",
+    "content-hash": "2e5ce50aff90b2d8caaeb4fe9d8eac96",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1848,16 +1848,16 @@
         },
         {
             "name": "silinternational/idp-pw-api-personnel-multiple",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-multiple.git",
-                "reference": "645d90db7b3ca57f28cb105c24d4c670a594341e"
+                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/645d90db7b3ca57f28cb105c24d4c670a594341e",
-                "reference": "645d90db7b3ca57f28cb105c24d4c670a594341e",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/36174b7ae8b5b14651162eb23aec362e0f52e669",
+                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669",
                 "shasum": ""
             },
             "require": {
@@ -1893,7 +1893,7 @@
                 }
             ],
             "description": "Personnel component for IdP PW API for using multiple backends.",
-            "time": "2017-11-01T17:42:11+00:00"
+            "time": "2017-11-01T18:04:25+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
