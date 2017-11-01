@@ -23,6 +23,7 @@
     "silinternational/idp-pw-api-common": "^1.0",
     "silinternational/idp-pw-api-personnel-insite": "^2.0.1",
     "silinternational/idp-pw-api-personnel-id-broker": "dev-2sv-prep",
+    "silinternational/idp-pw-api-personnel-multiple": "^0.1",
     "silinternational/idp-pw-api-auth-saml": "^1.0.1",
     "silinternational/idp-pw-api-passwordstore-ldap": "^2.0",
     "silinternational/idp-pw-api-passwordstore-id-broker": "dev-2sv-prep",
