@@ -5,10 +5,14 @@
         "This file is @generated automatically"
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "ec0307b88d8e8caa486678f0aa1fd277",
 =======
     "content-hash": "48eb5089718ed714e62fc47716b7448f",
 >>>>>>> update composer deps to install idp-pw-api-personnel-multiple
+=======
+    "content-hash": "2e5ce50aff90b2d8caaeb4fe9d8eac96",
+>>>>>>> update personnel-multiple adapter again for type comparison bug
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1901,6 +1905,7 @@
             "name": "silinternational/idp-pw-api-personnel-multiple",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             "version": "1.0.0",
             "source": {
                 "type": "git",
@@ -1916,13 +1921,17 @@
 =======
             "version": "0.1.1",
 >>>>>>> update version of personnel-multiple
+=======
+            "version": "0.1.2",
+>>>>>>> update personnel-multiple adapter again for type comparison bug
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-multiple.git",
-                "reference": "645d90db7b3ca57f28cb105c24d4c670a594341e"
+                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669"
             },
             "dist": {
                 "type": "zip",
+<<<<<<< HEAD
 <<<<<<< HEAD
                 "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/dd6dd0809e902850772bd653e88bf9698901e118",
                 "reference": "dd6dd0809e902850772bd653e88bf9698901e118",
@@ -1931,6 +1940,10 @@
                 "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/645d90db7b3ca57f28cb105c24d4c670a594341e",
                 "reference": "645d90db7b3ca57f28cb105c24d4c670a594341e",
 >>>>>>> update version of personnel-multiple
+=======
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/36174b7ae8b5b14651162eb23aec362e0f52e669",
+                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669",
+>>>>>>> update personnel-multiple adapter again for type comparison bug
                 "shasum": ""
             },
             "require": {
@@ -1968,6 +1981,7 @@
             "description": "Personnel component for IdP PW API for using multiple backends.",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             "time": "2017-11-01T18:04:25+00:00"
 =======
             "time": "2017-11-01T15:23:57+00:00"
@@ -1975,6 +1989,9 @@
 =======
             "time": "2017-11-01T17:42:11+00:00"
 >>>>>>> update version of personnel-multiple
+=======
+            "time": "2017-11-01T18:04:25+00:00"
+>>>>>>> update personnel-multiple adapter again for type comparison bug
         },
         {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
