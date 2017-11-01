@@ -1848,16 +1848,16 @@
         },
         {
             "name": "silinternational/idp-pw-api-personnel-multiple",
-            "version": "0.1",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-multiple.git",
-                "reference": "dd6dd0809e902850772bd653e88bf9698901e118"
+                "reference": "645d90db7b3ca57f28cb105c24d4c670a594341e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/dd6dd0809e902850772bd653e88bf9698901e118",
-                "reference": "dd6dd0809e902850772bd653e88bf9698901e118",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/645d90db7b3ca57f28cb105c24d4c670a594341e",
+                "reference": "645d90db7b3ca57f28cb105c24d4c670a594341e",
                 "shasum": ""
             },
             "require": {
@@ -1893,7 +1893,7 @@
                 }
             ],
             "description": "Personnel component for IdP PW API for using multiple backends.",
-            "time": "2017-11-01T15:23:57+00:00"
+            "time": "2017-11-01T17:42:11+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
