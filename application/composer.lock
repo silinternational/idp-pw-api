@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8fda2c85a449e15d2c7fb53dc38d705",
+    "content-hash": "5e85e1abc48d54ae8a854b4a188f4a80",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -804,16 +804,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "dev-master",
+            "version": "5.5.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "ae69cd01353b505dcdb1e67f8a7c91164ca7b175"
+                "reference": "d9e269284eba43bd2e9e8d1f1ba12362b00ec096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/ae69cd01353b505dcdb1e67f8a7c91164ca7b175",
-                "reference": "ae69cd01353b505dcdb1e67f8a7c91164ca7b175",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/d9e269284eba43bd2e9e8d1f1ba12362b00ec096",
+                "reference": "d9e269284eba43bd2e9e8d1f1ba12362b00ec096",
                 "shasum": ""
             },
             "require": {
@@ -824,7 +824,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.6-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -844,26 +844,26 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2017-10-06T13:10:32+00:00"
+            "time": "2017-09-19T13:09:37+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "dev-master",
+            "version": "5.5.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "07991af49f1c06717c7cbbf323180e1b070fc93c"
+                "reference": "4495da4b63937a2315922906cd3b5b66ab11cad6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/07991af49f1c06717c7cbbf323180e1b070fc93c",
-                "reference": "07991af49f1c06717c7cbbf323180e1b070fc93c",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/4495da4b63937a2315922906cd3b5b66ab11cad6",
+                "reference": "4495da4b63937a2315922906cd3b5b66ab11cad6",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "~1.1",
                 "ext-mbstring": "*",
-                "illuminate/contracts": "5.6.*",
+                "illuminate/contracts": "5.5.*",
                 "nesbot/carbon": "^1.20",
                 "php": ">=7.0"
             },
@@ -878,7 +878,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.6-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -901,7 +901,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2017-10-31T13:10:26+00:00"
+            "time": "2017-11-01T13:58:08+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1538,16 +1538,16 @@
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
-            "version": "dev-feature/2sv",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "f2aa4cde94b4537a274c12596da186bc49444c52"
+                "reference": "1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/f2aa4cde94b4537a274c12596da186bc49444c52",
-                "reference": "f2aa4cde94b4537a274c12596da186bc49444c52",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e",
+                "reference": "1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e",
                 "shasum": ""
             },
             "require": {
@@ -1589,7 +1589,7 @@
                 "idp",
                 "php client"
             ],
-            "time": "2017-10-23T20:09:22+00:00"
+            "time": "2017-10-23T20:23:06+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-auth-saml",
@@ -1674,22 +1674,22 @@
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-id-broker",
-            "version": "dev-2sv-prep",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-id-broker.git",
-                "reference": "dc18676962a71db49da3d18c48b69f5aa45d32a1"
+                "reference": "2b9132ac0591db3f7dc9e762c92a3d7fbbe4d877"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/dc18676962a71db49da3d18c48b69f5aa45d32a1",
-                "reference": "dc18676962a71db49da3d18c48b69f5aa45d32a1",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/2b9132ac0591db3f7dc9e762c92a3d7fbbe4d877",
+                "reference": "2b9132ac0591db3f7dc9e762c92a3d7fbbe4d877",
                 "shasum": ""
             },
             "require": {
                 "fillup/fake-bower-assets": "^2.0.9",
                 "php": ">=7.0.0",
-                "silinternational/idp-id-broker-php-client": "dev-feature/2sv",
+                "silinternational/idp-id-broker-php-client": "^2.1.2",
                 "silinternational/idp-pw-api-common": "^1.0"
             },
             "require-dev": {
@@ -1715,7 +1715,7 @@
                 }
             ],
             "description": "Id Broker Password Store component for IdP PW API",
-            "time": "2017-10-17T15:56:31+00:00"
+            "time": "2017-11-08T18:58:48+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
@@ -1764,19 +1764,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-id-broker.git",
-                "reference": "153c9fb88cf7ccbc5ae3bd661e5ffaf65844f106"
+                "reference": "21fcf9f8a27a3a640564189feb030ad3aa006247"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/153c9fb88cf7ccbc5ae3bd661e5ffaf65844f106",
-                "reference": "153c9fb88cf7ccbc5ae3bd661e5ffaf65844f106",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/21fcf9f8a27a3a640564189feb030ad3aa006247",
+                "reference": "21fcf9f8a27a3a640564189feb030ad3aa006247",
                 "shasum": ""
             },
             "require": {
                 "fillup/fake-bower-assets": "*",
                 "php": ">=7.0",
                 "roave/security-advisories": "dev-master",
-                "silinternational/idp-id-broker-php-client": "dev-feature/2sv",
+                "silinternational/idp-id-broker-php-client": "^2.1.2",
                 "silinternational/idp-pw-api-common": "^1.0",
                 "yiisoft/yii2": "^2.0"
             },
@@ -1800,7 +1800,7 @@
                 }
             ],
             "description": "IdP Password Management personnel component for ID Broker",
-            "time": "2017-10-17T14:39:19+00:00"
+            "time": "2017-11-07T23:25:04+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -1849,16 +1849,16 @@
         },
         {
             "name": "silinternational/idp-pw-api-personnel-multiple",
-            "version": "0.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-multiple.git",
-                "reference": "dd6dd0809e902850772bd653e88bf9698901e118"
+                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/dd6dd0809e902850772bd653e88bf9698901e118",
-                "reference": "dd6dd0809e902850772bd653e88bf9698901e118",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/36174b7ae8b5b14651162eb23aec362e0f52e669",
+                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669",
                 "shasum": ""
             },
             "require": {
@@ -1894,7 +1894,7 @@
                 }
             ],
             "description": "Personnel component for IdP PW API for using multiple backends.",
-            "time": "2017-11-01T15:23:57+00:00"
+            "time": "2017-11-01T18:04:25+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
@@ -2230,12 +2230,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "5f617743a4bf70c2f453efdbc850abe04de6f1af"
+                "reference": "ca780797dbd027c394a926a2607bca441ce2607e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/5f617743a4bf70c2f453efdbc850abe04de6f1af",
-                "reference": "5f617743a4bf70c2f453efdbc850abe04de6f1af",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/ca780797dbd027c394a926a2607bca441ce2607e",
+                "reference": "ca780797dbd027c394a926a2607bca441ce2607e",
                 "shasum": ""
             },
             "require": {
@@ -2277,7 +2277,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-09-30T22:40:37+00:00"
+            "time": "2017-11-08T00:14:48+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2344,12 +2344,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "e7bfada027b7c17e973c80f5f789f91f896e42f8"
+                "reference": "34c2376013f9e151b2e7f935a77e42586b28d8c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/e7bfada027b7c17e973c80f5f789f91f896e42f8",
-                "reference": "e7bfada027b7c17e973c80f5f789f91f896e42f8",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/34c2376013f9e151b2e7f935a77e42586b28d8c6",
+                "reference": "34c2376013f9e151b2e7f935a77e42586b28d8c6",
                 "shasum": ""
             },
             "require": {
@@ -2404,7 +2404,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-24T14:12:06+00:00"
+            "time": "2017-11-07T14:20:24+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -2615,12 +2615,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-                "reference": "76cd85c7ed79cfff57b69096099ef38adc37691e"
+                "reference": "c3cbe6d81fde8566ff2345d29850adeb59f8929a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/76cd85c7ed79cfff57b69096099ef38adc37691e",
-                "reference": "76cd85c7ed79cfff57b69096099ef38adc37691e",
+                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/c3cbe6d81fde8566ff2345d29850adeb59f8929a",
+                "reference": "c3cbe6d81fde8566ff2345d29850adeb59f8929a",
                 "shasum": ""
             },
             "require": {
@@ -2657,7 +2657,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2017-08-23T13:03:35+00:00"
+            "time": "2017-11-03T11:01:32+00:00"
         }
     ],
     "packages-dev": [
@@ -2726,12 +2726,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "d64f8dde1f2fda3584b62d6f32982840a021f9db"
+                "reference": "10192427bdd8d1c63c231105bdc189a76636f8f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/d64f8dde1f2fda3584b62d6f32982840a021f9db",
-                "reference": "d64f8dde1f2fda3584b62d6f32982840a021f9db",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/10192427bdd8d1c63c231105bdc189a76636f8f6",
+                "reference": "10192427bdd8d1c63c231105bdc189a76636f8f6",
                 "shasum": ""
             },
             "require": {
@@ -2812,7 +2812,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-10-28T20:13:38+00:00"
+            "time": "2017-11-03T09:37:24+00:00"
         },
         {
             "name": "codeception/specify",
@@ -2950,12 +2950,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-webdriver.git",
-                "reference": "5522ce16dbcd46869278c030687758840b30e193"
+                "reference": "f049e6756ecb8a69282b88e0114a63866d3747d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/5522ce16dbcd46869278c030687758840b30e193",
-                "reference": "5522ce16dbcd46869278c030687758840b30e193",
+                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/f049e6756ecb8a69282b88e0114a63866d3747d2",
+                "reference": "f049e6756ecb8a69282b88e0114a63866d3747d2",
                 "shasum": ""
             },
             "require": {
@@ -2969,7 +2969,7 @@
                 "guzzle/guzzle": "^3.4.1",
                 "php-coveralls/php-coveralls": "^1.0.2",
                 "php-mock/php-mock-phpunit": "^1.1",
-                "phpunit/phpunit": "^5.4",
+                "phpunit/phpunit": "^5.7",
                 "sebastian/environment": "^1.3.4 || ^2.0 || ^3.0",
                 "squizlabs/php_codesniffer": "^2.6",
                 "symfony/var-dumper": "^3.3"
@@ -2997,7 +2997,7 @@
                 "selenium",
                 "webdriver"
             ],
-            "time": "2017-10-26T14:08:12+00:00"
+            "time": "2017-11-08T14:31:23+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -3005,12 +3005,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "012cf358fa417d409c70bafded4bdb0cc3ad852c"
+                "reference": "910a79d58e264630477292a3ca06b9966673ac09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/012cf358fa417d409c70bafded4bdb0cc3ad852c",
-                "reference": "012cf358fa417d409c70bafded4bdb0cc3ad852c",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/910a79d58e264630477292a3ca06b9966673ac09",
+                "reference": "910a79d58e264630477292a3ca06b9966673ac09",
                 "shasum": ""
             },
             "require": {
@@ -3047,7 +3047,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2017-10-28T06:02:50+00:00"
+            "time": "2017-11-06T09:42:24+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -3348,12 +3348,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6"
+                "reference": "ddd9d7ffff1d7c3acd1a79a8e21d5ee5ea7beace"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6",
-                "reference": "c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/ddd9d7ffff1d7c3acd1a79a8e21d5ee5ea7beace",
+                "reference": "ddd9d7ffff1d7c3acd1a79a8e21d5ee5ea7beace",
                 "shasum": ""
             },
             "require": {
@@ -3365,7 +3365,7 @@
             },
             "require-dev": {
                 "phpspec/phpspec": "^2.5|^3.2",
-                "phpunit/phpunit": "^4.8 || ^5.6.5"
+                "phpunit/phpunit": "^4.8.35 || ^5.7"
             },
             "type": "library",
             "extra": {
@@ -3403,7 +3403,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2017-09-04T11:05:03+00:00"
+            "time": "2017-11-07T12:00:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3411,12 +3411,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "77a1ba8076365f943e2a3d75573b6c9822840ac6"
+                "reference": "11740267caeac2b4de90e4d895d0bcc361a3ba55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/77a1ba8076365f943e2a3d75573b6c9822840ac6",
-                "reference": "77a1ba8076365f943e2a3d75573b6c9822840ac6",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/11740267caeac2b4de90e4d895d0bcc361a3ba55",
+                "reference": "11740267caeac2b4de90e4d895d0bcc361a3ba55",
                 "shasum": ""
             },
             "require": {
@@ -3467,7 +3467,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-08-25T06:32:04+00:00"
+            "time": "2017-11-03T13:55:28+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3661,12 +3661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "13b752f7226c0b1dacaa4cb88bb7e25ef987f9e6"
+                "reference": "562f7dc75d46510a4ed5d16189ae57fbe45a9932"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/13b752f7226c0b1dacaa4cb88bb7e25ef987f9e6",
-                "reference": "13b752f7226c0b1dacaa4cb88bb7e25ef987f9e6",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/562f7dc75d46510a4ed5d16189ae57fbe45a9932",
+                "reference": "562f7dc75d46510a4ed5d16189ae57fbe45a9932",
                 "shasum": ""
             },
             "require": {
@@ -3737,20 +3737,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-10-23T05:02:20+00:00"
+            "time": "2017-11-08T11:26:09+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "4.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "2f789b59ab89669015ad984afa350c4ec577ade0"
+                "reference": "0a279d180253b7144b47b4d5be21c769f799d002"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/2f789b59ab89669015ad984afa350c4ec577ade0",
-                "reference": "2f789b59ab89669015ad984afa350c4ec577ade0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/0a279d180253b7144b47b4d5be21c769f799d002",
+                "reference": "0a279d180253b7144b47b4d5be21c769f799d002",
                 "shasum": ""
             },
             "require": {
@@ -3763,7 +3763,7 @@
                 "phpunit/phpunit": "<6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.0"
+                "phpunit/phpunit": "^6.5"
             },
             "suggest": {
                 "ext-soap": "*"
@@ -3771,7 +3771,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0.x-dev"
+                    "dev-master": "5.0.x-dev"
                 }
             },
             "autoload": {
@@ -3796,7 +3796,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2017-08-03T14:08:16+00:00"
+            "time": "2017-11-06T08:21:34+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3849,12 +3849,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "f805963ee2e7d38a474d6ebc8961b1854eed210a"
+                "reference": "1174d9018191e93cb9d719edec01257fc05f8158"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/f805963ee2e7d38a474d6ebc8961b1854eed210a",
-                "reference": "f805963ee2e7d38a474d6ebc8961b1854eed210a",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1174d9018191e93cb9d719edec01257fc05f8158",
+                "reference": "1174d9018191e93cb9d719edec01257fc05f8158",
                 "shasum": ""
             },
             "require": {
@@ -3905,7 +3905,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2017-11-01T08:33:06+00:00"
+            "time": "2017-11-03T07:16:52+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -4408,12 +4408,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "58a38941962e69476bf6e11ce13effc26120d2d8"
+                "reference": "179522b5f0b5e6d00bb60f38a4d6b29962e4b61b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/58a38941962e69476bf6e11ce13effc26120d2d8",
-                "reference": "58a38941962e69476bf6e11ce13effc26120d2d8",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/179522b5f0b5e6d00bb60f38a4d6b29962e4b61b",
+                "reference": "179522b5f0b5e6d00bb60f38a4d6b29962e4b61b",
                 "shasum": ""
             },
             "require": {
@@ -4457,7 +4457,7 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-28T16:49:05+00:00"
+            "time": "2017-11-07T14:20:24+00:00"
         },
         {
             "name": "symfony/console",
@@ -4465,12 +4465,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8e5f4d2b26b0a158bd7c83ffc780ffcd08fd3bb3"
+                "reference": "a2e7a0bb621a55647877608ae202175086444595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8e5f4d2b26b0a158bd7c83ffc780ffcd08fd3bb3",
-                "reference": "8e5f4d2b26b0a158bd7c83ffc780ffcd08fd3bb3",
+                "url": "https://api.github.com/repos/symfony/console/zipball/a2e7a0bb621a55647877608ae202175086444595",
+                "reference": "a2e7a0bb621a55647877608ae202175086444595",
                 "shasum": ""
             },
             "require": {
@@ -4526,7 +4526,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-24T14:40:29+00:00"
+            "time": "2017-11-07T14:20:24+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -4534,12 +4534,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "6bbad1ad4cd69dd440b24a62979cc469c5800490"
+                "reference": "7134b93e90ea7e7881fcb2da006d21b4c5f31908"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/6bbad1ad4cd69dd440b24a62979cc469c5800490",
-                "reference": "6bbad1ad4cd69dd440b24a62979cc469c5800490",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/7134b93e90ea7e7881fcb2da006d21b4c5f31908",
+                "reference": "7134b93e90ea7e7881fcb2da006d21b4c5f31908",
                 "shasum": ""
             },
             "require": {
@@ -4579,7 +4579,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-24T14:12:06+00:00"
+            "time": "2017-11-05T16:10:10+00:00"
         },
         {
             "name": "symfony/debug",
@@ -4643,12 +4643,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "8cc827ee34b27767110c6ba2f2efa899e8aa3be5"
+                "reference": "7bf68716e400997a291ad42c9f9fe7972e6656d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/8cc827ee34b27767110c6ba2f2efa899e8aa3be5",
-                "reference": "8cc827ee34b27767110c6ba2f2efa899e8aa3be5",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/7bf68716e400997a291ad42c9f9fe7972e6656d2",
+                "reference": "7bf68716e400997a291ad42c9f9fe7972e6656d2",
                 "shasum": ""
             },
             "require": {
@@ -4691,7 +4691,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-28T16:49:05+00:00"
+            "time": "2017-11-05T16:10:10+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -4699,12 +4699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "494b359278b7f3a88527f40deda3227df301330a"
+                "reference": "90a32e11a5b643cd77b99c51f8b8e1976031cc90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/494b359278b7f3a88527f40deda3227df301330a",
-                "reference": "494b359278b7f3a88527f40deda3227df301330a",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/90a32e11a5b643cd77b99c51f8b8e1976031cc90",
+                "reference": "90a32e11a5b643cd77b99c51f8b8e1976031cc90",
                 "shasum": ""
             },
             "require": {
@@ -4754,7 +4754,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-24T14:12:06+00:00"
+            "time": "2017-11-07T20:33:43+00:00"
         },
         {
             "name": "symfony/finder",
@@ -4762,12 +4762,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "29422c4e871dd668ecac0e8075cf64dccdabff46"
+                "reference": "dac8d7db537bac7ad8143eb11360a8c2231f251a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/29422c4e871dd668ecac0e8075cf64dccdabff46",
-                "reference": "29422c4e871dd668ecac0e8075cf64dccdabff46",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/dac8d7db537bac7ad8143eb11360a8c2231f251a",
+                "reference": "dac8d7db537bac7ad8143eb11360a8c2231f251a",
                 "shasum": ""
             },
             "require": {
@@ -4803,7 +4803,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-24T14:12:06+00:00"
+            "time": "2017-11-05T16:10:10+00:00"
         },
         {
             "name": "symfony/process",
@@ -4811,12 +4811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "ae1f0fe7202afcdd0ea905fe88b14c05e1be5a46"
+                "reference": "dce0aaed6962844b680b9a98a163e2f5f768752b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/ae1f0fe7202afcdd0ea905fe88b14c05e1be5a46",
-                "reference": "ae1f0fe7202afcdd0ea905fe88b14c05e1be5a46",
+                "url": "https://api.github.com/repos/symfony/process/zipball/dce0aaed6962844b680b9a98a163e2f5f768752b",
+                "reference": "dce0aaed6962844b680b9a98a163e2f5f768752b",
                 "shasum": ""
             },
             "require": {
@@ -4852,7 +4852,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-24T14:12:06+00:00"
+            "time": "2017-11-05T16:10:10+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -5054,12 +5054,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "bb0eecb03ca2a782102104b1162584cf3b2313b3"
+                "reference": "e11796fe54648ce5ca18e0a5b97a4f715c0907ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/bb0eecb03ca2a782102104b1162584cf3b2313b3",
-                "reference": "bb0eecb03ca2a782102104b1162584cf3b2313b3",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/e11796fe54648ce5ca18e0a5b97a4f715c0907ec",
+                "reference": "e11796fe54648ce5ca18e0a5b97a4f715c0907ec",
                 "shasum": ""
             },
             "require": {
@@ -5093,7 +5093,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2017-10-16T07:35:33+00:00"
+            "time": "2017-11-07T19:47:11+00:00"
         },
         {
             "name": "yiisoft/yii2-faker",
@@ -5146,9 +5146,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "silinternational/idp-id-broker-php-client": 20,
         "silinternational/idp-pw-api-personnel-id-broker": 20,
-        "silinternational/idp-pw-api-passwordstore-id-broker": 20,
         "adldap2/adldap2": 20,
         "roave/security-advisories": 20
     },
