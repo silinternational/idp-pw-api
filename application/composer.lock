@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "54f3d7f1d28f9f218eda26325a3248c8",
+    "content-hash": "ec0307b88d8e8caa486678f0aa1fd277",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1538,16 +1538,16 @@
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
-            "version": "2.1.2",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e"
+                "reference": "c17f03490f9ed31b812bce5b3b5c09f39ac963d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e",
-                "reference": "1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/c17f03490f9ed31b812bce5b3b5c09f39ac963d7",
+                "reference": "c17f03490f9ed31b812bce5b3b5c09f39ac963d7",
                 "shasum": ""
             },
             "require": {
@@ -1589,7 +1589,7 @@
                 "idp",
                 "php client"
             ],
-            "time": "2017-10-23T20:23:06+00:00"
+            "time": "2017-11-09T16:01:26+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-auth-saml",
@@ -1674,22 +1674,22 @@
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-id-broker",
-            "version": "3.1.0",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-id-broker.git",
-                "reference": "2b9132ac0591db3f7dc9e762c92a3d7fbbe4d877"
+                "reference": "496b6d6d38de85baec61ec7b40946bcca65fd724"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/2b9132ac0591db3f7dc9e762c92a3d7fbbe4d877",
-                "reference": "2b9132ac0591db3f7dc9e762c92a3d7fbbe4d877",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/496b6d6d38de85baec61ec7b40946bcca65fd724",
+                "reference": "496b6d6d38de85baec61ec7b40946bcca65fd724",
                 "shasum": ""
             },
             "require": {
                 "fillup/fake-bower-assets": "^2.0.9",
                 "php": ">=7.0.0",
-                "silinternational/idp-id-broker-php-client": "^2.1.2",
+                "silinternational/idp-id-broker-php-client": "^2.2.0",
                 "silinternational/idp-pw-api-common": "^1.0"
             },
             "require-dev": {
@@ -1715,7 +1715,7 @@
                 }
             ],
             "description": "Id Broker Password Store component for IdP PW API",
-            "time": "2017-11-08T18:58:48+00:00"
+            "time": "2017-11-09T16:18:39+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
@@ -1759,24 +1759,70 @@
             "time": "2017-04-03T14:57:19+00:00"
         },
         {
-            "name": "silinternational/idp-pw-api-personnel-id-broker",
-            "version": "dev-2sv-prep",
+            "name": "silinternational/idp-pw-api-passwordstore-multiple",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-personnel-id-broker.git",
-                "reference": "21fcf9f8a27a3a640564189feb030ad3aa006247"
+                "url": "https://github.com/silinternational/idp-pw-api-passwordstore-multiple.git",
+                "reference": "9327d43d771cf8f0f2f740b25231c1887aab1ec5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/21fcf9f8a27a3a640564189feb030ad3aa006247",
-                "reference": "21fcf9f8a27a3a640564189feb030ad3aa006247",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-multiple/zipball/9327d43d771cf8f0f2f740b25231c1887aab1ec5",
+                "reference": "9327d43d771cf8f0f2f740b25231c1887aab1ec5",
+                "shasum": ""
+            },
+            "require": {
+                "fillup/fake-bower-assets": "^2.0.9",
+                "php": ">=7.0.0",
+                "roave/security-advisories": "dev-master",
+                "silinternational/idp-pw-api-common": "^1.0",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.3",
+                "phpunit/phpunit": "^6.0",
+                "silinternational/php-env": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sil\\IdpPw\\PasswordStore\\Multiple\\": "src/",
+                    "Sil\\IdpPw\\PasswordStore\\Multiple\\Behat\\": "features/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Henderson",
+                    "email": "matt_henderson@sil.org"
+                }
+            ],
+            "description": "Password store component for IdP PW API for using multiple backends.",
+            "time": "2017-11-09T15:37:19+00:00"
+        },
+        {
+            "name": "silinternational/idp-pw-api-personnel-id-broker",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/idp-pw-api-personnel-id-broker.git",
+                "reference": "736a917c2279438b7389813955ef578a9a67c2a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/736a917c2279438b7389813955ef578a9a67c2a7",
+                "reference": "736a917c2279438b7389813955ef578a9a67c2a7",
                 "shasum": ""
             },
             "require": {
                 "fillup/fake-bower-assets": "*",
                 "php": ">=7.0",
                 "roave/security-advisories": "dev-master",
-                "silinternational/idp-id-broker-php-client": "^2.1.2",
+                "silinternational/idp-id-broker-php-client": "^2.2.0",
                 "silinternational/idp-pw-api-common": "^1.0",
                 "yiisoft/yii2": "^2.0"
             },
@@ -1800,7 +1846,7 @@
                 }
             ],
             "description": "IdP Password Management personnel component for ID Broker",
-            "time": "2017-11-07T23:25:04+00:00"
+            "time": "2017-11-09T16:13:56+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -1849,7 +1895,7 @@
         },
         {
             "name": "silinternational/idp-pw-api-personnel-multiple",
-            "version": "0.1.2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-multiple.git",
@@ -5136,7 +5182,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silinternational/idp-pw-api-personnel-id-broker": 20,
         "adldap2/adldap2": 20,
         "roave/security-advisories": 20
     },
