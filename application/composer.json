@@ -33,9 +33,15 @@
     "silinternational/idp-pw-api-personnel-multiple": "^0.1.2",
 >>>>>>> update personnel-multiple adapter again for type comparison bug
     "silinternational/idp-pw-api-auth-saml": "^1.0.1",
+<<<<<<< HEAD
     "silinternational/idp-pw-api-passwordstore-ldap": "^2.1",
     "silinternational/idp-pw-api-passwordstore-id-broker": "^3.2.0",
     "silinternational/idp-pw-api-passwordstore-multiple": "^1.0.1",
+=======
+    "silinternational/idp-pw-api-passwordstore-ldap": "^2.0",
+    "silinternational/idp-pw-api-passwordstore-id-broker": "^2.0",
+    "silinternational/idp-pw-api-passwordstore-multiple": "^1.0",
+>>>>>>> add passwordstore-multiple adapter
     "silinternational/idp-pw-api-phoneverification-nexmo": "^2.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",
     "google/recaptcha": "^1.1.2",

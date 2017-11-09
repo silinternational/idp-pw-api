@@ -6,6 +6,7 @@
     ],
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "ec0307b88d8e8caa486678f0aa1fd277",
 =======
     "content-hash": "48eb5089718ed714e62fc47716b7448f",
@@ -13,6 +14,9 @@
 =======
     "content-hash": "2e5ce50aff90b2d8caaeb4fe9d8eac96",
 >>>>>>> update personnel-multiple adapter again for type comparison bug
+=======
+    "content-hash": "0308f76188b880da840e2fabd363f238",
+>>>>>>> add passwordstore-multiple adapter
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1768,6 +1772,55 @@
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-multiple",
+<<<<<<< HEAD
+=======
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/idp-pw-api-passwordstore-multiple.git",
+                "reference": "4cde57a4106a0feac4b0643afa31d0185759b333"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-multiple/zipball/4cde57a4106a0feac4b0643afa31d0185759b333",
+                "reference": "4cde57a4106a0feac4b0643afa31d0185759b333",
+                "shasum": ""
+            },
+            "require": {
+                "fillup/fake-bower-assets": "^2.0.9",
+                "php": ">=7.0.0",
+                "roave/security-advisories": "dev-master",
+                "silinternational/idp-pw-api-common": "^1.0",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.3",
+                "phpunit/phpunit": "^6.0",
+                "silinternational/php-env": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sil\\IdpPw\\PasswordStore\\Multiple\\": "src/",
+                    "Sil\\IdpPw\\PasswordStore\\Multiple\\Behat\\": "features/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Henderson",
+                    "email": "matt_henderson@sil.org"
+                }
+            ],
+            "description": "Password store component for IdP PW API for using multiple backends.",
+            "time": "2017-07-03T17:51:25+00:00"
+        },
+        {
+            "name": "silinternational/idp-pw-api-personnel-id-broker",
+>>>>>>> add passwordstore-multiple adapter
             "version": "1.0.1",
             "source": {
                 "type": "git",
