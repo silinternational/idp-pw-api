@@ -1,5 +1,5 @@
 <?php
-defined('YII_DEBUG') || define('YII_DEBUG', true);
+defined('YII_DEBUG') || define('YII_DEBUG', false);
 defined('YII_ENV') || define('YII_ENV', 'production');
 
 require(__DIR__ . '/../../vendor/autoload.php');
