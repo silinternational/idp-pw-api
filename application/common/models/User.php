@@ -498,9 +498,8 @@ class User extends UserBase implements IdentityInterface
             /** @var UserPasswordMeta $pwMeta */
             $pwMeta = \Yii::$app->passwordStore->getMeta($this->employee_id);
 
-            $lastChangedTimestamp = strtotime($pwMeta->passwordLastChangeDate);
-            $this->pw_last_changed = Utils::getDatetime($lastChangedTimestamp);
-            $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
+            $this->pw_last_changed = Utils::getDatetime(strtotime($pwMeta->passwordLastChangeDate));
+            $this->pw_expires = Utils::getDatetime(strtotime($pwMeta->passwordExpireDate));
 
             if ( ! $this->save()) {
                 throw new ServerErrorHttpException('Unable to update user record with password metadata', 1467297721);
