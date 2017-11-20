@@ -19,3 +19,6 @@ runny apache2ctl start
 
 # Run codeception tests
 /data/vendor/bin/codecept run api -d
+
+
+echo "Note: If there are unexpected errors, ensure the unit tests are run first and try again."
