@@ -96,16 +96,8 @@ class Password extends Model
                 'when' => function() { return $this->config['zxcvbn']['enabled']; }
             ],
             [
-                'password', 'match', 'pattern' => '/^p.ssw.rd$/i',
-                'not' => true,
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must not be similar to "password" (code 160)'
-                ),
-            ],
-            [
-                'password', 'validateNotUserAttributes', 'params'=>['idp_username', 'email'],
+                'password', 'validateNotUserAttributes',
+                'params'=>['first_name', 'last_name', 'idp_username', 'email'],
                 'skipOnError' => false,
             ],
         ];
@@ -113,19 +105,16 @@ class Password extends Model
 
     public function validateNotUserAttributes($attribute, $params=null)
     {
+        /* Ensure the password instance has a user attribute */
         if (!isset($this->user)) {
 
-            /*
-             * Log error
-             */
+            /* Log error */
             $log['status'] = 'error';
             $log['error'] = "No User instance has been assigned to the new password. " .
                 "Cannot validate it against the user's attributes.";
             \Yii::error($log);
 
-            /*
-             * Throw exception based on exception type
-             */
+            /* Throw exception based on exception type */
             throw new ServerErrorHttpException(
                 \Yii::t(
                     'app',
@@ -139,10 +128,12 @@ class Password extends Model
         foreach ($params as $disallowedAttribute) {
             $labelList[] = $userAttributeLabels[$disallowedAttribute];
         }
+
         foreach ($params as $disallowedAttribute) {
-            if ($this->{$attribute} == $this->user->$disallowedAttribute) {
+            if (mb_strpos(mb_strtolower($this->{$attribute}),
+                mb_strtolower($this->user->$disallowedAttribute)) !== false) {
                 $this->addError($attribute, sprintf(
-                    'Your password may not match any of these: %s (code 180)',
+                    'Your password may not contain any of these: %s (code 180)',
                     join(', ', $labelList)
                 ));
             }

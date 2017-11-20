@@ -161,21 +161,21 @@ class PasswordCest extends BaseCest
 
     public function test19(ApiTester $I)
     {
-        $I->wantTo('check response when changing the password (PUT request) to something similar to "password"');
+        $I->wantTo('check response when changing the password (PUT request) to something that contains the first_name');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'p@ssWQRD']);
+        $I->sendPUT('/password', ['password' => 'aFIRSTz']);
         $I->seeResponseCodeIs(400);
         $body = json_decode($I->grabResponse(), true);
-        if (substr_count($body['message'], 'code 160') <= 0) {
-            throw new \Exception('Expected error code not present in message', 1466798393);
+        if (substr_count($body['message'], 'code 180') <= 0) {
+
         }
     }
 
     public function test20(ApiTester $I)
     {
-        $I->wantTo('check response when changing the password (PUT request) to something that matches the idp_username');
+        $I->wantTo('check response when changing the password (PUT request) to something that contains the idp_username');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'first_last']);
+        $I->sendPUT('/password',['password' => 'First_Lastzzzz']);
         $I->seeResponseCodeIs(400);
         $body = json_decode($I->grabResponse(), true);
         if (substr_count($body['message'], 'code 180') <= 0) {
@@ -185,9 +185,9 @@ class PasswordCest extends BaseCest
 
     public function test21(ApiTester $I)
     {
-        $I->wantTo('check response when changing the password (PUT request) to something that matches the email address');
+        $I->wantTo('check response when changing the password (PUT request) to something that contains the email address');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'first_last@organization.org']);
+        $I->sendPUT('/password',['password' => 'aaaafirst_last@organization.org']);
         $I->seeResponseCodeIs(400);
         $body = json_decode($I->grabResponse(), true);
         if (substr_count($body['message'], 'code 180') <= 0) {

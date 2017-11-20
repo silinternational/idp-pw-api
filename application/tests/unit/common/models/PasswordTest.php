@@ -104,7 +104,9 @@ class PasswordTest extends TestCase
         $user = User::findOne(['employee_id' => $employeeId]);
 
         $testData = [
-            $user->idp_username,
+            "a" . $user->first_name . "z",
+            mb_strtoupper($user->last_name) . "z",
+            "a" . $user->idp_username,
             $user->email,
         ];
         foreach ($testData as $testPassword) {
