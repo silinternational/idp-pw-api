@@ -109,9 +109,11 @@ class Password extends Model
         if (!isset($this->user)) {
 
             /* Log error */
-            $log['status'] = 'error';
-            $log['error'] = "No User instance has been assigned to the new password. " .
-                "Cannot validate it against the user's attributes.";
+            $log = [
+                'status' => 'error',
+                'error' => 'No User instance has been assigned to the new password. ' .
+                    "Cannot validate it against the user's attributes.",
+            ];
             \Yii::error($log);
 
             /* Throw exception based on exception type */
