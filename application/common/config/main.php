@@ -252,7 +252,7 @@ return [
                 'enabled' => true
             ],
             'minNum' => [
-                'value' => 2,
+                'value' => 0,
                 'phpRegex' => '/(\d.*){2,}/',
                 'jsRegex' => '(\d.*){2,}',
                 'enabled' => true
@@ -270,7 +270,7 @@ return [
                 'enabled' => false
             ],
             'zxcvbn' => [
-                'minScore' => 2,
+                'minScore' => 3,
                 'enabled' => true,
                 'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
