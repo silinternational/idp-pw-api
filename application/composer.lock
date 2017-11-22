@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d573fb84d5f68a32b3434145eef42a0f",
+    "content-hash": "32750135b479b7765c635a2422c86866",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1811,16 +1811,16 @@
         },
         {
             "name": "silinternational/idp-pw-api-personnel-id-broker",
-            "version": "dev-develop",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-personnel-id-broker.git",
-                "reference": "6929499c5732d48c23ea9386d9a3efe49c5ca0de"
+                "reference": "ee46b37df75aab064d31c8e026b69d3a4ad3c204"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/6929499c5732d48c23ea9386d9a3efe49c5ca0de",
-                "reference": "6929499c5732d48c23ea9386d9a3efe49c5ca0de",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/ee46b37df75aab064d31c8e026b69d3a4ad3c204",
+                "reference": "ee46b37df75aab064d31c8e026b69d3a4ad3c204",
                 "shasum": ""
             },
             "require": {
@@ -1851,7 +1851,7 @@
                 }
             ],
             "description": "IdP Password Management personnel component for ID Broker",
-            "time": "2017-11-22T14:30:55+00:00"
+            "time": "2017-11-22T15:24:43+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-personnel-insite",
@@ -5190,7 +5190,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silinternational/idp-pw-api-personnel-id-broker": 20,
         "adldap2/adldap2": 20,
         "roave/security-advisories": 20
     },
