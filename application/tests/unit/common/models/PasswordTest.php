@@ -3,10 +3,19 @@ namespace tests\unit\common\models;
 
 use common\helpers\Utils;
 use common\models\Password;
+use common\models\User;
+use tests\unit\fixtures\common\models\UserFixture;
 use yii\codeception\TestCase;
 
 class PasswordTest extends TestCase
 {
+
+    public function fixtures()
+    {
+        return [
+            'users' => UserFixture::className(),
+        ];
+    }
 
     public function testZxcvbn()
     {
@@ -85,6 +94,34 @@ class PasswordTest extends TestCase
                 );
             }
 
+        }
+    }
+
+
+    public function testVsUserAttributes()
+    {
+        $employeeId = '111111';
+        $user = User::findOne(['employee_id' => $employeeId]);
+
+        $testData = [
+            "a" . $user->first_name . "z",
+            mb_strtoupper($user->last_name) . "z",
+            "a" . $user->idp_username,
+            $user->email,
+        ];
+        foreach ($testData as $testPassword) {
+            $password = Password::create($employeeId, $testPassword);
+            $password->user = $user;
+
+            $valid = $password->validate();
+            $errors = $password->getErrors('password');
+            $validationErrorsString = join('|', array_values($errors));
+
+            $this->assertTrue(
+                substr_count($validationErrorsString, 'code 180') > 0,
+                'Failed validating test case: ' . $testPassword .
+                '. No error for matching a user attribute.'
+            );
         }
     }
 
