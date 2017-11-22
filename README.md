@@ -39,7 +39,7 @@ Backend API for Identity Provider Password Management
    clone at ```link coming soon```
 
 ### Additional setup for Linux & Mac
-1. Add entry to ```/etc/hosts``` for ```120.0.0.1 idp-pw-api.local```
+1. Add entry to ```/etc/hosts``` for ```127.0.0.1 idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
 3. Run ```make start```
 

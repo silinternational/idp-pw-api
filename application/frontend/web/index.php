@@ -11,7 +11,7 @@ require(__DIR__ . '/../config/bootstrap.php');
  * Load environment config if present, else expect local.php
  */
 $appEnv = \Sil\PhpEnv\Env::get('APP_ENV', 'production');
-if ( ! in_array($appEnv, ['development', 'staging', 'production'])) {
+if ( ! in_array($appEnv, ['development', 'dev', 'staging', 'stage', 'production', 'prod'])) {
     throw new \yii\web\ServerErrorHttpException('Invalid APP_ENV provided');
 }
 $configPath = __DIR__ . '/../../common/config';

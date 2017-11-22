@@ -3,9 +3,11 @@ start: api
 test:
 	make testunit && make testapi
 
-testunit: composer rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal rmTestDb
+testunit: composer emailcron rmTestDb upTestDb yiimigratetestDb yiimigratetestDblocal
+	docker-compose run emailcron whenavail emaildb 3306 100 ./yii migrate --interactive=0
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
+# Run testunit first at least once. Otherwise, this will have 5 test failures.
 testapi: upTestDb yiimigratetestDb yiimigratetestDblocal
 	docker-compose up -d zxcvbn
 	docker-compose run --rm apitest
@@ -28,6 +30,9 @@ dockerpullall:
 
 email:
 	docker-compose up -d email
+
+emailcron:
+	docker-compose up -d emailcron
 
 rmDb:
 	docker-compose kill db

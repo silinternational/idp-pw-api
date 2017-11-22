@@ -21,7 +21,7 @@
     "silinternational/yii2-email-log-target": "^1.0.1",
     "silinternational/idp-pw-api-common": "^1.0",
     "silinternational/idp-pw-api-personnel-insite": "^2.0.1",
-    "silinternational/idp-pw-api-personnel-id-broker": "^1.2.0",
+    "silinternational/idp-pw-api-personnel-id-broker": "^1.2.1",
     "silinternational/idp-pw-api-personnel-multiple": "^1.0.0",
     "silinternational/idp-pw-api-auth-saml": "^1.0.1",
     "silinternational/idp-pw-api-passwordstore-ldap": "^2.1",
