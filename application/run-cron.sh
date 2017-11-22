@@ -21,16 +21,7 @@ runny /data/yii migrate --interactive=0
 runny /data/yii migrate --interactive=0 --migrationPath=console/migrations-local
 
 # Dump env to a file
-touch /etc/cron.d/idp
-env | while read line ; do
-   echo "$line" >> /etc/cron.d/idp
-done
-
-# Add env vars to idp-cron to make available to scripts
-cat /etc/cron.d/idp-cron >> /etc/cron.d/idp
-
-# Remove original cron file without env vars
-rm -f /etc/cron.d/idp-cron
+env >> /etc/environment
 
 # Start cron daemon
 cron -f
