@@ -255,7 +255,7 @@ return [
                 'value' => 0,
                 'phpRegex' => '/(\d.*){2,}/',
                 'jsRegex' => '(\d.*){2,}',
-                'enabled' => true
+                'enabled' => false
             ],
             'minUpper' => [
                 'value' => 0,
