@@ -92,7 +92,6 @@ class MfaController extends BaseRestController
                 \Yii::$app->response->statusCode = 204;
                 return;
             }
-            throw new BadRequestHttpException('Invalid code provided');
         } catch (\Exception $e) {
             \Yii::error([
                 'action' => 'verify mfa',
@@ -103,6 +102,8 @@ class MfaController extends BaseRestController
             ]);
             throw new ServerErrorHttpException('Unable to verify MFA code, error code: ' . $e->getCode());
         }
+
+        throw new BadRequestHttpException('Invalid code provided');
     }
 
 }
