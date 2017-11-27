@@ -35,6 +35,8 @@ RUN chown -R www-data:www-data \
     frontend/runtime/ \
     frontend/web/assets/
 
+RUN touch /etc/default/locale
+
 EXPOSE 80
 ENTRYPOINT ["/usr/local/bin/s3-expand"]
 CMD ["/data/run.sh"]

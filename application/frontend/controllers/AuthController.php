@@ -52,6 +52,10 @@ class AuthController extends BaseRestController
          * Before redirecting user after login this will be prefixed with ui_url
          */
         $returnTo = \Yii::$app->request->get('ReturnTo', '');
+        if (substr($returnTo, 0, 1) == '/') {
+            $returnTo = \Yii::$app->params['uiUrl'] . $returnTo;
+        }
+
         if ( ! \Yii::$app->user->isGuest) {
             $afterLogin = $this->getAfterLoginUrl($returnTo);
             return $this->redirect($afterLogin);
@@ -164,10 +168,11 @@ class AuthController extends BaseRestController
     public function getAfterLoginUrl($returnTo)
     {
         /*
-         * Only keep $returnTo if it is a path on the frontend as a safety measure
-         * to help prevent CSRF
+         * If $returnTo starts with UI_URL, return it, else relative build absolute
          */
-        if (substr($returnTo, 0, 1) == '/') {
+        if (strpos($returnTo, \Yii::$app->params['uiUrl']) === 0) {
+            return $returnTo;
+        } elseif (substr($returnTo, 0, 1) == '/') {
             $path = $returnTo;
         } else {
             $path = '';

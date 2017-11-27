@@ -23,6 +23,9 @@ class Password extends Model
     /** @var array */
     public $config;
 
+    /** @var common\models\User **/
+    public $user;
+
     public function init()
     {
         $this->passwordStore = \Yii::$app->passwordStore;
@@ -92,7 +95,51 @@ class Password extends Model
                 ),
                 'when' => function() { return $this->config['zxcvbn']['enabled']; }
             ],
+            [
+                'password', 'validateNotUserAttributes',
+                'params'=>['first_name', 'last_name', 'idp_username', 'email'],
+                'skipOnError' => false,
+            ],
         ];
+    }
+
+    public function validateNotUserAttributes($attribute, $params=null)
+    {
+        /* Ensure the password instance has a user attribute */
+        if (!isset($this->user)) {
+
+            /* Log error */
+            $log = [
+                'status' => 'error',
+                'error' => 'No User instance has been assigned to the new password. ' .
+                    "Cannot validate it against the user's attributes.",
+            ];
+            \Yii::error($log);
+
+            /* Throw exception based on exception type */
+            throw new ServerErrorHttpException(
+                \Yii::t(
+                    'app',
+                    'Unable to update password. Please contact support.'
+                ),
+                1511195430
+            );
+        }
+        $userAttributeLabels = $this->user->attributeLabels();
+        $labelList = [];
+        foreach ($params as $disallowedAttribute) {
+            $labelList[] = $userAttributeLabels[$disallowedAttribute];
+        }
+
+        foreach ($params as $disallowedAttribute) {
+            if (mb_strpos(mb_strtolower($this->{$attribute}),
+                mb_strtolower($this->user->$disallowedAttribute)) !== false) {
+                $this->addError($attribute, sprintf(
+                    'Your password may not contain any of these: %s (code 180)',
+                    join(', ', $labelList)
+                ));
+            }
+        }
     }
 
     /**

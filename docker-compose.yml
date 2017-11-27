@@ -12,7 +12,7 @@ services:
             - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
-            MYSQL_DATABASE: idpmgmt
+            MYSQL_DATABASE: pwmgr
             MYSQL_USER: idpmgmt
             MYSQL_PASSWORD: idpmgmt
 

@@ -1,23 +1,76 @@
 <?php
 
+use Sil\PhpEnv\Env;
+use yii\helpers\ArrayHelper;
+
+$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
+
 return [
+    'params' => [
+        'accessTokenHashKey' => 'KEY4TESTING',
+        'password' => [
+            'minLength' => [
+                'value' => 10,
+                'phpRegex' => '/.{10,}/',
+                'jsRegex' => '.{10,}',
+                'enabled' => true
+            ],
+            'maxLength' => [
+                'value' => 255,
+                'phpRegex' => '/^.{0,255}$/',
+                'jsRegex' => '.{0,255}',
+                'enabled' => true
+            ],
+            'minNum' => [
+                'value' => 2,
+                'phpRegex' => '/(\d.*){2,}/',
+                'jsRegex' => '(\d.*){2,}',
+                'enabled' => true
+            ],
+            'minUpper' => [
+                'value' => 1,
+                'phpRegex' => '/([A-Z].*){1,}/',
+                'jsRegex' => '([A-Z].*){1,}',
+                'enabled' => true
+            ],
+            'minSpecial' => [
+                'value' => 1,
+                'phpRegex' => '/([\W_].*){1,}/',
+                'jsRegex' => '([\W_].*){1,}',
+                'enabled' => true
+            ],
+            'zxcvbn' => [
+                'minScore' => 2,
+                'enabled' => true,
+                'apiBaseUrl' => $zxcvbnApiBaseUrl,
+            ]
+        ],
+    ],
     'components' => [
+        'mailer' => [
+            'useFileTransport' => true,
+            'transport' => [
+                'host' => null,
+            ],
+        ],
         'personnel' => [
-            // Example:
             'class' => '\Sil\IdpPw\Common\Personnel\Insite',
             'insitePeopleSearchBaseUrl' => '',
             'insitePeopleSearchApiKey' => '',
             'insitePeopleSearchApiSecret' => '',
         ],
+//        'personnel' => ArrayHelper::merge(
+//            ['class' => 'Sil\IdpPw\Common\Personnel\IdBroker\IdBroker'],
+//            Env::getArrayFromPrefix('ID_BROKER_')
+//        ),
         'auth' => [
-            'class' => '\Sil\IdpPw\Auth\Saml',
-            'signRequest' => true,
-            'checkResponseSigning' => true,
-            'requireEncryptedAssertion' => true,
+            'class' => Sil\IdpPw\Auth\Saml::class,
+            'signRequest' => false,
+            'checkResponseSigning' => false,
+            'requireEncryptedAssertion' => false,
             'idpCertificate' => '',
             'spCertificate' => '',
             'spPrivateKey' => '',
-            'assertionConsumerServiceUrl' => 'http://idp-pw-api.local:8080/auth/login',
             'entityId' => 'idp-pw-api.local',
             'ssoUrl' => '',
             'sloUrl' => '',
@@ -27,43 +80,15 @@ return [
                 'last_name' => ['field' => 'sn', 'element' => 0 ],
                 'email' => ['field' => 'mail', 'element' => 0 ],
                 'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
-            ]
+            ],
         ],
         'phone' => [
-            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Verify',
-            'apiKey' => '',
-            'apiSecret' => '',
+            'class' => 'tests\mock\phone\Component',
             'codeLength' => 4,
-            'brand' => 'Verification',
         ],
-//        'phone' => [
-//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\Sms',
-//            'apiKey' => '',
-//            'apiSecret' => '',
-//            'from' => '',
-//        ],
-//        'phone' => [
-//            'class' => '\Sil\IdpPw\PhoneVerification\Nexmo\VerifyThenSms',
-//            'apiKey' => '',
-//            'apiSecret' => '',
-//            'from' => '',
-//            'codeLength' => 4,
-//            'brand' => 'Verification',
-//        ],
-        'passwordStore' => [
-            'class' => '\Sil\IdpPw\PasswordStore\Ldap',
-            'host' => '',
-            'port' => 636,
-            'baseDn' => '',
-            'adminUsername' => '',
-            'adminPassword' => '',
-            'useTls' => false,
-            'useSsl' => true,
-            'userPasswordAttribute' => 'userPassword',
-            'employeeIdAttribute' => 'gisEisPersonId',
-            'passwordLastChangeDateAttribute' => 'pwdchangedtime',
-            'passwordExpireDateAttribute' => 'modifytimestamp',
-
-        ],
-    ]
+        'passwordStore' => ArrayHelper::merge(
+            ['class' => 'Sil\IdpPw\PasswordStore\IdBroker\IdBroker'],
+            Env::getArrayFromPrefix('ID_BROKER_')
+        ),
+    ],
 ];
