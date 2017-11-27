@@ -113,7 +113,7 @@ class PasswordTest extends TestCase
             $password = Password::create($employeeId, $testPassword);
             $password->user = $user;
 
-            $valid = $password->validate();
+            $password->validate();
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));
 
