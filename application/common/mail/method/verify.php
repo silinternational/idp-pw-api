@@ -14,11 +14,11 @@ Hi there,
 <p>
     Someone recently requested to add this email address, <?php echo yHtml::encode($toAddress); ?>,
     as a method for verifying themselves should they need to reset their
-    <?php echo yHtml::encode($idpDisplayName); ?> account. If this was you, you can use the reset code
-    below to set a new password.
+    <?php echo yHtml::encode($idpDisplayName); ?> account password. If this was you, you can use the verification code
+    below to add it to your account.
 </p>
 <p>
-    Reset Code: <?php echo yHtml::encode($code); ?>
+    Verification Code: <?php echo yHtml::encode($code); ?>
 </p>
 <p>
     If you did not request adding this email address to your account please delete this email.
