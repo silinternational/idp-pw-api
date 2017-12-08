@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f8e37e531ae0c9a29998c6772d288aa",
+    "content-hash": "2da148800254385610c6203e8e48b58c",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -905,16 +905,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.18.1",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45"
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
-                "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
                 "shasum": ""
             },
             "require": {
@@ -925,17 +925,17 @@
                 "psr/log-implementation": "1.0.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "^2.4.9",
+                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
                 "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
                 "php-console/php-console": "^3.1.3",
                 "phpunit/phpunit": "~4.5",
                 "phpunit/phpunit-mock-objects": "2.3.0",
-                "raven/raven": "^0.13",
                 "ruflin/elastica": ">=0.90 <3.0",
-                "swiftmailer/swiftmailer": "~5.3",
-                "videlalvaro/php-amqplib": "~2.4"
+                "sentry/sentry": "^0.13",
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -944,11 +944,11 @@
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
+                "sentry/sentry": "Allow sending log messages to a Sentry server"
             },
             "type": "library",
             "extra": {
@@ -979,7 +979,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-03-13T16:08:35+00:00"
+            "time": "2017-06-19T01:22:40+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -1489,16 +1489,16 @@
         },
         {
             "name": "silinternational/email-service-php-client",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/email-service-php-client.git",
-                "reference": "5d460975e3828e9803472dcfd3acb128aeb17eae"
+                "reference": "b77da76234ae82391cfe1eb4319b241d505c6aa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/email-service-php-client/zipball/5d460975e3828e9803472dcfd3acb128aeb17eae",
-                "reference": "5d460975e3828e9803472dcfd3acb128aeb17eae",
+                "url": "https://api.github.com/repos/silinternational/email-service-php-client/zipball/b77da76234ae82391cfe1eb4319b241d505c6aa4",
+                "reference": "b77da76234ae82391cfe1eb4319b241d505c6aa4",
                 "shasum": ""
             },
             "require": {
@@ -1539,7 +1539,7 @@
                 "email",
                 "php client"
             ],
-            "time": "2017-08-23T18:55:07+00:00"
+            "time": "2017-12-07T14:53:05+00:00"
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
@@ -1598,20 +1598,20 @@
         },
         {
             "name": "silinternational/idp-pw-api-auth-saml",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-auth-saml.git",
-                "reference": "4f4cc7eb6d95c151b15c5c4eff92a69b0314793d"
+                "reference": "242dfc3c36718dfb447d31d2cc46404eebf5ccc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/4f4cc7eb6d95c151b15c5c4eff92a69b0314793d",
-                "reference": "4f4cc7eb6d95c151b15c5c4eff92a69b0314793d",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/242dfc3c36718dfb447d31d2cc46404eebf5ccc1",
+                "reference": "242dfc3c36718dfb447d31d2cc46404eebf5ccc1",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "1.18.1",
+                "monolog/monolog": "^1.23",
                 "php": ">=5.4.0",
                 "silinternational/idp-pw-api-common": "^1.0",
                 "silinternational/yii2-jsonsyslog": "*",
@@ -1635,7 +1635,7 @@
                 }
             ],
             "description": "SAML Auth component for IdP PW API",
-            "time": "2017-08-30T13:36:23+00:00"
+            "time": "2017-12-08T16:48:00+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-common",
@@ -1724,22 +1724,25 @@
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
-            "version": "2.1",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "956798964596d0977f8489a9b651c5052e673db2"
+                "reference": "acd0052574baa29a69a92ea56dc5b68132789757"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/956798964596d0977f8489a9b651c5052e673db2",
-                "reference": "956798964596d0977f8489a9b651c5052e673db2",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/acd0052574baa29a69a92ea56dc5b68132789757",
+                "reference": "acd0052574baa29a69a92ea56dc5b68132789757",
                 "shasum": ""
             },
             "require": {
                 "adldap2/adldap2": "dev-master",
-                "php": ">=5.4.0",
-                "silinternational/idp-pw-api-common": "^1.0"
+                "monolog/monolog": "^1.23",
+                "php": ">=7.0",
+                "roave/security-advisories": "dev-master",
+                "silinternational/idp-pw-api-common": "^1.0",
+                "silinternational/psr3-adapters": "^1.1.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0"
@@ -1761,7 +1764,7 @@
                 }
             ],
             "description": "LDAP Password Store component for IdP PW API",
-            "time": "2017-04-03T14:57:19+00:00"
+            "time": "2017-12-08T16:30:39+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-multiple",
@@ -2021,6 +2024,53 @@
             ],
             "description": "Simple PHP library for getting (or requiring) environment variables, designed to handle true, false, and null more intelligently. If desired, an environment variable's value can be split into an array automatically.",
             "time": "2017-08-31T12:44:44+00:00"
+        },
+        {
+            "name": "silinternational/psr3-adapters",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/psr3-adapters.git",
+                "reference": "bbaef684f34f94f64dcf018698028b786f67caaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/psr3-adapters/zipball/bbaef684f34f94f64dcf018698028b786f67caaa",
+                "reference": "bbaef684f34f94f64dcf018698028b786f67caaa",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "psr/log": "^1.0",
+                "roave/security-advisories": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6.1"
+            },
+            "suggest": {
+                "monolog/monolog": "^1.22",
+                "simplesamlphp/simplesamlphp": "^1.14.12",
+                "yiisoft/yii2": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sil\\Psr3Adapters\\": "src/",
+                    "Sil\\Psr3Adapters\\tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Henderson",
+                    "email": "matt_henderson@sil.org"
+                }
+            ],
+            "description": "Various PSR3-compatible logging adapters.",
+            "time": "2017-05-09T19:14:19+00:00"
         },
         {
             "name": "silinternational/yii2-email-log-target",
