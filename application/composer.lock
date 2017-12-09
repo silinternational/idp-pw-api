@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2da148800254385610c6203e8e48b58c",
+    "content-hash": "627f35343cf7588fd88380b95f1b5419",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1724,25 +1724,23 @@
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "acd0052574baa29a69a92ea56dc5b68132789757"
+                "reference": "a63e10cb891df5a10fe4ed1977494e7d8a169676"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/acd0052574baa29a69a92ea56dc5b68132789757",
-                "reference": "acd0052574baa29a69a92ea56dc5b68132789757",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/a63e10cb891df5a10fe4ed1977494e7d8a169676",
+                "reference": "a63e10cb891df5a10fe4ed1977494e7d8a169676",
                 "shasum": ""
             },
             "require": {
                 "adldap2/adldap2": "dev-master",
-                "monolog/monolog": "^1.23",
                 "php": ">=7.0",
                 "roave/security-advisories": "dev-master",
-                "silinternational/idp-pw-api-common": "^1.0",
-                "silinternational/psr3-adapters": "^1.1.0"
+                "silinternational/idp-pw-api-common": "^1.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0"
@@ -1764,7 +1762,7 @@
                 }
             ],
             "description": "LDAP Password Store component for IdP PW API",
-            "time": "2017-12-08T16:30:39+00:00"
+            "time": "2017-12-09T20:23:41+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-multiple",
@@ -2024,53 +2022,6 @@
             ],
             "description": "Simple PHP library for getting (or requiring) environment variables, designed to handle true, false, and null more intelligently. If desired, an environment variable's value can be split into an array automatically.",
             "time": "2017-08-31T12:44:44+00:00"
-        },
-        {
-            "name": "silinternational/psr3-adapters",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/psr3-adapters.git",
-                "reference": "bbaef684f34f94f64dcf018698028b786f67caaa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/psr3-adapters/zipball/bbaef684f34f94f64dcf018698028b786f67caaa",
-                "reference": "bbaef684f34f94f64dcf018698028b786f67caaa",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0",
-                "psr/log": "^1.0",
-                "roave/security-advisories": "dev-master"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.6.1"
-            },
-            "suggest": {
-                "monolog/monolog": "^1.22",
-                "simplesamlphp/simplesamlphp": "^1.14.12",
-                "yiisoft/yii2": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\Psr3Adapters\\": "src/",
-                    "Sil\\Psr3Adapters\\tests\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Henderson",
-                    "email": "matt_henderson@sil.org"
-                }
-            ],
-            "description": "Various PSR3-compatible logging adapters.",
-            "time": "2017-05-09T19:14:19+00:00"
         },
         {
             "name": "silinternational/yii2-email-log-target",
