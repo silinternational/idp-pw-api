@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "627f35343cf7588fd88380b95f1b5419",
+    "content-hash": "bef3ab2b3e4150b87537951a52660269",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1724,16 +1724,16 @@
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-ldap",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "a63e10cb891df5a10fe4ed1977494e7d8a169676"
+                "reference": "28540f77de187ad79e5de5dcebfb309cf2a460b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/a63e10cb891df5a10fe4ed1977494e7d8a169676",
-                "reference": "a63e10cb891df5a10fe4ed1977494e7d8a169676",
+                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/28540f77de187ad79e5de5dcebfb309cf2a460b0",
+                "reference": "28540f77de187ad79e5de5dcebfb309cf2a460b0",
                 "shasum": ""
             },
             "require": {
@@ -1762,7 +1762,7 @@
                 }
             ],
             "description": "LDAP Password Store component for IdP PW API",
-            "time": "2017-12-09T20:23:41+00:00"
+            "time": "2017-12-09T21:45:45+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-passwordstore-multiple",
