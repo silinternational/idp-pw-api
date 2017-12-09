@@ -24,7 +24,7 @@
     "silinternational/idp-pw-api-personnel-id-broker": "^1.2.1",
     "silinternational/idp-pw-api-personnel-multiple": "^1.0.0",
     "silinternational/idp-pw-api-auth-saml": "^1.0.2",
-    "silinternational/idp-pw-api-passwordstore-ldap": "^2.2.0",
+    "silinternational/idp-pw-api-passwordstore-ldap": "^2.2.1",
     "silinternational/idp-pw-api-passwordstore-id-broker": "^3.2.1",
     "silinternational/idp-pw-api-passwordstore-multiple": "^1.0.2",
     "silinternational/idp-pw-api-phoneverification-nexmo": "^2.0",
