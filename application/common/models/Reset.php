@@ -556,10 +556,10 @@ class Reset extends ResetBase
             throw new BadRequestHttpException('Unknown reset type requested', 1462989489);
         }
 
-        /*
-         * Generate new verification code
-         */
-        $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+        // NOTE: We stopped changing the code here so that, if someone requests
+        // a subsequent reset while an existing one is not yet expired, the same
+        // code will be used. That way, clicking the link in the first email
+        // will still work.
 
         /*
          * Save changes
