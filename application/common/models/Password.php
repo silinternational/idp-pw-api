@@ -166,7 +166,7 @@ class Password extends Model
 
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
-            \Yii::error([
+            \Yii::warning([
                 'action' => 'save password',
                 'status' => 'error',
                 'employee_id' => $this->employeeId,
@@ -186,7 +186,7 @@ class Password extends Model
         if ( ! $this->validate()) {
             $errors = $this->getFirstErrors();
             $log['status'] = 'error';
-            $log['error'] = Json::encode($errors);
+            $log['error'] = $errors;
             \Yii::error($log);
             throw new BadRequestHttpException($errors[0], 1463164336);
         }
