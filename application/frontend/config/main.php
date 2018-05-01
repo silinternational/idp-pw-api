@@ -4,7 +4,7 @@ use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
-$cookieValidationKey = Env::get('COOKIE_VALIDATION_KEY', base64_encode(random_bytes(33)));
+$cookieValidationKey = Env::requireEnv('COOKIE_VALIDATION_KEY');
 
 $sessionLifetime = 1800; // 30 minutes
 
