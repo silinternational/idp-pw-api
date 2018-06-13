@@ -4,6 +4,7 @@ use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
+$cookieValidationKey = Env::get('COOKIE_VALIDATION_KEY');
 
 $sessionLifetime = 1800; // 30 minutes
 
@@ -36,6 +37,8 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
+            'cookieValidationKey' => $cookieValidationKey,
+            'enableCookieValidation' => !empty($cookieValidationKey),
             'enableCsrfValidation' => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',

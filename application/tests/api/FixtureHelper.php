@@ -37,6 +37,7 @@ class FixtureHelper extends Module
      */
     public function _beforeSuite($settings = [])
     {
+        $this->unloadFixtures();
         $this->loadFixtures();
     }
 
