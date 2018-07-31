@@ -16,3 +16,6 @@ tracking.env
 /application/ocular.phar
 phpinfo.php
 /nbproject/private/
+
+# generated files
+application/tests/_support/_generated/
