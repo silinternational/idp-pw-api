@@ -3,10 +3,6 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://bitbucket.org/silintl/insite-people-search.git"
-    },
-    {
-      "type": "vcs",
       "url": "https://github.com/fillup/Adldap2.git"
     }
   ],
@@ -20,7 +16,6 @@
     "silinternational/yii2-json-log-targets": "^1.0.0",
     "silinternational/yii2-email-log-target": "^1.0.1",
     "silinternational/idp-pw-api-common": "^1.0",
-    "silinternational/idp-pw-api-personnel-insite": "^2.0.1",
     "silinternational/idp-pw-api-personnel-id-broker": "^1.2.1",
     "silinternational/idp-pw-api-personnel-multiple": "^1.0.0",
     "silinternational/idp-pw-api-auth-saml": "^1.0.3",

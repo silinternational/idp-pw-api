@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cd0488a2adb50623c0a9ca85b3242d5",
+    "content-hash": "fa2ceeff1e24eac6208b33dba608527f",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -489,39 +489,6 @@
             ],
             "description": "Nexmo API client built with Guzzle Web Service descriptions",
             "time": "2017-04-28T18:14:49+00:00"
-        },
-        {
-            "name": "forevermatt/calc-api-sig",
-            "version": "0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/forevermatt/calc-api-sig.git",
-                "reference": "6a92e1b4df8f21b661735ab3cded1288e6c0e3a7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/forevermatt/calc-api-sig/zipball/6a92e1b4df8f21b661735ab3cded1288e6c0e3a7",
-                "reference": "6a92e1b4df8f21b661735ab3cded1288e6c0e3a7",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "roave/security-advisories": "dev-master"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CalcApiSig\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "time": "2015-09-03T15:21:29+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -1940,51 +1907,6 @@
             "time": "2017-11-22T15:24:43+00:00"
         },
         {
-            "name": "silinternational/idp-pw-api-personnel-insite",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-personnel-insite.git",
-                "reference": "64757a36c520e8d80c000ef950d6f7efe451f1a5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-insite/zipball/64757a36c520e8d80c000ef950d6f7efe451f1a5",
-                "reference": "64757a36c520e8d80c000ef950d6f7efe451f1a5",
-                "shasum": ""
-            },
-            "require": {
-                "fillup/fake-bower-assets": "*",
-                "forevermatt/calc-api-sig": "^0.1.1",
-                "php": ">=5.4.0",
-                "roave/security-advisories": "dev-master",
-                "silinternational/idp-pw-api-common": "^1.0",
-                "silintl/insite-people-search": "^1.1",
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\Common\\Personnel\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Steve Bagwell",
-                    "email": "steve_bagwell@sil.org"
-                }
-            ],
-            "description": "IdP Password Management personnel component for Insite",
-            "time": "2017-08-30T14:21:44+00:00"
-        },
-        {
             "name": "silinternational/idp-pw-api-personnel-multiple",
             "version": "1.0.0",
             "source": {
@@ -2272,41 +2194,6 @@
                 "zxcvbn"
             ],
             "time": "2017-04-28T18:23:23+00:00"
-        },
-        {
-            "name": "silintl/insite-people-search",
-            "version": "1.1",
-            "source": {
-                "type": "git",
-                "url": "https://bitbucket.org/silintl/insite-people-search.git",
-                "reference": "de2c832fe6df2ca8ff3e362fc41598a046e639dd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://bitbucket.org/silintl/insite-people-search/get/de2c832fe6df2ca8ff3e362fc41598a046e639dd.zip",
-                "reference": "de2c832fe6df2ca8ff3e362fc41598a046e639dd",
-                "shasum": ""
-            },
-            "require": {
-                "forevermatt/calc-api-sig": "^0.1.1",
-                "guzzlehttp/guzzle": "^6.2.3",
-                "php": ">=5.4.0",
-                "roave/security-advisories": "dev-master"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "silintl\\InsitePeopleSearch\\": "src/"
-                }
-            },
-            "homepage": "https://bitbucket.org/silintl/insite-people-search",
-            "support": {
-                "source": "https://bitbucket.org/silintl/insite-people-search/src/de2c832fe6df2ca8ff3e362fc41598a046e639dd/?at=1.1"
-            },
-            "time": "2017-05-17T16:03:00+00:00"
         },
         {
             "name": "simplesamlphp/saml2",
