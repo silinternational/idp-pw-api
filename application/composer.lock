@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e0307af3546aa1e22008e6b52c588f63",
+    "content-hash": "7a1f5bd09c42223dcda6dfc07df3cf86",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1908,55 +1908,6 @@
             ],
             "description": "IdP Password Management personnel component for ID Broker",
             "time": "2018-07-30T20:17:17+00:00"
-        },
-        {
-            "name": "silinternational/idp-pw-api-personnel-multiple",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-personnel-multiple.git",
-                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-multiple/zipball/36174b7ae8b5b14651162eb23aec362e0f52e669",
-                "reference": "36174b7ae8b5b14651162eb23aec362e0f52e669",
-                "shasum": ""
-            },
-            "require": {
-                "fillup/fake-bower-assets": "^2.0.9",
-                "php": ">=7.0.0",
-                "roave/security-advisories": "dev-master",
-                "silinternational/idp-pw-api-common": "^1.0",
-                "yiisoft/yii2": "~2.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.0",
-                "silinternational/php-env": "^2.1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\Common\\Personnel\\Multiple\\": "src/",
-                    "tests\\mock\\": "tests/mock/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                },
-                {
-                    "name": "Matt Henderson",
-                    "email": "matt_henderson@sil.org"
-                }
-            ],
-            "description": "Personnel component for IdP PW API for using multiple backends.",
-            "time": "2017-11-01T18:04:25+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
