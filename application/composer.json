@@ -1,4 +1,6 @@
 {
+  "name": "IdP Password Manager API",
+  "description": "Backend API for Identity Provider Password Management",
   "minimum-stability": "stable",
   "repositories": [
     {
