@@ -1,10 +1,9 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\helpers\Utils;
 use common\models\Method;
 use common\models\User;
-use yii\codeception\DbTestCase;
+use Sil\Codeception\TestCase\Test;
 
 use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\UserFixture;
@@ -17,13 +16,13 @@ use yii\web\ServerErrorHttpException;
  * @method User users($key)
  * @method Method methods($key)
  */
-class MethodTest extends DbTestCase
+class MethodTest extends Test
 {
-    public function fixtures()
+    public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'methods' => MethodFixture::className(),
+            'users' => UserFixture::class,
+            'methods' => MethodFixture::class,
         ];
     }
 
@@ -76,10 +75,9 @@ class MethodTest extends DbTestCase
          * use the email service for now.  */
         \Yii::$app->params['emailVerification']['useEmailService'] = false;
 
-        EmailUtils::removeEmailFiles();
         $user = $this->users('user1');
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
 
         $method = Method::createAndSendVerification(
             $user->id,
@@ -87,9 +85,9 @@ class MethodTest extends DbTestCase
             'unique-1461443608@email.com'
         );
 
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount());
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($method->verification_code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($method->value));
+        $this->assertEquals(1, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $method->verification_code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $method->value));
 
     }
 

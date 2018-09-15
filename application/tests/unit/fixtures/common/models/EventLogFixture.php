@@ -1,7 +1,7 @@
 <?php
 namespace tests\unit\fixtures\common\models;
 
-use yii\test\ActiveFixture;
+use Sil\yii\test\ActiveFixture;
 
 class EventLogFixture extends ActiveFixture
 {

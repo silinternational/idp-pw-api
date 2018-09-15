@@ -3,7 +3,7 @@ namespace tests\unit\common\models;
 
 use common\models\PasswordChangeLog;
 use common\models\User;
-use yii\codeception\DbTestCase;
+use Sil\Codeception\TestCase\Test;
 
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\UserFixture;
@@ -12,9 +12,9 @@ use tests\unit\fixtures\common\models\UserFixture;
  * Class PasswordChangeLogTest
  * @package tests\unit\common\models
  */
-class PasswordChangeLogTest extends DbTestCase
+class PasswordChangeLogTest extends Test
 {
-    public function fixtures()
+    public function _fixtures()
     {
         return [
             'users' => UserFixture::className(),
