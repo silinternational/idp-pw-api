@@ -15,6 +15,7 @@ use yii\web\ServerErrorHttpException;
  * @package tests\unit\common\models
  * @method User users($key)
  * @method Method methods($key)
+ * @property \Codeception\Module\Yii2 tester
  */
 class MethodTest extends Test
 {

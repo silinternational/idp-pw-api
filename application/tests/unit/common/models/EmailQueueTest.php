@@ -15,6 +15,7 @@ use Sil\Codeception\TestCase\Test;
  * @package tests\unit\common\models
  * @method User users($key)
  * @method EventLog eventLogs($key)
+ * @property \Codeception\Module\Yii2 tester
  */
 class EmailQueueTest extends Test
 {
@@ -88,16 +89,14 @@ class EmailQueueTest extends Test
 
     public function testSendOrQueueQueued()
     {
-        $this->markTestSkipped("Yii2 codeception test mailer doesn't allow override of transport to force failed send and queuing");
+        $this->markTestSkipped(
+            "Yii2 codeception test mailer doesn't allow override of transport to force failed send and queuing"
+        );
 
         /*
          * Override mailer config to force attempted connection to fake domain
          */
         \Yii::$app->mailer->useFileTransport = false;
-//        \Yii::$app->mailer->transport = [
-//            'class' => 'Swift_SmtpTransport',
-//            'host' => '127.0.0.1'
-//        ];
 
         $data = [
             'toAddress' => 'test@test.com',
@@ -119,15 +118,13 @@ class EmailQueueTest extends Test
 
     public function testSendAttemptsCountIncreases()
     {
-        $this->markTestSkipped("Yii2 codeception test mailer doesn't allow override of transport to force failed send and queuing");
+        $this->markTestSkipped(
+            "Yii2 codeception test mailer doesn't allow override of transport to force failed send and queuing"
+        );
         /*
          * Override mailer config to force attempted connection to fake domain
          */
         \Yii::$app->mailer->useFileTransport = false;
-//        \Yii::$app->mailer->transport = [
-//            'class' => 'Swift_SmtpTransport',
-//            'host' => '127.0.0.1'
-//        ];
 
         $data = [
             'toAddress' => 'test@test.com',

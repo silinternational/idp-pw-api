@@ -17,6 +17,7 @@ use yii\web\TooManyRequestsHttpException;
  * @method User users($key)
  * @method Method methods($key)
  * @method Reset resets($key)
+ * @property \Codeception\Module\Yii2 tester
  */
 class ResetTest extends Test
 {
