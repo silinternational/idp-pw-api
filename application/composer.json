@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=7.0",
     "yiisoft/yii2": "~2.0.15",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
@@ -30,13 +30,13 @@
     "fillup/fake-bower-assets": "2.0.9"
   },
   "require-dev": {
-    "yiisoft/yii2-codeception": "*",
     "yiisoft/yii2-debug": "*",
     "yiisoft/yii2-faker": "*",
     "roave/security-advisories": "dev-master",
-    "codeception/codeception": "^2.2",
+    "codeception/codeception": "~2.4.5",
     "codeception/specify": "0.*",
-    "codeception/verify": "0.*"
+    "codeception/verify": "0.*",
+    "silinternational/yii2-codeception": "dev-master"
   },
   "config": {
     "process-timeout": 1800,

@@ -5,12 +5,12 @@ use common\helpers\Utils;
 use common\models\Password;
 use common\models\User;
 use tests\unit\fixtures\common\models\UserFixture;
-use yii\codeception\TestCase;
+use Sil\Codeception\TestCase\Test;
 
-class PasswordTest extends TestCase
+class PasswordTest extends Test
 {
 
-    public function fixtures()
+    public function _fixtures()
     {
         return [
             'users' => UserFixture::className(),

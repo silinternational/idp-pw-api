@@ -10,7 +10,7 @@ use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use yii\codeception\DbTestCase;
+use Sil\Codeception\TestCase\Test;
 
 /**
  * Class UserTest
@@ -19,9 +19,9 @@ use yii\codeception\DbTestCase;
  * @method Method methods($key)
  * @method Reset resets($key)
  */
-class UserTest extends DbTestCase
+class UserTest extends Test
 {
-    public function fixtures()
+    public function _fixtures()
     {
         return [
             'users' => UserFixture::className(),

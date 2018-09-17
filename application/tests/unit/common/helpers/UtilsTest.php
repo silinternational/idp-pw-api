@@ -1,11 +1,11 @@
 <?php
 namespace tests\unit\common\helpers;
 
-use yii\codeception\TestCase;
+use Sil\Codeception\TestCase\Test;
 use common\helpers\Utils;
 use yii\web\Request;
 
-class UtilsTest extends TestCase
+class UtilsTest extends Test
 {
     public function testUidRegexGenerateRandomString()
     {

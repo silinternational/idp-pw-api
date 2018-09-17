@@ -1,55 +1,36 @@
 <?php
 namespace tests\helpers;
 
-use yii\helpers\FileHelper;
-
 class EmailUtils
 {
     /**
+     * @param \Codeception\Module\Yii2 $tester
      * @param string $uniqueContent
      * @return bool
+     * @throws
      */
-    public static function hasEmailFileBeenCreated($uniqueContent)
+    public static function hasEmailFileBeenCreated($tester, $uniqueContent)
     {
-        $path = self::getEmailFilesPath();
-        if ($path) {
-            $files = FileHelper::findFiles($path);
-            foreach ($files as $file) {
-                $contents = file_get_contents($file);
-                $contents = quoted_printable_decode($contents);
-                if (substr_count($contents, $uniqueContent) > 0) {
-                    return true;
-                }
+        try {
+            /** @var \yii\mail\MessageInterface[] $messages */
+            $messages = $tester->grabSentEmails();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        /** @var \yii\mail\MessageInterface $message */
+        foreach ($messages as $message) {
+            $contents = $message->toString();
+            if (substr_count($contents, $uniqueContent) > 0) {
+                return true;
             }
         }
 
         return false;
     }
 
-    public static function removeEmailFiles()
+    public static function getEmailFilesCount($tester)
     {
-        $path = self::getEmailFilesPath();
-        if ($path) {
-            $files = FileHelper::findFiles($path);
-            foreach ($files as $file) {
-                unlink($file);
-            }
-        }
-    }
-
-    public static function getEmailFilesPath()
-    {
-        return \Yii::getAlias('@runtime/mail');
-    }
-
-    public static function getEmailFilesCount()
-    {
-        $path = self::getEmailFilesPath();
-        if ($path) {
-            $files = FileHelper::findFiles($path);
-            return count($files);
-        }
-
-        return 0;
+        return count($tester->grabSentEmails());
     }
 }
