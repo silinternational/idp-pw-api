@@ -2,7 +2,7 @@
 namespace tests\unit\common\models;
 
 use common\models\PasswordChangeLog;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
+use common\components\Personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
@@ -106,7 +106,7 @@ class UserTest extends Test
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->expectException(\Sil\IdpPw\Common\Personnel\NotFoundException::class);
+        $this->expectException(\common\components\Personnel\NotFoundException::class);
         User::findOrCreate('doesnt_exist');
     }
 
@@ -165,7 +165,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $personnelData = $user->getPersonnelUser();
-        $this->assertInstanceOf('\Sil\IdpPw\Common\Personnel\PersonnelUser', $personnelData);
+        $this->assertInstanceOf('common\components\Personnel\PersonnelUser', $personnelData);
     }
 
     public function testSupervisor()

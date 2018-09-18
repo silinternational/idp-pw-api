@@ -1,13 +1,32 @@
 <?php
 namespace tests\mock\personnel;
 
-use Sil\IdpPw\Common\Personnel\PersonnelInterface;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
-use Sil\IdpPw\Common\Personnel\NotFoundException;
+use common\components\Personnel\PersonnelInterface;
+use common\components\Personnel\PersonnelUser;
+use common\components\Personnel\NotFoundException;
 use yii\base\Component as YiiComponent;
 
 class Component extends YiiComponent implements PersonnelInterface
 {
+    /**
+     * @var string
+     */
+    public $baseUrl;
+
+    /**
+     * @var string
+     */
+    public $accessToken;
+
+    /**
+     * @var boolean
+     */
+    public $assertValidBrokerIp = true;
+
+    /**
+     * @var IPBlock[]
+     */
+    public $validIpRanges = [];
 
     public function findByEmployeeId($employeeId)
     {

@@ -6,7 +6,7 @@ use common\models\EventLog;
 use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
-use Sil\IdpPw\Common\Personnel\NotFoundException;
+use common\components\Personnel\NotFoundException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
