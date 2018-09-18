@@ -16,10 +16,10 @@ api: upDb composer yiimigrate yiimigratelocal
 	docker-compose up -d api zxcvbn cron phpmyadmin
 
 composer:
-	docker-compose run --rm --user="0:0" cli composer install
+	docker-compose run --rm cli composer install
 
 composerupdate:
-	docker-compose run --rm --user="0:0" cli composer update
+	docker-compose run --rm cli composer update
 
 dockerpullall:
 	docker pull phpmyadmin/phpmyadmin:latest
@@ -68,4 +68,4 @@ bounce:
 
 clean:
 	docker-compose kill
-	docker system prune -f
+	docker-compose rm
