@@ -27,6 +27,7 @@ api:
         MAILER_USEFILES: true
         ALERTS_EMAIL_ENABLED: false
         ALERTS_EMAIL: alerts@nowhere.com
+        APP_ENV: test
     working_dir: /data
     command: /data/run-tests.sh
 
