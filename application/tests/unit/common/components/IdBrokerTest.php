@@ -39,9 +39,9 @@ class IdBrokerTest extends TestCase
                 $idBrokerClient->createUser($userInfo);
                 $e = null;
                 break;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // If broker not available, wait longer
-                if ($e instanceof GuzzleHttp\Command\Exception\CommandException) {
+                if ($e instanceof \GuzzleHttp\Command\Exception\CommandException) {
                     sleep(1);
                 
                     // if user already created, ensure it matches
