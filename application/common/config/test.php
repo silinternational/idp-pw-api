@@ -52,9 +52,9 @@ return [
                 'host' => null,
             ],
         ],
-        'personnel' => [
-            'class' => 'tests\mock\personnel\Component',
-        ],
+//        'personnel' => [
+//            'class' => 'tests\mock\personnel\Component',
+//        ],
         'auth' => [
             'class' => 'tests\mock\auth\Component',
         ],

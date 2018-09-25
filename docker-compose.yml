@@ -78,8 +78,6 @@ services:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
             APP_ENV: test
-            ID_BROKER_baseUrl: http://broker
-            ID_BROKER_accessToken: abc123
         command: ["/data/run-tests-api.sh"]
 
     cli:

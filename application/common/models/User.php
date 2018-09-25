@@ -1,7 +1,7 @@
 <?php
 namespace common\models;
 
-use Sil\IdpPw\Common\Auth\User as AuthUser;
+use common\components\auth\User as AuthUser;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use common\components\Personnel\NotFoundException;
 use common\components\Personnel\PersonnelInterface;
@@ -455,7 +455,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Get this user as an AuthUser object
-     * @return \Sil\IdpPw\Common\Auth\User
+     * @return \common\components\auth\User
      */
     public function getAuthUser()
     {

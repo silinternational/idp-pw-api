@@ -264,7 +264,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $authUser = $user->getAuthUser();
-        $this->assertInstanceOf(\Sil\IdpPw\Common\Auth\User::class, $authUser);
+        $this->assertInstanceOf(\common\components\auth\User::class, $authUser);
         $this->assertEquals($user->first_name, $authUser->firstName);
         $this->assertEquals($user->last_name, $authUser->lastName);
         $this->assertEquals($user->email, $authUser->email);

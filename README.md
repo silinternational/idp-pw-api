@@ -72,7 +72,7 @@ All components must extend from [\yii\base\Component](http://www.yiiframework.co
 We use SAML for authentication but this component can be replaced to support whatever method is needed. For example an auth component could be written to implement OAuth or use Google, etc.
 
 * Component ID: ```auth```
-* Implement interface: ```Sil\IdpPw\Common\Auth\AuthnInterface```
+* Implement interface: ```common\components\auth\AuthnInterface```
 * Example implementation: [idp-pw-api-auth-saml](https://github.com/silinternational/idp-pw-api-auth-saml)
 
 ### Password Store Component
