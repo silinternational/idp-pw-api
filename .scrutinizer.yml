@@ -166,7 +166,7 @@ build:
     tests:
         override:
             -
-                command: cp ./common/config/test.php ./common/config/local.php
+                command: cp ./common/config/scrutinizer.php ./common/config/local.php
             -
                 command: mkdir -p runtime/mail
             -
