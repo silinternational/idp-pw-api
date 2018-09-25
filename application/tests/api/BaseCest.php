@@ -1,6 +1,7 @@
 <?php
 
 use tests\api\FixtureHelper;
+use tests\helpers\BrokerFakes;
 
 class BaseCest
 {
@@ -14,6 +15,7 @@ class BaseCest
 
     public function _before(ApiTester $I)
     {
+        BrokerFakes::insertFakeUsers();
         $this->fixtureHelper->_beforeSuite();
     }
 

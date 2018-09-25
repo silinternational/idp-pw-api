@@ -19,6 +19,8 @@ api:
     links:
         - db
         - zxcvbn
+    depends_on:
+        - broker
     environment:
         MYSQL_HOST: db
         MYSQL_DATABASE: test
@@ -27,8 +29,50 @@ api:
         MAILER_USEFILES: true
         ALERTS_EMAIL_ENABLED: false
         ALERTS_EMAIL: alerts@nowhere.com
+        ID_BROKER_baseUrl: http://broker
+        ID_BROKER_accessToken: abc123
+        ID_BROKER_assertValidBrokerIp: false
+        ID_BROKER_validIpRanges: 127.0.0.1/32,192.168.65.1/32
     working_dir: /data
     command: /data/run-tests.sh
+
+brokerDb:
+    image: silintl/mariadb:latest
+    ports:
+    - "3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: r00tp@ss!
+        MYSQL_HOST: db
+        MYSQL_DATABASE: app
+        MYSQL_USER: user
+        MYSQL_PASSWORD: pass
+
+broker:
+    image: silintl/idp-id-broker:latest
+    depends_on:
+    - brokerDb
+    volumes:
+    - ./run-broker.sh:/data/run-broker.sh
+    working_dir: /data
+    environment:
+        EMAIL_SERVICE_accessToken: fake
+        EMAIL_SERVICE_assertValidIp: "false"
+        EMAIL_SERVICE_baseUrl: fake
+        EMAIL_SERVICE_validIpRanges: 10.0.0.0/128
+        IDP_NAME: idp1
+        MYSQL_HOST: brokerDb
+        MYSQL_DATABASE: app
+        MYSQL_USER: user
+        MYSQL_PASSWORD: pass
+        MYSQL_ROOT_PASSWORD: dummy-root-password
+        API_ACCESS_KEYS: abc123
+        HELP_CENTER_URL: https://example.com/#/help
+        PASSWORD_FORGOT_URL: https://example.com/#/forgot
+        PASSWORD_PROFILE_URL: https://example.com/#/profile
+        SUPPORT_EMAIL: support@example.com
+        EMAIL_SIGNATURE: Dummy Signature for Tests
+    command: whenavail brokerDb 3306 60 ./run-broker.sh
+
 
 
 

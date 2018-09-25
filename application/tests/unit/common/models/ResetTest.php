@@ -4,6 +4,7 @@ namespace tests\unit\common\models;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
+use tests\helpers\BrokerFakes;
 use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
@@ -21,6 +22,12 @@ use yii\web\TooManyRequestsHttpException;
  */
 class ResetTest extends Test
 {
+    public function _before()
+    {
+        BrokerFakes::insertFakeUsers();
+        parent::_before();
+    }
+
     public function _fixtures()
     {
         return [

@@ -6,6 +6,7 @@ use common\components\Personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
+use tests\helpers\BrokerFakes;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
@@ -21,6 +22,12 @@ use Sil\Codeception\TestCase\Test;
  */
 class UserTest extends Test
 {
+    public function _before()
+    {
+        BrokerFakes::insertFakeUsers();
+        parent::_before();
+    }
+
     public function _fixtures()
     {
         return [
