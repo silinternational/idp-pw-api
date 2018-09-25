@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../../../../vendor/autoload.php');
+namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
 
