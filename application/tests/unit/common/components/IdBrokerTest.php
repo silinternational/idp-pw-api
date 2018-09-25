@@ -63,19 +63,19 @@ class IdBrokerTest extends TestCase
     private function getMockReturnValue()
     {
        return [
-           "uuid" => "11111111-aaaa-1111-aaaa-111111111111",
-           "employee_id" => "11111",
-           "first_name" => "John",
-           "last_name" => "Smith",
-           "display_name" => "John Smith",
-           "username" => "john_smith",
-           "email" => "john_smith@example.com",
-           "active" => "yes",
-           "locked" => "no",
-           "password" => [
-               "created_utc" => "2017-05-24 14:04:51",
-               "expiration_utc" => "2018-05-24 14:04:51",
-               "grace_period_ends_utc" => "2018-06-23 14:04:51"
+           'uuid' => '11111111-aaaa-1111-aaaa-111111111111',
+           'employee_id' => '11111',
+           'first_name' => 'John',
+           'last_name' => 'Smith',
+           'display_name' => 'John Smith',
+           'username' => 'john_smith',
+           'email' => 'john_smith@example.com',
+           'active' => 'yes',
+           'locked' => 'no',
+           'password' => [
+               'created_utc' => '2017-05-24 14:04:51',
+               'expiration_utc' => '2018-05-24 14:04:51',
+               'grace_period_ends_utc' => '2018-06-23 14:04:51'
            ]
        ];
     }
@@ -108,14 +108,14 @@ class IdBrokerTest extends TestCase
                    ->method('callIdBrokerGetUser')
                    ->willReturn($mockReturnValue);
 
-        $brokerMock->baseUrl = "some.site.org";
-        $brokerMock->accessToken = "abc123";
+        $brokerMock->baseUrl = 'some.site.org';
+        $brokerMock->accessToken = 'abc123';
 
         $employeeId = '11111';
         $results = $brokerMock->findByEmployeeId($employeeId);
 
         $expected = $mockReturnValue['username'];
-        $msg = " *** Bad results for username";
+        $msg = ' *** Bad results for username';
         $this->assertEquals($expected, $results->username, $msg);
     }
 
