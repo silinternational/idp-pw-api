@@ -247,7 +247,6 @@ class Saml extends Component implements AuthnInterface
     /**
      * @param string $returnTo Where to have IdP send user after logout
      * @param null|\common\components\auth\User $user
-     * @return NoType
      * @throws RedirectException
      */
     public function logout($returnTo, AuthUser $user = null)
