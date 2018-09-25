@@ -16,9 +16,9 @@ class RedirectException extends \Exception
     /**
      * RedirectException constructor.
      * @param string $url
-     * @param string $message
-     * @param int $code
-     * @param \Exception $previous
+     * @param string|null $message
+     * @param int|null $code
+     * @param null|\Exception $previous
      */
     public function __construct($url, $message = null, $code = null, \Exception $previous = null)
     {
