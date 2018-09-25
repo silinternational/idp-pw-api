@@ -6,7 +6,7 @@ use common\components\Personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
-use tests\helpers\BrokerFakes;
+use tests\helpers\BrokerUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
@@ -24,7 +24,7 @@ class UserTest extends Test
 {
     public function _before()
     {
-        BrokerFakes::insertFakeUsers();
+        BrokerUtils::insertFakeUsers();
         parent::_before();
     }
 

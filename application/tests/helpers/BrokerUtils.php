@@ -3,7 +3,7 @@ namespace tests\helpers;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
-class BrokerFakes {
+class BrokerUtils {
 
     public static function insertFakeUsers()
     {
