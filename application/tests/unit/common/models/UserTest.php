@@ -2,10 +2,11 @@
 namespace tests\unit\common\models;
 
 use common\models\PasswordChangeLog;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
+use common\components\Personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
+use tests\helpers\BrokerUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
@@ -21,6 +22,12 @@ use Sil\Codeception\TestCase\Test;
  */
 class UserTest extends Test
 {
+    public function _before()
+    {
+        BrokerUtils::insertFakeUsers();
+        parent::_before();
+    }
+
     public function _fixtures()
     {
         return [
@@ -106,7 +113,7 @@ class UserTest extends Test
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->expectException(\Sil\IdpPw\Common\Personnel\NotFoundException::class);
+        $this->expectException(\common\components\Personnel\NotFoundException::class);
         User::findOrCreate('doesnt_exist');
     }
 
@@ -165,7 +172,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $personnelData = $user->getPersonnelUser();
-        $this->assertInstanceOf('\Sil\IdpPw\Common\Personnel\PersonnelUser', $personnelData);
+        $this->assertInstanceOf('common\components\Personnel\PersonnelUser', $personnelData);
     }
 
     public function testSupervisor()
@@ -257,7 +264,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $authUser = $user->getAuthUser();
-        $this->assertInstanceOf(\Sil\IdpPw\Common\Auth\User::class, $authUser);
+        $this->assertInstanceOf(\common\components\auth\User::class, $authUser);
         $this->assertEquals($user->first_name, $authUser->firstName);
         $this->assertEquals($user->last_name, $authUser->lastName);
         $this->assertEquals($user->email, $authUser->email);

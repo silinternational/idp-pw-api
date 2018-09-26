@@ -9,7 +9,7 @@ use tests\mock\auth\Component as AuthComponent;
 use tests\mock\phone\Component as PhoneComponent;
 
 $mainConfig = require(__DIR__ . '/../../../common/config/main.php');
-$testConfig = require(__DIR__ . '/../../../common/config/local.test.php');
+$testConfig = require(__DIR__ . '/../../../common/config/test.php');
 
 $config = [
     'id' => 'unit_tests_app',

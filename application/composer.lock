@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd162c86146fb5a4a54168ffb266e1d8",
+    "content-hash": "8a014969bedaa08aeb518171243b389d",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -424,12 +424,6 @@
                 "type": "git",
                 "url": "https://github.com/fillup/fake-bower-assets.git",
                 "reference": "9845d8e91eea0922fd6446ba99c68682c9f46a38"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fillup/fake-bower-assets/zipball/9845d8e91eea0922fd6446ba99c68682c9f46a38",
-                "reference": "9845d8e91eea0922fd6446ba99c68682c9f46a38",
-                "shasum": ""
             },
             "replace": {
                 "bower-asset/bootstrap": "3.3.6",
@@ -933,95 +927,17 @@
             "time": "2018-08-10T19:40:01+00:00"
         },
         {
-            "name": "monolog/monolog",
-            "version": "1.23.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "psr/log": "~1.0"
-            },
-            "provide": {
-                "psr/log-implementation": "1.0.0"
-            },
-            "require-dev": {
-                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
-                "doctrine/couchdb": "~1.0@dev",
-                "graylog2/gelf-php": "~1.0",
-                "jakub-onderka/php-parallel-lint": "0.9",
-                "php-amqplib/php-amqplib": "~2.4",
-                "php-console/php-console": "^3.1.3",
-                "phpunit/phpunit": "~4.5",
-                "phpunit/phpunit-mock-objects": "2.3.0",
-                "ruflin/elastica": ">=0.90 <3.0",
-                "sentry/sentry": "^0.13",
-                "swiftmailer/swiftmailer": "^5.3|^6.0"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-                "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-                "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "sentry/sentry": "Allow sending log messages to a Sentry server"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Monolog\\": "src/Monolog"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
-                }
-            ],
-            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-            "homepage": "http://github.com/Seldaek/monolog",
-            "keywords": [
-                "log",
-                "logging",
-                "psr-3"
-            ],
-            "time": "2017-06-19T01:22:40+00:00"
-        },
-        {
             "name": "nesbot/carbon",
-            "version": "1.33.0",
+            "version": "1.34.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "55667c1007a99e82030874b1bb14d24d07108413"
+                "reference": "1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/55667c1007a99e82030874b1bb14d24d07108413",
-                "reference": "55667c1007a99e82030874b1bb14d24d07108413",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33",
+                "reference": "1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33",
                 "shasum": ""
             },
             "require": {
@@ -1063,7 +979,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-08-07T08:39:47+00:00"
+            "time": "2018-09-20T19:36:25+00:00"
         },
         {
             "name": "phpspec/php-diff",
@@ -1340,12 +1256,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38"
+                "reference": "8605f2e74f558d3e349b219e58414b75b0adc30e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0abc14e0df387fe74b4b32e0b8647d1639256d38",
-                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8605f2e74f558d3e349b219e58414b75b0adc30e",
+                "reference": "8605f2e74f558d3e349b219e58414b75b0adc30e",
                 "shasum": ""
             },
             "conflict": {
@@ -1355,6 +1271,7 @@
                 "amphp/http": "<1.0.1",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
+                "brightlocal/phpwhois": "<=4.2.5",
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "cakephp/cakephp": ">=1.3,<1.3.18|>=2,<2.4.99|>=2.5,<2.5.99|>=2.6,<2.6.12|>=2.7,<2.7.6|>=3,<3.0.15|>=3.1,<3.1.4|>=3.4,<3.4.14|>=3.5,<3.5.17|>=3.6,<3.6.4",
                 "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
@@ -1366,6 +1283,7 @@
                 "contao/core-bundle": ">=4,<4.4.18|>=4.5,<4.5.8",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/newsletter-bundle": ">=4,<4.1",
+                "david-garcia/phpwhois": "<=4.3.1",
                 "doctrine/annotations": ">=1,<1.2.7",
                 "doctrine/cache": ">=1,<1.3.2|>=1.4,<1.4.2",
                 "doctrine/common": ">=2,<2.4.3|>=2.5,<2.5.1",
@@ -1380,6 +1298,7 @@
                 "drupal/drupal": ">=7,<7.59|>=8,<8.4.8|>=8.5,<8.5.3",
                 "erusev/parsedown": "<1.7",
                 "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.3|>=5.4,<5.4.11.3|>=2017.8,<2017.8.1.1|>=2017.12,<2017.12.2.1",
+                "ezyang/htmlpurifier": "<4.1.1",
                 "firebase/php-jwt": "<2",
                 "friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
                 "friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
@@ -1391,7 +1310,11 @@
                 "illuminate/cookie": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
                 "illuminate/database": ">=4,<4.0.99|>=4.1,<4.1.29",
                 "illuminate/encryption": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
+                "ivankristianto/phpwhois": "<=4.3",
+                "james-heinrich/getid3": "<1.9.9",
                 "joomla/session": "<1.3.1",
+                "jsmitty12/phpwhois": "<5.1",
+                "kazist/phpwhois": "<=4.2.6",
                 "kreait/firebase-php": ">=3.2,<3.8.1",
                 "laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
@@ -1401,6 +1324,7 @@
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
                 "onelogin/php-saml": "<2.10.4",
+                "openid/php-openid": "<2.3",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
                 "padraic/humbug_get_contents": "<1.1.2",
@@ -1409,21 +1333,25 @@
                 "paypal/merchant-sdk-php": "<3.12",
                 "phpmailer/phpmailer": ">=5,<5.2.24",
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
+                "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
                 "propel/propel": ">=2.0.0-alpha1,<=2.0.0-alpha7",
                 "propel/propel1": ">=1,<=1.7.1",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "sensiolabs/connect": "<4.2.3",
+                "serluck/phpwhois": "<=4.2.6",
                 "shopware/shopware": "<5.3.7",
                 "silverstripe/cms": ">=3,<=3.0.11|>=3.1,<3.1.11",
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
                 "silverstripe/framework": ">=3,<3.3",
                 "silverstripe/userforms": "<3",
+                "simple-updates/phpwhois": "<=1",
                 "simplesamlphp/saml2": "<1.10.6|>=2,<2.3.8|>=3,<3.1.4",
                 "simplesamlphp/simplesamlphp": "<1.15.2",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "slim/slim": "<2.6",
+                "smarty/smarty": "<3.1.33",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
                 "stormpath/sdk": ">=0,<9.9.99",
@@ -1450,8 +1378,10 @@
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
+                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+                "theonedemon/phpwhois": "<=4.2.5",
                 "titon/framework": ">=0,<9.9.99",
+                "truckersmp/phpwhois": "<=4.3.1",
                 "twig/twig": "<1.20",
                 "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.30|>=8,<8.7.17|>=9,<9.3.2",
                 "typo3/cms-core": ">=8,<8.7.17|>=9,<9.3.2",
@@ -1504,7 +1434,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-08-14T15:39:17+00:00"
+            "time": "2018-09-17T20:20:31+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -1654,47 +1584,6 @@
                 "php client"
             ],
             "time": "2018-07-17T17:58:22+00:00"
-        },
-        {
-            "name": "silinternational/idp-pw-api-auth-saml",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-auth-saml.git",
-                "reference": "18560f675bb68e18039a4a519d401b3c6c6e3d8d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-auth-saml/zipball/18560f675bb68e18039a4a519d401b3c6c6e3d8d",
-                "reference": "18560f675bb68e18039a4a519d401b3c6c6e3d8d",
-                "shasum": ""
-            },
-            "require": {
-                "monolog/monolog": "^1.23",
-                "php": ">=5.4.0",
-                "silinternational/idp-pw-api-common": "^1.0",
-                "silinternational/yii2-jsonsyslog": "*",
-                "simplesamlphp/saml2": "^3.1.5",
-                "yiisoft/yii2": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\Auth\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                }
-            ],
-            "description": "SAML Auth component for IdP PW API",
-            "time": "2018-04-30T14:01:25+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-common",
@@ -1870,50 +1759,6 @@
             "time": "2017-12-06T20:35:23+00:00"
         },
         {
-            "name": "silinternational/idp-pw-api-personnel-id-broker",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-personnel-id-broker.git",
-                "reference": "1e63a7dd68d9362c8057e018a9a3720d3c4638b9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-personnel-id-broker/zipball/1e63a7dd68d9362c8057e018a9a3720d3c4638b9",
-                "reference": "1e63a7dd68d9362c8057e018a9a3720d3c4638b9",
-                "shasum": ""
-            },
-            "require": {
-                "fillup/fake-bower-assets": "*",
-                "php": ">=7.0",
-                "silinternational/idp-id-broker-php-client": "^2.2.0",
-                "silinternational/idp-pw-api-common": "^1.0",
-                "yiisoft/yii2": "~2.0.15"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "6.2.*",
-                "roave/security-advisories": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\Common\\Personnel\\IdBroker\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                }
-            ],
-            "description": "IdP Password Management personnel component for ID Broker",
-            "time": "2018-07-30T20:17:17+00:00"
-        },
-        {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
             "version": "2.0.1",
             "source": {
@@ -2070,44 +1915,6 @@
                 "yii2"
             ],
             "time": "2017-08-29T20:30:16+00:00"
-        },
-        {
-            "name": "silinternational/yii2-jsonsyslog",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/yii2-jsonsyslog.git",
-                "reference": "d3a9326deff4ececbdbc84d0963185f5849c94cc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/yii2-jsonsyslog/zipball/d3a9326deff4ececbdbc84d0963185f5849c94cc",
-                "reference": "d3a9326deff4ececbdbc84d0963185f5849c94cc",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "yiisoft/yii2": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\JsonSyslog\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Yii2 log target for sending data to Syslog as a JSON encoded string",
-            "keywords": [
-                "json",
-                "log",
-                "syslog",
-                "yii2"
-            ],
-            "abandoned": "silinternational/yii2-json-log-targets",
-            "time": "2015-08-19T15:07:38+00:00"
         },
         {
             "name": "silinternational/zxcvbn-api-client-php",

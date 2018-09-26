@@ -4,6 +4,7 @@ use Sil\PhpEnv\Env;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonSyslogTarget;
 use Sil\Log\EmailTarget;
+use yii\helpers\ArrayHelper;
 
 /*
  * Get config settings from ENV vars or set defaults
@@ -205,12 +206,14 @@ return [
                 'encryption' => 'ssl',
             ],
         ],
-        'personnel' => [
-            // Define in local.php
-        ],
-        'auth' => [
-            // Define in local.php
-        ],
+        'personnel' => ArrayHelper::merge(
+            ['class' => 'common\components\Personnel\IdBroker'],
+            Env::getArrayFromPrefix('ID_BROKER_')
+        ),
+        'auth' => ArrayHelper::merge(
+            ['class' => 'common\components\auth\Saml'],
+            Env::getArrayFromPrefix('AUTH_SAML_')
+        ),
         'phone' => [
             // Define in local.php
         ],

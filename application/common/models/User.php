@@ -1,11 +1,11 @@
 <?php
 namespace common\models;
 
-use Sil\IdpPw\Common\Auth\User as AuthUser;
+use common\components\auth\User as AuthUser;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
-use Sil\IdpPw\Common\Personnel\NotFoundException;
-use Sil\IdpPw\Common\Personnel\PersonnelInterface;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
+use common\components\Personnel\NotFoundException;
+use common\components\Personnel\PersonnelInterface;
+use common\components\Personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -455,7 +455,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Get this user as an AuthUser object
-     * @return \Sil\IdpPw\Common\Auth\User
+     * @return \common\components\auth\User
      */
     public function getAuthUser()
     {
