@@ -1,9 +1,9 @@
 <?php
 
-use Sil\PhpEnv\Env;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonSyslogTarget;
 use Sil\Log\EmailTarget;
+use Sil\PhpEnv\Env;
 use yii\helpers\ArrayHelper;
 
 /*
@@ -207,7 +207,7 @@ return [
             ],
         ],
         'personnel' => ArrayHelper::merge(
-            ['class' => 'common\components\Personnel\IdBroker'],
+            ['class' => 'common\components\personnel\IdBroker'],
             Env::getArrayFromPrefix('ID_BROKER_')
         ),
         'auth' => ArrayHelper::merge(

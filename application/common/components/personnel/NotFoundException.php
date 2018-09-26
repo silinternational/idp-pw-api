@@ -1,5 +1,5 @@
 <?php
-namespace common\components\Personnel;
+namespace common\components\personnel;
 
 class NotFoundException extends \Exception
 {

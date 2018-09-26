@@ -3,8 +3,8 @@ namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
 
-use common\components\Personnel\NotFoundException;
-use common\components\Personnel\IdBroker;
+use common\components\personnel\NotFoundException;
+use common\components\personnel\IdBroker;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
 class IdBrokerTest extends TestCase
@@ -13,7 +13,8 @@ class IdBrokerTest extends TestCase
     public $baseUrl = 'http://broker';
     public $accessToken = 'abc123';
 
-    public function getConfig() {
+    public function getConfig()
+    {
         return [
             'baseUrl' => $this->baseUrl,
             'accessToken' => $this->accessToken,
@@ -62,28 +63,29 @@ class IdBrokerTest extends TestCase
 
     private function getMockReturnValue()
     {
-       return [
-           'uuid' => '11111111-aaaa-1111-aaaa-111111111111',
-           'employee_id' => '11111',
-           'first_name' => 'John',
-           'last_name' => 'Smith',
-           'display_name' => 'John Smith',
-           'username' => 'john_smith',
-           'email' => 'john_smith@example.com',
-           'active' => 'yes',
-           'locked' => 'no',
-           'password' => [
-               'created_utc' => '2017-05-24 14:04:51',
-               'expiration_utc' => '2018-05-24 14:04:51',
-               'grace_period_ends_utc' => '2018-06-23 14:04:51'
-           ]
-       ];
+        return [
+            'uuid' => '11111111-aaaa-1111-aaaa-111111111111',
+            'employee_id' => '11111',
+            'first_name' => 'John',
+            'last_name' => 'Smith',
+            'display_name' => 'John Smith',
+            'username' => 'john_smith',
+            'email' => 'john_smith@example.com',
+            'active' => 'yes',
+            'locked' => 'no',
+            'password' => [
+                'created_utc' => '2017-05-24 14:04:51',
+                'expiration_utc' => '2018-05-24 14:04:51',
+                'grace_period_ends_utc' => '2018-06-23 14:04:51'
+            ]
+        ];
     }
 
-    public function testReturnPersonnelUserFromResponse_Mocked() {
+    public function testReturnPersonnelUserFromResponse_Mocked()
+    {
         $mockReturnValue = $this->getMockReturnValue();
         unset($mockReturnValue['email']);
-        $brokerMock = $this->getMockBuilder('common\components\Personnel\IdBroker')
+        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
             ->setMethods(['callIdBrokerGetUser'])
             ->getMock();
         $brokerMock->expects($this->any())
@@ -101,12 +103,12 @@ class IdBrokerTest extends TestCase
     public function testFindByEmployeeId_Mocked()
     {
         $mockReturnValue = $this->getMockReturnValue();
-        $brokerMock = $this->getMockBuilder('common\components\Personnel\IdBroker')
-                           ->setMethods(['callIdBrokerGetUser'])
-                           ->getMock();
+        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
+                            ->setMethods(['callIdBrokerGetUser'])
+                            ->getMock();
         $brokerMock->expects($this->any())
-                   ->method('callIdBrokerGetUser')
-                   ->willReturn($mockReturnValue);
+                    ->method('callIdBrokerGetUser')
+                    ->willReturn($mockReturnValue);
 
         $brokerMock->baseUrl = 'some.site.org';
         $brokerMock->accessToken = 'abc123';

@@ -1,9 +1,10 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\models\PasswordChangeLog;
-use common\components\Personnel\PersonnelUser;
+use Sil\Codeception\TestCase\Test;
+use common\components\personnel\PersonnelUser;
 use common\models\Method;
+use common\models\PasswordChangeLog;
 use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
@@ -11,7 +12,6 @@ use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use Sil\Codeception\TestCase\Test;
 
 /**
  * Class UserTest
@@ -113,7 +113,7 @@ class UserTest extends Test
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->expectException(\common\components\Personnel\NotFoundException::class);
+        $this->expectException(\common\components\personnel\NotFoundException::class);
         User::findOrCreate('doesnt_exist');
     }
 
@@ -172,7 +172,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $personnelData = $user->getPersonnelUser();
-        $this->assertInstanceOf('common\components\Personnel\PersonnelUser', $personnelData);
+        $this->assertInstanceOf('common\components\personnel\PersonnelUser', $personnelData);
     }
 
     public function testSupervisor()

@@ -1,9 +1,9 @@
 <?php
 namespace tests\mock\personnel;
 
-use common\components\Personnel\PersonnelInterface;
-use common\components\Personnel\PersonnelUser;
-use common\components\Personnel\NotFoundException;
+use common\components\personnel\PersonnelInterface;
+use common\components\personnel\PersonnelUser;
+use common\components\personnel\NotFoundException;
 use yii\base\Component as YiiComponent;
 
 class Component extends YiiComponent implements PersonnelInterface
