@@ -1,9 +1,9 @@
 <?php
-namespace common\components\Personnel;
+namespace common\components\personnel;
 
 /**
  * Class PersonnelUser
- * @package common\components\Personnel
+ * @package common\components\personnel
  */
 class PersonnelUser
 {

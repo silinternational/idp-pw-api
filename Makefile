@@ -12,7 +12,7 @@ testapi: upTestDb brokerDb broker yiimigratetestDb yiimigratetestDblocal
 	docker-compose up -d zxcvbn
 	docker-compose run --rm apitest
 
-api: upDb composer yiimigrate yiimigratelocal
+api: upDb brokerDb broker composer yiimigrate yiimigratelocal
 	docker-compose up -d api zxcvbn cron phpmyadmin
 
 composer:
@@ -74,4 +74,4 @@ bounce:
 
 clean:
 	docker-compose kill
-	docker-compose rm
+	docker-compose rm -f

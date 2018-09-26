@@ -1,9 +1,9 @@
 <?php
-namespace common\components\Personnel;
+namespace common\components\personnel;
 
 /**
  * Interface PersonnelInterface
- * @package common\components\Personnel
+ * @package common\components\personnel
  */
 interface PersonnelInterface
 {

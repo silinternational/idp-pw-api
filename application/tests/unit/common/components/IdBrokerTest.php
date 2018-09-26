@@ -3,8 +3,8 @@ namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
 
-use common\components\Personnel\NotFoundException;
-use common\components\Personnel\IdBroker;
+use common\components\personnel\NotFoundException;
+use common\components\personnel\IdBroker;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
 class IdBrokerTest extends TestCase
@@ -83,7 +83,7 @@ class IdBrokerTest extends TestCase
     public function testReturnPersonnelUserFromResponse_Mocked() {
         $mockReturnValue = $this->getMockReturnValue();
         unset($mockReturnValue['email']);
-        $brokerMock = $this->getMockBuilder('common\components\Personnel\IdBroker')
+        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
             ->setMethods(['callIdBrokerGetUser'])
             ->getMock();
         $brokerMock->expects($this->any())
@@ -101,7 +101,7 @@ class IdBrokerTest extends TestCase
     public function testFindByEmployeeId_Mocked()
     {
         $mockReturnValue = $this->getMockReturnValue();
-        $brokerMock = $this->getMockBuilder('common\components\Personnel\IdBroker')
+        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
                            ->setMethods(['callIdBrokerGetUser'])
                            ->getMock();
         $brokerMock->expects($this->any())

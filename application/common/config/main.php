@@ -207,7 +207,7 @@ return [
             ],
         ],
         'personnel' => ArrayHelper::merge(
-            ['class' => 'common\components\Personnel\IdBroker'],
+            ['class' => 'common\components\personnel\IdBroker'],
             Env::getArrayFromPrefix('ID_BROKER_')
         ),
         'auth' => ArrayHelper::merge(

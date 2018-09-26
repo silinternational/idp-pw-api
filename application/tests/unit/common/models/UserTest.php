@@ -2,7 +2,7 @@
 namespace tests\unit\common\models;
 
 use common\models\PasswordChangeLog;
-use common\components\Personnel\PersonnelUser;
+use common\components\personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
@@ -113,7 +113,7 @@ class UserTest extends Test
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->expectException(\common\components\Personnel\NotFoundException::class);
+        $this->expectException(\common\components\personnel\NotFoundException::class);
         User::findOrCreate('doesnt_exist');
     }
 
@@ -172,7 +172,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $personnelData = $user->getPersonnelUser();
-        $this->assertInstanceOf('common\components\Personnel\PersonnelUser', $personnelData);
+        $this->assertInstanceOf('common\components\personnel\PersonnelUser', $personnelData);
     }
 
     public function testSupervisor()
