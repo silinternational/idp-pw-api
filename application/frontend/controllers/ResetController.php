@@ -1,12 +1,12 @@
 <?php
 namespace frontend\controllers;
 
+use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\EventLog;
 use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
-use common\components\personnel\NotFoundException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;

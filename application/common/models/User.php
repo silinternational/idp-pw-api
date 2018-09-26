@@ -1,8 +1,8 @@
 <?php
 namespace common\models;
 
-use common\components\auth\User as AuthUser;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
+use common\components\auth\User as AuthUser;
 use common\components\personnel\NotFoundException;
 use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;

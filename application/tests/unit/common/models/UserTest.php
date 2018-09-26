@@ -1,9 +1,10 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\models\PasswordChangeLog;
+use Sil\Codeception\TestCase\Test;
 use common\components\personnel\PersonnelUser;
 use common\models\Method;
+use common\models\PasswordChangeLog;
 use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
@@ -11,7 +12,6 @@ use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use Sil\Codeception\TestCase\Test;
 
 /**
  * Class UserTest
