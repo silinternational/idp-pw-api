@@ -210,25 +210,10 @@ return [
             ['class' => 'common\components\Personnel\IdBroker'],
             Env::getArrayFromPrefix('ID_BROKER_')
         ),
-        'auth' => [
-            'class' => common\components\auth\Saml::class,
-            'signRequest' => false,
-            'checkResponseSigning' => false,
-            'requireEncryptedAssertion' => false,
-            'idpCertificate' => '',
-            'spCertificate' => '',
-            'spPrivateKey' => '',
-            'entityId' => 'idp-pw-api.local',
-            'ssoUrl' => '',
-            'sloUrl' => '',
-            'attributeMap' => [
-                'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
-                'first_name' => ['field' => 'givenName', 'element' => 0 ],
-                'last_name' => ['field' => 'sn', 'element' => 0 ],
-                'email' => ['field' => 'mail', 'element' => 0 ],
-                'employee_id' => ['field' => 'gisEisPersonId', 'element' => 0],
-            ],
-        ],
+        'auth' => ArrayHelper::merge(
+            ['class' => 'common\components\auth\Saml'],
+            Env::getArrayFromPrefix('AUTH_SAML_')
+        ),
         'phone' => [
             // Define in local.php
         ],

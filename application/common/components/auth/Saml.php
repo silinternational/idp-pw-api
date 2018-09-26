@@ -75,7 +75,13 @@ class Saml extends Component implements AuthnInterface
      * Mapping configuration for IdP attributes to User
      * @var array
      */
-    public $attributeMap;
+    public $attributeMap = [
+        'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
+        'first_name' => ['field' => 'givenName', 'element' => 0 ],
+        'last_name' => ['field' => 'sn', 'element' => 0 ],
+        'email' => ['field' => 'mail', 'element' => 0 ],
+        'employee_id' => ['field' => 'employeeNumber', 'element' => 0],
+    ];
 
     public function init()
     {
