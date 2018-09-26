@@ -2,17 +2,17 @@
 namespace tests\mock\passwordstore;
 
 use common\helpers\Utils;
-use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
-use Sil\IdpPw\Common\PasswordStore\UserNotFoundException;
-use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
+use common\components\passwordStore\PasswordStoreInterface;
+use common\components\passwordStore\UserNotFoundException;
+use common\components\passwordStore\UserPasswordMeta;
 
 class Component implements PasswordStoreInterface
 {
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
-     * @return \Sil\IdpPw\Common\PasswordStore\UserPasswordMeta
-     * @throw \Sil\IdpPw\Common\PasswordStore\UserNotFoundException
+     * @return \common\components\passwordStore\UserPasswordMeta
+     * @throw \common\components\passwordStore\UserNotFoundException
      */
     public function getMeta($employeeId)
     {
@@ -23,7 +23,7 @@ class Component implements PasswordStoreInterface
      * Set user's password
      * @param string $employeeId
      * @param string $password
-     * @return \Sil\IdpPw\Common\PasswordStore\UserPasswordMeta
+     * @return \common\components\passwordStore\UserPasswordMeta
      * @throws \Exception
      */
     public function set($employeeId, $password)

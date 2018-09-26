@@ -79,7 +79,7 @@ We use SAML for authentication but this component can be replaced to support wha
 You can store your passwords wherever you like, whether it is LDAP, Active Directory, a database, or even Redis.
 
 * Component ID: ```passwordstore```
-* Implement interface: ```Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface```
+* Implement interface: ```common\components\passwordStore\PasswordStoreInterface```
 * Example implementation: [idp-pw-api-passwordstore-ldap](https://github.com/silinternational/idp-pw-api-passwordstore-ldap)
 
 ### Personnel Component
