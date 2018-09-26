@@ -1,9 +1,9 @@
 <?php
 
-use Sil\PhpEnv\Env;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonSyslogTarget;
 use Sil\Log\EmailTarget;
+use Sil\PhpEnv\Env;
 use yii\helpers\ArrayHelper;
 
 /*
