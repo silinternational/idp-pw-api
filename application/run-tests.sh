@@ -21,6 +21,7 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 #php5enmod xdebug
 
 # Run codeception tests
+whenavail broker 80 100 echo "broker ready"
 runny ./vendor/bin/codecept run unit
 
 ##### Disabled reporting of code coverage on 3/30 because scrutinizer isnt working with it yet
