@@ -167,12 +167,12 @@ class Ldap extends Component implements PasswordStoreInterface
          */
         if ( ! $this->matchesRequiredAttributes($user)) {
             try {
-                $message = 'Skipping password update in LDAP for user %s because they do not match required attributes: %s';
                 \Yii::warning(
                     [
                         'action' => 'set password in ldap store',
                         'message' => sprintf(
-                            $message,
+                            'Skipping password update in LDAP for user %s because they do not match ' .
+                                'required attributes: %s',
                             $logIdentifier,
                             json_encode($this->updatePasswordIfAttributeAndValue)
                         ),
