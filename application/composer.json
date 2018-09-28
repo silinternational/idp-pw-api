@@ -44,5 +44,11 @@
       "npm-asset-library": "vendor/npm",
       "bower-asset-library": "vendor/bower"
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "tests\\features\\": "tests/features/",
+      "common\\components\\passwordStore\\": "common/components/passwordStore/"
+    }
   }
 }

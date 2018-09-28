@@ -1,7 +1,7 @@
 start: api
 
 test:
-	make testunit && make testapi
+	make testunit && make testapi && make testbehat
 
 testunit: composer emailcron rmTestDb upTestDb brokerDb broker yiimigratetestDb yiimigratetestDblocal
 	docker-compose run emailcron whenavail emaildb 3306 100 ./yii migrate --interactive=0
@@ -11,6 +11,9 @@ testunit: composer emailcron rmTestDb upTestDb brokerDb broker yiimigratetestDb 
 testapi: upTestDb brokerDb broker yiimigratetestDb yiimigratetestDblocal
 	docker-compose up -d zxcvbn
 	docker-compose run --rm apitest
+
+testbehat:
+	docker-compose run --rm cli bash -c './vendor/bin/behat --config=tests/features/behat.yml --strict'
 
 api: upDb brokerDb broker composer yiimigrate yiimigratelocal
 	docker-compose up -d api zxcvbn cron phpmyadmin

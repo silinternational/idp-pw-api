@@ -24,6 +24,9 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 whenavail broker 80 100 echo "broker ready"
 runny ./vendor/bin/codecept run unit
 
+# Run behat tests
+runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
+
 ##### Disabled reporting of code coverage on 3/30 because scrutinizer isnt working with it yet
 
 #./vendor/bin/codecept run unit --coverage --coverage-xml

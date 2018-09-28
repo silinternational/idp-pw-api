@@ -1,0 +1,5 @@
+default:
+  suites:
+    multiple:
+      paths:    [ %paths.base%/../features/multiple.feature ]
+      contexts: [ tests\features\Context\MultipleContext ]
