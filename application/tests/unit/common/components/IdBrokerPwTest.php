@@ -1,9 +1,11 @@
 <?php
 namespace tests\unit\common\components;
 
-use PHPUnit\Framework\TestCase;
-use common\components\passwordStore\UserPasswordMeta;
+use common\components\passwordStore\AccountLockedException;
 use common\components\passwordStore\IdBroker;
+use common\components\passwordStore\UserNotFoundException;
+use common\components\passwordStore\UserPasswordMeta;
+use PHPUnit\Framework\TestCase;
 use Phake;
 
 class IdBrokerPwTest extends TestCase
@@ -53,7 +55,7 @@ class IdBrokerPwTest extends TestCase
             ],
         ]);
 
-        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
+        $this->expectException(UserNotFoundException::class);
 
         $idbroker->getMeta('badUserId');
     }
@@ -70,7 +72,7 @@ class IdBrokerPwTest extends TestCase
             ],
         ]);
 
-        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
+        $this->expectException(AccountLockedException::class);
 
         $userMeta = $idbroker->getMeta('10161');
     }
@@ -105,7 +107,7 @@ class IdBrokerPwTest extends TestCase
             ],
         ]);
 
-        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
+        $this->expectException(UserNotFoundException::class);
 
         $idbroker->set('badUserId', 'newPassword');
     }
@@ -122,7 +124,7 @@ class IdBrokerPwTest extends TestCase
             ],
         ]);
 
-        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
+        $this->expectException(AccountLockedException::class);
 
         $idbroker->set('10161', 'newPassword');
     }
