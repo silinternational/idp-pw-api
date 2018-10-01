@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb5bc5609565379a9c2bffae8acf440e",
+    "content-hash": "f3ed60d43d596173b72a1304e5085963",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -447,42 +447,6 @@
             ],
             "description": "Use Composer \"replace\" to fake out installing bower-asset dependencies that aren't really needed",
             "time": "2016-07-27T13:10:36+00:00"
-        },
-        {
-            "name": "fillup/nexmo",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fillup/nexmo.git",
-                "reference": "a4ba5510e5b3ed7d3dc9fc0a4eb44ddd4c466cce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fillup/nexmo/zipball/a4ba5510e5b3ed7d3dc9fc0a4eb44ddd4c466cce",
-                "reference": "a4ba5510e5b3ed7d3dc9fc0a4eb44ddd4c466cce",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle-services": "^1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Nexmo\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip.shipley@gmail.com"
-                }
-            ],
-            "description": "Nexmo API client built with Guzzle Web Service descriptions",
-            "time": "2017-04-28T18:14:49+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -1584,87 +1548,6 @@
             "time": "2018-07-17T17:58:22+00:00"
         },
         {
-            "name": "silinternational/idp-pw-api-common",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-common.git",
-                "reference": "68259ed6136da9cfcda4e6ba5d43db6a5049de87"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-common/zipball/68259ed6136da9cfcda4e6ba5d43db6a5049de87",
-                "reference": "68259ed6136da9cfcda4e6ba5d43db6a5049de87",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "5.2.9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\Common\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                }
-            ],
-            "description": "Common interfaces and bases classes for integration components.",
-            "time": "2016-07-29T18:12:19+00:00"
-        },
-        {
-            "name": "silinternational/idp-pw-api-phoneverification-nexmo",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-phoneverification-nexmo.git",
-                "reference": "efb0391e7c17aa85195f3dd07755bfd2ecb68fdc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-phoneverification-nexmo/zipball/efb0391e7c17aa85195f3dd07755bfd2ecb68fdc",
-                "reference": "efb0391e7c17aa85195f3dd07755bfd2ecb68fdc",
-                "shasum": ""
-            },
-            "require": {
-                "fillup/nexmo": "^2.0",
-                "php": ">=5.4.0",
-                "silinternational/idp-pw-api-common": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\PhoneVerification\\Nexmo\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                }
-            ],
-            "description": "PhoneVerification component for IdP PW API that uses Nexmo services for SMS/Voice verification",
-            "time": "2017-12-12T18:20:35+00:00"
-        },
-        {
             "name": "silinternational/php-env",
             "version": "2.1.1",
             "source": {
@@ -2601,16 +2484,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "6.0.11",
+            "version": "6.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "959266c59861bbceb7832ad7c200cd6375893a3c"
+                "reference": "de922c760dfddf8a33c4a066efcd0cd93576d957"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/959266c59861bbceb7832ad7c200cd6375893a3c",
-                "reference": "959266c59861bbceb7832ad7c200cd6375893a3c",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/de922c760dfddf8a33c4a066efcd0cd93576d957",
+                "reference": "de922c760dfddf8a33c4a066efcd0cd93576d957",
                 "shasum": ""
             },
             "require": {
@@ -2643,7 +2526,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2018-07-31T20:27:01+00:00"
+            "time": "2018-09-12T20:19:47+00:00"
         },
         {
             "name": "codeception/specify",
