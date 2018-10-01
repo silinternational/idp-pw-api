@@ -22,7 +22,8 @@
     "simplesamlphp/saml2": "^3.1.5",
     "google/recaptcha": "^1.1.2",
     "adldap2/adldap2": "dev-master",
-    "fillup/fake-bower-assets": "2.0.9"
+    "fillup/fake-bower-assets": "2.0.9",
+    "fillup/nexmo": "^2.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "*",
