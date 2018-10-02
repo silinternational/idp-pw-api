@@ -11,7 +11,7 @@ class VerifyTest extends TestCase
         $this->markTestIncomplete('Need a test double for Nexmo');
         $config = include __DIR__ . '/config.local.php';
         $client = $this->getClient();
-        $response = $client->send($config['number']);
+        $response = $client->send($config['number'], '1111');
         echo $response;
         $this->assertNotNull($response);
     }
