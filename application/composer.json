@@ -33,6 +33,9 @@
     "codeception/codeception": "~2.4.5",
     "codeception/specify": "0.*",
     "codeception/verify": "0.*",
+    "behat/behat": "^3.3",
+    "phpunit/phpunit": "^6.0",
+    "phake/phake": "^2.3",
     "silinternational/yii2-codeception": "dev-master"
   },
   "config": {
@@ -40,6 +43,12 @@
     "fxp-asset.installer-paths": {
       "npm-asset-library": "vendor/npm",
       "bower-asset-library": "vendor/bower"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "tests\\features\\": "tests/features/",
+      "common\\components\\passwordStore\\": "common/components/passwordStore/"
     }
   }
 }
