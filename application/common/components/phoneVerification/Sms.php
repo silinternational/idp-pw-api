@@ -52,7 +52,7 @@ class Sms extends Base implements PhoneVerificationInterface
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
-                $body = $response->json();
+                $body = json_decode($response->getBody());
                 throw new \Exception(
                     sprintf('Error: [%s] %s', $body['status'], $body['error-text']),
                     1460146928
