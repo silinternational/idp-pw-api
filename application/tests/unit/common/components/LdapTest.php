@@ -127,7 +127,7 @@ class LdapTest extends TestCase
 
         $this->expectException(AccountLockedException::class);
         $this->expectExceptionCode(1472740480);
-        $userMeta = $ldap->getMeta('10121');
+        $ldap->getMeta('10121');
     }
 
     public function testSetPasswordWithMatchingAttributeAndValue()
