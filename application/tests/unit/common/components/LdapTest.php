@@ -74,7 +74,7 @@ class LdapTest extends TestCase
         $user = $ldap->ldapProvider->search()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10131');
-        //die(var_dump($user->getAttributes()));
+
         foreach ($ldap->removeAttributesOnSetPassword as $attrName) {
             $this->assertFalse($user->hasAttribute($attrName));
         }

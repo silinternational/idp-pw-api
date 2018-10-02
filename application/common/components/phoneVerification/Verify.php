@@ -80,7 +80,7 @@ class Verify extends Base implements PhoneVerificationInterface
      * @param string $userProvided
      * @return boolean
      * @throws \Exception
-     * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
+     * @throws \common\components\phoneVerification\NotMatchException
      */
     public function verify($resetCode, $userProvided)
     {

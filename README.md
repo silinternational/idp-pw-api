@@ -93,7 +93,7 @@ The personnel component is used to look up informaton about users from your comp
 This component is used for performing phone based verification of users.
 
 * Component ID: ```phone```
-* Implement interface: ```Sil\IdpPw\Common\PhoneVerification\PhoneVerificationInterface```
+* Implement interface: ```common\components\phoneVerification\PhoneVerificationInterface```
 * Example implementation: [idp-pw-api-phoneverification-nexmo](https://github.com/silinternational/idp-pw-api-phoneverification-nexmo)
 
 The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging.
