@@ -3,7 +3,7 @@ namespace common\models;
 
 use common\helpers\Utils;
 use common\helpers\ZxcvbnPasswordValidator;
-use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
+use common\components\passwordStore\PasswordReuseException;
 use yii\base\Model;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -17,7 +17,7 @@ class Password extends Model
     /** @var  string */
     public $employeeId;
 
-    /** @var \Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface */
+    /** @var \common\components\passwordStore\PasswordStoreInterface */
     public $passwordStore;
 
     /** @var array */

@@ -88,7 +88,10 @@ class PasswordChangeLog extends PasswordChangeLogBase
                 'masked_value' => $maskedMethodValue,
                 'error' => $log->getFirstErrors(),
             ]);
-            throw new ServerErrorHttpException('Unable to log password change' . print_r($log->getFirstErrors(), true), 1470246318);
+            throw new ServerErrorHttpException(
+                'Unable to log password change' . print_r($log->getFirstErrors(), true),
+                1470246318
+            );
         }
 
     }

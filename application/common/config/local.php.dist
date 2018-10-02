@@ -77,7 +77,7 @@ return [
             'codeLength' => 4,
         ],
         'passwordStore' => ArrayHelper::merge(
-            ['class' => 'Sil\IdpPw\PasswordStore\IdBroker\IdBroker'],
+            ['class' => 'common\components\passwordStore\IdBroker'],
             Env::getArrayFromPrefix('ID_BROKER_')
         ),
     ],

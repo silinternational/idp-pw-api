@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a014969bedaa08aeb518171243b389d",
+    "content-hash": "01ba4427381f834c7aa0d04928e24d70",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -315,16 +315,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3"
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/54859fabea8b3beecbb1a282888d5c990036b9e3",
-                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
                 "shasum": ""
             },
             "require": {
@@ -368,7 +368,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-08-16T20:49:45+00:00"
+            "time": "2018-09-25T20:47:26+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1626,139 +1626,6 @@
             "time": "2016-07-29T18:12:19+00:00"
         },
         {
-            "name": "silinternational/idp-pw-api-passwordstore-id-broker",
-            "version": "3.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-passwordstore-id-broker.git",
-                "reference": "bf83c52228c98b348b28a2da59761fbc8fd61594"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-id-broker/zipball/bf83c52228c98b348b28a2da59761fbc8fd61594",
-                "reference": "bf83c52228c98b348b28a2da59761fbc8fd61594",
-                "shasum": ""
-            },
-            "require": {
-                "fillup/fake-bower-assets": "^2.0.9",
-                "php": ">=7.0.0",
-                "silinternational/idp-id-broker-php-client": "^2.4.0",
-                "silinternational/idp-pw-api-common": "^1.0"
-            },
-            "require-dev": {
-                "phake/phake": "^2.3",
-                "phpunit/phpunit": "^5.0",
-                "roave/security-advisories": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\PasswordStore\\IdBroker\\": "src/",
-                    "Sil\\IdpPw\\PasswordStore\\IdBroker\\tests\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                }
-            ],
-            "description": "Id Broker Password Store component for IdP PW API",
-            "time": "2017-12-06T19:47:13+00:00"
-        },
-        {
-            "name": "silinternational/idp-pw-api-passwordstore-ldap",
-            "version": "2.2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-passwordstore-ldap.git",
-                "reference": "28540f77de187ad79e5de5dcebfb309cf2a460b0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-ldap/zipball/28540f77de187ad79e5de5dcebfb309cf2a460b0",
-                "reference": "28540f77de187ad79e5de5dcebfb309cf2a460b0",
-                "shasum": ""
-            },
-            "require": {
-                "adldap2/adldap2": "dev-master",
-                "php": ">=7.0",
-                "roave/security-advisories": "dev-master",
-                "silinternational/idp-pw-api-common": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\PasswordStore\\Ldap\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip_shipley@sil.org"
-                }
-            ],
-            "description": "LDAP Password Store component for IdP PW API",
-            "time": "2017-12-09T21:45:45+00:00"
-        },
-        {
-            "name": "silinternational/idp-pw-api-passwordstore-multiple",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silinternational/idp-pw-api-passwordstore-multiple.git",
-                "reference": "e780df00ebeff2e5c2eb1b2fb027430aebf20148"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-pw-api-passwordstore-multiple/zipball/e780df00ebeff2e5c2eb1b2fb027430aebf20148",
-                "reference": "e780df00ebeff2e5c2eb1b2fb027430aebf20148",
-                "shasum": ""
-            },
-            "require": {
-                "fillup/fake-bower-assets": "^2.0.9",
-                "php": ">=7.0.0",
-                "roave/security-advisories": "dev-master",
-                "silinternational/idp-pw-api-common": "^1.0",
-                "yiisoft/yii2": "~2.0.0"
-            },
-            "require-dev": {
-                "behat/behat": "^3.3",
-                "phpunit/phpunit": "^6.0",
-                "silinternational/php-env": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sil\\IdpPw\\PasswordStore\\Multiple\\": "src/",
-                    "Sil\\IdpPw\\PasswordStore\\Multiple\\Behat\\": "features/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Henderson",
-                    "email": "matt_henderson@sil.org"
-                }
-            ],
-            "description": "Password store component for IdP PW API for using multiple backends.",
-            "time": "2017-12-06T20:35:23+00:00"
-        },
-        {
             "name": "silinternational/idp-pw-api-phoneverification-nexmo",
             "version": "2.0.1",
             "source": {
@@ -2412,21 +2279,21 @@
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-                "reference": "fd917fbe63b7ea796c52902143b83b98e65bfb73"
+                "reference": "09659a55959f9e64b8178d842b64a9ffae42b994"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/fd917fbe63b7ea796c52902143b83b98e65bfb73",
-                "reference": "fd917fbe63b7ea796c52902143b83b98e65bfb73",
+                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/09659a55959f9e64b8178d842b64a9ffae42b994",
+                "reference": "09659a55959f9e64b8178d842b64a9ffae42b994",
                 "shasum": ""
             },
             "require": {
                 "swiftmailer/swiftmailer": "~6.0",
-                "yiisoft/yii2": "~2.0.4"
+                "yiisoft/yii2": ">=2.0.4"
             },
             "type": "yii2-extension",
             "extra": {
@@ -2458,7 +2325,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2018-04-24T23:17:42+00:00"
+            "time": "2018-09-23T22:00:47+00:00"
         }
     ],
     "packages-dev": [
@@ -4943,16 +4810,16 @@
         },
         {
             "name": "yiisoft/yii2-debug",
-            "version": "2.0.13",
+            "version": "2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "b37f414959c2fafefb332020b42037cd17c1cb7f"
+                "reference": "dc5a4a8529de1a41dbb037dbabf1f3f93002f21d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/b37f414959c2fafefb332020b42037cd17c1cb7f",
-                "reference": "b37f414959c2fafefb332020b42037cd17c1cb7f",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/dc5a4a8529de1a41dbb037dbabf1f3f93002f21d",
+                "reference": "dc5a4a8529de1a41dbb037dbabf1f3f93002f21d",
                 "shasum": ""
             },
             "require": {
@@ -4967,7 +4834,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "yii\\debug\\": ""
+                    "yii\\debug\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4986,7 +4853,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2017-12-05T07:36:23+00:00"
+            "time": "2018-09-23T21:41:04+00:00"
         },
         {
             "name": "yiisoft/yii2-faker",
