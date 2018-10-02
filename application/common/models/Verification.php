@@ -2,7 +2,7 @@
 namespace common\models;
 
 use Sil\EmailService\Client\EmailServiceClient;
-use Sil\IdpPw\Common\PhoneVerification\NotMatchException;
+use common\components\phoneVerification\NotMatchException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
@@ -156,7 +156,7 @@ class Verification extends Model
      * @param string $userProvided
      * @return boolean
      * @throws \Exception
-     * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
+     * @throws \common\components\phoneVerification\NotMatchException
      */
     public static function isPhoneCodeValid($code, $userProvided)
     {
