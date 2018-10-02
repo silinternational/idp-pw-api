@@ -57,7 +57,7 @@ class LdapTest extends TestCase
         $user = $ldap->ldapProvider->search()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10131');
-        //die(print_r($user->getAttributes(), true));
+
         foreach ($ldap->removeAttributesOnSetPassword as $attrName) {
             $this->assertTrue($user->hasAttribute($attrName));
         }
@@ -94,7 +94,7 @@ class LdapTest extends TestCase
         $user = $ldap->ldapProvider->search()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
-        //die(print_r($user->getAttributes(), true));
+
         foreach ($ldap->updateAttributesOnSetPassword as $attrName) {
             $this->assertFalse($user->hasAttribute($attrName));
         }
@@ -111,7 +111,7 @@ class LdapTest extends TestCase
         $user = $ldap->ldapProvider->search()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
-        //die(var_dump($user->getAttributes()));
+
         foreach ($ldap->updateAttributesOnSetPassword as $attrName => $attrValue) {
             $this->assertTrue($user->hasAttribute($attrName) &&
                 $user->getAttribute($attrName) == [ 0 => $attrValue]);
