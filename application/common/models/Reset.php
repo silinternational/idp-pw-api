@@ -365,7 +365,7 @@ class Reset extends ResetBase
      * @throws \Exception
      * @throws ServerErrorHttpException
      * @throws TooManyRequestsHttpException
-     * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
+     * @throws common\components\phoneVerification\NotMatchException
      */
     public function isUserProvidedCodeCorrect($userProvided)
     {

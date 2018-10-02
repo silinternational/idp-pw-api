@@ -31,10 +31,10 @@ class UserTest extends Test
     public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'methods' => MethodFixture::className(),
-            'resets' => ResetFixture::className(),
-            'password_change_logs' => PasswordChangeLogFixture::className(),
+            'users' => UserFixture::class,
+            'methods' => MethodFixture::class,
+            'resets' => ResetFixture::class,
+            'password_change_logs' => PasswordChangeLogFixture::class,
         ];
     }
 

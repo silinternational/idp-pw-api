@@ -23,9 +23,9 @@ class EmailQueueTest extends Test
     public function _fixtures()
     {
         return [
-            'email_queues' => EmailQueueFixture::className(),
-            'event_log' => EventLogFixture::className(),
-            'users' => UserFixture::className(),
+            'email_queues' => EmailQueueFixture::class,
+            'event_log' => EventLogFixture::class,
+            'users' => UserFixture::class,
         ];
     }
 

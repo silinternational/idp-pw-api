@@ -1,8 +1,8 @@
 <?php
 namespace tests\mock\phone;
 
-use Sil\IdpPw\Common\PhoneVerification\PhoneVerificationInterface;
-use Sil\IdpPw\Common\PhoneVerification\NotMatchException;
+use common\components\phoneVerification\PhoneVerificationInterface;
+use common\components\phoneVerification\NotMatchException;
 use yii\base\Component as YiiComponent;
 
 class Component extends YiiComponent implements PhoneVerificationInterface
@@ -46,7 +46,7 @@ class Component extends YiiComponent implements PhoneVerificationInterface
      * @param string $userProvided
      * @return boolean
      * @throws \Exception
-     * @throws \Sil\IdpPw\Common\PhoneVerification\NotMatchException
+     * @throws common\components\phoneVerification\NotMatchException
      */
     public function verify($resetCode, $userProvided)
     {

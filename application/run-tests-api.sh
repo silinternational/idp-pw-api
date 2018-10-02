@@ -21,7 +21,8 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 runny apache2ctl start
 
 # Run codeception tests
-whenavail broker 80 100 echo "broker ready"
+#whenavail broker 80 100 echo "broker ready"
+sleep 10
 /data/vendor/bin/codecept run api -d
 
 

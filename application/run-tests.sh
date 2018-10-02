@@ -21,7 +21,8 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 #php5enmod xdebug
 
 # Run codeception tests
-whenavail broker 80 100 echo "broker ready"
+#whenavail broker 80 100 echo "broker ready"
+sleep 10
 runny ./vendor/bin/codecept run unit
 
 # Run behat tests

@@ -74,7 +74,7 @@ class IdBrokerPwTest extends TestCase
 
         $this->expectException(AccountLockedException::class);
 
-        $userMeta = $idbroker->getMeta('10161');
+        $idbroker->getMeta('10161');
     }
 
     public function testSetOk()

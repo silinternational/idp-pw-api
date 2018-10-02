@@ -86,7 +86,7 @@ class Password extends Model
                 'when' => function() { return $this->config['minSpecial']['enabled']; }
             ],
             [
-                'password', ZxcvbnPasswordValidator::className(), 'minScore' => $this->config['zxcvbn']['minScore'],
+                'password', ZxcvbnPasswordValidator::class, 'minScore' => $this->config['zxcvbn']['minScore'],
                 'skipOnError' => true,
                 'message' => \Yii::t(
                     'app',

@@ -54,7 +54,7 @@ return [
             ],
         ],
         'auth' => [
-            'class' => Sil\IdpPw\Auth\Saml::class,
+            'class' => common\components\auth\Saml::class,
             'signRequest' => false,
             'checkResponseSigning' => false,
             'requireEncryptedAssertion' => false,

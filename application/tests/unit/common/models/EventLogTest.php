@@ -20,8 +20,8 @@ class EventLogTest extends Test
     public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'event_logs' => EventLogFixture::className(),
+            'users' => UserFixture::class,
+            'event_logs' => EventLogFixture::class,
         ];
     }
 

@@ -21,14 +21,14 @@ class BaseRestController extends Controller
     {
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
-                'class' => CompositeAuth::className(),
+                'class' => CompositeAuth::class,
                 'authMethods' => [
-                    HttpBearerAuth::className(), // Use header ... Authorization: Bearer abc123
+                    HttpBearerAuth::class, // Use header ... Authorization: Bearer abc123
                 ],
                 'except' => ['options'],
             ],
             'corsFilter' => [
-                'class' => Cors::className(),
+                'class' => Cors::class,
                 'actions' => ['index', 'view', 'create', 'update', 'delete', 'options'],
                 'cors' => [
                     'Origin' => [\Yii::$app->params['uiCorsOrigin']],
@@ -41,7 +41,7 @@ class BaseRestController extends Controller
                 ]
             ],
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,

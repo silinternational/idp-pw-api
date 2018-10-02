@@ -20,7 +20,7 @@ class EmailUtils
 
         /** @var \yii\mail\MessageInterface $message */
         foreach ($messages as $message) {
-            $contents = $message->toString();
+            $contents = quoted_printable_decode($message->toString());
             if (substr_count($contents, $uniqueContent) > 0) {
                 return true;
             }
