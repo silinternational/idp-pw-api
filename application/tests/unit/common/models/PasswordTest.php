@@ -13,7 +13,7 @@ class PasswordTest extends Test
     public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
+            'users' => UserFixture::class,
         ];
     }
 

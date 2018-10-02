@@ -17,8 +17,8 @@ class PasswordChangeLogTest extends Test
     public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'password_change_logs' => PasswordChangeLogFixture::className(),
+            'users' => UserFixture::class,
+            'password_change_logs' => PasswordChangeLogFixture::class,
         ];
     }
 

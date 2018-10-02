@@ -31,9 +31,9 @@ class ResetTest extends Test
     public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'methods' => MethodFixture::className(),
-            'resets' => ResetFixture::className(),
+            'users' => UserFixture::class,
+            'methods' => MethodFixture::class,
+            'resets' => ResetFixture::class,
         ];
     }
 
