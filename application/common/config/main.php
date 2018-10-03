@@ -217,6 +217,10 @@ return [
         'phone' => [
             // Define in local.php
         ],
+        'passwordStore' => ArrayHelper::merge(
+            ['class' => 'common\components\passwordStore\IdBroker'],
+            Env::getArrayFromPrefix('ID_BROKER_')
+        ),
     ],
     'params' => [
         'idpName' => $idpName,
