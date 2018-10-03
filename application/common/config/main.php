@@ -208,7 +208,8 @@ return [
         ],
         'personnel' => ArrayHelper::merge(
             ['class' => 'common\components\personnel\IdBroker'],
-            Env::getArrayFromPrefix('ID_BROKER_')
+            Env::getArrayFromPrefix('ID_BROKER_'),
+            ['validIpRanges' => Env::getArray('ID_BROKER_validIpRanges')]
         ),
         'auth' => ArrayHelper::merge(
             ['class' => 'common\components\auth\Saml'],
