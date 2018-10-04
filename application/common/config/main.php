@@ -220,7 +220,8 @@ return [
         ],
         'passwordStore' => ArrayHelper::merge(
             ['class' => 'common\components\passwordStore\IdBroker'],
-            Env::getArrayFromPrefix('ID_BROKER_')
+            Env::getArrayFromPrefix('ID_BROKER_'),
+            ['validIpRanges' => Env::getArray('ID_BROKER_validIpRanges')]
         ),
     ],
     'params' => [
