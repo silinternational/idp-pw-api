@@ -21,7 +21,7 @@ class UserCest extends BaseCest
     public function test2(ApiTester $I)
     {
         $I->wantTo('check response when making GET request to /user/me with incorrect token');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(401);
     }
@@ -37,7 +37,7 @@ class UserCest extends BaseCest
     public function test4(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated POST request to /user/me');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendPOST('/user/me');
         $I->seeResponseCodeIs(401);
     }
@@ -53,7 +53,7 @@ class UserCest extends BaseCest
     public function test6(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated DELETE request to /user/me');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendDELETE('/user/me');
         $I->seeResponseCodeIs(401);
     }
@@ -69,7 +69,7 @@ class UserCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PATCH request to /user/me');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendPATCH('/user/me');
         $I->seeResponseCodeIs(401);
     }
@@ -85,7 +85,7 @@ class UserCest extends BaseCest
     public function test10(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated OPTIONS request to /user/me');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendOPTIONS('/user/me');
         $I->seeResponseCodeIs(200);
     }

@@ -14,7 +14,7 @@ class PasswordCest extends BaseCest
     public function test2(ApiTester $I)
     {
         $I->wantTo('check response when making GET request with incorrect token for obtaining info about password');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendGET('/password');
         $I->seeResponseCodeIs(401);
     }
@@ -42,7 +42,7 @@ class PasswordCest extends BaseCest
     public function test5(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated POST request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendPOST('/password');
         $I->seeResponseCodeIs(401);
     }
@@ -66,7 +66,7 @@ class PasswordCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated DELETE request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendDELETE('/password');
         $I->seeResponseCodeIs(401);
     }
@@ -74,7 +74,7 @@ class PasswordCest extends BaseCest
     public function test9(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PATCH request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendPATCH('/password');
         $I->seeResponseCodeIs(401);
     }
@@ -90,7 +90,7 @@ class PasswordCest extends BaseCest
     public function test11(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated OPTIONS request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer user11');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
         $I->sendOPTIONS('/password');
         $I->seeResponseCodeIs(200);
     }
