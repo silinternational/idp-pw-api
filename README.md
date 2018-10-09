@@ -94,6 +94,6 @@ This component is used for performing phone based verification of users.
 
 * Component ID: ```phone```
 * Implement interface: ```common\components\phoneVerification\PhoneVerificationInterface```
-* [Example implementation](./common/components/Base.php)
+* [Example implementation](./common/components/phoneVerification/Base.php)
 
 The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging.
