@@ -15,6 +15,7 @@ return [
         'pw_expires' => null,
         'access_token' => Utils::getAccessTokenHash('user1'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
+        'auth_type' => 'login',
     ],
     'user2' => [
         'id' => 2,
@@ -30,6 +31,7 @@ return [
         'pw_expires' => null,
         'access_token' => Utils::getAccessTokenHash('user2'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
+        'auth_type' => 'login',
     ],
     'user3' => [
         'id' => 3,
@@ -45,6 +47,7 @@ return [
         'pw_expires' => null,
         'access_token' => Utils::getAccessTokenHash('user3'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
+        'auth_type' => 'login',
     ],
     'user4' => [
         'id' => 4,
@@ -59,4 +62,20 @@ return [
         'pw_last_changed' => null,
         'pw_expires' => null,
     ],
+    'user5' => [
+        'id' => 5,
+        'uid' => '55555555555555555555555555555555',
+        'employee_id' => '5',
+        'first_name' => 'User',
+        'last_name' => 'Five',
+        'idp_username' => 'user_five',
+        'email' => 'user_five@organization.org',
+        'created' => '2016-02-29 11:58:00',
+        'last_login' => null,
+        'pw_last_changed' => null,
+        'pw_expires' => null,
+        'access_token' => Utils::getAccessTokenHash('user5'),
+        'access_token_expiration' => Utils::getDatetime(time() + 1800),
+        'auth_type' => 'reset',
+    ]
 ];
