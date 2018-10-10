@@ -61,9 +61,5 @@ return [
             'brand' => 'Verification',
             'from' => '',
         ],
-        'passwordStore' => ArrayHelper::merge(
-            ['class' => 'common\components\passwordStore\IdBroker'],
-            Env::getArrayFromPrefix('ID_BROKER_')
-        ),
     ],
 ];
