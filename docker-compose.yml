@@ -59,6 +59,10 @@ services:
         env_file:
             - ./common.env
             - ./local.env
+        environment:
+            AUTH_SAML_idpCertificate:
+            AUTH_SAML_spCertificate:
+            AUTH_SAML_spPrivateKey:
         command: /data/run-cron.sh
 
     apitest:

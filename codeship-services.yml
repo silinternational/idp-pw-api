@@ -16,10 +16,9 @@ api:
         image: silintl/idp-pw-api
         dockerfile_path: ./Dockerfile
         cached: true
-    links:
+    depends_on:
         - db
         - zxcvbn
-    depends_on:
         - broker
     environment:
         MYSQL_HOST: db
