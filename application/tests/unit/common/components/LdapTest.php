@@ -239,7 +239,7 @@ class LdapTest extends TestCase
     public function getClient()
     {
         $ldap = new Ldap();
-        $ldap->host = '127.0.0.1';
+        $ldap->host = 'ldap';
         $ldap->port = 389;
         $ldap->baseDn = 'ou=gis_affiliated_person,dc=acme,dc=org';
         $ldap->adminUsername = 'cn=Manager,dc=acme,dc=org';
