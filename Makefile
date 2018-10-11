@@ -73,6 +73,8 @@ ldap:
 	docker-compose up -d ldap
 
 ldapload:
+	docker-compose kill ldap
+	docker-compose rm -f ldap
 	docker-compose run --rm ldapload
 
 bounce:

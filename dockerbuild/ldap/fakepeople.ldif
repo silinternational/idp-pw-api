@@ -200,6 +200,7 @@ gisAddressLine1: Zur Habrouse 25
 gisCurrentAssignLocation: Germany
 gisRetirementDate: 20141231
 mail: noaddress_MANDY_SMITH@bounce.acme.org
+pwdAccountLockedTime: 000001010000Z
 
 dn: cn=TESS_WHITE,ou=gis_affiliated_person,dc=acme,dc=org
 gisContainer: gis_affiliated_person
@@ -306,6 +307,7 @@ gisCity: Waxhaw
 st: NC
 gisStateProvinceCounty: NC
 gisCountry: United States
+gisCurrentAsgnEntityCode: USA
 postalCode: 28173
 gisPostalCode: 28173
 gisCurrentAssignPartnerOrg: Workers International
