@@ -54,7 +54,7 @@ class LdapTest extends TestCase
         foreach ($ldap->removeAttributesOnSetPassword as $attrName) {
             $user->setAttribute($attrName, 'anything');
             $this->assertTrue(
-                $user->hasAttribute($attrName), "Attribute '$attrName' not found."
+                $user->hasAttribute($attrName), "Attribute '{$attrName}' not found."
             );
         }
 
