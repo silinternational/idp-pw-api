@@ -190,7 +190,7 @@ services:
         depends_on:
         - ldap
         working_dir: /data
-        command: bash -c "/data/load_ldap.sh"
+        command: ./load_ldap.sh
 
 networks:
     default:
