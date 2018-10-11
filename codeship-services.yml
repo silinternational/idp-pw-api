@@ -20,7 +20,7 @@ api:
         - db
         - zxcvbn
         - broker
-        - ldap
+        - ldapload
     environment:
         MYSQL_HOST: db
         MYSQL_DATABASE: test
@@ -77,7 +77,7 @@ ldap:
     build: ./dockerbuild/ldap
     container_name: ldap
     ports:
-    - "389:389"
+    - "389"
     working_dir: /data
     environment:
         DEBUG_LEVEL: 320
@@ -88,4 +88,4 @@ ldapload:
     depends_on:
     - ldap
     working_dir: /data
-    command: bash -c "/data/load_ldap.sh"
+    command: ./load_ldap.sh
