@@ -79,8 +79,8 @@ ldap:
     ports:
     - "389:389"
     working_dir: /data
-    env_file:
-    - ./local.env
+    environment:
+        DEBUG_LEVEL: 320
 
 ldapload:
     build: ./dockerbuild/ldap
