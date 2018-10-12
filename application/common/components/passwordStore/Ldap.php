@@ -2,8 +2,9 @@
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
-use Adldap\Connections\Provider;
-use Adldap\Exceptions\Auth\BindException;
+use Adldap\Auth\BindException;
+use Adldap\Configuration\DomainConfiguration;
+use Adldap\Configuration\ConfigurationException;
 use Adldap\Schemas\OpenLDAP;
 use yii\base\Component;
 
@@ -90,26 +91,19 @@ class Ldap extends Component implements PasswordStoreInterface
         /*
          * Initialize provider with configuration
          */
-        $schema = new OpenLDAP();
-        $this->ldapProvider = new Provider([
+        $this->ldapClient = new Adldap();
+        $this->ldapClient->addProvider([
             'base_dn' => $this->baseDn,
-            'domain_controllers' => [$this->host],
+            'hosts' => [$this->host],
             'port' => $this->port,
-            'admin_username' => $this->adminUsername,
-            'admin_password' => $this->adminPassword,
+            'username' => $this->adminUsername,
+            'password' => $this->adminPassword,
             'use_ssl' => $this->useSsl,
             'use_tls' => $this->useTls,
-        ], null, $schema);
+            'schema' => OpenLDAP::class,
+        ]);
 
-        $this->ldapClient = new Adldap();
-        $this->ldapClient->addProvider('default', $this->ldapProvider);
-
-        try {
-            $this->ldapClient->connect('default');
-            $this->ldapProvider->auth()->bindAsAdministrator();
-        } catch (BindException $e) {
-            throw $e;
-        }
+        $this->ldapProvider = $this->ldapClient->connect();
     }
 
     /**
@@ -334,16 +328,16 @@ class Ldap extends Component implements PasswordStoreInterface
         if ( ! empty($this->userAccountDisabledAttribute)) {
             $criteria[] = $this->userAccountDisabledAttribute;
         }
-        if ( is_array($this->updateAttributesOnSetPassword)) {
+        if (is_array($this->updateAttributesOnSetPassword)) {
             $criteria = array_merge(
                 $criteria,
                 array_keys($this->updateAttributesOnSetPassword)
             );
         }
-        if ( is_array($this->removeAttributesOnSetPassword)) {
+        if (is_array($this->removeAttributesOnSetPassword)) {
             $criteria = array_merge($criteria, $this->removeAttributesOnSetPassword);
         }
-        if ( is_array($this->updatePasswordIfAttributeAndValue)) {
+        if (is_array($this->updatePasswordIfAttributeAndValue)) {
             foreach ($this->updatePasswordIfAttributeAndValue as $key => $value) {
                 $criteria[] = $key;
             }
@@ -368,7 +362,11 @@ class Ldap extends Component implements PasswordStoreInterface
                 ->select($criteria)
                 ->findByOrFail($this->employeeIdAttribute, $employeeId);
         } catch (\Exception $e) {
-            throw new UserNotFoundException('User not found', 1463493653, $e);
+            throw new UserNotFoundException(
+                sprintf("User %s not found in %s", $employeeId, $this->employeeIdAttribute),
+                1463493653,
+                $e
+            );
         }
 
         return $user;
