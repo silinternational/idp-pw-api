@@ -184,55 +184,18 @@ class Ldap extends Component implements PasswordStoreInterface
             return $this->getMeta($employeeId);
         }
 
-        /*
-         * Make sure user is not disabled
-         */
         $this->assertUserNotDisabled($user);
 
-
-        /*
-         * Update password
-         */
-        try{
-            $user->updateAttribute($this->userPasswordAttribute, $password);
-        } catch (\Exception $e) {
-            /*
-             * Check if failure is due to constraint violation
-             */
-            $error = strtolower($e->getMessage());
-            if (substr_count($error, 'constraint violation') > 0) {
-                throw new PasswordReuseException(
-                    'Unable to change password. If this password has been used before please use something different.',
-                    1464018255,
-                    $e
-                );
-            }
-        }
+        $this->updatePassword($user, $password);
 
         /*
          * Reload user after password change
          */
         $user = $this->findUser($employeeId);
 
-        /*
-         * Remove any attributes that should be removed after changing password
-         */
-        foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
-            if($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
-                $user->deleteAttribute($removeAttr);
-            }
-        }
+        $this->removeAttributesAfterNewPassword($user);
 
-        /*
-         * Update flag attributes after changing password
-         */
-        foreach ($this->updateAttributesOnSetPassword as $key => $value) {
-            if ($user->hasAttribute($key) || $user->hasAttribute(strtolower($key))) {
-                $user->updateAttribute($key, $value);
-            } else {
-                $user->createAttribute($key, $value);
-            }
-        }
+        $this->updateAttributesAfterNewPassword($user);
 
         /*
          * Save changes
@@ -259,6 +222,56 @@ class Ldap extends Component implements PasswordStoreInterface
         }
 
         return $this->getMeta($employeeId);
+    }
+
+    /**
+     * @param \Adldap\Models\Entry $user
+     * @param string $password
+     * @throws PasswordReuseException
+     */
+    protected function updatePassword($user, $password)
+    {
+        try {
+            $user->updateAttribute($this->userPasswordAttribute, $password);
+        } catch (\Exception $e) {
+            /*
+             * Check if failure is due to constraint violation
+             */
+            $error = strtolower($e->getMessage());
+            if (substr_count($error, 'constraint violation') > 0) {
+                throw new PasswordReuseException(
+                    'Unable to change password. If this password has been used before please use something different.',
+                    1464018255,
+                    $e
+                );
+            }
+        }
+    }
+
+    /**
+     * @param \Adldap\Models\Entry $user
+     */
+    protected function removeAttributesAfterNewPassword($user)
+    {
+        foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
+            if ($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
+                $user->deleteAttribute($removeAttr);
+            }
+        }
+    }
+
+    /**
+     * @param \Adldap\Models\Entry $user
+     */
+    protected function updateAttributesAfterNewPassword($user)
+    {
+        foreach ($this->updateAttributesOnSetPassword as $key => $value) {
+            if ($user->hasAttribute($key) || $user->hasAttribute(strtolower($key))) {
+                $user->updateAttribute($key, $value);
+            } else {
+                $user->createAttribute($key, $value);
+            }
+        }
     }
 
     /**
