@@ -108,7 +108,7 @@ class LdapTest extends TestCase
 
         foreach ($ldap->updateAttributesOnSetPassword as $attrName => $attrValue) {
             $this->assertTrue($user->hasAttribute($attrName) &&
-                $user->getAttribute($attrName) == [ 0 => $attrValue]);
+                $user->getAttribute($attrName) == [0 => $attrValue]);
         }
 
     }

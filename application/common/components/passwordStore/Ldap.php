@@ -2,9 +2,6 @@
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
-use Adldap\Auth\BindException;
-use Adldap\Configuration\DomainConfiguration;
-use Adldap\Configuration\ConfigurationException;
 use Adldap\Schemas\OpenLDAP;
 use yii\base\Component;
 
@@ -79,7 +76,6 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * Connect and bind to ldap server
-     * @throws \Adldap\Exceptions\Auth\BindException
      */
     public function connect()
     {
@@ -109,8 +105,6 @@ class Ldap extends Component implements PasswordStoreInterface
     /**
      * @param string $employeeId
      * @return \common\components\passwordStore\UserPasswordMeta
-     * @throws \Exception
-     * @throws \common\components\passwordStore\UserNotFoundException
      */
     public function getMeta($employeeId)
     {
@@ -221,7 +215,7 @@ class Ldap extends Component implements PasswordStoreInterface
     /**
      * @param \Adldap\Models\Entry $user
      * @param string $password
-     * @throws PasswordReuseException
+     * @throws \common\components\passwordStore\PasswordReuseException
      */
     protected function updatePassword($user, $password)
     {
@@ -299,7 +293,7 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * @param \Adldap\Models\Entry $user
-     * @throws AccountLockedException
+     * @throws \common\components\passwordStore\AccountLockedException
      */
     public function assertUserNotDisabled($user)
     {
@@ -349,7 +343,7 @@ class Ldap extends Component implements PasswordStoreInterface
     /**
      * @param string $employeeId
      * @return \Adldap\Models\Entry
-     * @throws UserNotFoundException
+     * @throws \common\components\passwordStore\UserNotFoundException
      */
     public function findUser($employeeId)
     {
@@ -363,7 +357,7 @@ class Ldap extends Component implements PasswordStoreInterface
                 ->findByOrFail($this->employeeIdAttribute, $employeeId);
         } catch (\Exception $e) {
             throw new UserNotFoundException(
-                sprintf("User %s not found in %s", $employeeId, $this->employeeIdAttribute),
+                sprintf('User %s not found in %s', $employeeId, $this->employeeIdAttribute),
                 1463493653,
                 $e
             );
@@ -371,5 +365,4 @@ class Ldap extends Component implements PasswordStoreInterface
 
         return $user;
     }
-
 }
