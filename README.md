@@ -80,7 +80,7 @@ You can store your passwords wherever you like, whether it is LDAP, Active Direc
 
 * Component ID: ```passwordstore```
 * Implement interface: ```common\components\passwordStore\PasswordStoreInterface```
-* [Example implementation](application/common/common/components/passwordStore/Ldap.php)
+* [Example implementation](application/common/components/passwordStore/Ldap.php)
 
 ### Personnel Component
 The personnel component is used to look up informaton about users from your company's personnel system. This includes verifying that they are an active employee, getting information about them like name, email, employee id, whether they have a supervisor and what their supervisors email address is. If the personnel system is aware of spouses it can also provide the spouse's email address.
