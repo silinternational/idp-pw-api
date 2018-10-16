@@ -7,6 +7,7 @@ nbproject/
 
 # local config files
 local.php
+local.php.backup
 local.env
 *.local.env
 *.aes
