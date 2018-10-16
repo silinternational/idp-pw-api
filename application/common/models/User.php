@@ -68,7 +68,8 @@ class User extends UserBase implements IdentityInterface
             'email',
             'password_meta' => function($model) {
                 return $model->getPasswordMeta();
-            }
+            },
+            'auth_type'
         ];
     }
 
@@ -587,5 +588,10 @@ class User extends UserBase implements IdentityInterface
         }
 
         return $accessToken;
+    }
+
+    public function isAuthScopeFull()
+    {
+        return $this->auth_type === self::AUTH_TYPE_LOGIN;
     }
 }

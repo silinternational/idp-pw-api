@@ -29,7 +29,10 @@ class MethodController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function () {
+                            $user = \Yii::$app->user->identity;
+                            return ($user->isAuthScopeFull());
+                        }
                     ],
                 ]
             ]
