@@ -27,7 +27,7 @@ class MfaController extends BaseRestController
                         'allow' => true,
                         'matchCallback' => function () {
                             $user = \Yii::$app->user->identity;
-                            return ( $user->isAuthScopeFull());
+                            return $user->isAuthScopeFull();
                         }
                     ],
                 ]
