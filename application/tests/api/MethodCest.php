@@ -68,6 +68,14 @@ class MethodCest extends BaseCest
         ]);
     }
 
+    public function test62(ApiTester $I)
+    {
+        $I->wantTo('check response for authenticated GET request to method for a user with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendGET('/method');
+        $I->seeResponseCodeIs(403);
+    }
+
     public function test7(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated POST request for creating a new method');
@@ -95,6 +103,14 @@ class MethodCest extends BaseCest
         $I->seeResponseCodeIs(409);
     }
 
+    public function test84(ApiTester $I)
+    {
+        $I->wantTo('check response for authenticated POST request to method for a user with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendPOST('/method',['type'=>'email','value'=>'email@example.com']);
+        $I->seeResponseCodeIs(403);
+    }
+
     public function test9(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated GET request to obtain a method');
@@ -113,6 +129,14 @@ class MethodCest extends BaseCest
             'type' => "phone",
             'value' => "1,1234567890"
         ]);
+    }
+
+    public function test102(ApiTester $I)
+    {
+        $I->wantTo('check response for authenticated GET request to method/{uid} for a user with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendGET('/method/55555555555555555555555555555555');
+        $I->seeResponseCodeIs(403);
     }
 
     public function test11(ApiTester $I)
@@ -205,7 +229,7 @@ class MethodCest extends BaseCest
 
     public function test157(ApiTester $I)
     {
-        $I->wantTo('check response when making multiple authenticated PUT request with invalid code and unexpired verification time when tyring to update a method');
+        $I->wantTo('check response when making multiple authenticated PUT request with invalid code and unexpired verification time when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
@@ -231,6 +255,14 @@ class MethodCest extends BaseCest
         $I->seeResponseCodeIs(429);
     }
 
+    public function test158(ApiTester $I)
+    {
+        $I->wantTo('check response for authenticated PUT request to method/{uid} for a user with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendPUT('/method/55555555555555555555555555555555');
+        $I->seeResponseCodeIs(403);
+    }
+
     public function test16(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated DELETE request to method/id');
@@ -254,6 +286,14 @@ class MethodCest extends BaseCest
         $I->haveHttpHeader('Authorization', 'Bearer user2');
         $I->sendDELETE('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(404);
+    }
+
+    public function test174(ApiTester $I)
+    {
+        $I->wantTo('check response for authenticated DELETE request to method/{uid} for a user with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendDELETE('/method/55555555555555555555555555555555');
+        $I->seeResponseCodeIs(403);
     }
 
     public function test18(ApiTester $I)
