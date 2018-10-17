@@ -103,10 +103,10 @@ class Password extends Model
         ];
     }
 
-    public function validateNotUserAttributes($attribute, $params=null)
+    public function validateNotUserAttributes($attribute, $params = null)
     {
         /* Ensure the password instance has a user attribute */
-        if (!isset($this->user)) {
+        if ( ! isset($this->user)) {
 
             /* Log error */
             $log = [

@@ -1,11 +1,11 @@
 <?php
 namespace tests\unit\common\models;
 
+use Sil\Codeception\TestCase\Test;
 use common\helpers\Utils;
 use common\models\Password;
 use common\models\User;
 use tests\unit\fixtures\common\models\UserFixture;
-use Sil\Codeception\TestCase\Test;
 
 class PasswordTest extends Test
 {

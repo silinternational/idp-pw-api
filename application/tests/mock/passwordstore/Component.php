@@ -28,7 +28,7 @@ class Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password)
     {
-        if ( $employeeId == 'notfound') {
+        if ($employeeId == 'notfound') {
             throw new UserNotFoundException();
         }
 

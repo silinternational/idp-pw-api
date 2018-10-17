@@ -76,11 +76,11 @@ class ResetController extends BaseRestController
          */
         if (\Yii::$app->params['recaptcha']['required']) {
             if ( ! $verificationToken) {
-                throw new BadRequestHttpException(\Yii::t('app','reCAPTCHA verification code is required'));
+                throw new BadRequestHttpException(\Yii::t('app', 'reCAPTCHA verification code is required'));
             }
             
             $clientIp = Utils::getClientIp(\Yii::$app->request);
-            if (!Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
                 throw new BadRequestHttpException(\Yii::t('app', 'reCAPTCHA failed verification'));
             }
         }
@@ -112,10 +112,10 @@ class ResetController extends BaseRestController
             return new \stdClass();
         } catch (\Exception $e) {
             \Yii::error([
-               'action' => 'create reset',
-               'username' => $username,
-               'status' => 'error',
-               'error' => $e->getMessage(),
+                'action' => 'create reset',
+                'username' => $username,
+                'status' => 'error',
+                'error' => $e->getMessage(),
             ]);
             throw new ServerErrorHttpException(
                 \Yii::t('app', 'Unable to create new reset'),

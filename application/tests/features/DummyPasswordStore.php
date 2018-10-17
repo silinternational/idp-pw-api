@@ -40,7 +40,7 @@ class DummyPasswordStore extends Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password): UserPasswordMeta
     {
-        if ($this->willFailToSetPassword || !$this->isOnline) {
+        if ($this->willFailToSetPassword || ! $this->isOnline) {
             throw new Exception('Failed to set password for ' . $employeeId);
         }
         return UserPasswordMeta::create($this->uniqueDate, $this->uniqueDate);

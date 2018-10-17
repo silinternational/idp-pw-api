@@ -48,7 +48,7 @@ return [
         ],
         'request' => [
             'cookieValidationKey' => $cookieValidationKey,
-            'enableCookieValidation' => !empty($cookieValidationKey),
+            'enableCookieValidation' => ! empty($cookieValidationKey),
             'enableCsrfValidation' => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',

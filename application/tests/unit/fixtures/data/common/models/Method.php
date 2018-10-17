@@ -46,7 +46,7 @@ return [
         'verified' => 0,
         'verification_code' => 654987,
         'verification_attempts' => null,
-        'verification_expires' => Utils::getDatetime(time()+1800),
+        'verification_expires' => Utils::getDatetime(time() + 1800),
         'created' => '2000-01-01 00:00:00',
     ],
     'method5' => [
@@ -58,7 +58,7 @@ return [
         'verified' => 0,
         'verification_code' => 987456,
         'verification_attempts' => null,
-        'verification_expires' => Utils::getDatetime(time()+1800),
+        'verification_expires' => Utils::getDatetime(time() + 1800),
         'created' => '2000-01-01 00:00:00',
     ],
     

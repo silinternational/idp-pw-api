@@ -13,7 +13,7 @@ try {
      */
     $appEnv = \Sil\PhpEnv\Env::get('APP_ENV', 'production');
     $validEnvs = ['test', 'development', 'dev', 'staging', 'stage', 'stg', 'production', 'prod', 'prd'];
-    if (! in_array($appEnv, $validEnvs, true)) {
+    if ( ! in_array($appEnv, $validEnvs, true)) {
         throw new \yii\web\ServerErrorHttpException('Invalid APP_ENV provided');
     }
     $configPath = __DIR__ . '/../../common/config';

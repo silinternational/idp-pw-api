@@ -45,7 +45,7 @@ class EventLog extends EventLogBase
             $user = User::findOne(['id' => $userId]);
             if ($user !== null) {
                 \Yii::warning([
-                   'action' => 'eventlog',
+                    'action' => 'eventlog',
                     'user' => $user->email,
                     'topic' => $topic,
                     'details' => $details,

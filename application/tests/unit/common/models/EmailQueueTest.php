@@ -1,6 +1,7 @@
 <?php
 namespace tests\unit\common\models;
 
+use Sil\Codeception\TestCase\Test;
 use common\models\EmailQueue;
 use common\models\EventLog;
 use common\models\User;
@@ -8,7 +9,6 @@ use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\EmailQueueFixture;
 use tests\unit\fixtures\common\models\EventLogFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use Sil\Codeception\TestCase\Test;
 
 /**
  * Class EmailQueueTest

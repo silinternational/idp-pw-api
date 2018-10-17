@@ -315,7 +315,7 @@ class Reset extends ResetBase
         );
         
         \Yii::warning([
-           'action' => 'reset send email',
+            'action' => 'reset send email',
             'user' => $this->user->email,
             'to_address' => $toAddress,
             'subject' => $subject,
