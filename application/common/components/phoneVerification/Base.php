@@ -113,6 +113,7 @@ class Base extends Component
             } else {
                 throw new \Exception(
                     \Yii::t(
+                        'app',
                         'Unable to verify phone number for formatting, please check the number and try again. ' .
                             'Error code: {code}',
                         ['code' => $insights['status']]
