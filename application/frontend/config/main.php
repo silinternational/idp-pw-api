@@ -13,7 +13,16 @@ const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'errorHandler'],
+    'bootstrap' => [
+        'log',
+        'errorHandler',
+        [
+            'class' => 'yii\filters\ContentNegotiator',
+            'languages' => [
+                'en',
+            ],
+        ],
+    ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'user' => [
