@@ -3,7 +3,8 @@ namespace tests\helpers;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
-class BrokerUtils {
+class BrokerUtils
+{
 
     public static function insertFakeUsers()
     {
@@ -17,7 +18,7 @@ class BrokerUtils {
 
         $userExistsCode = 1490802526;
 
-        foreach($data as $userInfo) {
+        foreach ($data as $userInfo) {
             try {
                 $idBrokerClient->createUser($userInfo);
             } catch (\Exception $e) {

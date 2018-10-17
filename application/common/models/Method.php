@@ -135,7 +135,7 @@ class Method extends MethodBase
             try {
                 $method->value = \Yii::$app->phone->format(Utils::stripNonNumbers($value));
             } catch (\Exception $e) {
-                $log['status'] ='error';
+                $log['status'] = 'error';
                 $log['error'] = $e->getMessage();
                 $log['value'] = Utils::stripNonNumbers($value);
                 \Yii::warning($log);

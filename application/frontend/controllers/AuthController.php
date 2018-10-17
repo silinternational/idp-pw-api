@@ -1,19 +1,15 @@
 <?php
 namespace frontend\controllers;
 
+use common\components\auth\RedirectException;
+use common\components\auth\User as AuthUser;
 use common\helpers\Utils;
 use common\models\User;
 use frontend\components\BaseRestController;
-use common\components\auth\RedirectException;
-use common\components\auth\User as AuthUser;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\Url;
-use yii\web\BadRequestHttpException;
-use yii\web\ServerErrorHttpException;
-use yii\web\UnauthorizedHttpException;
 
 class AuthController extends BaseRestController
 {
@@ -212,7 +208,7 @@ class AuthController extends BaseRestController
          * build url to redirect user to
          */
         $afterLogin = $this->getAfterLoginUrl($relayState);
-        if (strpos( $afterLogin, '?')) {
+        if (strpos($afterLogin, '?')) {
             $joinChar = '&';
         } else {
             $joinChar = '?';

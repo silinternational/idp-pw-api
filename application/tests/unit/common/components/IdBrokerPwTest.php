@@ -1,12 +1,12 @@
 <?php
 namespace tests\unit\common\components;
 
+use PHPUnit\Framework\TestCase;
+use Phake;
 use common\components\passwordStore\AccountLockedException;
 use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\UserNotFoundException;
 use common\components\passwordStore\UserPasswordMeta;
-use PHPUnit\Framework\TestCase;
-use Phake;
 
 class IdBrokerPwTest extends TestCase
 {

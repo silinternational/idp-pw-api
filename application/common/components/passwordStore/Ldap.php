@@ -193,7 +193,7 @@ class Ldap extends Component implements PasswordStoreInterface
         /*
          * Update password
          */
-        try{
+        try {
             $user->updateAttribute($this->userPasswordAttribute, $password);
         } catch (\Exception $e) {
             /*
@@ -218,7 +218,7 @@ class Ldap extends Component implements PasswordStoreInterface
          * Remove any attributes that should be removed after changing password
          */
         foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
-            if($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
+            if ($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
                 $user->deleteAttribute($removeAttr);
             }
         }
@@ -321,16 +321,16 @@ class Ldap extends Component implements PasswordStoreInterface
         if ( ! empty($this->userAccountDisabledAttribute)) {
             $criteria[] = $this->userAccountDisabledAttribute;
         }
-        if ( is_array($this->updateAttributesOnSetPassword)) {
+        if (is_array($this->updateAttributesOnSetPassword)) {
             $criteria = array_merge(
                 $criteria,
                 array_keys($this->updateAttributesOnSetPassword)
             );
         }
-        if ( is_array($this->removeAttributesOnSetPassword)) {
+        if (is_array($this->removeAttributesOnSetPassword)) {
             $criteria = array_merge($criteria, $this->removeAttributesOnSetPassword);
         }
-        if ( is_array($this->updatePasswordIfAttributeAndValue)) {
+        if (is_array($this->updatePasswordIfAttributeAndValue)) {
             foreach ($this->updatePasswordIfAttributeAndValue as $key => $value) {
                 $criteria[] = $key;
             }
