@@ -6,7 +6,8 @@
 return [
     // Base.php
     'Unable to verify phone number for formatting, please check the number and try again. Error code: {code}' =>
-      'Impossible de vérifier le numéro de téléphone pour le formatage, veuillez vérifier le numéro et réessayer. Code d\'erreur: {code} '
+      'Impossible de vérifier le numéro de téléphone pour le formatage, ' .
+        'veuillez vérifier le numéro et réessayer. Code d\'erreur: {code} ',
 
     // VerifyThenSms.php
     'Verification currently in progress, please check your phone.' =>
@@ -85,8 +86,10 @@ return [
     'New password validation failed: {errors}' =>
         'La validation du nouveau mot de passe a échoué: {errors}',
 
-    'Unable to update password. If this password has been used before please use something different.' =>
-        'Impossible de mettre à jour le mot de passe. Si ce mot de passe a déjà été utilisé, veuillez utiliser quelque chose de différent. ',
+    'Unable to update password. ' .
+        'If this password has been used before please use something different.' =>
+        'Impossible de mettre à jour le mot de passe. ' .
+            'Si ce mot de passe a déjà été utilisé, veuillez utiliser quelque chose de différent. ',
 
     'Unable to update password, please wait a minute and try again. If this problem persists, please contact support.' =>
         'Impossible de mettre à jour le mot de passe, attendez une minute, puis réessayez. Si ce problème persiste, contactez le support technique. ',
