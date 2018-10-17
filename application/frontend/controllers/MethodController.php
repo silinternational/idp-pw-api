@@ -127,7 +127,7 @@ class MethodController extends BaseRestController
                 /*
                  * method exists and is verified, throw conflict
                  */
-                throw new ConflictHttpException(\Yii::t('app', 'Method already exists');
+                throw new ConflictHttpException(\Yii::t('app', 'Method already exists'));
             }
         }
 
