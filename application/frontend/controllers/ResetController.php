@@ -66,7 +66,7 @@ class ResetController extends BaseRestController
         $verificationToken = \Yii::$app->request->post('verification_token');
 
         if ( ! $username) {
-            throw new BadRequestHttpException('Username is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Username is required'));
         }
 
         /*
@@ -76,12 +76,12 @@ class ResetController extends BaseRestController
          */
         if (\Yii::$app->params['recaptcha']['required']) {
             if ( ! $verificationToken) {
-                throw new BadRequestHttpException('Recaptcha verification code is required');
+                throw new BadRequestHttpException(\Yii::t('app','reCAPTCHA verification code is required'));
             }
             
             $clientIp = Utils::getClientIp(\Yii::$app->request);
             if (!Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
-                throw new BadRequestHttpException('reCaptcha failed verification');
+                throw new BadRequestHttpException(\Yii::t('app', 'reCAPTCHA failed verification'));
             }
         }
 
@@ -117,7 +117,10 @@ class ResetController extends BaseRestController
                'status' => 'error',
                'error' => $e->getMessage(),
             ]);
-            throw new ServerErrorHttpException('Unable to create new reset', 1469036552);
+            throw new ServerErrorHttpException(
+                \Yii::t('app', 'Unable to create new reset'),
+                1469036552
+            );
         }
 
 
@@ -154,14 +157,20 @@ class ResetController extends BaseRestController
         /** @var Reset $reset */
         $reset = Reset::findOne(['uid' => $uid]);
         if ($reset === null) {
-            throw new NotFoundHttpException('Reset not found', 1462989590);
+            throw new NotFoundHttpException(
+                \Yii::t('app', 'Reset not found'),
+                1462989590
+            );
         }
 
         $type = \Yii::$app->request->getBodyParam('type', null);
         $methodId = \Yii::$app->request->getBodyParam('uid', null);
 
         if ($type === null) {
-            throw new BadRequestHttpException('Invalid reset type', 1462989664);
+            throw new BadRequestHttpException(
+                \Yii::t('app', 'Invalid reset type'),
+                1462989664
+            );
         }
 
         /*
@@ -220,13 +229,19 @@ class ResetController extends BaseRestController
          */
         $code = \Yii::$app->request->getBodyParam('code', null);
         if ($code === null) {
-            throw new BadRequestHttpException('Code is required', 1462989866);
+            throw new BadRequestHttpException(
+                \Yii::t('app', 'Code is required'),
+                1462989866
+            );
         }
 
         try {
             $clientId = Utils::getClientIdOrFail();
         } catch (\Exception $e) {
-            throw new BadRequestHttpException('Client ID is missing', 1483979025);
+            throw new BadRequestHttpException(
+                \Yii::t('app', 'Client ID is missing'),
+                1483979025
+            );
         }
 
         $log = [
@@ -308,6 +323,9 @@ class ResetController extends BaseRestController
         $log['status'] = 'error';
         $log['error'] = 'Reset code verification failed';
         \Yii::warning($log);
-        throw new BadRequestHttpException('Invalid verification code', 1462991098);
+        throw new BadRequestHttpException(
+            \Yii::t('app', 'Invalid verification code'),
+            1462991098
+        );
     }
 }

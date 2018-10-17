@@ -137,7 +137,7 @@ class Utils
                 'status' => 'error',
                 'error' => 'Invalid email address provided: ' . Html::encode($email),
             ]);
-            throw new BadRequestHttpException('Invalid email address provided.', 1461459797);
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid email address provided'), 1461459797);
         }
 
         list($part1, $domain) = explode('@', $email);
@@ -305,7 +305,7 @@ class Utils
             'status' => 'error',
             'error' => Json::encode($response->getErrorCodes()),
         ]);
-        throw new BadRequestHttpException('Unable to verify recaptcha', 1462904023);
+        throw new BadRequestHttpException(\Yii::t('app', 'Unable to verify reCAPTCHA'), 1462904023);
     }
 
     /**

@@ -49,7 +49,7 @@ class VerifyThenSms extends Base implements PhoneVerificationInterface
                  */
                 if (strval($e->getCode()) === '10') {
                     throw new BadRequestHttpException(
-                        'Verification currently in progress, please check your phone.',
+                        \Yii::t('app', 'Verification currently in progress, please check your phone.'),
                         1470317050
                     );
                 }
@@ -68,8 +68,11 @@ class VerifyThenSms extends Base implements PhoneVerificationInterface
                         'code' => $e->getCode(),
                     ]);
                     throw new BadRequestHttpException(
-                        'We had trouble understanding that phone number. '
-                        . 'Would you mind retyping it, perhaps only using numbers?',
+                        \Yii::t(
+                            'app',
+                            'We had trouble understanding that phone number. '
+                            . 'Would you mind retyping it, perhaps using only numbers?'
+                        ),
                         1513088476
                     );
                 }

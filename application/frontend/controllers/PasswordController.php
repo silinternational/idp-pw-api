@@ -50,7 +50,7 @@ class PasswordController extends BaseRestController
     {
         $newPassword = \Yii::$app->request->getBodyParam('password');
         if ($newPassword === null) {
-            throw new BadRequestHttpException('Password is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Password is required'));
         }
 
         /** @var User $user */

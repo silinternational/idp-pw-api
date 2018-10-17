@@ -20,6 +20,7 @@ return [
             'class' => 'yii\filters\ContentNegotiator',
             'languages' => [
                 'en',
+                'fr'
             ],
         ],
     ],

@@ -112,8 +112,11 @@ class Base extends Component
                 return sprintf('%s %s', $insights['country_prefix'], $insights['national_format_number']);
             } else {
                 throw new \Exception(
-                    'Unable to verify phone number for formatting, please check the number and try again. ' .
-                    'Error code: ' . $insights['status'],
+                    \Yii::t(
+                        'Unable to verify phone number for formatting, please check the number and try again. ' .
+                            'Error code: {code}',
+                        ['code' => $insights['status']]
+                    ),
                     1469727752
                 );
             }

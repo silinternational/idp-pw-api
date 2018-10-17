@@ -103,11 +103,13 @@ class MethodController extends BaseRestController
         $value = $request->post('value');
 
         if ($type === null || ! in_array($type, [Method::TYPE_EMAIL, Method::TYPE_PHONE])) {
-            throw new BadRequestHttpException(
-                sprintf('Type is required. Options are: %s or %s', Method::TYPE_EMAIL, Method::TYPE_PHONE)
-            );
+            throw new BadRequestHttpException(\Yii::t(
+                'app',
+                'Type is required. Options are: {email} or {phone}',
+                ['email' => Method::TYPE_EMAIL, 'phone' => Method::TYPE_PHONE]
+            ));
         } elseif ($value === null) {
-            throw new BadRequestHttpException('Value is required.');
+            throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));
         }
 
         /*
@@ -125,7 +127,7 @@ class MethodController extends BaseRestController
                 /*
                  * method exists and is verified, throw conflict
                  */
-                throw new ConflictHttpException('Method already exists');
+                throw new ConflictHttpException(\Yii::t('app', 'Method already exists');
             }
         }
 
@@ -201,13 +203,13 @@ class MethodController extends BaseRestController
         $request = \Yii::$app->request;
         $code = $request->getBodyParam('code');
         if ($code === null) {
-            throw new BadRequestHttpException('Code is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'));
         }
 
         try {
             $method->validateAndSetAsVerified($code);
         } catch (InvalidCodeException $e) {
-            throw new BadRequestHttpException('Invalid verification code', 1470315942);
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid verification code'), 1470315942);
         } catch (\Exception $e) {
             throw new ServerErrorHttpException(
                 'Unable to set method as verified: ' . $e->getMessage(),
@@ -263,7 +265,7 @@ class MethodController extends BaseRestController
         if ($method === null) {
             throw new NotFoundHttpException();
         } elseif ($method->verified === 1) {
-            throw new BadRequestHttpException('Method already verified');
+            throw new BadRequestHttpException(\Yii::t('app', 'Method already verified'));
         }
 
         /*

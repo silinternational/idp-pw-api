@@ -140,12 +140,12 @@ class Method extends MethodBase
                 $log['value'] = Utils::stripNonNumbers($value);
                 \Yii::warning($log);
 
-                throw new BadRequestHttpException($e->getMessage(), $e->getCode());
+                throw new BadRequestHttpException(\Yii::t('app', $e->getMessage()), $e->getCode());
             }
         } elseif ($type == self::TYPE_EMAIL) {
             $method->value = mb_strtolower($value);
         } else {
-            throw new BadRequestHttpException('Invalid method type provided', 1470169372);
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid method type'), 1470169372);
         }
 
         if ($type == self::TYPE_PHONE) {
@@ -279,7 +279,7 @@ class Method extends MethodBase
                 );
             }
         } else {
-            throw new BadRequestHttpException('Invalid method type', 1461432437);
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid method type'), 1461432437);
         }
 
     }
