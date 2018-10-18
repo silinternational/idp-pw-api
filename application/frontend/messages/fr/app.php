@@ -5,17 +5,19 @@
  */
 return [
     // Base.php
-    'Unable to verify phone number for formatting, please check the number and try again. Error code: {code}' =>
-        'Impossible de vérifier le numéro de téléphone pour le formatage, ' .
-            'veuillez vérifier le numéro et réessayer. Code d\'erreur: {code} ',
+    'Unable to verify phone number for formatting, '
+    . 'please check the number and try again. Error code: {code}' =>
+        'Impossible de vérifier le numéro de téléphone pour le formatage, '
+        . 'veuillez vérifier le numéro et réessayer. Code d\'erreur: {code} ',
 
     // VerifyThenSms.php
     'Verification currently in progress, please check your phone.' =>
         "Vérification en cours, s'il vous plaît vérifier votre téléphone.",
 
-    'We had trouble understanding that phone number. Would you mind retyping it, perhaps using only numbers?' =>
-        'Nous avons eu du mal à comprendre ce numéro de téléphone. ' .
-            'Cela vous dérangerait-il de le retaper, peut-être en n\'utilisant que des chiffres?',
+    'We had trouble understanding that phone number. '
+    . 'Would you mind retyping it, perhaps using only numbers?' =>
+        'Nous avons eu du mal à comprendre ce numéro de téléphone. '
+        . 'Cela vous dérangerait-il de le retaper, peut-être en n\'utilisant que des chiffres?',
 
     // Utils.php
     'Invalid email address provided' => 'Adresse email invalide fournie',
@@ -86,15 +88,15 @@ return [
     'New password validation failed: {errors}' =>
         'La validation du nouveau mot de passe a échoué: {errors}',
 
-    'Unable to update password. ' .
-        'If this password has been used before please use something different.' =>
-        'Impossible de mettre à jour le mot de passe. ' .
-            'Si ce mot de passe a déjà été utilisé, veuillez utiliser quelque chose de différent. ',
+    'Unable to update password. '
+    . 'If this password has been used before please use something different.' =>
+        'Impossible de mettre à jour le mot de passe. '
+        . 'Si ce mot de passe a déjà été utilisé, veuillez utiliser quelque chose de différent. ',
 
-    'Unable to update password, please wait a minute and try again. ' .
-        'If this problem persists, please contact support.' =>
-        'Impossible de mettre à jour le mot de passe, attendez une minute, puis réessayez. ' .
-            'Si ce problème persiste, contactez le support technique. ',
+    'Unable to update password, please wait a minute and try again. '
+    . 'If this problem persists, please contact support.' =>
+        'Impossible de mettre à jour le mot de passe, attendez une minute, puis réessayez. '
+        . 'Si ce problème persiste, contactez le support technique. ',
 
     // MethodController.php
     'Type is required. Options are: {email} or {phone}' => 'Le type est requis. Les options sont: {email} ou {phone} ',
@@ -125,6 +127,5 @@ return [
     'Invalid reset type' => 'Type de réinitialisation invalide',
 
     'Client ID is missing' => 'Client ID est manquant',
-
-
+    
 ];

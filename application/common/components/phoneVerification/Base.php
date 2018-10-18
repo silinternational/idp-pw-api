@@ -114,8 +114,8 @@ class Base extends Component
                 throw new \Exception(
                     \Yii::t(
                         'app',
-                        'Unable to verify phone number for formatting, please check the number and try again. ' .
-                            'Error code: {code}',
+                        'Unable to verify phone number for formatting, please check the number and try again. '
+                        . 'Error code: {code}',
                         ['code' => $insights['status']]
                     ),
                     1469727752
