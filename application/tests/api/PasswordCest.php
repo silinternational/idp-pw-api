@@ -1,5 +1,8 @@
 <?php
 
+require_once "BaseCest.php";
+
+use common\helpers\Utils;
 
 class PasswordCest extends BaseCest
 {
@@ -51,7 +54,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated PUT request to update the password');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'newPassword33!']);
+        $I->sendPUT('/password',['password' => Utils::generateRandomString() . '!12']);
         $I->seeResponseCodeIs(200);
     }
 
@@ -135,7 +138,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 2');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'Hellow0rld1!']);
+        $I->sendPUT('/password',['password' => Utils::generateRandomString() . '!12']);
         $I->seeResponseCodeIs(200);
     }
 
@@ -143,7 +146,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 3');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'Helloworld1010f!']);
+        $I->sendPUT('/password',['password' => Utils::generateRandomString() . '!12']);
         $I->seeResponseCodeIs(200);
     }
 
