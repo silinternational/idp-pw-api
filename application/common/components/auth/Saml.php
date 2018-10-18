@@ -284,7 +284,7 @@ class Saml extends Component implements AuthnInterface
                     $attrs[$attr] = $attributes[$details['field']][$details['element']];
                 }
             } else {
-                if(isset($attributes[$details['field']])) {
+                if (isset($attributes[$details['field']])) {
                     $attrs[$attr] = $attributes[$details['field']];
                 }
             }
