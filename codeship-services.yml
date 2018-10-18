@@ -70,6 +70,7 @@ broker:
         PASSWORD_PROFILE_URL: https://example.com/#/profile
         SUPPORT_EMAIL: support@example.com
         EMAIL_SIGNATURE: Dummy Signature for Tests
+        EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
     command: whenavail brokerDb 3306 60 ./run-broker.sh
 
 
