@@ -2,14 +2,9 @@
   "name": "IdP Password Manager API",
   "description": "Backend API for Identity Provider Password Management",
   "minimum-stability": "stable",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/fillup/Adldap2.git"
-    }
-  ],
   "require": {
     "php": ">=7.0",
+    "ext-json": "*",
     "yiisoft/yii2": "~2.0.15",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",

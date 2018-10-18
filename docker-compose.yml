@@ -175,6 +175,23 @@ services:
             EMAIL_SIGNATURE: Dummy Signature for Tests
         command: whenavail brokerDb 3306 60 ./run-broker.sh
 
+    ldap:
+        build: ./dockerbuild/ldap
+        container_name: ldap
+        ports:
+        - "389:389"
+        working_dir: /data
+        env_file:
+        - ./local.env
+
+    ldapload:
+        build: ./dockerbuild/ldap
+        container_name: ldapload
+        depends_on:
+        - ldap
+        working_dir: /data
+        command: ./load_ldap.sh
+
 networks:
     default:
         driver: bridge

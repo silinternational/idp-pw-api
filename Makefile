@@ -3,7 +3,7 @@ start: api
 test:
 	make testunit && make testapi && make testbehat
 
-testunit: composer emailcron rmTestDb upTestDb broker yiimigratetestDb
+testunit: composer emailcron rmTestDb upTestDb broker ldapload yiimigratetestDb
 	docker-compose run emailcron whenavail emaildb 3306 100 ./yii migrate --interactive=0
 	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
 
@@ -68,6 +68,14 @@ upTestDb:
 
 broker:
 	docker-compose up -d broker
+
+ldap:
+	docker-compose up -d ldap
+
+ldapload:
+	docker-compose kill ldap
+	docker-compose rm -f ldap
+	docker-compose run --rm ldapload
 
 bounce:
 	docker-compose up -d api

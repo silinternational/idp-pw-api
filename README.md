@@ -73,27 +73,27 @@ We use SAML for authentication but this component can be replaced to support wha
 
 * Component ID: ```auth```
 * Implement interface: ```common\components\auth\AuthnInterface```
-* [Example implementation](./common/components/auth/Saml.php)
+* [Example implementation](application/common/components/auth/Saml.php)
 
 ### Password Store Component
 You can store your passwords wherever you like, whether it is LDAP, Active Directory, a database, or even Redis.
 
 * Component ID: ```passwordstore```
 * Implement interface: ```common\components\passwordStore\PasswordStoreInterface```
-* [Example implementation](./common/components/passwordStore/Ldap.php)
+* [Example implementation](application/common/components/passwordStore/Ldap.php)
 
 ### Personnel Component
 The personnel component is used to look up informaton about users from your company's personnel system. This includes verifying that they are an active employee, getting information about them like name, email, employee id, whether they have a supervisor and what their supervisors email address is. If the personnel system is aware of spouses it can also provide the spouse's email address.
 
 * Component ID: ```personnel```
 * Implement interface: ```common\components\personnel\PersonnelInterface```
-* [Example implementation](./common/components/personnel/IdBroker.php)
+* [Example implementation](application/common/components/personnel/IdBroker.php)
 
 ### Phone Verification Component
 This component is used for performing phone based verification of users.
 
 * Component ID: ```phone```
 * Implement interface: ```common\components\phoneVerification\PhoneVerificationInterface```
-* [Example implementation](./common/components/phoneVerification/Sms.php)
+* [Example implementation](application/common/components/phoneVerification/Sms.php)
 
 The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging.

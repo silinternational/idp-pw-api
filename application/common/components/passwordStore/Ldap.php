@@ -2,8 +2,6 @@
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
-use Adldap\Connections\Provider;
-use Adldap\Exceptions\Auth\BindException;
 use Adldap\Schemas\OpenLDAP;
 use yii\base\Component;
 
@@ -78,7 +76,6 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * Connect and bind to ldap server
-     * @throws \Adldap\Exceptions\Auth\BindException
      */
     public function connect()
     {
@@ -90,33 +87,24 @@ class Ldap extends Component implements PasswordStoreInterface
         /*
          * Initialize provider with configuration
          */
-        $schema = new OpenLDAP();
-        $this->ldapProvider = new Provider([
+        $this->ldapClient = new Adldap();
+        $this->ldapClient->addProvider([
             'base_dn' => $this->baseDn,
-            'domain_controllers' => [$this->host],
+            'hosts' => [$this->host],
             'port' => $this->port,
-            'admin_username' => $this->adminUsername,
-            'admin_password' => $this->adminPassword,
+            'username' => $this->adminUsername,
+            'password' => $this->adminPassword,
             'use_ssl' => $this->useSsl,
             'use_tls' => $this->useTls,
-        ], null, $schema);
+            'schema' => OpenLDAP::class,
+        ]);
 
-        $this->ldapClient = new Adldap();
-        $this->ldapClient->addProvider('default', $this->ldapProvider);
-
-        try {
-            $this->ldapClient->connect('default');
-            $this->ldapProvider->auth()->bindAsAdministrator();
-        } catch (BindException $e) {
-            throw $e;
-        }
+        $this->ldapProvider = $this->ldapClient->connect();
     }
 
     /**
      * @param string $employeeId
      * @return \common\components\passwordStore\UserPasswordMeta
-     * @throws \Exception
-     * @throws \common\components\passwordStore\UserNotFoundException
      */
     public function getMeta($employeeId)
     {
@@ -184,55 +172,18 @@ class Ldap extends Component implements PasswordStoreInterface
             return $this->getMeta($employeeId);
         }
 
-        /*
-         * Make sure user is not disabled
-         */
         $this->assertUserNotDisabled($user);
 
-
-        /*
-         * Update password
-         */
-        try {
-            $user->updateAttribute($this->userPasswordAttribute, $password);
-        } catch (\Exception $e) {
-            /*
-             * Check if failure is due to constraint violation
-             */
-            $error = strtolower($e->getMessage());
-            if (substr_count($error, 'constraint violation') > 0) {
-                throw new PasswordReuseException(
-                    'Unable to change password. If this password has been used before please use something different.',
-                    1464018255,
-                    $e
-                );
-            }
-        }
+        $this->updatePassword($user, $password);
 
         /*
          * Reload user after password change
          */
         $user = $this->findUser($employeeId);
 
-        /*
-         * Remove any attributes that should be removed after changing password
-         */
-        foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
-            if ($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
-                $user->deleteAttribute($removeAttr);
-            }
-        }
+        $this->removeAttributesAfterNewPassword($user);
 
-        /*
-         * Update flag attributes after changing password
-         */
-        foreach ($this->updateAttributesOnSetPassword as $key => $value) {
-            if ($user->hasAttribute($key) || $user->hasAttribute(strtolower($key))) {
-                $user->updateAttribute($key, $value);
-            } else {
-                $user->createAttribute($key, $value);
-            }
-        }
+        $this->updateAttributesAfterNewPassword($user);
 
         /*
          * Save changes
@@ -259,6 +210,56 @@ class Ldap extends Component implements PasswordStoreInterface
         }
 
         return $this->getMeta($employeeId);
+    }
+
+    /**
+     * @param \Adldap\Models\Entry $user
+     * @param string $password
+     * @throws \common\components\passwordStore\PasswordReuseException
+     */
+    protected function updatePassword($user, $password)
+    {
+        try {
+            $user->updateAttribute($this->userPasswordAttribute, $password);
+        } catch (\Exception $e) {
+            /*
+             * Check if failure is due to constraint violation
+             */
+            $error = strtolower($e->getMessage());
+            if (substr_count($error, 'constraint violation') > 0) {
+                throw new PasswordReuseException(
+                    'Unable to change password. If this password has been used before please use something different.',
+                    1464018255,
+                    $e
+                );
+            }
+        }
+    }
+
+    /**
+     * @param \Adldap\Models\Entry $user
+     */
+    protected function removeAttributesAfterNewPassword($user)
+    {
+        foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
+            if ($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
+                $user->deleteAttribute($removeAttr);
+            }
+        }
+    }
+
+    /**
+     * @param \Adldap\Models\Entry $user
+     */
+    protected function updateAttributesAfterNewPassword($user)
+    {
+        foreach ($this->updateAttributesOnSetPassword as $key => $value) {
+            if ($user->hasAttribute($key) || $user->hasAttribute(strtolower($key))) {
+                $user->updateAttribute($key, $value);
+            } else {
+                $user->createAttribute($key, $value);
+            }
+        }
     }
 
     /**
@@ -292,7 +293,7 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * @param \Adldap\Models\Entry $user
-     * @throws AccountLockedException
+     * @throws \common\components\passwordStore\AccountLockedException
      */
     public function assertUserNotDisabled($user)
     {
@@ -342,7 +343,7 @@ class Ldap extends Component implements PasswordStoreInterface
     /**
      * @param string $employeeId
      * @return \Adldap\Models\Entry
-     * @throws UserNotFoundException
+     * @throws \common\components\passwordStore\UserNotFoundException
      */
     public function findUser($employeeId)
     {
@@ -355,10 +356,13 @@ class Ldap extends Component implements PasswordStoreInterface
                 ->select($criteria)
                 ->findByOrFail($this->employeeIdAttribute, $employeeId);
         } catch (\Exception $e) {
-            throw new UserNotFoundException('User not found', 1463493653, $e);
+            throw new UserNotFoundException(
+                sprintf('User %s not found in %s', $employeeId, $this->employeeIdAttribute),
+                1463493653,
+                $e
+            );
         }
 
         return $user;
     }
-
 }
