@@ -37,7 +37,7 @@ class Verify extends Base implements PhoneVerificationInterface
         /*
          * Only add optional parameters if we have a value for them
          */
-        if ( ! is_null($this->codeLength)){
+        if ( ! is_null($this->codeLength)) {
             $requestData['code_length'] = $this->codeLength;
         }
         if ( ! is_null($this->country)) {

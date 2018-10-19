@@ -76,10 +76,10 @@ class Saml extends Component implements AuthnInterface
      * @var array
      */
     public $attributeMap = [
-        'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
-        'first_name' => ['field' => 'givenName', 'element' => 0 ],
-        'last_name' => ['field' => 'sn', 'element' => 0 ],
-        'email' => ['field' => 'mail', 'element' => 0 ],
+        'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0],
+        'first_name' => ['field' => 'givenName', 'element' => 0],
+        'last_name' => ['field' => 'sn', 'element' => 0],
+        'email' => ['field' => 'mail', 'element' => 0],
         'employee_id' => ['field' => 'employeeNumber', 'element' => 0],
     ];
 
@@ -103,7 +103,7 @@ class Saml extends Component implements AuthnInterface
         /*
          * Ensure conditionally required properties are set when needed
          */
-        if ($this->signRequest && (is_null($this->spCertificate) || is_null($this->spPrivateKey)) ) {
+        if ($this->signRequest && (is_null($this->spCertificate) || is_null($this->spPrivateKey))) {
             throw new \Exception(
                 'Signing requests requires spCertificate and spPrivateKey to be set in auth component configuration',
                 1459883965
@@ -278,13 +278,13 @@ class Saml extends Component implements AuthnInterface
     {
         $attrs = [];
 
-        foreach ($map as $attr => $details){
-            if (isset($details['element'])){
-                if (isset($attributes[$details['field']][$details['element']])){
+        foreach ($map as $attr => $details) {
+            if (isset($details['element'])) {
+                if (isset($attributes[$details['field']][$details['element']])) {
                     $attrs[$attr] = $attributes[$details['field']][$details['element']];
                 }
             } else {
-                if(isset($attributes[$details['field']])){
+                if (isset($attributes[$details['field']])) {
                     $attrs[$attr] = $attributes[$details['field']];
                 }
             }
@@ -303,7 +303,7 @@ class Saml extends Component implements AuthnInterface
     {
         $username = isset($attributes['idp_username']) ? $attributes['idp_username'] : 'missing username';
         foreach ($map as $key => $value) {
-            if ( ! array_key_exists($key, $attributes)){
+            if ( ! array_key_exists($key, $attributes)) {
                 throw new \Exception(
                     'SAML attributes missing attribute: ' . $key . ' for user ' . $username,
                     1454436522
@@ -320,7 +320,7 @@ class Saml extends Component implements AuthnInterface
      */
     public function pemEncodeCertificate($data, $type)
     {
-        if ( substr($data, 0, 1) !== '-') {
+        if (substr($data, 0, 1) !== '-') {
 
             $prefix = $type == self::TYPE_PUBLIC ? '-----BEGIN CERTIFICATE-----' : '-----BEGIN PRIVATE KEY-----';
             $suffix = $type == self::TYPE_PUBLIC ? '-----END CERTIFICATE-----' : '-----END PRIVATE KEY-----';

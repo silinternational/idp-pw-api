@@ -25,7 +25,7 @@ class MfaController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
-                        'matchCallback' => function () {
+                        'matchCallback' => function() {
                             $user = \Yii::$app->user->identity;
                             return $user->isAuthScopeFull();
                         }
@@ -62,7 +62,7 @@ class MfaController extends BaseRestController
     {
         $type = \Yii::$app->request->getBodyParam('type');
         if ($type === null) {
-            throw new BadRequestHttpException('Type is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Type is required'));
         }
 
         $label = \Yii::$app->request->getBodyParam('label');
@@ -87,7 +87,7 @@ class MfaController extends BaseRestController
     {
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
-            throw new BadRequestHttpException('Value is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));
         }
 
         try {
@@ -106,7 +106,7 @@ class MfaController extends BaseRestController
             throw new ServerErrorHttpException('Unable to verify MFA code, error code: ' . $e->getCode());
         }
 
-        throw new BadRequestHttpException('Invalid code provided');
+        throw new BadRequestHttpException(\Yii::t('app', 'Invalid code provided'));
     }
 
 }

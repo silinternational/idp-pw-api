@@ -131,7 +131,10 @@ class Reset extends ResetBase
                     $log['error'] = 'Requested method not found';
                     \Yii::error($log);
 
-                    throw new NotFoundHttpException('Requested method not found', 1456608142);
+                    throw new NotFoundHttpException(
+                        \Yii::t('app', 'Requested method not found'),
+                        1456608142
+                    );
                 }
                 $reset->method_id = $methodId;
             }
@@ -312,7 +315,7 @@ class Reset extends ResetBase
         );
         
         \Yii::warning([
-           'action' => 'reset send email',
+            'action' => 'reset send email',
             'user' => $this->user->email,
             'to_address' => $toAddress,
             'subject' => $subject,
@@ -540,7 +543,10 @@ class Reset extends ResetBase
              * If type is method but methodId is missing, throw error
              */
             if ($methodUid === null) {
-                throw new BadRequestHttpException('Method UID required for reset type method', 1462988984);
+                throw new BadRequestHttpException(
+                    \Yii::t('app', 'Method UID required for reset type method'),
+                    1462988984
+                );
             }
 
             /*
@@ -548,12 +554,18 @@ class Reset extends ResetBase
              */
             $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id, 'verified' => 1]);
             if ($method === null) {
-                throw new NotFoundHttpException('Method not found', 1462989221);
+                throw new NotFoundHttpException(
+                    \Yii::t('app', 'Method not found'),
+                    1462989221
+                );
             }
             $this->type = self::TYPE_METHOD;
             $this->method_id = $method->id;
         } else {
-            throw new BadRequestHttpException('Unknown reset type requested', 1462989489);
+            throw new BadRequestHttpException(
+                \Yii::t('app', 'Unknown reset type requested'),
+                1462989489
+            );
         }
 
         // NOTE: We stopped changing the code here so that, if someone requests
@@ -631,7 +643,7 @@ class Reset extends ResetBase
                 'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
                 'user' => $this->user->email,                
             ]);
-            throw new ServerErrorHttpException($errorPrefix);
+            throw new ServerErrorHttpException(\Yii::t('app', $errorPrefix));
         }
     }
 

@@ -103,10 +103,10 @@ class Password extends Model
         ];
     }
 
-    public function validateNotUserAttributes($attribute, $params=null)
+    public function validateNotUserAttributes($attribute, $params = null)
     {
         /* Ensure the password instance has a user attribute */
-        if (!isset($this->user)) {
+        if ( ! isset($this->user)) {
 
             /* Log error */
             $log = [
@@ -134,9 +134,10 @@ class Password extends Model
         foreach ($params as $disallowedAttribute) {
             if (mb_strpos(mb_strtolower($this->{$attribute}),
                 mb_strtolower($this->user->$disallowedAttribute)) !== false) {
-                $this->addError($attribute, sprintf(
-                    'Your password may not contain any of these: %s (code 180)',
-                    join(', ', $labelList)
+                $this->addError($attribute, \Yii::t(
+                    'app',
+                    'Your password may not contain any of these: {labelList} (code 180)',
+                    ['labelList' => join(', ', $labelList)]
                 ));
             }
         }
@@ -172,7 +173,11 @@ class Password extends Model
                 'employee_id' => $this->employeeId,
                 'error' => $this->getErrors('password'),
             ]);
-            throw new BadRequestHttpException('New password validation failed: ' . $errors);
+            throw new BadRequestHttpException(\Yii::t(
+                'app',
+                'New password validation failed: {errors}',
+                ['errors' => $errors]
+            ));
         }
         
         $log = [
@@ -188,7 +193,7 @@ class Password extends Model
             $log['status'] = 'error';
             $log['error'] = $errors;
             \Yii::error($log);
-            throw new BadRequestHttpException($errors[0], 1463164336);
+            throw new BadRequestHttpException(\Yii::t('app', $errors[0]), 1463164336);
         }
 
         /*

@@ -1,6 +1,7 @@
 <?php
 namespace tests\unit\common\models;
 
+use Sil\Codeception\TestCase\Test;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
@@ -9,7 +10,6 @@ use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use Sil\Codeception\TestCase\Test;
 use yii\web\TooManyRequestsHttpException;
 
 /**

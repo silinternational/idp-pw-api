@@ -1,10 +1,8 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\models\PasswordChangeLog;
-use common\models\User;
 use Sil\Codeception\TestCase\Test;
-
+use common\models\PasswordChangeLog;
 use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 

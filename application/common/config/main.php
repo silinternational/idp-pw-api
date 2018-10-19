@@ -116,7 +116,7 @@ return [
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
                     'message' => [
                         'to' => $alertsEmail,
-                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv .']',
+                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
                     ],
                     'baseUrl' => $emailServiceConfig['baseUrl'],
                     'accessToken' => $emailServiceConfig['accessToken'],
@@ -134,7 +134,7 @@ return [
                         } catch (\Exception $e) {
                             $appUser = null;
                         }
-                        if ($appUser && ! \Yii::$app->user->isGuest){
+                        if ($appUser && ! \Yii::$app->user->isGuest) {
                             $prefixData['user'] = \Yii::$app->user->identity->email;
                         }
 
@@ -164,7 +164,7 @@ return [
                     'message' => [
                         'from' => $fromEmail,
                         'to' => $alertsEmail,
-                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv .']',
+                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
                     ],
                     'enabled' => $alertsEmailEnabled && ! $emailServiceConfig['useEmailService'],
                     'prefix' => function($message) use ($appEnv) {
@@ -174,10 +174,10 @@ return [
                         try {
                             $appUser = \Yii::$app->user;
                         } catch (\Exception $e) {
-                            $appUser = Null;
+                            $appUser = null;
                         }
-                        if ($appUser && ! \Yii::$app->user->isGuest){
-                            $prefix .= 'user='.\Yii::$app->user->identity->email . PHP_EOL;
+                        if ($appUser && ! \Yii::$app->user->isGuest) {
+                            $prefix .= 'user=' . \Yii::$app->user->identity->email . PHP_EOL;
                         }
 
                         // Try to get requested url and method
