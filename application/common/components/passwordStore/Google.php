@@ -98,6 +98,9 @@ class Google extends Component implements PasswordStoreInterface
         parent::init();
     }
 
+    /**
+     * @return Google_Client
+     */
     protected function getClient()
     {
         if ($this->googleClient === null) {
@@ -134,8 +137,8 @@ class Google extends Component implements PasswordStoreInterface
         $emailFieldName = $this->emailFieldName;
         if (empty($userActiveRecord->$emailFieldName)) {
             throw new Exception(sprintf(
-                "No email address found for user %s, and without that we "
-                . "cannot retrieve the user's record from Google.",
+                'No email address found for user %s, and without that we '
+                . 'cannot retrieve the user\'s record from Google.',
                 var_export($employeeId, true)
             ), 1497980234);
         }
@@ -185,7 +188,7 @@ class Google extends Component implements PasswordStoreInterface
                 throw new AccountLockedException();
             }
             return $googleUser;
-        } catch (Exception $e){
+        } catch (Exception $e) {
             if ($e->getCode() == 404) {
                 throw new UserNotFoundException();
             }
