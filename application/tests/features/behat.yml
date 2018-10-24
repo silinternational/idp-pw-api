@@ -3,6 +3,6 @@ default:
     multiple:
       paths:    [ %paths.base%/../features/multiple.feature ]
       contexts: [ tests\features\Context\MultipleContext ]
-#    google:
-#      paths:    [ %paths.base%/../features/google.feature ]
-#      contexts: [ tests\features\Context\GoogleContext ]
+    google:
+      paths:    [ %paths.base%/../features/google.feature ]
+      contexts: [ tests\features\Context\GoogleContext ]
