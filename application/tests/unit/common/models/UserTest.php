@@ -194,7 +194,7 @@ class UserTest extends Test
         $user = $this->users('user1');
         $methods = $user->getMaskedMethods();
         $this->assertTrue(is_array($methods));
-        $this->assertEquals(5, count($methods));
+        $this->assertEquals(4, count($methods)); // phone method is not returned
 
         foreach ($methods as $method) {
             if ($method['type'] == 'primary') {
@@ -203,8 +203,6 @@ class UserTest extends Test
                 $this->assertEquals('s****e@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'supervisor') {
                 $this->assertEquals('s********r@d*****.o**', $method['value']);
-            } elseif ($method['type'] == 'phone' && $method['uid'] == '11111111111111111111111111111111') {
-                $this->assertEquals('+1 #######890', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '22222222222222222222222222222222') {
                 $this->assertEquals('e**************9@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '33333333333333333333333333333333') {
@@ -279,7 +277,7 @@ class UserTest extends Test
 
         $verifiedCount = 0;
         foreach ($user->methods as $method) {
-            if ($method->verified === 1) {
+            if ($method->verified === 1 && $method->type != Method::TYPE_PHONE) { // phone is deprecated
                 $verifiedCount++;
             }
         }

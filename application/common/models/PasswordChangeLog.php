@@ -41,9 +41,8 @@ class PasswordChangeLog extends PasswordChangeLogBase
                 ],
 
                 [
-                    ['method_type'], 'in', 'range' => [Method::TYPE_EMAIL, Method::TYPE_PHONE],
-                    'message' => 'Method type must be either ' . Method::TYPE_EMAIL . ' or ' .
-                        Method::TYPE_PHONE . '.',
+                    ['method_type'], 'in', 'range' => [Method::TYPE_EMAIL],
+                    'message' => 'Method type must be ' . Method::TYPE_EMAIL . '.',
                     'when' => function() { return $this->scenario === self::SCENARIO_RESET; },
                 ],
             ],

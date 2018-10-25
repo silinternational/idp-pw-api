@@ -55,10 +55,6 @@ return [
         'auth' => [
             'class' => 'tests\mock\auth\Component',
         ],
-        'phone' => [
-            'class' => 'tests\mock\phone\Component',
-            'codeLength' => 4,
-        ],
         'passwordStore' => [
             'class' => 'tests\mock\passwordstore\Component',
         ],

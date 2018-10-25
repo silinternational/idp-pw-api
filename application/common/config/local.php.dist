@@ -53,13 +53,5 @@ return [
                 'host' => null,
             ],
         ],
-        'phone' => [
-            'class' => '\common\components\phoneVerification\VerifyThenSms',
-            'apiKey' => '',
-            'apiSecret' => '',
-            'codeLength' => 6,
-            'brand' => 'Verification',
-            'from' => '',
-        ],
     ],
 ];

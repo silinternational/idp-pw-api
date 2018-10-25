@@ -102,11 +102,11 @@ class MethodController extends BaseRestController
         $type = $request->post('type');
         $value = $request->post('value');
 
-        if ($type === null || ! in_array($type, [Method::TYPE_EMAIL, Method::TYPE_PHONE])) {
+        if ($type === null || $type != Method::TYPE_EMAIL) {
             throw new BadRequestHttpException(\Yii::t(
                 'app',
-                'Type is required. Options are: {email} or {phone}',
-                ['email' => Method::TYPE_EMAIL, 'phone' => Method::TYPE_PHONE]
+                'Type is required. Options are: {email}',
+                ['email' => Method::TYPE_EMAIL]
             ));
         } elseif ($value === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));

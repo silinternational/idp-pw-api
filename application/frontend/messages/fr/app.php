@@ -4,21 +4,6 @@
  * Translation map for fr-FR
  */
 return [
-    // Base.php
-    'Unable to verify phone number for formatting, '
-    . 'please check the number and try again. Error code: {code}' =>
-        'Impossible de vérifier le numéro de téléphone pour le formatage, '
-        . 'veuillez vérifier le numéro et réessayer. Code d\'erreur: {code} ',
-
-    // VerifyThenSms.php
-    'Verification currently in progress, please check your phone.' =>
-        "Vérification en cours, s'il vous plaît vérifier votre téléphone.",
-
-    'We had trouble understanding that phone number. '
-    . 'Would you mind retyping it, perhaps using only numbers?' =>
-        'Nous avons eu du mal à comprendre ce numéro de téléphone. '
-        . 'Cela vous dérangerait-il de le retaper, peut-être en n\'utilisant que des chiffres?',
-
     // Utils.php
     'Invalid email address provided' => 'Adresse email invalide fournie',
 
@@ -42,9 +27,6 @@ return [
 
     'Unable to update reset in database, email not sent.' =>
         'Impossible de mettre à jour la réinitialisation dans la base de données, e-mail non envoyé.',
-
-    'Unable to update reset after sending phone verification.' =>
-        'Impossible de mettre à jour la réinitialisation après l\'envoi de la vérification du téléphone.',
 
     'Unable to save reset with disable_until.' => 'Impossible d\'enregistrer la réinitialisation avec disable_until.',
 
@@ -99,7 +81,7 @@ return [
         . 'Si ce problème persiste, contactez le support technique. ',
 
     // MethodController.php
-    'Type is required. Options are: {email} or {phone}' => 'Le type est requis. Les options sont: {email} ou {phone} ',
+    'Type is required. Options are: {email}' => 'Le type est requis. Les options sont: {email} ',
     'Value is required' => 'Valeur est requise',
     'Method already exists' => 'La méthode existe déjà',
     'Code is required' => 'Code est requis',

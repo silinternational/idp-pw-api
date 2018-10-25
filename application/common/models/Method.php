@@ -4,8 +4,6 @@ namespace common\models;
 use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -43,17 +41,12 @@ class Method extends MethodBase
                 ],
 
                 [
-                    ['type'], 'in', 'range' => [self::TYPE_EMAIL, self::TYPE_PHONE],
-                    'message' => 'Method type must be either ' . self::TYPE_EMAIL . ' or ' . self::TYPE_PHONE . '.',
+                    ['type'], 'in', 'range' => [self::TYPE_EMAIL],
+                    'message' => 'Method type must be ' . self::TYPE_EMAIL . '.',
                 ],
 
                 [// Email validation when type is email
                     'value', 'email', 'when' => function() { return $this->type === self::TYPE_EMAIL; }
-                ],
-
-                [// Phone number validation when type is phone
-                    'value', 'match', 'pattern' => '/^[\-0-9,\(\) \.#*\+]{8,32}$/',
-                    'when' => function() { return $this->type === self::TYPE_PHONE; }
                 ],
 
                 [
@@ -80,22 +73,11 @@ class Method extends MethodBase
      */
     public function getMaskedValue()
     {
-        if ($this->type == self::TYPE_PHONE) {
-            return Utils::maskPhone($this->value);
-        } elseif ($this->type == self::TYPE_EMAIL) {
+        if ($this->type == self::TYPE_EMAIL) {
             return Utils::maskEmail($this->value);
         } else {
             throw new \Exception('Method using invalid Type', 1456610497);
         }
-    }
-
-    /**
-     * If this is a phone method, remove comma from value before returning
-     * @return string
-     */
-    public function getRawPhoneNumber()
-    {
-        return Utils::stripNonNumbers($this->value);
     }
 
     /**
@@ -128,29 +110,13 @@ class Method extends MethodBase
         $method->user_id = $userId;
         $method->type = $type;
 
-        /*
-         * Try to get national formatted version of number if phone
-         */
-        if ($type == self::TYPE_PHONE) {
-            try {
-                $method->value = \Yii::$app->phone->format(Utils::stripNonNumbers($value));
-            } catch (\Exception $e) {
-                $log['status'] = 'error';
-                $log['error'] = $e->getMessage();
-                $log['value'] = Utils::stripNonNumbers($value);
-                \Yii::warning($log);
-
-                throw new BadRequestHttpException(\Yii::t('app', $e->getMessage()), $e->getCode());
-            }
-        } elseif ($type == self::TYPE_EMAIL) {
+        if ($type == self::TYPE_EMAIL) {
             $method->value = mb_strtolower($value);
         } else {
             throw new BadRequestHttpException(\Yii::t('app', 'Invalid method type'), 1470169372);
         }
 
-        if ($type == self::TYPE_PHONE) {
-            $log['value'] = Utils::maskPhone($value);
-        } elseif ($type == self::TYPE_EMAIL) {
+        if ($type == self::TYPE_EMAIL) {
             $log['value'] = Utils::maskEmail($value);
         } else {
             $log['value'] = 'invalid type';
@@ -219,27 +185,10 @@ class Method extends MethodBase
             return mb_strtolower($value);
         };
 
-        /*
-         * If type is phone use different check function
-         */
-        if ($type == self::TYPE_PHONE) {
-            $checkFunction = function($value) {
-                return Utils::stripNonNumbers($value);
-            };
-        }
         /** @var Method $existMethod */
         foreach ($existing as $existMethod) {
             if ($checkFunction($existMethod->value) === $checkFunction($value)) {
-                try {
-                    $existMethod->sendVerification();
-                } catch (\Exception $e) {
-                    /*
-                     * If phone verification in process, treat as success so user can provide code
-                     */
-                    if ($e->getCode() != 1470317050) {
-                        throw $e;
-                    }
-                }
+                $existMethod->sendVerification();
 
                 return $existMethod;
             }
@@ -249,7 +198,7 @@ class Method extends MethodBase
     }
 
     /**
-     * Send verification to either email or phone based on $this->type
+     * Send verification to email
      * @throws \Exception
      */
     public function sendVerification()
@@ -267,17 +216,6 @@ class Method extends MethodBase
 
         if ($this->type == self::TYPE_EMAIL) {
             $this->sendVerificationEmail();
-        } elseif ($this->type == self::TYPE_PHONE) {
-            /*
-             * Save verification code to db again in case phone provider generated a new one
-             */
-            $this->verification_code = $this->sendVerificationPhone();
-            if ( ! $this->save()) {
-                throw new ServerErrorHttpException(
-                    sprintf('Unable to save method after sending %s verification', $this->type),
-                    1461441851
-                );
-            }
         } else {
             throw new BadRequestHttpException(\Yii::t('app', 'Invalid method type'), 1461432437);
         }
@@ -306,21 +244,6 @@ class Method extends MethodBase
     }
 
     /**
-     * @return string
-     * @throws \Exception
-     */
-    public function sendVerificationPhone()
-    {
-        return Verification::sendPhone(
-            $this->getRawPhoneNumber(),
-            $this->verification_code,
-            $this->user->getId(),
-            'New phone method',
-            'A new phone method has been added and verification sent to ' . $this->getMaskedValue()
-        );
-    }
-
-    /**
      * @param string $userSubmitted
      * @return bool
      */
@@ -328,8 +251,6 @@ class Method extends MethodBase
     {
         if ($this->type === self::TYPE_EMAIL) {
             return Verification::isEmailCodeValid($this->verification_code, $userSubmitted);
-        } elseif ($this->type === self::TYPE_PHONE) {
-            return Verification::isPhoneCodeValid($this->verification_code, $userSubmitted);
         } else {
             return false;
         }

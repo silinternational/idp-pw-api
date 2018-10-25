@@ -483,7 +483,8 @@ class User extends UserBase implements IdentityInterface
      */
     public function getVerifiedMethods()
     {
-        return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
+        $query = Method::find()->where(['user_id' => $this->id, 'verified' => 1]);
+        return $query->andWhere(['!=', 'type', Method::TYPE_PHONE])->all();
     }
 
     /**
