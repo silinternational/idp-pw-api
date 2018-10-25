@@ -304,8 +304,6 @@ class ResetTest extends Test
         $reset->setType(Reset::TYPE_SPOUSE);
         $this->assertEquals('s****e@d*****.o**', $reset->getMaskedValue());
 
-        $method = $this->methods('method1');
-
         $method2 = $this->methods('method2');
         $reset->setType(Reset::TYPE_METHOD, $method2->uid);
 
