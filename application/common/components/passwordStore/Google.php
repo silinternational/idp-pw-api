@@ -1,6 +1,7 @@
 <?php
 namespace common\components\passwordStore;
 
+use common\models\User;
 use Exception;
 use Google_Client;
 use Google_Service_Directory;
@@ -42,15 +43,6 @@ class Google extends Component implements PasswordStoreInterface
     public $jsonAuthFilePath = null;
 
     protected $authConfig = null;
-
-    /**
-     * Full class path for a user model (which must be a subclass of
-     * \yii\db\ActiveRecord) which we can use to look up the email address for
-     * the given employeeId.
-     *
-     * @var string
-     */
-    public $userActiveRecordClass = '\common\models\User';
 
     private $googleClient = null;
 
@@ -126,7 +118,7 @@ class Google extends Component implements PasswordStoreInterface
      */
     protected function getEmailForEmployeeId($employeeId)
     {
-        $userActiveRecord = $this->userActiveRecordClass::findOne([
+        $userActiveRecord = User::findOne([
             $this->employeeIdFieldName => $employeeId,
         ]);
 
