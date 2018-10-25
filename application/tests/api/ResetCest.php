@@ -81,7 +81,7 @@ class ResetCest extends BaseCest
             'type' => 'phone',
             'value' => '###-###-4567'
         ]);
-        $I->seeResponseCodeIs(400); // phone reset is deprecated
+        $I->seeResponseCodeIs(400); // phone reset is not supported
     }
 
     public function test6(ApiTester $I)

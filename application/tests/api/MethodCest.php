@@ -48,7 +48,7 @@ class MethodCest extends BaseCest
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendGET('/method');
         $I->seeResponseCodeIs(200);
-        $I->cantSeeResponseContainsJson([ // phone verification method is deprecated
+        $I->cantSeeResponseContainsJson([ // phone verification method is not supported
             'type' => "phone",
         ]);
         $I->seeResponseContainsJson([

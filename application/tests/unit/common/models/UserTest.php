@@ -277,7 +277,8 @@ class UserTest extends Test
 
         $verifiedCount = 0;
         foreach ($user->methods as $method) {
-            if ($method->verified === 1 && $method->type != Method::TYPE_PHONE) { // phone is deprecated
+            // phone verification is not supported
+            if ($method->verified === 1 && $method->type != Method::TYPE_PHONE) {
                 $verifiedCount++;
             }
         }
