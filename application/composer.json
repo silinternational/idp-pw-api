@@ -15,8 +15,9 @@
     "silinternational/idp-id-broker-php-client": "^2.2.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",
     "simplesamlphp/saml2": "^3.1.5",
+    "google/apiclient": "^2.0",
     "google/recaptcha": "^1.1.2",
-    "adldap2/adldap2": "dev-master",
+    "adldap2/adldap2": "^9.0",
     "fillup/fake-bower-assets": "2.0.9",
     "fillup/nexmo": "^2.0"
   },
