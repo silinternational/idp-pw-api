@@ -10,6 +10,11 @@ else
     sleep 10
 fi
 
+# Create common/config/local.php if doesn't exist
+if [ ! -f /data/common/config/local.php ]; then
+    echo "<?php return [];" > /data/common/config/local.php
+fi
+
 # Run database migrations
 runny /data/yii migrate --interactive=0
 
