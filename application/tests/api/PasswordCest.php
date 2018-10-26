@@ -1,5 +1,6 @@
 <?php
 
+require_once "BaseCest.php";
 
 class PasswordCest extends BaseCest
 {

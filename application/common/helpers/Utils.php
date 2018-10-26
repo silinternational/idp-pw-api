@@ -93,37 +93,6 @@ class Utils
     }
 
     /**
-     * @param string $phone
-     * @return string
-     */
-    public static function maskPhone($phone)
-    {
-        /*
-         * $phone may be formatted with country code followed by a comma followed by the rest of the phone number
-         * Example: 1,4085551212 or 77,8588923456
-         */
-        if (substr_count($phone, ',') > 0) {
-            list($countryCode, $number) = explode(',', $phone);
-        } else {
-            $countryCode = null;
-            $number = $phone;
-        }
-
-        $string = '';
-
-        /*
-         * If country code is present, prepend string with + followed by country code
-         */
-        if ( ! is_null($countryCode)) {
-            $string .= '+' . $countryCode . ' ';
-        }
-
-        $string .= self::maskString($number);
-
-        return $string;
-    }
-
-    /**
      * @param string $email an email address
      * @return string with most letters changed to asterisks
      * @throws BadRequestHttpException

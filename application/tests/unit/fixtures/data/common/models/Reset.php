@@ -32,7 +32,7 @@ return [
         'user_id' => 3,
         'type' => 'method',
         'method_id' => 2,
-        'code' => null,
+        'code' => '1234',
         'attempts' => 0,
         'expires' => Utils::getDatetime(time() + 900),
         'disable_until' => null,

@@ -250,7 +250,7 @@ class Reset extends ResetBase
     }
 
     /**
-     * Determine if type is phone or email and send accordingly
+     * Send reset appropriate for its type
      * @throws \Exception
      */
     private function sendMethod()
@@ -271,8 +271,6 @@ class Reset extends ResetBase
                 ]
             );
             $this->sendEmail($this->method->value, $subject, 'on-behalf');
-        } elseif ($this->method->type == Method::TYPE_PHONE) {
-            $this->sendPhone();
         } else {
             throw new \Exception('Method using unknown type', 1456608781);
         }
@@ -323,52 +321,12 @@ class Reset extends ResetBase
     }
 
     /**
-     * Send phone verification and store resulting code
-     * @throws \Exception
-     */
-    private function sendPhone()
-    {
-        // Initialize log
-        $log = [
-            'action' => 'reset send phone',
-            'method' => 'phone',
-            'method_id' => $this->method_id,
-            'previous_attempts' => $this->attempts,
-            'user' => $this->user->email,
-        ];
-
-        // Get phone number without comma
-        $number = $this->method->getRawPhoneNumber();
-
-        // Generate random code for potential use
-        $code = Utils::getRandomDigits(\Yii::$app->phone->codeLength);
-
-        // Send phone verification
-        $result = Verification::sendPhone(
-            $number,
-            $code,
-            $this->user->getId(),
-            self::TOPIC_RESET_PHONE_SENT,
-            'Password reset for ' . $this->user->getDisplayName() .
-            'sent to phone ' . $this->method->getMaskedValue()
-        );
-
-        // Update db with code
-        $this->code = $result;
-        $this->saveOrError('send phone reset', 'Unable to update reset after sending phone verification.');
-
-        $log['status'] = 'success';
-        \Yii::warning($log, 'application');
-    }
-
-    /**
      * Check if user provided code is valid
      * @param string $userProvided code submitted by user
      * @return boolean
      * @throws \Exception
      * @throws ServerErrorHttpException
      * @throws TooManyRequestsHttpException
-     * @throws common\components\phoneVerification\NotMatchException
      */
     public function isUserProvidedCodeCorrect($userProvided)
     {
@@ -377,9 +335,7 @@ class Reset extends ResetBase
          */
         $this->trackAttempt('verify');
 
-        if ($this->isTypePhone()) {
-            return Verification::isPhoneCodeValid($this->code, $userProvided);
-        } elseif ($this->isTypeEmail()) {
+        if ($this->isTypeEmail()) {
             return Verification::isEmailCodeValid($this->code, $userProvided);
         } else {
             throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
@@ -396,15 +352,6 @@ class Reset extends ResetBase
             || $this->type === self::TYPE_SUPERVISOR
             || $this->type === self::TYPE_SPOUSE
             || ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_EMAIL));
-    }
-
-    /**
-     * Check if reset is using a phone type of verification
-     * @return bool
-     */
-    public function isTypePhone()
-    {
-        return ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_PHONE);
     }
 
     /**
@@ -538,7 +485,7 @@ class Reset extends ResetBase
         if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
             $this->type = $type;
             $this->method_id = null;
-        } elseif (in_array($type, [self::TYPE_METHOD, Method::TYPE_EMAIL, Method::TYPE_PHONE])) {
+        } elseif ($type == self::TYPE_METHOD) {
             /*
              * If type is method but methodId is missing, throw error
              */

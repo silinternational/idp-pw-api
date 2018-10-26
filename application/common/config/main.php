@@ -215,9 +215,6 @@ return [
             ['class' => 'common\components\auth\Saml'],
             Env::getArrayFromPrefix('AUTH_SAML_')
         ),
-        'phone' => [
-            // Define in local.php
-        ],
         'passwordStore' => ArrayHelper::merge(
             ['class' => 'common\components\passwordStore\IdBroker'],
             Env::getArrayFromPrefix('ID_BROKER_'),

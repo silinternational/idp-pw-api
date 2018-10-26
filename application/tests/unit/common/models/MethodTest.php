@@ -7,7 +7,7 @@ use common\models\User;
 use tests\helpers\EmailUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use yii\web\ServerErrorHttpException;
+use yii\web\BadRequestHttpException;
 
 /**
  * Class MethodTest
@@ -48,25 +48,10 @@ class MethodTest extends Test
         $this->assertNotNull($method->created);
     }
 
-    public function testGetMaskedValuePhone()
-    {
-        $method = $this->methods('method1');
-        $this->assertEquals('+1 #######890', $method->getMaskedValue());
-    }
-
     public function testGetMaskedValueEmail()
     {
         $method = $this->methods('method2');
         $this->assertEquals('e**************9@d*****.o**', $method->getMaskedValue());
-    }
-
-    public function testRuleValidateValueAsPhone()
-    {
-        $method = $this->methods('method1');
-        $this->assertTrue($method->validate(['value']));
-
-        $method->value = 'email@domain.com';
-        $this->assertFalse($method->validate(['value']));
     }
 
     public function testCreateAndSendVerificationEmail()
@@ -91,19 +76,6 @@ class MethodTest extends Test
 
     }
 
-    public function testCreateAndSendVerificationPhone()
-    {
-        $user = $this->users('user1');
-        $mockPhones = include __DIR__ . '/../../../mock/phone/data.php';
-        $method = Method::createAndSendVerification(
-            $user->id,
-            Method::TYPE_PHONE,
-            $mockPhones[0]['number']
-        );
-
-        $this->assertEquals($mockPhones[0]['code'], $method->verification_code);
-    }
-
     public function testCreateAndSendVerificationInvalidType()
     {
         $this->expectException(\Exception::class);
@@ -126,30 +98,11 @@ class MethodTest extends Test
         );
     }
 
-    public function testCreateAndSendVerificationInvalidPhone()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(1461375342);
-        Method::createAndSendVerification(
-            1,
-            Method::TYPE_PHONE,
-            'not-a-phone'
-        );
-    }
-
     public function testValidateAndSetAsVerifiedValid()
     {
-        $user = $this->users('user1');
-        $mockPhones = include __DIR__ . '/../../../mock/phone/data.php';
-        $method = Method::createAndSendVerification(
-            $user->id,
-            Method::TYPE_PHONE,
-            $mockPhones[0]['number']
-        );
+        $method = $this->methods('method3');
 
-        $this->assertEquals($mockPhones[0]['code'], $method->verification_code);
-
-        $method->validateAndSetAsVerified($mockPhones[0]['code']);
+        $method->validateAndSetAsVerified($method->verification_code);
 
         $this->assertEquals(1, $method->verified);
         $this->assertNull($method->verification_code);
@@ -158,30 +111,21 @@ class MethodTest extends Test
 
     public function testValidateAndSetAsVerifiedInvalid()
     {
-        $user = $this->users('user1');
-        $mockPhones = include __DIR__ . '/../../../mock/phone/data.php';
-        $method = Method::createAndSendVerification(
-            $user->id,
-            Method::TYPE_PHONE,
-            $mockPhones[0]['number']
-        );
-
-        $this->assertEquals($mockPhones[0]['code'], $method->verification_code);
-        $this->assertEquals(1, $method->verification_attempts);
+        $method = $this->methods('method4');
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
 
         $this->assertEquals(0, $method->verified);
-        $this->assertEquals(2, $method->verification_attempts);
+        $this->assertEquals(1, $method->verification_attempts);
         $this->assertNotNull($method->verification_code);
         $this->assertNotNull($method->verification_expires);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461442988);
         $method->validateAndSetAsVerified('asdf1234');
-        $this->assertEquals(3, $method->verification_attempts);
+        $this->assertEquals(2, $method->verification_attempts);
     }
 
     public function testDeleteExpiredUnverifiedMethods()
@@ -208,8 +152,8 @@ class MethodTest extends Test
          * Attempt to create new method, it should fail when sending verification and
          * delete itself and return an exception
          */
-        $this->expectException(ServerErrorHttpException::class);
-        $this->expectExceptionCode(1469736442);
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionCode(1470169372);
         $user = $this->users('user1');
         Method::createAndSendVerification(
             $user->id,
@@ -227,21 +171,6 @@ class MethodTest extends Test
     public function testCreateAndSendVerificationExistingUnverifiedMethodEmail()
     {
         $existing = $this->methods('method4');
-
-        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
-
-        $this->assertEquals($existing->uid, $method->uid);
-        $this->assertEquals(1, $method->verification_attempts);
-
-        $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
-
-        $this->assertEquals($existing->uid, $method->uid);
-        $this->assertEquals(2, $method->verification_attempts);
-    }
-
-    public function testCreateAndSendVerificationExistingUnverifiedMethodPhone()
-    {
-        $existing = $this->methods('method5');
 
         $method = Method::createAndSendVerification($existing->user_id, $existing->type, $existing->value);
 

@@ -1,5 +1,6 @@
 <?php
 
+require_once "BaseCest.php";
 
 class MethodCest extends BaseCest
 {
@@ -47,10 +48,8 @@ class MethodCest extends BaseCest
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendGET('/method');
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
-            'id' => "11111111111111111111111111111111",
+        $I->cantSeeResponseContainsJson([ // phone verification method is not supported
             'type' => "phone",
-            'value' => "1,1234567890",
         ]);
         $I->seeResponseContainsJson([
             'id' => "22222222222222222222222222222222",
@@ -99,7 +98,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated POST request for creating an already existing method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/method',['type'=>'phone','value'=>'1,1234567890']);
+        $I->sendPOST('/method',['type'=>'email','value'=>'email-1456769679@domain.org']);
         $I->seeResponseCodeIs(409);
     }
 

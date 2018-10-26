@@ -113,18 +113,9 @@ class ResetTest extends Test
         $this->assertEquals(Reset::TYPE_PRIMARY, $new->type);
     }
 
-    public function testSendPhone()
-    {
-        $reset = $this->resets('reset2');
-        $this->assertNull($reset->code);
-        $reset->send();
-        $this->assertEquals('1234', $reset->code);
-        $this->assertEquals(1, $reset->attempts);
-    }
-
     public function testIsUserProvidedCodeCorrect()
     {
-        $reset = $this->resets('reset2');
+        $reset = $this->resets('reset3');
         $reset->send();
         $this->assertTrue($reset->isUserProvidedCodeCorrect('1234'));
 
@@ -312,11 +303,6 @@ class ResetTest extends Test
 
         $reset->setType(Reset::TYPE_SPOUSE);
         $this->assertEquals('s****e@d*****.o**', $reset->getMaskedValue());
-
-        $method = $this->methods('method1');
-
-        $reset->setType(Reset::TYPE_METHOD, $method->uid);
-        $this->assertEquals('+1 #######890', $reset->getMaskedValue());
 
         $method2 = $this->methods('method2');
         $reset->setType(Reset::TYPE_METHOD, $method2->uid);

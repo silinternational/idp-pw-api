@@ -16,18 +16,6 @@ class UtilsTest extends Test
         }
     }
 
-    public function testMaskPhone()
-    {
-        $phone1 = '1234567890';
-        $expected1 = '#######890';
-        $this->assertEquals($expected1, Utils::maskPhone($phone1));
-
-        $phone2 = '77,8889123456';
-        $expected2 = '+77 #######456';
-        $this->assertEquals($expected2, Utils::maskPhone($phone2));
-
-    }
-    
     public function testMaskEmail()
     {
         $email1 = 'abc@domain.com';

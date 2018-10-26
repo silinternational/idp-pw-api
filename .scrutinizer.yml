@@ -1,5 +1,15 @@
 ######## Set this as appropriate for the project. ########
 
+### The following runs the "new" Scrutinizer PHP Analysis which
+### adds a bunch of false errors. Some additional configuration
+### must be needed.
+#build:
+#  nodes:
+#    analysis:
+#      tests:
+#        override:
+#          - php-scrutinizer-run
+
 filter:
     paths:
         - application/*

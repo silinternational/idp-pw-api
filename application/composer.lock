@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02fb1fc9e7957e99a8d45b5ba55bbeb0",
+    "content-hash": "733568e8a3f7a79c03000294d1cb46c6",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -362,42 +362,6 @@
             ],
             "description": "Use Composer \"replace\" to fake out installing bower-asset dependencies that aren't really needed",
             "time": "2016-07-27T13:10:36+00:00"
-        },
-        {
-            "name": "fillup/nexmo",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fillup/nexmo.git",
-                "reference": "a4ba5510e5b3ed7d3dc9fc0a4eb44ddd4c466cce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fillup/nexmo/zipball/a4ba5510e5b3ed7d3dc9fc0a4eb44ddd4c466cce",
-                "reference": "a4ba5510e5b3ed7d3dc9fc0a4eb44ddd4c466cce",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle-services": "^1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Nexmo\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Phillip Shipley",
-                    "email": "phillip.shipley@gmail.com"
-                }
-            ],
-            "description": "Nexmo API client built with Guzzle Web Service descriptions",
-            "time": "2017-04-28T18:14:49+00:00"
         },
         {
             "name": "firebase/php-jwt",
