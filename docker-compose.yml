@@ -75,6 +75,7 @@ services:
             - "8000:80"
         depends_on:
             - testDb
+            - zxcvbn
         env_file:
             - ./common.env
             - ./local.env
@@ -83,6 +84,25 @@ services:
             MYSQL_DATABASE: test
             APP_ENV: test
         command: ["/data/run-tests-api.sh"]
+
+    unittest:
+        build: ./
+        volumes_from:
+        - data
+        volumes:
+        - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+        ports:
+        - "8000:80"
+        depends_on:
+        - testDb
+        env_file:
+        - ./common.env
+        - ./local.env
+        environment:
+            MYSQL_HOST: testDb
+            MYSQL_DATABASE: test
+            APP_ENV: test
+        command: ["/data/run-tests.sh"]
 
     cli:
         image: silintl/php7:latest

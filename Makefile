@@ -1,19 +1,13 @@
 start: api
 
-test:
-	make testunit && make testapi && make testbehat
+test: testunit testapi
 
 testunit: composer emailcron rmTestDb upTestDb broker ldapload yiimigratetestDb
-	docker-compose run emailcron whenavail emaildb 3306 100 ./yii migrate --interactive=0
-	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
+	docker-compose run --rm unittest
 
 # Run testunit first at least once. Otherwise, this will have 5 test failures.
 testapi: upTestDb broker yiimigratetestDb
-	docker-compose up -d zxcvbn
 	docker-compose run --rm apitest
-
-testbehat:
-	docker-compose run --rm cli bash -c './vendor/bin/behat --config=tests/features/behat.yml --strict'
 
 api: upDb broker composer yiimigrate
 	docker-compose up -d api zxcvbn cron phpmyadmin
