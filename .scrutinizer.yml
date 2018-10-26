@@ -1,11 +1,14 @@
 ######## Set this as appropriate for the project. ########
 
-build:
-  nodes:
-    analysis:
-      tests:
-        override:
-          - php-scrutinizer-run
+### The following runs the "new" Scrutinizer PHP Analysis which
+### adds a bunch of false errors. Some additional configuration
+### must be needed.
+#build:
+#  nodes:
+#    analysis:
+#      tests:
+#        override:
+#          - php-scrutinizer-run
 
 filter:
     paths:
@@ -14,6 +17,7 @@ filter:
         - application/vendor/*
     excluded_paths:
         - application/requirements.php
+        - application/vendor/*
         - application/console/migrations/*
         - application/console/migrations-local/*
         - application/console/migrations-test/*
