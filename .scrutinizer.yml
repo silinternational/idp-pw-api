@@ -1,5 +1,12 @@
 ######## Set this as appropriate for the project. ########
 
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+          
 filter:
     paths:
         - application/*
