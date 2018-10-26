@@ -6,7 +6,7 @@ build:
       tests:
         override:
           - php-scrutinizer-run
-          
+
 filter:
     paths:
         - application/*
@@ -14,7 +14,6 @@ filter:
         - application/vendor/*
     excluded_paths:
         - application/requirements.php
-        - application/vendor/*
         - application/console/migrations/*
         - application/console/migrations-local/*
         - application/console/migrations-test/*
