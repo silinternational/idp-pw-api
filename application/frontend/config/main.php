@@ -42,7 +42,7 @@ return [
         ],
         'response' => [
             'class' => 'yii\web\Response',
-            'on beforeSend' => function ($event) {
+            'on beforeSend' => function($event) {
                 /** @var yii\web\Response $response */
                 $response = $event->sender;
                 $response->headers->set('Access-Control-Allow-Origin', \Yii::$app->params['uiCorsOrigin']);
