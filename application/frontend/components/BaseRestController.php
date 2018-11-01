@@ -27,19 +27,6 @@ class BaseRestController extends Controller
                 ],
                 'except' => ['options'],
             ],
-            'corsFilter' => [
-                'class' => Cors::class,
-                'actions' => ['index', 'view', 'create', 'update', 'delete', 'options'],
-                'cors' => [
-                    'Origin' => [\Yii::$app->params['uiCorsOrigin']],
-                    'Access-Control-Request-Method' => [
-                        'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'
-                    ],
-                    'Access-Control-Request-Headers' => ['*'],
-                    'Access-Control-Allow-Credentials' => true,
-                    'Access-Control-Max-Age' => 86400,
-                ]
-            ],
             'access' => [
                 'class' => AccessControl::class,
                 'rules' => [
