@@ -279,8 +279,8 @@ class User extends UserBase implements IdentityInterface
     public function getMaskedMethods()
     {
         $methods = $this->getVerifiedMethodsAndPersonnelEmails();
-        foreach ($methods as $method) {
-            $methods['value'] = $method->getMaskedValue();
+        foreach ($methods as $key => $method) {
+            $methods[$key]['value'] = Utils::maskEmail($method['value']);
         }
         return $methods;
     }
