@@ -1,9 +1,6 @@
 <?php
 namespace frontend\controllers;
 
-use common\exception\InvalidCodeException;
-use common\models\Method;
-use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
@@ -55,16 +52,6 @@ class MethodController extends BaseRestController
                 ]
             ]
         ]);
-    }
-
-
-    /**
-     * Return list of available reset methods for user.
-     * @return array<Method|array>
-     */
-    public function getVerifiedMethods()
-    {
-        return $this->idBrokerClient->listMethod($employeeId);
     }
 
     /**
@@ -134,11 +121,8 @@ class MethodController extends BaseRestController
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        try {
-            $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
-        } catch (BadRequestHttpException $e) {
-            throw $e;
-        }
+        $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
+
         $method['type'] = 'email';
         return $method;
     }
