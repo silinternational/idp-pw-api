@@ -10,9 +10,7 @@ use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
-use yii\web\ConflictHttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
 
 class MethodController extends BaseRestController
@@ -91,7 +89,9 @@ class MethodController extends BaseRestController
     {
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        return $this->idBrokerClient->getMethod($uid, $employeeId);
+        $method = $this->idBrokerClient->getMethod($uid, $employeeId);
+        $method['type'] = 'email';
+        return $method;
     }
 
     /**
@@ -111,7 +111,9 @@ class MethodController extends BaseRestController
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        return $this->idBrokerClient->createMethod($employeeId, $value);
+        $method = $this->idBrokerClient->createMethod($employeeId, $value);
+        $method['type'] = 'email';
+        return $method;
     }
 
     /**
@@ -132,7 +134,13 @@ class MethodController extends BaseRestController
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        return $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
+        try {
+            $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
+        } catch (BadRequestHttpException $e) {
+            throw $e;
+        }
+        $method['type'] = 'email';
+        return $method;
     }
 
     /**
@@ -164,4 +172,5 @@ class MethodController extends BaseRestController
          */
         return new \stdClass();
     }
+
 }
