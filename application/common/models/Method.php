@@ -3,6 +3,7 @@ namespace common\models;
 
 use common\exception\InvalidCodeException;
 use common\helpers\Utils;
+use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -17,6 +18,25 @@ class Method extends MethodBase
 
     const TYPE_EMAIL = 'email';
     const TYPE_PHONE = 'phone';
+
+    /**
+     * @var IdBrokerClient
+     */
+    public $idBrokerClient;
+
+    public function init()
+    {
+        parent::init();
+        $config = \Yii::$app->params['mfa'];
+        $this->idBrokerClient = new IdBrokerClient(
+            $config['baseUrl'],
+            $config['accessToken'],
+            [
+                IdBrokerClient::TRUSTED_IPS_CONFIG              => $config['validIpRanges']       ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG   => $config['assertValidBrokerIp']   ?? true,
+            ]
+        );
+    }
 
     public function rules()
     {
@@ -324,4 +344,14 @@ class Method extends MethodBase
         }
     }
 
+    /**
+     * Gets all verified methods for user specified by $employeeId
+     * @param string $employeeId
+     * @return Method[]
+     */
+    public static function getVerifiedMethods($employeeId)
+    {
+        $method = new Method;
+        return $method->idBrokerClient->listMethod($employeeId);
+    }
 }

@@ -8,7 +8,6 @@ use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
-use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -279,46 +278,9 @@ class User extends UserBase implements IdentityInterface
      */
     public function getMaskedMethods()
     {
-        /*
-         * Include primary email address
-         */
-        $methods = [
-            [
-                'type' => Reset::TYPE_PRIMARY,
-                'value' => Utils::maskEmail($this->email),
-            ],
-        ];
-
-        /*
-         * Add spouse if available
-         */
-        if ($this->hasSpouse()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => Utils::maskEmail($this->getSpouseEmail()),
-            ];
-        }
-
-        /*
-         * Add supervisor if available
-         */
-        if ($this->hasSupervisor()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SUPERVISOR,
-                'value' => Utils::maskEmail($this->getSupervisorEmail()),
-            ];
-        }
-        
-        /*
-         * Then get other verified methods
-         */
-        $verifiedMethods = $this->getVerifiedMethods();
-        foreach ($verifiedMethods as $method) {
-            $methods[] = [
-                'uid' => $method->uid,
-                'type' => $method->type,
-                'value' => $method->getMaskedValue(),
-            ];
+        $methods = $this->getVerifiedMethodsAndPersonnelEmails();
+        foreach ($methods as $method) {
+            $methods['value'] = $method->getMaskedValue();
         }
         return $methods;
     }
@@ -481,10 +443,36 @@ class User extends UserBase implements IdentityInterface
     /**
      * @return Method[]
      */
-    public function getVerifiedMethods()
+    public function getVerifiedMethodsAndPersonnelEmails()
     {
-        $query = Method::find()->where(['user_id' => $this->id, 'verified' => 1]);
-        return $query->andWhere(['!=', 'type', Method::TYPE_PHONE])->all();
+        $verifiedMethods = Method::getVerifiedMethods($this->employee_id);
+
+        // Add missing 'type' property. This can go away when the UI no longer
+        // expects to see it.
+        foreach ($verifiedMethods as $key => $method) {
+            $verifiedMethods[$key]['type'] = 'email';
+        }
+
+        $verifiedMethods[] = [
+            'type' => Reset::TYPE_PRIMARY,
+            'value' => $this->email,
+        ];
+
+        if ($this->hasSpouse()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SPOUSE,
+                'value' => $this->getSpouseEmail(),
+            ];
+        }
+
+        if ($this->hasSupervisor()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SUPERVISOR,
+                'value' => $this->getSupervisorEmail(),
+            ];
+        }
+
+        return $verifiedMethods;
     }
 
     /**

@@ -59,6 +59,16 @@ class MethodController extends BaseRestController
         ]);
     }
 
+
+    /**
+     * Return list of available reset methods for user.
+     * @return array
+     */
+    public function getVerifiedMethods()
+    {
+        return $this->idBrokerClient->listMethod($employeeId);
+    }
+
     /**
      * Return list of available reset methods for user.
      * @return array
@@ -67,30 +77,8 @@ class MethodController extends BaseRestController
     {
         /** @var User $user */
         $user = \Yii::$app->user->identity;
-        $employeeId = $user->employee_id;
 
-        $verifiedMethods = $this->idBrokerClient->listMethod($employeeId);
-
-        $verifiedMethods[] = [
-            'type' => Reset::TYPE_PRIMARY,
-            'value' => $user->email,
-        ];
-
-        if ($user->hasSpouse()) {
-            $verifiedMethods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => $user->getSpouseEmail(),
-            ];
-        }
-
-        if ($user->hasSupervisor()) {
-            $verifiedMethods[] = [
-                'type' => Reset::TYPE_SUPERVISOR,
-                'value' => $user->getSupervisorEmail(),
-            ];
-        }
-
-        return $verifiedMethods;
+        return $user->getVerifiedMethodsAndPersonnelEmails();
     }
 
     /**
