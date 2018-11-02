@@ -48,10 +48,10 @@ return [
                 $response->headers->set('Access-Control-Allow-Origin', \Yii::$app->params['uiCorsOrigin']);
                 $response->headers->set('Access-Control-Allow-Credentials', 'true');
                 $response->headers->set(
-                    'Access-Control-Request-Method', 
+                    'Access-Control-Allow-Methods', 
                     'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS'
                 );
-                $response->headers->set('Access-Control-Request-Headers', '*');
+                $response->headers->set('Access-Control-Allow-Headers', '*');
                 $response->headers->set('Access-Control-Max-Age', 86400);
             },
         ],
