@@ -60,7 +60,7 @@ class MethodController extends BaseRestController
 
     /**
      * Return list of available reset methods for user.
-     * @return array
+     * @return array<Method|array>
      */
     public function getVerifiedMethods()
     {
@@ -82,7 +82,7 @@ class MethodController extends BaseRestController
     /**
      * View single method
      * @param string $uid
-     * @return array
+     * @return array<string,string>
      * @throws NotFoundHttpException
      */
     public function actionView($uid)
@@ -96,7 +96,7 @@ class MethodController extends BaseRestController
 
     /**
      * Create new unverified method and send verification
-     * @return array
+     * @return array<string,string>
      * @throws BadRequestHttpException
      * @throws \Exception
      */
@@ -119,7 +119,7 @@ class MethodController extends BaseRestController
     /**
      * Validates user submitted code and marks method as verified if valid
      * @param string $uid
-     * @return array
+     * @return array<string,string>
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws TooManyRequestsHttpException
