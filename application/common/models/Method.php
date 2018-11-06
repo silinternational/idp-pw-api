@@ -354,4 +354,16 @@ class Method extends MethodBase
         $method = new Method;
         return $method->idBrokerClient->listMethod($employeeId);
     }
+
+    /**
+     * Gets a specific verified method for user specified by $employeeId
+     * @param string $uid
+     * @param string $employeeId
+     * @return Method[]
+     */
+    public static function getOneVerifiedMethod($uid, $employeeId)
+    {
+        $method = new Method;
+        return $method->idBrokerClient->getMethod($uid, $employeeId);
+    }
 }

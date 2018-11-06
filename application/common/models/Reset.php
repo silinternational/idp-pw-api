@@ -232,30 +232,23 @@ class Reset extends ResetBase
     }
 
     /**
-     * Send reset appropriate for its type
+     * Send reset message
      * @throws \Exception
      */
     private function sendMethod()
     {
-        if ( ! ($this->method instanceof Method)) {
-            throw new \Exception('Method not initialized on Reset', 1456608512);
+        if ($this->email === null) {
+            throw new \Exception('No email defined for reset', 1456608512);
         }
 
-        if ($this->method->type == Method::TYPE_EMAIL) {
-            /*
-             * Send email to 'self' with verified email address
-             */
-            $subject = \Yii::t(
-                'app',
-                '{idpDisplayName} password reset request',
-                [
-                    'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
-                ]
-            );
-            $this->sendEmail($this->method->value, $subject, 'on-behalf');
-        } else {
-            throw new \Exception('Method using unknown type', 1456608781);
-        }
+        $subject = \Yii::t(
+            'app',
+            '{idpDisplayName} password reset request',
+            [
+                'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
+            ]
+        );
+        $this->sendEmail($this->email, $subject, 'on-behalf');
     }
 
     /**
@@ -333,7 +326,7 @@ class Reset extends ResetBase
         return ($this->type === self::TYPE_PRIMARY
             || $this->type === self::TYPE_SUPERVISOR
             || $this->type === self::TYPE_SPOUSE
-            || ($this->type === self::TYPE_METHOD && $this->method->type === Method::TYPE_EMAIL));
+            || $this->type === self::TYPE_METHOD);
     }
 
     /**
@@ -466,8 +459,8 @@ class Reset extends ResetBase
          */
         if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
             $this->type = $type;
-            $this->method_id = null;
-        } elseif ($type == self::TYPE_METHOD) {
+            $this->email = null;
+        } elseif ($type == self::TYPE_METHOD || $type == Method::TYPE_EMAIL) {
             /*
              * If type is method but methodId is missing, throw error
              */
@@ -481,7 +474,7 @@ class Reset extends ResetBase
             /*
              * Make sure user owns requested method and it is verified before update
              */
-            $method = Method::findOne(['uid' => $methodUid, 'user_id' => $this->user_id, 'verified' => 1]);
+            $method = Method::getOneVerifiedMethod($methodUid, $this->user->employee_id);
             if ($method === null) {
                 throw new NotFoundHttpException(
                     \Yii::t('app', 'Method not found'),
@@ -489,7 +482,7 @@ class Reset extends ResetBase
                 );
             }
             $this->type = self::TYPE_METHOD;
-            $this->method_id = $method->id;
+            $this->email = $method['value'];
         } else {
             throw new BadRequestHttpException(
                 \Yii::t('app', 'Unknown reset type requested'),
@@ -610,7 +603,7 @@ class Reset extends ResetBase
     public function getMaskedValue()
     {
         if ($this->type === self::TYPE_METHOD) {
-            return $this->method->getMaskedValue();
+            return Utils::maskEmail($this->email);
         } elseif ($this->type === self::TYPE_PRIMARY) {
             return Utils::maskEmail($this->user->email);
         } elseif ($this->type == self::TYPE_SUPERVISOR) {
