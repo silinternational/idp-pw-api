@@ -274,7 +274,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Return array of arrays of masked out methods
-     * @return array
+     * @return array<Method|array>
      */
     public function getMaskedMethods()
     {
@@ -441,7 +441,7 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return Method[]
+     * @return array<Method|array>
      */
     public function getVerifiedMethodsAndPersonnelEmails()
     {

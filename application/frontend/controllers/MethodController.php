@@ -56,7 +56,7 @@ class MethodController extends BaseRestController
 
     /**
      * Return list of available reset methods for user.
-     * @return array
+     * @return array<\common\models\Method|array>
      */
     public function actionIndex()
     {
