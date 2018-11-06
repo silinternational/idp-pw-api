@@ -51,7 +51,7 @@ return [
                     'Access-Control-Allow-Methods', 
                     'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS'
                 );
-                $response->headers->set('Access-Control-Allow-Headers', 'authorization');
+                $response->headers->set('Access-Control-Allow-Headers', 'authorization, content-type');
                 $response->headers->set('Access-Control-Max-Age', 86400);
             },
         ],
