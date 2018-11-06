@@ -79,13 +79,11 @@ class Reset extends ResetBase
 
     /**
      * @param User $user
-     * @param string [default=self::TYPE_PRIMARY] $type
-     * @param integer|null [default=null] $method_id
      * @return Reset
      * @throws NotFoundHttpException
      * @throws \Exception
      */
-    public static function findOrCreate($user, $type = self::TYPE_PRIMARY, $methodId = null)
+    public static function findOrCreate($user)
     {
         /*
          * Clean up expired resets
@@ -96,8 +94,8 @@ class Reset extends ResetBase
             'action' => 'findOrCreate reset',
             'user_id' => $user->id,
             'user' => $user->email,
-            'type' => $type,
-            'method_id' => $methodId,
+            'type' => self::TYPE_PRIMARY,
+            'method_id' => null,
             'ip_address' => 'initiated outside web request context',
         ];
 
@@ -120,24 +118,8 @@ class Reset extends ResetBase
              * Only set type/method if creating so that on subsequent restarts of process
              * it does not reset method to primary
              */
-            $reset->type = $type;
-            /*
-             * If $method_id is provided, make sure user owns it
-             */
-            if ($type == self::TYPE_METHOD && $methodId !== null) {
-                $method = Method::findOne(['user_id' => $user->id, 'id' => $methodId, 'verified' => 1]);
-                if ( ! $method) {
-                    $log['status'] = 'error';
-                    $log['error'] = 'Requested method not found';
-                    \Yii::error($log);
+            $reset->type = self::TYPE_PRIMARY;
 
-                    throw new NotFoundHttpException(
-                        \Yii::t('app', 'Requested method not found'),
-                        1456608142
-                    );
-                }
-                $reset->method_id = $methodId;
-            }
             /*
              * Save new Reset
              */
