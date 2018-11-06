@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "requests_by_ip".
  *
- * @property integer $id
+ * @property int $id
  * @property string $username
  * @property string $ip_address
  * @property string $created
@@ -15,7 +15,7 @@ use Yii;
 class RequestsByIpBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -23,7 +23,7 @@ class RequestsByIpBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -36,7 +36,7 @@ class RequestsByIpBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

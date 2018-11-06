@@ -7,24 +7,24 @@ use Yii;
 /**
  * This is the model class for table "email_queue".
  *
- * @property integer $id
+ * @property int $id
  * @property string $to_address
  * @property string $cc_address
  * @property string $subject
  * @property string $text_body
  * @property string $html_body
- * @property integer $attempts_count
+ * @property int $attempts_count
  * @property string $last_attempt
  * @property string $created
  * @property string $error
- * @property integer $event_log_user_id
+ * @property int $event_log_user_id
  * @property string $event_log_topic
  * @property string $event_log_details
  */
 class EmailQueueBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -32,7 +32,7 @@ class EmailQueueBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -47,7 +47,7 @@ class EmailQueueBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

@@ -7,16 +7,17 @@ use Yii;
 /**
  * This is the model class for table "reset".
  *
- * @property integer $id
+ * @property int $id
  * @property string $uid
- * @property integer $user_id
+ * @property int $user_id
  * @property string $type
- * @property integer $method_id
+ * @property int $method_id
  * @property string $code
- * @property integer $attempts
+ * @property int $attempts
  * @property string $expires
  * @property string $disable_until
  * @property string $created
+ * @property string $email
  *
  * @property Method $method
  * @property User $user
@@ -24,7 +25,7 @@ use Yii;
 class ResetBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -32,7 +33,7 @@ class ResetBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -43,6 +44,7 @@ class ResetBase extends \yii\db\ActiveRecord
             [['expires', 'disable_until', 'created'], 'safe'],
             [['uid'], 'string', 'max' => 32],
             [['code'], 'string', 'max' => 64],
+            [['email'], 'string', 'max' => 255],
             [['uid'], 'unique'],
             [['user_id'], 'unique'],
             [['code'], 'unique'],
@@ -52,7 +54,7 @@ class ResetBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -67,6 +69,7 @@ class ResetBase extends \yii\db\ActiveRecord
             'expires' => Yii::t('app', 'Expires'),
             'disable_until' => Yii::t('app', 'Disable Until'),
             'created' => Yii::t('app', 'Created'),
+            'email' => Yii::t('app', 'Email'),
         ];
     }
 

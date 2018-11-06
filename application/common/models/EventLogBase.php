@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "event_log".
  *
- * @property integer $id
- * @property integer $user_id
+ * @property int $id
+ * @property int $user_id
  * @property string $topic
  * @property string $details
  * @property string $created
@@ -18,7 +18,7 @@ use Yii;
 class EventLogBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -26,7 +26,7 @@ class EventLogBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -41,7 +41,7 @@ class EventLogBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
