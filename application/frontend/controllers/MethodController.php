@@ -77,7 +77,11 @@ class MethodController extends BaseRestController
         $employeeId = \Yii::$app->user->identity->employee_id;
 
         $method = $this->idBrokerClient->getMethod($uid, $employeeId);
-        $method['type'] = 'email';
+        if ($method === null) {
+            throw new NotFoundHttpException();
+        }
+
+        $method['type'] = ('email');
         return $method;
     }
 
