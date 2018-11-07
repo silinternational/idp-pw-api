@@ -5,8 +5,8 @@ return [
         'id' => 1,
         'uid' => '11111111111111111111111111111111',
         'user_id' => 1,
-        'type' => 'phone',
-        'value' => '1,1234567890',
+        'type' => 'email',
+        'value' => 'email1234567890@example.org',
         'verified' => 1,
         'verification_code' => null,
         'verification_attempts' => null,
@@ -48,18 +48,6 @@ return [
         'verification_attempts' => null,
         'verification_expires' => Utils::getDatetime(time() + 1800),
         'created' => '2000-01-01 00:00:00',
-    ],
-    'method5' => [
-        'id' => 5,
-        'uid' => '55555555555555555555555555555555',
-        'user_id' => 1,
-        'type' => 'phone',
-        'value' => '1 (555) 444-5692',
-        'verified' => 0,
-        'verification_code' => 987456,
-        'verification_attempts' => null,
-        'verification_expires' => Utils::getDatetime(time() + 1800),
-        'created' => '2000-01-01 00:00:00',
-    ],
+    ]
     
 ];
