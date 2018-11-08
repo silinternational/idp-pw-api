@@ -347,7 +347,7 @@ class Method extends MethodBase
     /**
      * Gets all verified methods for user specified by $employeeId
      * @param string $employeeId
-     * @return Method[]
+     * @return String[]
      */
     public static function getVerifiedMethods($employeeId)
     {
@@ -359,7 +359,7 @@ class Method extends MethodBase
      * Gets a specific verified method for user specified by $employeeId
      * @param string $uid
      * @param string $employeeId
-     * @return Method[]
+     * @return null|String[]
      */
     public static function getOneVerifiedMethod($uid, $employeeId)
     {
