@@ -1,10 +1,10 @@
 <?php
 namespace common\models;
 
-use common\exception\InvalidCodeException;
-use common\helpers\Utils;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
+use common\exception\InvalidCodeException;
+use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;

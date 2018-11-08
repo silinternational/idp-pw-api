@@ -58,6 +58,10 @@ class Reset extends ResetBase
                     'message' => 'Reset type must be either ' . self::TYPE_PRIMARY . ' or ' . self::TYPE_METHOD .
                         ' or ' . self::TYPE_SUPERVISOR . ' or ' . self::TYPE_SPOUSE . ' .',
                 ],
+
+                [
+                    ['email'], 'email'
+                ],
             ],
             parent::rules()
         );
@@ -459,6 +463,10 @@ class Reset extends ResetBase
             $this->type = $type;
             $this->email = null;
         } elseif ($type == self::TYPE_METHOD || $type == Method::TYPE_EMAIL) {
+            /*
+             * Method::TYPE_EMAIL is included because that type is identified by the UI
+             */
+
             /*
              * If type is method but methodId is missing, throw error
              */

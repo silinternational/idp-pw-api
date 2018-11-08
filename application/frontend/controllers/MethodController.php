@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Method;
 use common\models\User;
 use frontend\components\BaseRestController;
 use Sil\Idp\IdBroker\Client\exceptions\MethodRateLimitException;
@@ -78,12 +79,9 @@ class MethodController extends BaseRestController
     {
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        $method = $this->idBrokerClient->getMethod($uid, $employeeId);
-        if ($method === null) {
-            throw new NotFoundHttpException();
-        }
+        $method = Method::getOneVerifiedMethod($uid, $employeeId);
 
-        $method['type'] = ('email');
+        $method['type'] = 'email';
         return $method;
     }
 

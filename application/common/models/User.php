@@ -447,8 +447,6 @@ class User extends UserBase implements IdentityInterface
     {
         $verifiedMethods = Method::getVerifiedMethods($this->employee_id);
 
-        // Add missing 'type' property. This can go away when the UI no longer
-        // expects to see it.
         foreach ($verifiedMethods as $key => $method) {
             $verifiedMethods[$key]['type'] = 'email';
         }
