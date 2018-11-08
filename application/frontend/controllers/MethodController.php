@@ -3,7 +3,9 @@ namespace frontend\controllers;
 
 use common\models\User;
 use frontend\components\BaseRestController;
+use Sil\Idp\IdBroker\Client\exceptions\MethodRateLimitException;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -125,7 +127,17 @@ class MethodController extends BaseRestController
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
+        try {
+            $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException();
+            } else {
+                throw new \Exception($e->getMessage());
+            }
+        } catch (MethodRateLimitException $e) {
+            throw new TooManyRequestsHttpException();
+        }
 
         $method['type'] = 'email';
         return $method;
