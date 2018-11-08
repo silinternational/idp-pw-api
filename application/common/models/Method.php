@@ -4,8 +4,10 @@ namespace common\models;
 use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -360,10 +362,23 @@ class Method extends MethodBase
      * @param string $uid
      * @param string $employeeId
      * @return null|String[]
+     * @throws \yii\web\NotFoundHttpException
+     * @throws \Exception
      */
     public static function getOneVerifiedMethod($uid, $employeeId)
     {
         $method = new Method;
-        return $method->idBrokerClient->getMethod($uid, $employeeId);
+        try {
+            return $method->idBrokerClient->getMethod($uid, $employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException(
+                    \Yii::t('app', 'Method not found'),
+                    1462989221
+                );
+            } else {
+                throw new \Exception($e->getMessage());
+            }
+        }
     }
 }

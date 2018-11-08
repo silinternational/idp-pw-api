@@ -5,7 +5,6 @@ use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
 
@@ -80,7 +79,6 @@ class Reset extends ResetBase
     /**
      * @param User $user
      * @return Reset
-     * @throws NotFoundHttpException
      * @throws \Exception
      */
     public static function findOrCreate($user)
@@ -475,12 +473,6 @@ class Reset extends ResetBase
              * Make sure user owns requested method and it is verified before update
              */
             $method = Method::getOneVerifiedMethod($methodUid, $this->user->employee_id);
-            if ($method === null) {
-                throw new NotFoundHttpException(
-                    \Yii::t('app', 'Method not found'),
-                    1462989221
-                );
-            }
             $this->type = self::TYPE_METHOD;
             $this->email = $method['value'];
         } else {
