@@ -1705,7 +1705,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client",
-                "reference": "e10e784b0900cbf4ac6dfe90a03835cf4f30a3b6"
+                "reference": "395910527fcd4e66a8d895c47b7288b07f64ab09"
             },
             "require": {
                 "guzzlehttp/guzzle-services": "^1.1",
@@ -1745,7 +1745,7 @@
                 "idp",
                 "php client"
             ],
-            "time": "2018-11-07T22:15:28+00:00"
+            "time": "2018-11-08T18:11:45+00:00"
         },
         {
             "name": "silinternational/php-env",
