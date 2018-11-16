@@ -85,7 +85,7 @@ class AuthController extends BaseRestController
             $user = User::findOrCreate(null, null, $authUser->employeeId);
             $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
-            $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken);
+            $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 
             $log['status'] = 'success';
             \Yii::warning($log, 'application');
@@ -195,13 +195,15 @@ class AuthController extends BaseRestController
      * Build URL to redirect user to after successful login
      * @param string $state
      * @param string $accessToken
+     * @param string $tokenExpiration
      * @return string
+     * @throws \Exception
      */
-    public function getLoginSuccessRedirectUrl($state, $accessToken)
+    public function getLoginSuccessRedirectUrl($state, $accessToken, $tokenExpiration)
     {
         /*
-             * Relay state holds the return to path from UI
-             */
+         * Relay state holds the return to path from UI
+         */
         $relayState = \Yii::$app->request->post('RelayState', '/');
 
         /*
@@ -214,9 +216,12 @@ class AuthController extends BaseRestController
             $joinChar = '?';
         }
         $url = $afterLogin . sprintf(
-                '%sstate=%s&token_type=Bearer&expires_in=%s&access_token=%s',
-                $joinChar, Html::encode($state), \Yii::$app->user->absoluteAuthTimeout, $accessToken
-            );
+            '%sstate=%s&token_type=Bearer&expires_in=%s&access_token=%s',
+            $joinChar,
+            Html::encode($state),
+            Utils::getIso8601($tokenExpiration),
+            $accessToken
+        );
 
         return $url;
     }
