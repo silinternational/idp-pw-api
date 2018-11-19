@@ -216,7 +216,7 @@ class AuthController extends BaseRestController
             $joinChar = '?';
         }
         $url = $afterLogin . sprintf(
-            '%sstate=%s&token_type=Bearer&expires=%s&access_token=%s',
+            '%sstate=%s&token_type=Bearer&expires_utc=%s&access_token=%s',
             $joinChar,
             Html::encode($state),
             Utils::getIso8601($tokenExpiration),
