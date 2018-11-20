@@ -95,7 +95,7 @@ class IdBroker extends Component implements PasswordStoreInterface
             );
             return $meta;
         } catch (ServiceException $e) {
-            if ($e->httpStatusCode === 422) {
+            if ($e->httpStatusCode === 409) {
                 throw new PasswordReuseException();
             }
             throw $e;

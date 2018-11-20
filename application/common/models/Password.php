@@ -7,6 +7,7 @@ use common\components\passwordStore\PasswordReuseException;
 use yii\base\Model;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\ServerErrorHttpException;
 
 class Password extends Model
@@ -222,7 +223,7 @@ class Password extends Model
              */
             if ($e instanceof  PasswordReuseException) {
                 \Yii::warning($log);
-                throw new BadRequestHttpException(
+                throw new ConflictHttpException(
                     \Yii::t(
                         'app',
                         'Unable to update password. ' .
