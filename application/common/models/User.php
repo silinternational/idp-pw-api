@@ -278,9 +278,13 @@ class User extends UserBase implements IdentityInterface
      */
     public function getMaskedMethods()
     {
-        $methods = $this->getVerifiedMethodsAndPersonnelEmails();
+        $methods = $this->getMethodsAndPersonnelEmails();
         foreach ($methods as $key => $method) {
-            $methods[$key]['value'] = Utils::maskEmail($method['value']);
+            if ($method['verified'] ?? true) {
+                $methods[$key]['value'] = Utils::maskEmail($method['value']);
+            } else {
+                unset($methods[$key]);
+            }
         }
         return $methods;
     }
@@ -443,9 +447,9 @@ class User extends UserBase implements IdentityInterface
     /**
      * @return array<Method|array>
      */
-    public function getVerifiedMethodsAndPersonnelEmails()
+    public function getMethodsAndPersonnelEmails()
     {
-        $verifiedMethods = Method::getVerifiedMethods($this->employee_id);
+        $verifiedMethods = Method::getMethods($this->employee_id);
 
         foreach ($verifiedMethods as $key => $method) {
             $verifiedMethods[$key]['type'] = 'email';

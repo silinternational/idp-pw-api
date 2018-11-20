@@ -66,7 +66,7 @@ class MethodController extends BaseRestController
         /** @var User $user */
         $user = \Yii::$app->user->identity;
 
-        return $user->getVerifiedMethodsAndPersonnelEmails();
+        return $user->getMethodsAndPersonnelEmails();
     }
 
     /**

@@ -347,11 +347,11 @@ class Method extends MethodBase
     }
 
     /**
-     * Gets all verified methods for user specified by $employeeId
+     * Gets all methods for user specified by $employeeId
      * @param string $employeeId
      * @return String[]
      */
-    public static function getVerifiedMethods($employeeId)
+    public static function getMethods($employeeId)
     {
         $method = new Method;
         return $method->idBrokerClient->listMethod($employeeId);
