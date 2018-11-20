@@ -449,32 +449,32 @@ class User extends UserBase implements IdentityInterface
      */
     public function getMethodsAndPersonnelEmails()
     {
-        $verifiedMethods = Method::getMethods($this->employee_id);
+        $methods = Method::getMethods($this->employee_id);
 
-        foreach ($verifiedMethods as $key => $method) {
-            $verifiedMethods[$key]['type'] = 'email';
+        foreach ($methods as $key => $method) {
+            $methods[$key]['type'] = 'email';
         }
 
-        $verifiedMethods[] = [
+        $methods[] = [
             'type' => Reset::TYPE_PRIMARY,
             'value' => $this->email,
         ];
 
         if ($this->hasSpouse()) {
-            $verifiedMethods[] = [
+            $methods[] = [
                 'type' => Reset::TYPE_SPOUSE,
                 'value' => $this->getSpouseEmail(),
             ];
         }
 
         if ($this->hasSupervisor()) {
-            $verifiedMethods[] = [
+            $methods[] = [
                 'type' => Reset::TYPE_SUPERVISOR,
                 'value' => $this->getSupervisorEmail(),
             ];
         }
 
-        return $verifiedMethods;
+        return $methods;
     }
 
     /**
