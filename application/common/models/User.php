@@ -8,7 +8,6 @@ use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
-use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -275,50 +274,17 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Return array of arrays of masked out methods
-     * @return array
+     * @return array<Method|array>
      */
     public function getMaskedMethods()
     {
-        /*
-         * Include primary email address
-         */
-        $methods = [
-            [
-                'type' => Reset::TYPE_PRIMARY,
-                'value' => Utils::maskEmail($this->email),
-            ],
-        ];
-
-        /*
-         * Add spouse if available
-         */
-        if ($this->hasSpouse()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => Utils::maskEmail($this->getSpouseEmail()),
-            ];
-        }
-
-        /*
-         * Add supervisor if available
-         */
-        if ($this->hasSupervisor()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SUPERVISOR,
-                'value' => Utils::maskEmail($this->getSupervisorEmail()),
-            ];
-        }
-        
-        /*
-         * Then get other verified methods
-         */
-        $verifiedMethods = $this->getVerifiedMethods();
-        foreach ($verifiedMethods as $method) {
-            $methods[] = [
-                'uid' => $method->uid,
-                'type' => $method->type,
-                'value' => $method->getMaskedValue(),
-            ];
+        $methods = $this->getMethodsAndPersonnelEmails();
+        foreach ($methods as $key => $method) {
+            if ($method['verified'] ?? true) {
+                $methods[$key]['value'] = Utils::maskEmail($method['value']);
+            } else {
+                unset($methods[$key]);
+            }
         }
         return $methods;
     }
@@ -479,12 +445,36 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return Method[]
+     * @return array<Method|array>
      */
-    public function getVerifiedMethods()
+    public function getMethodsAndPersonnelEmails()
     {
-        $query = Method::find()->where(['user_id' => $this->id, 'verified' => 1]);
-        return $query->andWhere(['!=', 'type', Method::TYPE_PHONE])->all();
+        $verifiedMethods = Method::getMethods($this->employee_id);
+
+        foreach ($verifiedMethods as $key => $method) {
+            $verifiedMethods[$key]['type'] = 'email';
+        }
+
+        $verifiedMethods[] = [
+            'type' => Reset::TYPE_PRIMARY,
+            'value' => $this->email,
+        ];
+
+        if ($this->hasSpouse()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SPOUSE,
+                'value' => $this->getSpouseEmail(),
+            ];
+        }
+
+        if ($this->hasSupervisor()) {
+            $verifiedMethods[] = [
+                'type' => Reset::TYPE_SUPERVISOR,
+                'value' => $this->getSupervisorEmail(),
+            ];
+        }
+
+        return $verifiedMethods;
     }
 
     /**

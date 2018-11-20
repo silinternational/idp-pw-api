@@ -164,7 +164,7 @@ class ResetController extends BaseRestController
         }
 
         $type = \Yii::$app->request->getBodyParam('type', null);
-        $methodId = \Yii::$app->request->getBodyParam('uid', null);
+        $methodId = \Yii::$app->request->getBodyParam('id', null);
 
         if ($type === null) {
             throw new BadRequestHttpException(
@@ -254,11 +254,6 @@ class ResetController extends BaseRestController
         if ($isValid === true) {
 
             $ipAddress = Utils::getClientIp(\Yii::$app->request);
-            if ($reset->type === Reset::TYPE_METHOD) {
-                $methodType = $reset->method->type;
-            } else {
-                $methodType = null;
-            }
 
             /*
              * Log event with reset type/method details
@@ -269,7 +264,6 @@ class ResetController extends BaseRestController
                     'Reset Type' => $reset->type,
                     'Attempts' => $reset->attempts,
                     'IP Address' => $ipAddress,
-                    'Method type (if reset type is method)' => $methodType,
                     'Method value' => $reset->getMaskedValue(),
                 ],
                 $reset->user_id

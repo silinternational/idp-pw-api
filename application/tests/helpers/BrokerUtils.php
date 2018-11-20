@@ -30,4 +30,19 @@ class BrokerUtils
             }
         }
     }
+
+    public static function insertFakeMethods()
+    {
+        $data = include __DIR__ . '/BrokerFakeMethods.php';
+
+        $baseUrl = \Yii::$app->personnel->baseUrl;
+        $accessToken = \Yii::$app->personnel->accessToken;
+        $idBrokerClient = new IdBrokerClient($baseUrl, $accessToken, [
+            IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
+        ]);
+
+        foreach ($data as $methodInfo) {
+            $idBrokerClient->createMethod($methodInfo['employee_id'], $methodInfo['value']);
+        }
+    }
 }

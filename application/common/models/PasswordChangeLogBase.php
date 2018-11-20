@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "password_change_log".
  *
- * @property integer $id
- * @property integer $user_id
+ * @property int $id
+ * @property int $user_id
  * @property string $scenario
  * @property string $reset_type
  * @property string $method_type
@@ -21,7 +21,7 @@ use Yii;
 class PasswordChangeLogBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -29,7 +29,7 @@ class PasswordChangeLogBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -45,7 +45,7 @@ class PasswordChangeLogBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

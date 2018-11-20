@@ -83,6 +83,7 @@ services:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
             APP_ENV: test
+            ID_BROKER_baseUrl: http://broker
         command: ["/data/run-tests-api.sh"]
 
     unittest:
@@ -102,6 +103,7 @@ services:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
             APP_ENV: test
+            ID_BROKER_baseUrl: http://broker
         command: ["/data/run-tests.sh"]
 
     cli:
@@ -168,7 +170,7 @@ services:
             MYSQL_PASSWORD: pass
 
     broker:
-        image: silintl/idp-id-broker:latest
+        image: silintl/idp-id-broker:develop-4.0
         ports:
         - "8083:80"
         depends_on:
@@ -193,6 +195,9 @@ services:
             PASSWORD_PROFILE_URL: https://example.com/#/profile
             SUPPORT_EMAIL: support@example.com
             EMAIL_SIGNATURE: Dummy Signature for Tests
+            RESET_lifetimeSeconds: 3600
+            RESET_codeLength: 6
+            APP_ENV: test
         command: whenavail brokerDb 3306 60 ./run-broker.sh
 
     ldap:

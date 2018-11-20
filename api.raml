@@ -1,0 +1,360 @@
+#%RAML 1.0
+title: Password API
+version: v3
+baseUri: http://idp-pw-api.local:8080
+protocols: [ HTTPS ]
+mediaType: application/json
+securitySchemes:
+  AuthzBearerToken:
+      type: x-{other}
+      describedBy:
+        headers:
+          Authorization:
+            type: string
+            example: Bearer gwgyxgf0vbuwYrI60sbbxLM3U1Jjw2lyvG53Kjjy9cq
+securedBy: [ AuthzBearerToken ]
+types:
+  Error:
+    type: object
+    properties:
+      name: string
+      message: string
+      code: integer
+      status: integer
+    example:
+      {
+        "name": "Bad Request",
+        "message": "Unable to update password. If this password has been used before please use something different.",
+        "code": 1469194882,
+        "status": 409
+      }
+  Method:
+    type: object
+    properties:
+      id?: string
+      value: string
+      type:
+        enum: [ primary, supervisor, spouse, email ]
+      verified?: boolean
+    example:
+      {
+        "id": "nFV7mQQJl3L0PB4kfS2tG1YYbmzT0Ghm",
+        "type": "email",
+        "value": "shep@gmail.com"
+      }
+  Mfa:
+    type: object
+    properties:
+      id?: integer
+      type:
+        enum: [ backupcode, totp, u2f ]
+      label?: string
+      created_utc?: string
+      last_used_utc?: string
+      data?: array
+    example:
+      {
+        "id": 1,
+        "type": "backupcode",
+        "label": "a_label",
+        "created_utc": "2018-09-07T17:46:37+00:00",
+        "last_used_utc": "2018-09-07T17:47:06+00:00",
+        "data": [
+           "count": 9
+        ]
+      }
+  PasswordMeta:
+    type: object
+    properties:
+      last_changed: string
+      expires: string
+    example:
+      {
+        "last_changed": "2018-09-13T19:21:57+00:00",
+        "expires": "2020-09-13T23:59:59+00:00"
+      }
+  Reset:
+    description: |
+      An object holding the verified emails that can be used for performing
+      a password reset. The addresses in the response are
+      masked for privacy.
+    type: object
+    properties:
+      uid: string
+      methods: Method[]
+    example:
+      {
+        "uid": 123asdf123lkjfsdfw23,
+        "methods": [
+          {
+            "type": "primary",
+            "value": "i****@s**.com"
+          },
+          {
+            "type": "spouse",
+            "value": "a*******@s**.org"
+          },
+          {
+            "type": "supervisor",
+            "value": "a*******@s**.org"
+          },
+          {
+            "id": a4a45eg5h6h7tjy8kaw4w33,
+            "type": "email",
+            "value": "j****@c*********.com"
+          }
+        ]
+      }
+
+/auth:
+  /login:
+    get:
+      queryParameters:
+        ReturnTo:
+          description: URL to return to after login
+          type: string
+      responses:
+        302:
+          description: Redirection to login page
+    post:
+      queryParameters:
+        ReturnTo:
+          description: URL to return to after login
+          type: string
+      responses:
+        302:
+          description: Redirection to login page
+  /logout:
+    get:
+      responses:
+        200:
+/method:
+  get:
+    description: |
+      Request a list of password recovery methods, including methods
+      not yet verified.
+    responses:
+      200:
+        body:
+          type: Method[]
+  post:
+    description: |
+      Create a new password recovery method. The creation of a method
+      is not completed until the following verification call is made.
+      Unverified Methods will automatically expire if not verified
+      within a certain amount of time.
+    body:
+      properties:
+        value: string
+    responses:
+      200:
+        body:
+          type: Method
+  /{methodId}:
+    get:
+      description: Request a single password recovery method.
+      responses:
+        200:
+          body:
+            type: Method
+    put:
+      description: Attempt to verify a recovery method.
+      body:
+        properties:
+          code: string
+      responses:
+        200:
+          body:
+            type: Method
+        400:
+          description: Submitted code was incorrect.
+        429:
+          description: Too many verification attempts on this method.
+    delete:
+      description: Delete a recovery method.
+      responses:
+        204:
+          description: Method has been deleted.
+    /resend:
+      put:
+        description: Resend recovery verification message.
+        responses:
+          200:
+            description: Message sent.
+          400:
+            description: Method already verified.
+/mfa:
+  get:
+    description: Request a list of MFA objects for logged in user.
+    responses:
+      200:
+        body:
+          type: Mfa
+  post:
+    description: |
+      Create a new MFA object. Only properties `type` and `label` are
+      needed in the request.
+    body:
+      type: Mfa
+    responses:
+      200:
+        description: |
+          MFA object created. Only `id` and `data` are in the response.
+          If `type` is `backupcode` then `data` is populated with the
+          backup codes.
+        body:
+          type: Mfa
+      400:
+        description: Property `type` was omitted.
+  /{mfaId}:
+    delete:
+      description: Delete an MFA object.
+      responses:
+        200:
+          description: Object deleted
+    /verify:
+      post:
+        description: Attempt to verify an MFA object.
+        body:
+          properties:
+            value: string
+        responses:
+          204:
+            description: MFA verified successfully.
+          400:
+            description: Property `value` was omitted or incorrect.
+/password:
+  put:
+    description: Set a new password.
+    body:
+      properties:
+        password:
+          type: string
+      example:
+        {
+          "password": "abc123!@*ABC"
+        }
+    responses:
+      200:
+        body:
+          type: PasswordMeta
+      409:
+        description: The requested password has been used too recently.
+        body:
+          type: Error
+  get:
+    description: Get password metadata.
+    responses:
+      200:
+        body:
+          type: PasswordMeta
+/reset:
+  post:
+    description: |
+      Initiate a password reset.
+      Sends reset email to primary email address with a link like
+      `https://idp-pw.local/#/recovery/verify/{resetUid}/{code}`
+      Responds with id of reset object and all available email addresses
+      for the user.
+    body:
+      properties:
+        username:
+          type: string
+    responses:
+      200:
+        body:
+          type: Reset
+  /{resetId}:
+    get:
+      description: Request the reset object by its id.
+      responses:
+        200:
+          body:
+            type: Reset
+    put:
+      description: |
+        Update the reset to use a different email. If `type` is `email`,
+        then this request is for an alternate recovery Method, and
+        `methodId` is required.
+      body:
+        properties:
+          type:
+            enum: [ primary, supervisor, spouse, email ]
+          methodId?: string
+      responses:
+        200:
+          body:
+            type: Reset
+        400:
+          description: |
+            The reset `type` was not provided or is not valid, or the
+            `methodId` parameter was not provided when required.
+          body:
+            type: Error
+        404:
+          description: |
+            The reset could not be found or the referenced Method has
+            not been verified.
+          body:
+            type: Error
+    /resend:
+      put:
+        description: Request to resend verification email.
+        responses:
+          200:
+            body:
+              type: Reset
+          404:
+            description: Reset could not be found.
+            body:
+              type: Error
+    /validate:
+      put:
+        description: Validate reset code to complete password reset process
+        body:
+          properties:
+            code: string
+            client_id: string
+        responses:
+          200:
+            description: |
+              Reset was validated. Response contains a 32-character access
+              token. Subsequent API calls should use `client_id` concatenated
+              with `access_token` in the Authorization header.
+            body:
+              properties:
+                access_token: string
+          400:
+            description: |
+              The provided code was incorrect or `client_id` was missing.
+/site:
+  /system-status:
+    get:
+      description: Check site status.
+      responses:
+        200:
+          description: Site is operational.
+/user:
+  /me:
+    description: Request information for current user.
+    get:
+      responses:
+        200:
+          body:
+            properties:
+              first_name: string
+              last_name: string
+              idp_username: string
+              email: string
+              password_meta: PasswordMeta
+            example:
+              {
+                "first_name": "Billy",
+                "last_name": "Clark",
+                "idp_username": "billy_clark",
+                "email": "a@b.com",
+                "password_meta": {
+                  "last_changed": 2018-09-13T19:21:57+00:00,
+                  "expires":  2020-09-13T23:59:59+00:00
+                }
+              }

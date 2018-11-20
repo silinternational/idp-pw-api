@@ -1,10 +1,13 @@
 <?php
 namespace common\models;
 
+use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use common\exception\InvalidCodeException;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -17,6 +20,25 @@ class Method extends MethodBase
 
     const TYPE_EMAIL = 'email';
     const TYPE_PHONE = 'phone';
+
+    /**
+     * @var IdBrokerClient
+     */
+    public $idBrokerClient;
+
+    public function init()
+    {
+        parent::init();
+        $config = \Yii::$app->params['mfa'];
+        $this->idBrokerClient = new IdBrokerClient(
+            $config['baseUrl'],
+            $config['accessToken'],
+            [
+                IdBrokerClient::TRUSTED_IPS_CONFIG              => $config['validIpRanges']       ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG   => $config['assertValidBrokerIp']   ?? true,
+            ]
+        );
+    }
 
     public function rules()
     {
@@ -324,4 +346,39 @@ class Method extends MethodBase
         }
     }
 
+    /**
+     * Gets all methods for user specified by $employeeId
+     * @param string $employeeId
+     * @return String[]
+     */
+    public static function getMethods($employeeId)
+    {
+        $method = new Method;
+        return $method->idBrokerClient->listMethod($employeeId);
+    }
+
+    /**
+     * Gets a specific verified method for user specified by $employeeId
+     * @param string $uid
+     * @param string $employeeId
+     * @return null|String[]
+     * @throws \yii\web\NotFoundHttpException
+     * @throws \Exception
+     */
+    public static function getOneVerifiedMethod($uid, $employeeId)
+    {
+        $method = new Method;
+        try {
+            return $method->idBrokerClient->getMethod($uid, $employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException(
+                    \Yii::t('app', 'Method not found'),
+                    1462989221
+                );
+            } else {
+                throw new \Exception($e->getMessage());
+            }
+        }
+    }
 }
