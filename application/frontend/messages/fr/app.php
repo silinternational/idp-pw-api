@@ -14,6 +14,7 @@ return [
 
     // Method.php
     'Invalid method type' => 'Type de méthode invalide',
+    'Error locating personnel record' => 'Erreur de localisation du dossier personnel',
 
     // Reset.php
     'Requested method not found' => 'Méthode demandée non trouvée',
@@ -83,10 +84,13 @@ return [
     // MethodController.php
     'Type is required. Options are: {email}' => 'Le type est requis. Les options sont: {email} ',
     'Value is required' => 'Valeur est requise',
-    'Method already exists' => 'La méthode existe déjà',
+    'Recovery method already exists' => 'La méthode de récupération existe déjà',
     'Code is required' => 'Code est requis',
     'Invalid verification code' => 'Code de vérification invalide',
     'Method already verified' => 'Méthode déjà vérifiée',
+    'Too many failures for this recovery method' =>
+        'Trop d\'échecs pour cette méthode de récupération',
+    'Recovery method not found' => 'Méthode de récupération non trouvée',
 
     // MfaController.php
     'Type is required' => '\'Type\' est requis',

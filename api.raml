@@ -137,6 +137,8 @@ types:
       200:
         body:
           type: Method[]
+      400:
+        description: User not found in personnel database.
   post:
     description: |
       Create a new password recovery method. The creation of a method
@@ -150,13 +152,21 @@ types:
       200:
         body:
           type: Method
+      400:
+        description: Missing parameter
+      409:
+        description: New method matches an already existing verified method
+      500:
+        description: Database or other system error
   /{methodId}:
     get:
-      description: Request a single password recovery method.
+      description: Request a single verified password recovery method.
       responses:
         200:
           body:
             type: Method
+        404:
+          description: Method not found.
     put:
       description: Attempt to verify a recovery method.
       body:
@@ -167,22 +177,32 @@ types:
           body:
             type: Method
         400:
-          description: Submitted code was incorrect.
+          description: Submitted code was incorrect or missing.
+        404:
+          description: Method not found.
         429:
           description: Too many verification attempts on this method.
+        500:
+          description: Database or other system error
     delete:
-      description: Delete a recovery method.
+      description: Delete a recovery method object.
       responses:
         204:
           description: Method has been deleted.
+        404:
+          description: Method not found.
+        500:
+          description: Delete failed.
     /resend:
       put:
         description: Resend recovery verification message.
         responses:
-          200:
+          204:
             description: Message sent.
           400:
             description: Method already verified.
+          500:
+            description: Resend failed.
 /mfa:
   get:
     description: Request a list of MFA objects for logged in user.
