@@ -15,6 +15,7 @@ class Utils
 
     const DT_FORMAT = 'Y-m-d H:i:s';
     const FRIENDLY_DT_FORMAT = 'l F j, Y g:iA T';
+    const DT_ISO8601 = 'Y-m-d\TH:i:s\Z';
     const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
@@ -40,7 +41,7 @@ class Utils
         if ($timestamp === false) {
             throw new \Exception('Unable to parse date to timestamp', 1468865840);
         }
-        return date('c', $timestamp);
+        return date(self::DT_ISO8601, $timestamp);
     }
 
     /**
