@@ -135,7 +135,7 @@ class UtilsTest extends Test
 
     public function testGetIso8601()
     {
-        $expected = '2016-06-15T13:09:28+00:00';
+        $expected = '2016-06-15T13:09:28Z';
         $timestamp = 1465996168;
 
         $this->assertEquals($expected, Utils::getIso8601($timestamp));
