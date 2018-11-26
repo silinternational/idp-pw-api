@@ -7,14 +7,14 @@ use Yii;
 /**
  * This is the model class for table "method".
  *
- * @property integer $id
+ * @property int $id
  * @property string $uid
- * @property integer $user_id
+ * @property int $user_id
  * @property string $type
  * @property string $value
- * @property integer $verified
+ * @property int $verified
  * @property string $verification_code
- * @property integer $verification_attempts
+ * @property int $verification_attempts
  * @property string $verification_expires
  * @property string $created
  *
@@ -24,7 +24,7 @@ use Yii;
 class MethodBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -32,7 +32,7 @@ class MethodBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -45,14 +45,14 @@ class MethodBase extends \yii\db\ActiveRecord
             [['value'], 'string', 'max' => 255],
             [['verification_code'], 'string', 'max' => 64],
             [['uid'], 'unique'],
-            [['user_id', 'type', 'value'], 'unique', 'targetAttribute' => ['user_id', 'type', 'value'], 'message' => 'The combination of User ID, Type and Value has already been taken.'],
+            [['user_id', 'type', 'value'], 'unique', 'targetAttribute' => ['user_id', 'type', 'value']],
             [['verification_code'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

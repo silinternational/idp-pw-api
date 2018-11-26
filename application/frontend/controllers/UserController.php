@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\components\BaseRestController;
 
 use yii\filters\AccessControl;
@@ -37,5 +38,24 @@ class UserController extends BaseRestController
     {
         return \Yii::$app->user->identity;
     }
-    
+
+    /**
+     * @return null|\yii\web\IdentityInterface
+     */
+    public function actionUpdate()
+    {
+        /**
+         * @var User $user
+         */
+        $user = \Yii::$app->user->identity;
+
+        $do_not_disclose = \Yii::$app->request->getBodyParam('do_not_disclose');
+
+        if ($do_not_disclose !== null) {
+            $user->do_not_disclose = $do_not_disclose ? 1 : 0;
+            $user->save();
+        }
+
+        return $user;
+    }
 }
