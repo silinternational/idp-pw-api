@@ -280,6 +280,11 @@ types:
       properties:
         username:
           type: string
+        verification_token?:
+          description: |
+            ReCAPTCHA verification token. Required if app is configured
+            to require ReCAPTCHA for password reset.
+          type: string
     responses:
       200:
         body:
