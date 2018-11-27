@@ -109,7 +109,10 @@ class ResetController extends BaseRestController
                 'status' => 'error',
                 'error' => 'user not found',
             ]);
-            return new \stdClass();
+            throw new NotFoundHttpException(
+            \Yii::t('app', 'User not found'),
+                1543338164
+            );
         } catch (\Exception $e) {
             \Yii::error([
                 'action' => 'create reset',
@@ -138,6 +141,13 @@ class ResetController extends BaseRestController
          * Send reset notification
          */
         $reset->send();
+
+        if ($user->do_not_disclose) {
+            throw new NotFoundHttpException(
+                \Yii::t('app', 'User not found'),
+                1543338164
+            );
+        }
 
         return $reset;
     }

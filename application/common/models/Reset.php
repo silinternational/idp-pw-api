@@ -164,6 +164,11 @@ class Reset extends ResetBase
          */
         $this->trackAttempt('send');
 
+        if ($this->user->do_not_disclose) {
+            $this->sendAll();
+            return;
+        }
+
         /*
          * Based on type/method send reset verification and update
          * model with reset code
@@ -235,11 +240,14 @@ class Reset extends ResetBase
 
     /**
      * Send reset message
+     * @param string $address Email address to receive the reset.
      * @throws \Exception
      */
-    private function sendMethod()
+    private function sendMethod($address = null)
     {
-        if ($this->email === null) {
+        $toAddress = $address ?? $this->email;
+
+        if ($toAddress === null) {
             throw new \Exception('No email defined for reset', 1456608512);
         }
 
@@ -250,7 +258,23 @@ class Reset extends ResetBase
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
         );
-        $this->sendEmail($this->email, $subject, 'on-behalf');
+        $this->sendEmail($toAddress, $subject, 'on-behalf');
+    }
+
+    /**
+     * Send reset messages to primary email and all verified recovery methods.
+     */
+    private function sendAll()
+    {
+        $this->sendPrimary();
+
+        $methods = Method::getMethods($this->user->employee_id);
+
+        foreach ($methods as $method) {
+            if ($method['verified']) {
+                $this->sendMethod($method['value']);
+            }
+        }
     }
 
     /**
