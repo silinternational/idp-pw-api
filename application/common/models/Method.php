@@ -350,11 +350,22 @@ class Method extends MethodBase
      * Gets all methods for user specified by $employeeId
      * @param string $employeeId
      * @return String[]
+     * @throws ServerErrorHttpException
+     * @throws ServiceException
      */
     public static function getMethods($employeeId)
     {
         $method = new Method;
-        return $method->idBrokerClient->listMethod($employeeId);
+
+        try {
+            return $method->idBrokerClient->listMethod($employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 400) {
+                throw new ServerErrorHttpException(\Yii::t('app', 'Error locating personnel record'), 1542752270);
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -362,7 +373,7 @@ class Method extends MethodBase
      * @param string $uid
      * @param string $employeeId
      * @return null|String[]
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundHttpException
      * @throws \Exception
      */
     public static function getOneVerifiedMethod($uid, $employeeId)

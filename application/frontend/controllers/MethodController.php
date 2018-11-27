@@ -4,7 +4,6 @@ namespace frontend\controllers;
 use common\models\Method;
 use common\models\User;
 use frontend\components\BaseRestController;
-use Sil\Idp\IdBroker\Client\exceptions\MethodRateLimitException;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
@@ -59,7 +58,7 @@ class MethodController extends BaseRestController
 
     /**
      * Return list of available reset methods for user.
-     * @return array<\common\models\Method|array>
+     * @return array<Method|array>
      */
     public function actionIndex()
     {
@@ -74,6 +73,7 @@ class MethodController extends BaseRestController
      * @param string $uid
      * @return array<string,string>
      * @throws NotFoundHttpException
+     * @throws \Exception
      */
     public function actionView($uid)
     {
@@ -97,12 +97,25 @@ class MethodController extends BaseRestController
 
         $value = $request->post('value');
         if ($value === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));
+            throw new BadRequestHttpException(\Yii::t('app', 'Value is required'), 1542750428);
         }
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        $method = $this->idBrokerClient->createMethod($employeeId, $value);
+        try {
+            $method = $this->idBrokerClient->createMethod($employeeId, $value);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 409) {
+                throw new TooManyRequestsHttpException(
+                    \Yii::t('app', 'Recovery method already exists'),
+                    1542750430
+                );
+            } elseif ($e->httpStatusCode === 400) {
+                throw new BadRequestHttpException(\Yii::t('app', 'Value is required'), 1542750431);
+            } else {
+                throw $e;
+            }
+        }
         $method['type'] = 'email';
         return $method;
     }
@@ -120,7 +133,7 @@ class MethodController extends BaseRestController
     {
         $code = \Yii::$app->request->getBodyParam('code');
         if ($code === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'));
+            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1542749426);
         }
 
         $employeeId = \Yii::$app->user->identity->employee_id;
@@ -129,12 +142,17 @@ class MethodController extends BaseRestController
             $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 404) {
-                throw new NotFoundHttpException();
+                throw new NotFoundHttpException(\Yii::t('app', 'Recovery method not found'), 1542749427);
+            } elseif ($e->httpStatusCode === 429) {
+                throw new TooManyRequestsHttpException(
+                    \Yii::t('app', 'Too many failures for this recovery method'),
+                    1542749428
+                );
+            } elseif ($e->httpStatusCode === 400) {
+                throw new BadRequestHttpException(\Yii::t('app', 'Invalid verification code'), 1542749429);
             } else {
-                throw new \Exception($e->getMessage());
+                throw $e;
             }
-        } catch (MethodRateLimitException $e) {
-            throw new TooManyRequestsHttpException();
         }
 
         $method['type'] = 'email';
@@ -144,26 +162,53 @@ class MethodController extends BaseRestController
     /**
      * Delete method
      * @param string $uid
-     * @return array
+     * @return \stdClass
+     * @throws NotFoundHttpException
+     * @throws \Exception
      */
     public function actionDelete($uid)
     {
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        $this->idBrokerClient->deleteMethod($uid, $employeeId);
+        try {
+            $this->idBrokerClient->deleteMethod($uid, $employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Recovery method not found'), 1542749425);
+            } else {
+                throw $e;
+            }
+        }
 
-        return [];
+        \Yii::$app->response->statusCode = 204;
+
+        /*
+         * Return empty object
+         */
+        return new \stdClass();
     }
 
     /**
      * @param string $uid
      * @return \stdClass
+     * @throws NotFoundHttpException
+     * @throws \Exception
      */
     public function actionResend($uid)
     {
         $employeeId = \Yii::$app->user->identity->employee_id;
 
-        $this->idBrokerClient->resendMethod($uid, $employeeId);
+        try {
+            $this->idBrokerClient->resendMethod($uid, $employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Recovery method not found'), 1542749424);
+            } else {
+                throw $e;
+            }
+        }
+
+        \Yii::$app->response->statusCode = 204;
 
         /*
          * Return empty object
