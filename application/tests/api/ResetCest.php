@@ -184,4 +184,25 @@ class ResetCest extends BaseCest
         $I->sendPUT('/reset/33333333333333333333333333333334/validate',['code' => '344', 'client_id' => 'abc123']);
         $I->seeResponseCodeIs(429);
     }
+
+    public function test91(ApiTester $I)
+    {
+        $I->wantTo('check response when making a POST request to create a reset');
+        $I->sendPOST('/reset', ['username' => 'first_last']);
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function test92(ApiTester $I)
+    {
+        $I->wantTo('check response when making a POST request to create a reset for an invalid user');
+        $I->sendPOST('/reset', ['username' => 'xxxxx']);
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test93(ApiTester $I)
+    {
+        $I->wantTo('check response when making a POST request to create a reset for a DND user');
+        $I->sendPOST('/reset', ['username' => 'user_six']);
+        $I->seeResponseCodeIs(404);
+    }
 }
