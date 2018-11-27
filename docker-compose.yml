@@ -78,7 +78,7 @@ services:
             - zxcvbn
         env_file:
             - ./common.env
-            - ./local.env
+            - ./test.env
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
@@ -98,7 +98,7 @@ services:
         - testDb
         env_file:
         - ./common.env
-        - ./local.env
+        - ./test.env
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
