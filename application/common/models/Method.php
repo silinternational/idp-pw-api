@@ -350,7 +350,7 @@ class Method extends MethodBase
      * Gets all methods for user specified by $employeeId
      * @param string $employeeId
      * @return String[]
-     * @throws BadRequestHttpException
+     * @throws ServerErrorHttpException
      * @throws ServiceException
      */
     public static function getMethods($employeeId)
@@ -361,7 +361,7 @@ class Method extends MethodBase
             return $method->idBrokerClient->listMethod($employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 400) {
-                throw new BadRequestHttpException(\Yii::t('app', 'Error locating personnel record'), 1542752270);
+                throw new ServerErrorHttpException(\Yii::t('app', 'Error locating personnel record'), 1542752270);
             } else {
                 throw $e;
             }
