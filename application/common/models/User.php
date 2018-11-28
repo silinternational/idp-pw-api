@@ -69,8 +69,8 @@ class User extends UserBase implements IdentityInterface
                 return $model->getPasswordMeta();
             },
             'auth_type',
-            'do_not_disclose' => function ($model) {
-                return $model->do_not_disclose == 1;
+            'do_not_disclose' => function ($model): bool {
+                return $model->do_not_disclose;
             },
         ];
     }
