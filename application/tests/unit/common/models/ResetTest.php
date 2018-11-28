@@ -238,6 +238,8 @@ class ResetTest extends Test
 
     public function testSendDoNotDisclose()
     {
+        $this->markTestSkipped('test is broken because fake methods are not accessible in this context');
+
         /* Since these tests depend on emails being written to files, don't
          * use the email service for now.  */
         \Yii::$app->params['emailVerification']['useEmailService'] = false;
@@ -249,12 +251,10 @@ class ResetTest extends Test
 
         $reset->send();
 
-        // Method fakes aren't being loaded correctly, so this test is a bit mangled
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount($this->tester));
-//        $this->assertEquals(2, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(2, EmailUtils::getEmailFilesCount($this->tester));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'first_last4@example.com'));
-//        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'email-1543358588@example.org'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'email-1543358588@example.org'));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'password change for your'));
         $this->assertEquals($attempts + 1, $reset->attempts);
     }
