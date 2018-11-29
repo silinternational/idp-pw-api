@@ -76,6 +76,7 @@ broker:
         EMAIL_SIGNATURE: Dummy Signature for Tests
         RESET_lifetimeSeconds: 3600
         RESET_codeLength: 6
+        EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
     command: whenavail brokerDb 3306 60 ./run-broker.sh
 
 ldap:
