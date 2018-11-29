@@ -268,14 +268,10 @@ class Reset extends ResetBase
     {
         $this->sendPrimary();
 
-        $methods = Method::getMethods($this->user->employee_id);
+        $methods = Method::getVerifiedMethods($this->user->employee_id);
 
-        if (is_iterable($methods)) {
-            foreach ($methods as $method) {
-                if ($method['verified'] ?? false) {
-                    $this->sendMethod($method['value']);
-                }
-            }
+        foreach ($methods as $method) {
+            $this->sendMethod($method['value']);
         }
     }
 
