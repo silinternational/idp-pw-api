@@ -272,7 +272,7 @@ class Reset extends ResetBase
 
         if (is_iterable($methods)) {
             foreach ($methods as $method) {
-                if ($method['verified']) {
+                if ($method['verified'] ?? false) {
                     $this->sendMethod($method['value']);
                 }
             }
