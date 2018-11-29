@@ -22,7 +22,7 @@ dockerpullall:
 	docker pull phpmyadmin/phpmyadmin:latest
 	docker pull silintl/data-volume:latest
 	docker pull silintl/mariadb:latest
-	docker pull silintl/php7:latest
+	docker pull silintl/php7:7.2
 	docker pull wcjr/zxcvbn-api:1.1.0
 
 email:

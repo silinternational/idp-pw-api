@@ -107,7 +107,7 @@ services:
         command: ["/data/run-tests.sh"]
 
     cli:
-        image: silintl/php7:latest
+        image: silintl/php7:7.2
         volumes_from:
             - data
         volumes:
