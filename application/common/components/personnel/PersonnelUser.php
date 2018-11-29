@@ -41,4 +41,9 @@ class PersonnelUser
      * @var null|string
      */
     public $spouseEmail;
+
+    /**
+     * @var bool
+     */
+    public $doNotDisclose;
 }

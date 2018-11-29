@@ -3,6 +3,7 @@ namespace common\components\personnel;
 
 use IPBlock;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Component;
 
 class IdBroker extends Component implements PersonnelInterface
@@ -34,7 +35,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     private function assertRequiredAttributesPresent($userData)
     {
-        $required = ['first_name', 'last_name', 'email', 'employee_id', 'username'];
+        $required = ['first_name', 'last_name', 'email', 'employee_id', 'username', 'do_not_disclose'];
 
         foreach ($required as $requiredAttr) {
             if ( ! array_key_exists($requiredAttr, $userData)) {
@@ -115,6 +116,7 @@ class IdBroker extends Component implements PersonnelInterface
             $pUser->username = $response['username'];
             $pUser->supervisorEmail = $response['manager_email'] ?? null;
             $pUser->spouseEmail = $response['spouse_email'] ?? null;
+            $pUser->doNotDisclose = (int)$response['do_not_disclose'];
 
             return $pUser;
         } catch (\Exception $e) {
@@ -193,4 +195,26 @@ class IdBroker extends Component implements PersonnelInterface
         );
     }
 
+    /**
+     * @param mixed $properties
+     * @throws NotFoundException
+     * @throws \Exception
+     * @return array
+     */
+    public function updateUser($properties)
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        try {
+            $results = $idBrokerClient->updateUser($properties);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode == 204) {
+                throw new NotFoundException();
+            } else {
+                throw $e;
+            }
+        }
+
+        return $results;
+    }
 }
