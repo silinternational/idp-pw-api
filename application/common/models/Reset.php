@@ -164,6 +164,20 @@ class Reset extends ResetBase
          */
         $this->trackAttempt('send');
 
+        if ($this->user->do_not_disclose) {
+            try {
+                $this->sendAll();
+            } catch (\Throwable $t) {
+                $log = [
+                    'action' => 'reset send all',
+                    'status' => 'error',
+                    'error' => 'Exception during password reset for undisclosed account. ' . $t->getMessage()
+                ];
+                \Yii::error($log, __METHOD__);
+            }
+            return;
+        }
+
         /*
          * Based on type/method send reset verification and update
          * model with reset code
@@ -235,11 +249,14 @@ class Reset extends ResetBase
 
     /**
      * Send reset message
+     * @param string|null $address Email address to receive the reset.
      * @throws \Exception
      */
-    private function sendMethod()
+    private function sendMethod(string $address = null)
     {
-        if ($this->email === null) {
+        $toAddress = $address ?? $this->email;
+
+        if ($toAddress === null) {
             throw new \Exception('No email defined for reset', 1456608512);
         }
 
@@ -250,7 +267,21 @@ class Reset extends ResetBase
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
         );
-        $this->sendEmail($this->email, $subject, 'on-behalf');
+        $this->sendEmail($toAddress, $subject, 'on-behalf');
+    }
+
+    /**
+     * Send reset messages to primary email and all verified recovery methods.
+     */
+    private function sendAll()
+    {
+        $this->sendPrimary();
+
+        $methods = Method::getVerifiedMethods($this->user->employee_id);
+
+        foreach ($methods as $method) {
+            $this->sendMethod($method['value']);
+        }
     }
 
     /**

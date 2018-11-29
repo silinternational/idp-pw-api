@@ -34,6 +34,7 @@ api:
         ID_BROKER_assertValidBrokerIp: false
         ID_BROKER_validIpRanges: 127.0.0.1/32,192.168.65.1/32
         TEST_GOOGLE_PWSTORE_CONFIG_applicationName: idpGooglePwStoreTestsByCI
+        RECAPTCHA_REQUIRED: false
     encrypted_env_file: codeship.env.encrypted
     working_dir: /data
     command: /data/run-tests.sh
@@ -75,6 +76,7 @@ broker:
         EMAIL_SIGNATURE: Dummy Signature for Tests
         RESET_lifetimeSeconds: 3600
         RESET_codeLength: 6
+        EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
     command: whenavail brokerDb 3306 60 ./run-broker.sh
 
 ldap:

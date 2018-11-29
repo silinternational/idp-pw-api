@@ -27,4 +27,13 @@ return [
         'manager_email' => null,
         'spouse_email' => null,
     ],
+    [
+        'first_name' => 'First4',
+        'last_name' => 'Last4',
+        'email' => 'first_last4@example.com',
+        'employee_id' => '444444',
+        'username' => 'first4_last4',
+        'manager_email' => 'supervisor4@example.com',
+        'spouse_email' => 'spouse4@example.com',
+    ],
 ];

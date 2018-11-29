@@ -1,12 +1,11 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\components\BaseRestController;
 
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
-use yii\web\UnauthorizedHttpException;
 
 class UserController extends BaseRestController
 {
@@ -37,5 +36,24 @@ class UserController extends BaseRestController
     {
         return \Yii::$app->user->identity;
     }
-    
+
+    /**
+     * @return null|\yii\web\IdentityInterface
+     */
+    public function actionUpdate()
+    {
+        /**
+         * @var User $user
+         */
+        $user = \Yii::$app->user->identity;
+
+        $doNotDisclose = \Yii::$app->request->getBodyParam('do_not_disclose');
+
+        if ($doNotDisclose !== null) {
+            $user->do_not_disclose = (int)$doNotDisclose;
+            $user->save();
+        }
+
+        return $user;
+    }
 }

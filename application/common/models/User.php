@@ -65,10 +65,13 @@ class User extends UserBase implements IdentityInterface
             'last_name',
             'idp_username',
             'email',
-            'password_meta' => function($model) {
+            'password_meta' => function ($model) {
                 return $model->getPasswordMeta();
             },
-            'auth_type'
+            'auth_type',
+            'do_not_disclose' => function ($model): bool {
+                return $model->do_not_disclose;
+            },
         ];
     }
 

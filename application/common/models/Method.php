@@ -369,6 +369,30 @@ class Method extends MethodBase
     }
 
     /**
+     * Gets all verified methods for user specified by $employeeId
+     * @param string $employeeId
+     * @return array[]
+     * @throws BadRequestHttpException
+     * @throws ServiceException
+     */
+    public static function getVerifiedMethods($employeeId)
+    {
+        $methods = self::getMethods($employeeId);
+
+        $verifiedMethods = [];
+
+        if (is_iterable($methods)) {
+            foreach ($methods as $method) {
+                if ($method['verified'] ?? false) {
+                    $verifiedMethods[] = $method;
+                }
+            }
+        }
+
+        return $verifiedMethods;
+    }
+
+    /**
      * Gets a specific verified method for user specified by $employeeId
      * @param string $uid
      * @param string $employeeId

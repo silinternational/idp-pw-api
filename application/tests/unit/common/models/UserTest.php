@@ -69,6 +69,8 @@ class UserTest extends Test
                 'last_changed' => '2016-06-15T19:00:32+00:00',
                 'expires' => '2016-06-15T19:00:32+00:00',
             ],
+            'auth_type' => 'login',
+            'do_not_disclose' => false
         ];
 
         $user = $this->users('user1');
@@ -77,6 +79,8 @@ class UserTest extends Test
         $this->assertEquals($expected['last_name'], $fields['last_name']);
         $this->assertEquals($expected['idp_username'], $fields['idp_username']);
         $this->assertEquals($expected['email'], $fields['email']);
+        $this->assertEquals($expected['auth_type'], $fields['auth_type']);
+        $this->assertEquals($expected['do_not_disclose'], $fields['do_not_disclose']);
     }
 
     public function testFindOrCreateException()

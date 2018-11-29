@@ -41,4 +41,17 @@ return [
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],
+    'reset4' => [// email
+        'id' => 4,
+        'uid' => '44444444444444444444444444444444',
+        'user_id' => 4,
+        'type' => 'primary',
+        'email' => null,
+        'method_id' => null,
+        'code' => '12345',
+        'attempts' => 0,
+        'expires' => Utils::getDatetime(time() + 900),
+        'disable_until' => null,
+        'created' => '2016-02-29 13:33:00',
+    ],
 ];

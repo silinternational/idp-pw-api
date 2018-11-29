@@ -234,7 +234,29 @@ class ResetTest extends Test
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'email-1456769679@domain.org'));
         $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'requested a password change for their'));
         $this->assertEquals($attempts + 1, $reset->attempts);
+    }
 
+    public function testSendDoNotDisclose()
+    {
+        $this->markTestSkipped('test is broken because fake methods are not accessible in this context');
+
+        /* Since these tests depend on emails being written to files, don't
+         * use the email service for now.  */
+        \Yii::$app->params['emailVerification']['useEmailService'] = false;
+
+        $reset = $this->resets('reset4');
+        $attempts = $reset->attempts;
+
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+
+        $reset->send();
+
+        $this->assertEquals(2, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'first_last4@example.com'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'email-1543358588@example.org'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'password change for your'));
+        $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
     public function testDisableIsDisabled()

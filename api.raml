@@ -105,7 +105,31 @@ types:
           }
         ]
       }
-
+  User:
+    description: |
+      A limited set of information describing a user account. Does not necessarily
+      contain all of the properties in the personnel record, and may contain other
+      non-personnel information.
+    type: object
+    properties:
+      first_name: string
+      last_name: string
+      idp_username: string
+      email: string
+      password_meta: PasswordMeta
+      do_not_disclose: boolean
+    example:
+      {
+        "first_name": "John",
+        "last_name": "Doe",
+        "idp_username": "john_doe",
+        "email": "john_doe@example.com",
+        "password_meta": {
+          "last_changed": 2018-09-13T19:21:57+00:00,
+          "expires":  2020-09-13T23:59:59+00:00
+        }
+        "do_not_disclose": false
+      }
 /auth:
   /login:
     get:
@@ -280,6 +304,11 @@ types:
       properties:
         username:
           type: string
+        verification_token?:
+          description: |
+            ReCAPTCHA verification token. Required if app is configured
+            to require ReCAPTCHA for password reset.
+          type: string
     responses:
       200:
         body:
@@ -356,25 +385,22 @@ types:
           description: Site is operational.
 /user:
   /me:
-    description: Request information for current user.
+    description: Operations for currently-authenticated user.
     get:
+      description: Request basic information for the user.
       responses:
         200:
           body:
-            properties:
-              first_name: string
-              last_name: string
-              idp_username: string
-              email: string
-              password_meta: PasswordMeta
-            example:
-              {
-                "first_name": "Billy",
-                "last_name": "Clark",
-                "idp_username": "billy_clark",
-                "email": "a@b.com",
-                "password_meta": {
-                  "last_changed": 2018-09-13T19:21:57+00:00,
-                  "expires":  2020-09-13T23:59:59+00:00
-                }
-              }
+            type: User
+    post:
+      description: |
+        Limited options for updating the user record. If no
+        properties are provided, no changes will be made.
+      body:
+        properties:
+          do_not_disclose?: boolean
+      responses:
+        200:
+          description: User information after changes have been made.
+          body:
+            type: User
