@@ -371,7 +371,7 @@ class Method extends MethodBase
     /**
      * Gets all verified methods for user specified by $employeeId
      * @param string $employeeId
-     * @return string[]
+     * @return array[]
      * @throws BadRequestHttpException
      * @throws ServiceException
      */
