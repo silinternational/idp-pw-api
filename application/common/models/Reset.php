@@ -240,10 +240,10 @@ class Reset extends ResetBase
 
     /**
      * Send reset message
-     * @param string $address Email address to receive the reset.
+     * @param string|null $address Email address to receive the reset.
      * @throws \Exception
      */
-    private function sendMethod($address = null)
+    private function sendMethod(string $address = null)
     {
         $toAddress = $address ?? $this->email;
 
@@ -270,9 +270,11 @@ class Reset extends ResetBase
 
         $methods = Method::getMethods($this->user->employee_id);
 
-        foreach ($methods as $method) {
-            if ($method['verified']) {
-                $this->sendMethod($method['value']);
+        if (is_iterable($methods)) {
+            foreach ($methods as $method) {
+                if ($method['verified']) {
+                    $this->sendMethod($method['value']);
+                }
             }
         }
     }
