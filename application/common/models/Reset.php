@@ -165,7 +165,16 @@ class Reset extends ResetBase
         $this->trackAttempt('send');
 
         if ($this->user->do_not_disclose) {
-            $this->sendAll();
+            try {
+                $this->sendAll();
+            } catch (\Throwable $t) {
+                $log = [
+                    'action' => 'reset send all',
+                    'status' => 'error',
+                    'error' => 'Exception during password reset for undisclosed account. ' . $t->getMessage()
+                ];
+                \Yii::error($log, __METHOD__);
+            }
             return;
         }
 
