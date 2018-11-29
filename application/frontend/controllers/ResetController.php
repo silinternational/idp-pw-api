@@ -110,7 +110,7 @@ class ResetController extends BaseRestController
                 'error' => 'user not found',
             ]);
             throw new NotFoundHttpException(
-            \Yii::t('app', 'User not found'),
+                \Yii::t('app', 'User not found'),
                 1543338164
             );
         } catch (\Exception $e) {
