@@ -200,7 +200,6 @@ class IdBroker extends Component implements PersonnelInterface
      * contain an `'employee_id'` key.
      *
      * @param array $properties
-     * @return string[]
      * @throws NotFoundException
      * @throws ServiceException
      */
@@ -217,7 +216,5 @@ class IdBroker extends Component implements PersonnelInterface
                 throw $e;
             }
         }
-
-        return $results;
     }
 }

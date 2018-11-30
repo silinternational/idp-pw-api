@@ -32,8 +32,7 @@ interface PersonnelInterface
     public function findByEmail($email);
 
     /**
-     * @param mixed $properties
-     * @return array
+     * @param array $properties
      * @throws NotFoundException
      * @throws \Exception
      */
