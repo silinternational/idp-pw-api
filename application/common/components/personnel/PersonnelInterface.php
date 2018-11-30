@@ -35,6 +35,7 @@ interface PersonnelInterface
      * @param array $properties
      * @throws NotFoundException
      * @throws \Exception
+     * @return void
      */
     public function updateUser($properties);
 }
