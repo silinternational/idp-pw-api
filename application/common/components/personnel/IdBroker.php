@@ -208,7 +208,7 @@ class IdBroker extends Component implements PersonnelInterface
         $idBrokerClient = $this->getIdBrokerClient();
 
         try {
-            $results = $idBrokerClient->updateUser($properties);
+            $idBrokerClient->updateUser($properties);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode == 204) {
                 throw new NotFoundException();
