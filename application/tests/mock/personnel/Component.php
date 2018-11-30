@@ -75,4 +75,10 @@ class Component extends YiiComponent implements PersonnelInterface
         return $user;
     }
 
+    /*
+     * This method is not used, but added to satisfy the interface
+     */
+    public function updateUser($properties)
+    {
+    }
 }

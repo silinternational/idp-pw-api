@@ -593,7 +593,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function beforeSave($insert): bool
     {
-        if (!parent::beforeSave($insert)) {
+        if ( ! parent::beforeSave($insert)) {
             return false;
         }
 
