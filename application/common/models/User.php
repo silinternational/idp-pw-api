@@ -597,13 +597,15 @@ class User extends UserBase implements IdentityInterface
             return false;
         }
 
-        try {
-            \Yii::$app->personnel->updateUser([
-                'employee_id' => $this->employee_id,
-                'do_not_disclose' => (bool)$this->do_not_disclose,
-            ]);
-        } catch (\Exception $e) {
-            \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
+        if ($this->getOldAttribute('do_not_disclose') != $this->getAttribute('do_not_disclose')) {
+            try {
+                \Yii::$app->personnel->updateUser([
+                    'employee_id' => $this->employee_id,
+                    'do_not_disclose' => (bool)$this->do_not_disclose,
+                ]);
+            } catch (\Exception $e) {
+                \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
+            }
         }
 
         return true;
