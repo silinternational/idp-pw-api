@@ -76,7 +76,10 @@ class Component extends YiiComponent implements PersonnelInterface
     }
 
     /*
-     * This method is not used, but added to satisfy the interface
+     * This method is not used, but added to satisfy the interface.
+     * Also note that this class is not used at present, as tests
+     * are currently be run using an actual broker container. Need
+     * to decide whether to eliminate this class or go back to using it.
      */
     public function updateUser($properties)
     {
