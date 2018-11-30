@@ -157,7 +157,7 @@ class UserTest extends Test
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $personnelData->doNotDisclose = ! $personnelData->doNotDisclose;
+        $personnelData->doNotDisclose = (int) ( ! $personnelData->doNotDisclose);
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
     }
