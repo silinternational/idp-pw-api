@@ -125,50 +125,40 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
 
+        $personnelData = new PersonnelUser();
+        $personnelData->firstName = $user->first_name;
+        $personnelData->lastName = $user->last_name;
+        $personnelData->username = $user->idp_username;
+        $personnelData->email = $user->email;
+        $personnelData->doNotDisclose = $user->do_not_disclose;
+
         /*
          * Make no changes and ensure it is not updated
          */
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name,
-            $user->idp_username,
-            $user->email
-        );
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertFalse($changed);
 
         /*
          * Test changed for each property
          */
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name . 'a',
-            $user->last_name,
-            $user->idp_username,
-            $user->email
-        );
+        $personnelData->firstName .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name . 'a',
-            $user->idp_username,
-            $user->email
-        );
+        $personnelData->lastName .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name,
-            $user->idp_username . 'a',
-            $user->email
-        );
+        $personnelData->username .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name,
-            $user->idp_username,
-            'a' . $user->email
-        );
+        $personnelData->email = 'a' . $personnelData->email;
+        $changed = $user->updateProfileIfNeeded($personnelData);
+        $this->assertTrue($changed);
+
+        $personnelData->doNotDisclose = ! $personnelData->doNotDisclose;
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
     }
 

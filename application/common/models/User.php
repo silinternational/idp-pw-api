@@ -237,6 +237,7 @@ class User extends UserBase implements IdentityInterface
             $personnelUser->lastName = $user->last_name;
             $personnelUser->username = $user->idp_username;
             $personnelUser->email = sprintf('notfound-%s-%s', $user->email, time());
+            $personnelUser->doNotDisclose = $user->do_not_disclose;
 
             \Yii::error([
                 'action' => 'updateProfileForExistingUserWithEmailFromPersonnel',
@@ -249,12 +250,7 @@ class User extends UserBase implements IdentityInterface
             ]);
         }
 
-        return $user->updateProfileIfNeeded(
-            $personnelUser->firstName,
-            $personnelUser->lastName,
-            $personnelUser->username,
-            $personnelUser->email
-        );
+        return $user->updateProfileIfNeeded($personnelUser);
     }
 
     /**
@@ -608,7 +604,6 @@ class User extends UserBase implements IdentityInterface
             ]);
         } catch (\Exception $e) {
             \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
-            throw new ServerErrorHttpException('Error updating personnel record', 1543532075);
         }
 
         return true;
