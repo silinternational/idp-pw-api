@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -x
-set -e
 
 # Install composer dev dependencies
 cd /data
