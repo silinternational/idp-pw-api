@@ -610,4 +610,18 @@ class User extends UserBase implements IdentityInterface
 
         return true;
     }
+
+    /**
+     * Called by Yii before model validation
+     *
+     * @return bool
+     */
+    public function beforeValidate(): bool
+    {
+        if (is_bool($this->do_not_disclose)) {
+            $this->do_not_disclose = (int)$this->do_not_disclose;
+        }
+
+        return parent::beforeValidate();
+    }
 }

@@ -154,7 +154,7 @@ class IdBrokerTest extends TestCase
             'email' => $email,
             'supervisorEmail' => null,
             'spouseEmail' => null,
-            'doNotDisclose' => 0,
+            'doNotDisclose' => false,
         ];
 
         $results = get_object_vars($idBroker->findByUsername($userName));
@@ -193,7 +193,7 @@ class IdBrokerTest extends TestCase
             'email' => $email,
             'supervisorEmail' => null,
             'spouseEmail' => null,
-            'doNotDisclose' => 0,
+            'doNotDisclose' => false,
         ];
 
         $results = get_object_vars($idBroker->findByEmail($email));
@@ -232,7 +232,7 @@ class IdBrokerTest extends TestCase
             'email' => $email,
             'supervisorEmail' => null,
             'spouseEmail' => null,
-            'doNotDisclose' => 0,
+            'doNotDisclose' => false,
         ];
 
         $results = get_object_vars($idBroker->findByEmployeeId($employeeId));

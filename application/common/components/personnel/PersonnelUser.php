@@ -43,7 +43,7 @@ class PersonnelUser
     public $spouseEmail;
 
     /**
-     * @var int
+     * @var bool
      */
     public $doNotDisclose;
 }
