@@ -109,4 +109,24 @@ class MfaController extends BaseRestController
         throw new BadRequestHttpException(\Yii::t('app', 'Invalid code provided'));
     }
 
+    public function actionUpdate($mfaId)
+    {
+        $label = \Yii::$app->request->getBodyParam('label');
+        if ($label === null) {
+            return;
+        }
+
+        try {
+            $this->idBrokerClient->mfaUpdate($mfaId, \Yii::$app->user->identity->employee_id, $label);
+        } catch (\Exception $e) {
+            \Yii::error([
+                'status' => 'MFA update error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e instanceof ServiceException && $e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'MFA update failure'), $e->getCode());
+            }
+            throw new ServerErrorHttpException('Error updating MFA code', $e->getCode());
+        }
+    }
 }

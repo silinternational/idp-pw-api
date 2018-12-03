@@ -95,6 +95,7 @@ return [
     // MfaController.php
     'Type is required' => '\'Type\' est requis',
     'Invalid code provided' => 'Code invalide fourni',
+    'MFA update failure' => 'Echec de la mise à jour MFA',
 
     // PasswordController.php
     'Password is required' => 'Mot de passe requis',
