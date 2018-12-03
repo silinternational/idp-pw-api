@@ -3,11 +3,15 @@
 namespace frontend\controllers;
 
 use frontend\components\BaseRestController;
+use Sil\Idp\IdBroker\Client\exceptions\MfaRateLimitException;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
+use yii\web\TooManyRequestsHttpException;
 
 class MfaController extends BaseRestController
 {
@@ -17,6 +21,9 @@ class MfaController extends BaseRestController
      */
     public $idBrokerClient;
 
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         return ArrayHelper::merge(parent::behaviors(), [
@@ -35,6 +42,9 @@ class MfaController extends BaseRestController
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function init()
     {
         parent::init();
@@ -49,6 +59,10 @@ class MfaController extends BaseRestController
         );
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function actionIndex()
     {
         try {
@@ -58,6 +72,11 @@ class MfaController extends BaseRestController
         }
     }
 
+    /**
+     * @return array|null
+     * @throws BadRequestHttpException
+     * @throws ServerErrorHttpException
+     */
     public function actionCreate()
     {
         $type = \Yii::$app->request->getBodyParam('type');
@@ -70,19 +89,48 @@ class MfaController extends BaseRestController
         try {
             return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
         } catch (\Exception $e) {
-            throw $e;
+            \Yii::error([
+                'status' => 'MFA create error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e instanceof ServiceException && $e->httpStatusCode == 400) {
+                throw new ServerErrorHttpException(\Yii::t('app', 'Error creating MFA'), 1543860506);
+            }
         }
     }
 
+    /**
+     * @param $mfaId
+     * @return null
+     * @throws ServerErrorHttpException
+     * @throws NotFoundHttpException
+     */
     public function actionDelete($mfaId)
     {
         try {
             return $this->idBrokerClient->mfaDelete($mfaId, \Yii::$app->user->identity->employee_id);
-        } catch (\Exception $e) {
-            throw $e;
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA delete error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e instanceof ServiceException) {
+                if ($e->httpStatusCode == 400) {
+                    throw new ServerErrorHttpException(\Yii::t('app', 'Error deleting MFA'), 1543861308);
+                } elseif ($e->httpStatusCode == 404) {
+                    throw new NotFoundHttpException(\Yii::t('app', 'Error deleting MFA'), 1543861309);
+                }
+            }
         }
     }
 
+    /**
+     * @param $mfaId
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     * @throws TooManyRequestsHttpException
+     */
     public function actionVerify($mfaId)
     {
         $value = \Yii::$app->request->getBodyParam('value');
@@ -97,12 +145,14 @@ class MfaController extends BaseRestController
             }
         } catch (\Exception $e) {
             \Yii::error([
-                'action' => 'verify mfa',
-                'status' => 'error',
-                'error' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'user' => \Yii::$app->user->identity->email,
-            ]);
+                'status' => 'MFA verify error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e instanceof ServiceException && $e->httpStatusCode == 404) {
+                throw new NotFoundHttpException('MFA verify failure', $e->getCode());
+            } elseif ($e instanceof MfaRateLimitException) {
+                throw new TooManyRequestsHttpException('MFA rate limit failure', $e->getCode());
+            }
             throw new ServerErrorHttpException('Unable to verify MFA code, error code: ' . $e->getCode());
         }
 
