@@ -61,14 +61,20 @@ class MfaController extends BaseRestController
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws ServerErrorHttpException
      */
     public function actionIndex()
     {
         try {
             return $this->idBrokerClient->mfaList(\Yii::$app->user->identity->employee_id);
         } catch (\Exception $e) {
-            throw $e;
+            \Yii::error([
+                'status' => 'MFA list error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e instanceof ServiceException && $e->httpStatusCode == 400) {
+                throw new ServerErrorHttpException('Error listing MFAs', 1543873006);
+            }
         }
     }
 
@@ -149,9 +155,9 @@ class MfaController extends BaseRestController
                 'message' => $e->getMessage(),
             ], __METHOD__);
             if ($e instanceof ServiceException && $e->httpStatusCode == 404) {
-                throw new NotFoundHttpException('MFA verify failure', $e->getCode());
+                throw new NotFoundHttpException(\Yii::t('app', 'MFA verify failure'), $e->getCode());
             } elseif ($e instanceof MfaRateLimitException) {
-                throw new TooManyRequestsHttpException('MFA rate limit failure', $e->getCode());
+                throw new TooManyRequestsHttpException(\Yii::t('app', 'MFA rate limit failure'), $e->getCode());
             }
             throw new ServerErrorHttpException('Unable to verify MFA code, error code: ' . $e->getCode());
         }
@@ -159,6 +165,11 @@ class MfaController extends BaseRestController
         throw new BadRequestHttpException(\Yii::t('app', 'Invalid code provided'));
     }
 
+    /**
+     * @param $mfaId
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     */
     public function actionUpdate($mfaId)
     {
         $label = \Yii::$app->request->getBodyParam('label');
