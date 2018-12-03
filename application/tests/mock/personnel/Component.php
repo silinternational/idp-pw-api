@@ -83,5 +83,6 @@ class Component extends YiiComponent implements PersonnelInterface
      */
     public function updateUser($properties)
     {
+        throw new \Exception(__METHOD__ . ' has not been implemented in this class.');
     }
 }
