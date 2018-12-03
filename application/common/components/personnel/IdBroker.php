@@ -116,7 +116,7 @@ class IdBroker extends Component implements PersonnelInterface
             $pUser->username = $response['username'];
             $pUser->supervisorEmail = $response['manager_email'] ?? null;
             $pUser->spouseEmail = $response['spouse_email'] ?? null;
-            $pUser->doNotDisclose = (int)$response['do_not_disclose'];
+            $pUser->doNotDisclose = $response['do_not_disclose'];
 
             return $pUser;
         } catch (\Exception $e) {
