@@ -30,4 +30,12 @@ interface PersonnelInterface
      * @throws \Exception
      */
     public function findByEmail($email);
+
+    /**
+     * @param array $properties
+     * @throws NotFoundException
+     * @throws \Exception
+     * @return void
+     */
+    public function updateUser($properties);
 }

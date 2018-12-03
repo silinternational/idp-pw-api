@@ -3,6 +3,7 @@ namespace common\components\personnel;
 
 use IPBlock;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Component;
 
 class IdBroker extends Component implements PersonnelInterface
@@ -34,7 +35,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     private function assertRequiredAttributesPresent($userData)
     {
-        $required = ['first_name', 'last_name', 'email', 'employee_id', 'username'];
+        $required = ['first_name', 'last_name', 'email', 'employee_id', 'username', 'do_not_disclose'];
 
         foreach ($required as $requiredAttr) {
             if ( ! array_key_exists($requiredAttr, $userData)) {
@@ -60,7 +61,7 @@ class IdBroker extends Component implements PersonnelInterface
     /**
      * Get the user attributes for the user with the given Employee ID.
      *
-     * @param $employeeId string
+     * @param string $employeeId
      * @return array|null
      * @throws NotFoundException
      */
@@ -83,8 +84,8 @@ class IdBroker extends Component implements PersonnelInterface
      *
      * NOTE: Inactive users will be treated as not found.
      *
-     * @param $field string The field searched. EXAMPLE: 'employee_id'
-     * @param $value string The value searched for. EXAMPLE: '12345'
+     * @param string $field The field searched. EXAMPLE: 'employee_id'
+     * @param string $value The value searched for. EXAMPLE: '12345'
      * @param $response array|null The response returned by the IdBrokerClient.
      * @return PersonnelUser
      * @throws NotFoundException
@@ -115,6 +116,7 @@ class IdBroker extends Component implements PersonnelInterface
             $pUser->username = $response['username'];
             $pUser->supervisorEmail = $response['manager_email'] ?? null;
             $pUser->spouseEmail = $response['spouse_email'] ?? null;
+            $pUser->doNotDisclose = $response['do_not_disclose'];
 
             return $pUser;
         } catch (\Exception $e) {
@@ -193,4 +195,26 @@ class IdBroker extends Component implements PersonnelInterface
         );
     }
 
+    /**
+     * Updates properties on a personnel record. At a minimum, `$properties` must
+     * contain an `'employee_id'` key.
+     *
+     * @param array $properties
+     * @throws NotFoundException
+     * @throws ServiceException
+     */
+    public function updateUser($properties)
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        try {
+            $idBrokerClient->updateUser($properties);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode == 204) {
+                throw new NotFoundException();
+            } else {
+                throw $e;
+            }
+        }
+    }
 }

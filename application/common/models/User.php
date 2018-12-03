@@ -139,6 +139,7 @@ class User extends UserBase implements IdentityInterface
             $user->last_name = $personnelUser->lastName;
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
+            $user->do_not_disclose = $personnelUser->doNotDisclose;
             if ( ! $user->save()) {
                 \Yii::error([
                     'action' => 'create new user',
@@ -148,12 +149,7 @@ class User extends UserBase implements IdentityInterface
                 throw new \Exception('Unable to create new user', 1456760294);
             }
         } else {
-            $user->updateProfileIfNeeded(
-                $personnelUser->firstName,
-                $personnelUser->lastName,
-                $personnelUser->username,
-                $personnelUser->email
-            );
+            $user->updateProfileIfNeeded($personnelUser);
         }
 
         return $user;
@@ -162,21 +158,19 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Update local user record if given properties are different than currently stored
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $username
-     * @param string $email
+     * @param PersonnelUser $personnelUser
      * @return bool True if profile was updated, false if no updates were needed
      * @throws \Exception
      */
-    public function updateProfileIfNeeded($firstName, $lastName, $username, $email)
+    public function updateProfileIfNeeded($personnelUser)
     {
         $dirty = false;
         $properties = [
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'idp_username' => $username,
-            'email' => $email,
+            'first_name' => $personnelUser->firstName,
+            'last_name' => $personnelUser->lastName,
+            'idp_username' => $personnelUser->username,
+            'email' => $personnelUser->email,
+            'do_not_disclose' => $personnelUser->doNotDisclose,
         ];
 
         foreach ($properties as $property => $value) {
@@ -189,12 +183,12 @@ class User extends UserBase implements IdentityInterface
         if ($dirty) {
 
             /*
-             * Check that $email is not already in use by another user
+             * Check that email is not already in use by another user
              * If it is, refresh that user's profile from personnel in
              * case their email address has also changed
              */
-            if ($this->isEmailInUseByOtherUser($email)) {
-                self::refreshPersonnelDataForUserWithSpecificEmail($email);
+            if ($this->isEmailInUseByOtherUser($personnelUser->email)) {
+                self::refreshPersonnelDataForUserWithSpecificEmail($personnelUser->email);
             }
 
             /*
@@ -243,6 +237,7 @@ class User extends UserBase implements IdentityInterface
             $personnelUser->lastName = $user->last_name;
             $personnelUser->username = $user->idp_username;
             $personnelUser->email = sprintf('notfound-%s-%s', $user->email, time());
+            $personnelUser->doNotDisclose = $user->do_not_disclose;
 
             \Yii::error([
                 'action' => 'updateProfileForExistingUserWithEmailFromPersonnel',
@@ -255,12 +250,7 @@ class User extends UserBase implements IdentityInterface
             ]);
         }
 
-        return $user->updateProfileIfNeeded(
-            $personnelUser->firstName,
-            $personnelUser->lastName,
-            $personnelUser->username,
-            $personnelUser->email
-        );
+        return $user->updateProfileIfNeeded($personnelUser);
     }
 
     /**
@@ -584,8 +574,54 @@ class User extends UserBase implements IdentityInterface
         return $accessToken;
     }
 
-    public function isAuthScopeFull()
+    /**
+     * Check auth level. Returns true if user is authenticated by a full login.
+     *
+     * @return bool
+     */
+    public function isAuthScopeFull(): bool
     {
         return $this->auth_type === self::AUTH_TYPE_LOGIN;
+    }
+
+    /**
+     * Called by Yii before an insert or update
+     *
+     * @param bool $insert
+     * @return bool
+     * @throws ServerErrorHttpException
+     */
+    public function beforeSave($insert): bool
+    {
+        if ( ! parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($this->getOldAttribute('do_not_disclose') != $this->getAttribute('do_not_disclose')) {
+            try {
+                \Yii::$app->personnel->updateUser([
+                    'employee_id' => $this->employee_id,
+                    'do_not_disclose' => (bool)$this->do_not_disclose,
+                ]);
+            } catch (\Exception $e) {
+                \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Called by Yii before model validation
+     *
+     * @return bool
+     */
+    public function beforeValidate(): bool
+    {
+        if (is_bool($this->do_not_disclose)) {
+            $this->do_not_disclose = (int)$this->do_not_disclose;
+        }
+
+        return parent::beforeValidate();
     }
 }

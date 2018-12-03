@@ -170,7 +170,7 @@ services:
             MYSQL_PASSWORD: pass
 
     broker:
-        image: silintl/idp-id-broker:develop-4.0
+        image: silintl/idp-id-broker:featureadd-do-not-disclose
         ports:
         - "8083:80"
         depends_on:
@@ -198,6 +198,7 @@ services:
             RESET_lifetimeSeconds: 3600
             RESET_codeLength: 6
             APP_ENV: test
+            EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
         command: whenavail brokerDb 3306 60 ./run-broker.sh
 
     ldap:
