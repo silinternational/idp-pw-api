@@ -51,7 +51,7 @@ brokerDb:
         MYSQL_PASSWORD: pass
 
 broker:
-    image: silintl/idp-id-broker:featureadd-do-not-disclose
+    image: silintl/idp-id-broker:featuremfa-label-update
     depends_on:
     - brokerDb
     volumes:

@@ -170,7 +170,7 @@ services:
             MYSQL_PASSWORD: pass
 
     broker:
-        image: silintl/idp-id-broker:featureadd-do-not-disclose
+        image: silintl/idp-id-broker:featuremfa-label-update
         ports:
         - "8083:80"
         depends_on:
