@@ -258,9 +258,14 @@ types:
   /{mfaId}:
     put:
       description: Update an MFA object.
+      body:
+        properties:
+          label: string
       responses:
         200:
           description: Object updated
+          body:
+            type: Mfa
         404:
           description: Object not found
           body:
