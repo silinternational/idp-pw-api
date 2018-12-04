@@ -10,7 +10,6 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
 
 class MfaController extends BaseRestController
@@ -163,7 +162,7 @@ class MfaController extends BaseRestController
         }
 
         try {
-            $this->idBrokerClient->mfaUpdate($mfaId, \Yii::$app->user->identity->employee_id, $label);
+            return $this->idBrokerClient->mfaUpdate($mfaId, \Yii::$app->user->identity->employee_id, $label);
         } catch (ServiceException $e) {
             \Yii::error([
                 'status' => 'MFA update error',
