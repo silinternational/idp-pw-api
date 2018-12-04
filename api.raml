@@ -234,6 +234,9 @@ types:
       200:
         body:
           type: Mfa
+      500:
+        body:
+          type: Error
   post:
     description: |
       Create a new MFA object. Only properties `type` and `label` are
@@ -282,6 +285,8 @@ types:
             description: MFA verified successfully.
           400:
             description: Property `value` was omitted or incorrect.
+          429:
+            description: Too many verify requests have been attempted.
 /password:
   put:
     description: Set a new password.

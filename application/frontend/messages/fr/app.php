@@ -95,8 +95,8 @@ return [
     // MfaController.php
     'Type is required' => '\'Type\' est requis',
     'Invalid code provided' => 'Code invalide fourni',
-    'Error creating MFA' => 'Erreur lors de la création de l\'AMF',
-    'Error deleting MFA' => 'Erreur lors de la suppression de MFA',
+    'MFA record not found' => 'Enregistrement MFA non trouvé',
+    'Value is required' => 'Valeur est requise',
     'MFA verify failure' => 'MFA vérifier l\'échec',
     'MFA rate limit failure' => 'Échec de limite de taux MFA',
     'MFA update failure' => 'Echec de la mise à jour MFA',
