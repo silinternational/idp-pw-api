@@ -158,6 +158,7 @@ class MfaController extends BaseRestController
     {
         $label = \Yii::$app->request->getBodyParam('label');
         if ($label === null) {
+            \Yii::$app->response->statusCode = 204;
             return;
         }
 
