@@ -37,11 +37,12 @@ types:
         enum: [ primary, supervisor, spouse, email ]
       verified?: boolean
     example:
-      {
-        "id": "nFV7mQQJl3L0PB4kfS2tG1YYbmzT0Ghm",
-        "type": "email",
-        "value": "shep@gmail.com"
-      }
+      value:
+        {
+          "id": "nFV7mQQJl3L0PB4kfS2tG1YYbmzT0Ghm",
+          "type": "email",
+          "value": "shep@gmail.com"
+        }
   Mfa:
     type: object
     properties:
@@ -57,8 +58,8 @@ types:
         "id": 1,
         "type": "backupcode",
         "label": "a_label",
-        "created_utc": "2018-09-07T17:46:37+00:00",
-        "last_used_utc": "2018-09-07T17:47:06+00:00",
+        "created_utc": "2018-09-07T17:46:37Z",
+        "last_used_utc": "2018-09-07T17:47:06Z",
         "data": [
            "count": 9
         ]
@@ -70,8 +71,8 @@ types:
       expires: string
     example:
       {
-        "last_changed": "2018-09-13T19:21:57+00:00",
-        "expires": "2020-09-13T23:59:59+00:00"
+        "last_changed": "2018-09-13T19:21:57Z",
+        "expires": "2020-09-13T23:59:59Z"
       }
   Reset:
     description: |
@@ -125,8 +126,8 @@ types:
         "idp_username": "john_doe",
         "email": "john_doe@example.com",
         "password_meta": {
-          "last_changed": 2018-09-13T19:21:57+00:00,
-          "expires":  2020-09-13T23:59:59+00:00
+          "last_changed": 2018-09-13T19:21:57Z,
+          "expires":  2020-09-13T23:59:59Z
         }
         "do_not_disclose": false
       }
