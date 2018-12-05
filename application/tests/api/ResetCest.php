@@ -201,7 +201,7 @@ class ResetCest extends BaseCest
 
     public function test93(ApiTester $I)
     {
-        $I->wantTo('check response when making a POST request to create a reset for a Do Not Disclose user');
+        $I->wantTo('check response when making a POST request to create a reset for a use with hide flag');
         $I->sendPOST('/reset', ['username' => 'user_six']);
         $I->seeResponseCodeIs(404);
     }

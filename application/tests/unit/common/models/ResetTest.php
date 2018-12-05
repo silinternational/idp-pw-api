@@ -236,7 +236,7 @@ class ResetTest extends Test
         $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
-    public function testSendDoNotDisclose()
+    public function testSendUserWithHideFlag()
     {
         $this->markTestSkipped('test is broken because fake methods are not accessible in this context');
 

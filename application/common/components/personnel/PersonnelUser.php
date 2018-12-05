@@ -45,5 +45,5 @@ class PersonnelUser
     /**
      * @var string
      */
-    public $doNotDisclose;
+    public $hide;
 }

@@ -47,10 +47,10 @@ class UserController extends BaseRestController
          */
         $user = \Yii::$app->user->identity;
 
-        $doNotDisclose = \Yii::$app->request->getBodyParam('do_not_disclose');
+        $hide = \Yii::$app->request->getBodyParam('hide');
 
-        if ($doNotDisclose !== null) {
-            $user->do_not_disclose = $doNotDisclose;
+        if ($hide !== null) {
+            $user->hide = $hide;
             $user->save();
         }
 

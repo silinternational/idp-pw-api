@@ -69,7 +69,7 @@ class User extends UserBase implements IdentityInterface
                 return $model->getPasswordMeta();
             },
             'auth_type',
-            'do_not_disclose',
+            'hide',
         ];
     }
 
@@ -137,7 +137,7 @@ class User extends UserBase implements IdentityInterface
             $user->last_name = $personnelUser->lastName;
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
-            $user->do_not_disclose = $personnelUser->doNotDisclose;
+            $user->hide = $personnelUser->hide;
             if ( ! $user->save()) {
                 \Yii::error([
                     'action' => 'create new user',
@@ -168,7 +168,7 @@ class User extends UserBase implements IdentityInterface
             'last_name' => $personnelUser->lastName,
             'idp_username' => $personnelUser->username,
             'email' => $personnelUser->email,
-            'do_not_disclose' => $personnelUser->doNotDisclose,
+            'hide' => $personnelUser->hide,
         ];
 
         foreach ($properties as $property => $value) {
@@ -235,7 +235,7 @@ class User extends UserBase implements IdentityInterface
             $personnelUser->lastName = $user->last_name;
             $personnelUser->username = $user->idp_username;
             $personnelUser->email = sprintf('notfound-%s-%s', $user->email, time());
-            $personnelUser->doNotDisclose = $user->do_not_disclose;
+            $personnelUser->hide = $user->hide;
 
             \Yii::error([
                 'action' => 'updateProfileForExistingUserWithEmailFromPersonnel',
@@ -595,11 +595,11 @@ class User extends UserBase implements IdentityInterface
             return false;
         }
 
-        if ($this->getOldAttribute('do_not_disclose') != $this->getAttribute('do_not_disclose')) {
+        if ($this->getOldAttribute('hide') != $this->getAttribute('hide')) {
             try {
                 \Yii::$app->personnel->updateUser([
                     'employee_id' => $this->employee_id,
-                    'do_not_disclose' => $this->do_not_disclose,
+                    'hide' => $this->hide,
                 ]);
             } catch (\Exception $e) {
                 \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
