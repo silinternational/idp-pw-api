@@ -21,7 +21,7 @@ use Yii;
  * @property string $access_token
  * @property string $access_token_expiration
  * @property string $auth_type
- * @property int $do_not_disclose
+ * @property string $do_not_disclose
  *
  * @property EventLog[] $eventLogs
  * @property Method[] $methods
@@ -46,8 +46,7 @@ class UserBase extends \yii\db\ActiveRecord
         return [
             [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created'], 'required'],
             [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
-            [['auth_type'], 'string'],
-            [['do_not_disclose'], 'integer'],
+            [['auth_type', 'do_not_disclose'], 'string'],
             [['uid', 'employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
             [['access_token'], 'string', 'max' => 64],

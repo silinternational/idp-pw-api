@@ -12,7 +12,7 @@ class m181126_182233_add_do_not_disclose_column_to_user_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('user', 'do_not_disclose', 'boolean not null default false');
+        $this->addColumn('user', 'do_not_disclose', "enum('no','yes') not null");
     }
 
     /**

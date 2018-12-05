@@ -164,7 +164,7 @@ class Reset extends ResetBase
          */
         $this->trackAttempt('send');
 
-        if ($this->user->do_not_disclose) {
+        if ($this->user->do_not_disclose === 'yes') {
             try {
                 $this->sendAll();
             } catch (\Throwable $t) {

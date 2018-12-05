@@ -69,9 +69,7 @@ class User extends UserBase implements IdentityInterface
                 return $model->getPasswordMeta();
             },
             'auth_type',
-            'do_not_disclose' => function ($model): bool {
-                return $model->do_not_disclose;
-            },
+            'do_not_disclose',
         ];
     }
 
@@ -601,7 +599,7 @@ class User extends UserBase implements IdentityInterface
             try {
                 \Yii::$app->personnel->updateUser([
                     'employee_id' => $this->employee_id,
-                    'do_not_disclose' => (bool)$this->do_not_disclose,
+                    'do_not_disclose' => $this->do_not_disclose,
                 ]);
             } catch (\Exception $e) {
                 \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
@@ -609,19 +607,5 @@ class User extends UserBase implements IdentityInterface
         }
 
         return true;
-    }
-
-    /**
-     * Called by Yii before model validation
-     *
-     * @return bool
-     */
-    public function beforeValidate(): bool
-    {
-        if (is_bool($this->do_not_disclose)) {
-            $this->do_not_disclose = (int)$this->do_not_disclose;
-        }
-
-        return parent::beforeValidate();
     }
 }

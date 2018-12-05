@@ -70,7 +70,7 @@ class UserTest extends Test
                 'expires' => '2016-06-15T19:00:32+00:00',
             ],
             'auth_type' => 'login',
-            'do_not_disclose' => false
+            'do_not_disclose' => 'no'
         ];
 
         $user = $this->users('user1');
@@ -157,7 +157,9 @@ class UserTest extends Test
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $personnelData->doNotDisclose = ! $personnelData->doNotDisclose;
+        $personnelData->doNotDisclose === 'no'
+            ? $personnelData->doNotDisclose = 'yes'
+            : $personnelData->doNotDisclose = 'no';
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
     }
