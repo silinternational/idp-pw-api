@@ -234,6 +234,9 @@ types:
       200:
         body:
           type: Mfa
+      500:
+        body:
+          type: Error
   post:
     description: |
       Create a new MFA object. Only properties `type` and `label` are
@@ -250,12 +253,32 @@ types:
           type: Mfa
       400:
         description: Property `type` was omitted.
+        body:
+          type: Error
   /{mfaId}:
+    put:
+      description: Update an MFA object.
+      body:
+        properties:
+          label: string
+      responses:
+        200:
+          description: Object updated
+          body:
+            type: Mfa
+        404:
+          description: Object not found
+          body:
+            type: Error
     delete:
       description: Delete an MFA object.
       responses:
         200:
           description: Object deleted
+        404:
+          description: Object not found
+          body:
+            type: Error
     /verify:
       post:
         description: Attempt to verify an MFA object.
@@ -267,6 +290,8 @@ types:
             description: MFA verified successfully.
           400:
             description: Property `value` was omitted or incorrect.
+          429:
+            description: Too many verify requests have been attempted.
 /password:
   put:
     description: Set a new password.
