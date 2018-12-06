@@ -118,7 +118,8 @@ types:
       idp_username: string
       email: string
       password_meta: PasswordMeta
-      do_not_disclose: boolean
+      hide:
+        enum: [ yes, no ]
     example:
       {
         "first_name": "John",
@@ -129,7 +130,7 @@ types:
           "last_changed": 2018-09-13T19:21:57Z,
           "expires":  2020-09-13T23:59:59Z
         }
-        "do_not_disclose": false
+        "hide": "no"
       }
 /auth:
   /login:
@@ -424,7 +425,8 @@ types:
         properties are provided, no changes will be made.
       body:
         properties:
-          do_not_disclose?: boolean
+          hide?:
+            enum: [ yes, no ]
       responses:
         200:
           description: User information after changes have been made.

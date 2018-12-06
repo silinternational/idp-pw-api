@@ -8,7 +8,7 @@ return [
         'username' => 'first_last',
         'manager_email' => 'supervisor@domain.org',
         'spouse_email' => 'spouse@domain.org',
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     [
         'first_name' => 'First2',
@@ -18,7 +18,7 @@ return [
         'username' => 'first2_last2',
         'manager_email' => null,
         'spouse_email' => null,
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     [
         'first_name' => 'First3',
@@ -28,7 +28,7 @@ return [
         'username' => 'first3_last3',
         'manager_email' => null,
         'spouse_email' => null,
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     [
         'first_name' => 'First4',
@@ -38,6 +38,6 @@ return [
         'username' => 'first4_last4',
         'manager_email' => 'supervisor4@example.com',
         'spouse_email' => 'spouse4@example.com',
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
 ];

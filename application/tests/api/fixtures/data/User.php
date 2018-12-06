@@ -16,7 +16,7 @@ return [
         'access_token' => Utils::getAccessTokenHash('user1'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
         'auth_type' => 'login',
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     'user2' => [
         'id' => 2,
@@ -33,7 +33,7 @@ return [
         'access_token' => Utils::getAccessTokenHash('user2'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
         'auth_type' => 'login',
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     'user3' => [
         'id' => 3,
@@ -50,7 +50,7 @@ return [
         'access_token' => Utils::getAccessTokenHash('user3'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
         'auth_type' => 'login',
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     'user4' => [
         'id' => 4,
@@ -65,7 +65,7 @@ return [
         'pw_last_changed' => null,
         'pw_expires' => null,
         'auth_type' => null,
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     'user5' => [
         'id' => 5,
@@ -82,7 +82,7 @@ return [
         'access_token' => Utils::getAccessTokenHash('user5'),
         'access_token_expiration' => Utils::getDatetime(time() + 1800),
         'auth_type' => 'reset',
-        'do_not_disclose' => false,
+        'hide' => 'no',
     ],
     'user6' => [
         'id' => 6,
@@ -99,6 +99,6 @@ return [
         'access_token' => null,
         'access_token_expiration' => null,
         'auth_type' => null,
-        'do_not_disclose' => true,
+        'hide' => 'yes',
     ],
 ];

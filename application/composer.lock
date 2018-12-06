@@ -235,16 +235,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.6",
+            "version": "2.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
+                "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
-                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/709f21f92707308cdf8f9bcfa1af4cb26586521e",
+                "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e",
                 "shasum": ""
             },
             "require": {
@@ -288,7 +288,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-09-25T20:47:26+00:00"
+            "time": "2018-12-04T22:38:24+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -830,16 +830,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.5.0",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952"
+                "reference": "9f83dded91781a01c63574e387eaa769be769115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53662d6688033a5eccde987bdd5a4a98ebe2d952",
-                "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/9f83dded91781a01c63574e387eaa769be769115",
+                "reference": "9f83dded91781a01c63574e387eaa769be769115",
                 "shasum": ""
             },
             "require": {
@@ -893,7 +893,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2018-12-03T05:07:51+00:00"
+            "time": "2018-12-04T20:46:45+00:00"
         },
         {
             "name": "illuminate/contracts",
@@ -1752,7 +1752,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client",
-                "reference": "a4b34a95b42c205a9a697ad5cceb89aa96934979"
+                "reference": "94a1718761f3b6b49f96a1c1295c7ac0a52ef74f"
             },
             "require": {
                 "guzzlehttp/guzzle-services": "^1.1",
@@ -1792,7 +1792,7 @@
                 "idp",
                 "php client"
             ],
-            "time": "2018-12-03T23:32:37+00:00"
+            "time": "2018-12-06T14:28:29+00:00"
         },
         {
             "name": "silinternational/php-env",
@@ -1957,16 +1957,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v3.3.1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "db65c026334f1597796d6a387e884dc2e9c025ec"
+                "reference": "89f9ce38d614843b1115c91e2f0a6974ca2e71c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/db65c026334f1597796d6a387e884dc2e9c025ec",
-                "reference": "db65c026334f1597796d6a387e884dc2e9c025ec",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/89f9ce38d614843b1115c91e2f0a6974ca2e71c1",
+                "reference": "89f9ce38d614843b1115c91e2f0a6974ca2e71c1",
                 "shasum": ""
             },
             "require": {
@@ -2010,7 +2010,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2018-12-01T22:56:24+00:00"
+            "time": "2018-12-04T21:15:52+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

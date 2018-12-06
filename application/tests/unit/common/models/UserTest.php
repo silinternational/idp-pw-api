@@ -70,7 +70,7 @@ class UserTest extends Test
                 'expires' => '2016-06-15T19:00:32+00:00',
             ],
             'auth_type' => 'login',
-            'do_not_disclose' => false
+            'hide' => 'no'
         ];
 
         $user = $this->users('user1');
@@ -80,7 +80,7 @@ class UserTest extends Test
         $this->assertEquals($expected['idp_username'], $fields['idp_username']);
         $this->assertEquals($expected['email'], $fields['email']);
         $this->assertEquals($expected['auth_type'], $fields['auth_type']);
-        $this->assertEquals($expected['do_not_disclose'], $fields['do_not_disclose']);
+        $this->assertEquals($expected['hide'], $fields['hide']);
     }
 
     public function testFindOrCreateException()
@@ -130,7 +130,7 @@ class UserTest extends Test
         $personnelData->lastName = $user->last_name;
         $personnelData->username = $user->idp_username;
         $personnelData->email = $user->email;
-        $personnelData->doNotDisclose = $user->do_not_disclose;
+        $personnelData->hide = $user->hide;
 
         /*
          * Make no changes and ensure it is not updated
@@ -157,7 +157,7 @@ class UserTest extends Test
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $personnelData->doNotDisclose = ! $personnelData->doNotDisclose;
+        $personnelData->hide = ($personnelData->hide === 'no') ? 'yes' : 'no';
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
     }

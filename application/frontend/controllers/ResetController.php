@@ -142,7 +142,7 @@ class ResetController extends BaseRestController
          */
         $reset->send();
 
-        if ($user->do_not_disclose) {
+        if ($user->hide === 'yes') {
             throw new NotFoundHttpException(
                 \Yii::t('app', 'User not found'),
                 1543338164

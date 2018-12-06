@@ -73,7 +73,7 @@ class IdBrokerTest extends TestCase
             'email' => 'john_smith@example.com',
             'active' => 'yes',
             'locked' => 'no',
-            'do_not_disclose' => false,
+            'hide' => 'no',
             'password' => [
                 'created_utc' => '2017-05-24 14:04:51',
                 'expiration_utc' => '2018-05-24 14:04:51',
@@ -137,7 +137,7 @@ class IdBrokerTest extends TestCase
             'last_name' => $lastName,
             'username' => $userName,
             'email' => $email,
-            'do_not_disclose' => false,
+            'hide' => 'no',
         ]);
 
         $idBroker = new IdBroker([
@@ -154,7 +154,7 @@ class IdBrokerTest extends TestCase
             'email' => $email,
             'supervisorEmail' => null,
             'spouseEmail' => null,
-            'doNotDisclose' => false,
+            'hide' => 'no',
         ];
 
         $results = get_object_vars($idBroker->findByUsername($userName));
@@ -176,7 +176,7 @@ class IdBrokerTest extends TestCase
             'last_name' => $lastName,
             'username' => $userName,
             'email' => $email,
-            'do_not_disclose' => false,
+            'hide' => 'no',
         ]);
 
         $idBroker = new IdBroker([
@@ -193,7 +193,7 @@ class IdBrokerTest extends TestCase
             'email' => $email,
             'supervisorEmail' => null,
             'spouseEmail' => null,
-            'doNotDisclose' => false,
+            'hide' => 'no',
         ];
 
         $results = get_object_vars($idBroker->findByEmail($email));
@@ -215,7 +215,7 @@ class IdBrokerTest extends TestCase
             'last_name' => $lastName,
             'username' => $userName,
             'email' => $email,
-            'do_not_disclose' => false,
+            'hide' => 'no',
         ]);
 
         $idBroker = new IdBroker([
@@ -232,7 +232,7 @@ class IdBrokerTest extends TestCase
             'email' => $email,
             'supervisorEmail' => null,
             'spouseEmail' => null,
-            'doNotDisclose' => false,
+            'hide' => 'no',
         ];
 
         $results = get_object_vars($idBroker->findByEmployeeId($employeeId));
@@ -322,7 +322,7 @@ class IdBrokerTest extends TestCase
             'last_name' => 'Tester',
             'username' => $userName,
             'email' => $userName . '@example.com',
-            'do_not_disclose' => false,
+            'hide' => 'no',
             'manager_email' => $managerEmail,
         ]);
         $idBroker = new IdBroker([
@@ -351,7 +351,7 @@ class IdBrokerTest extends TestCase
             'username' => $userName,
             'email' => $userName . '@example.com',
             'spouse_email' => $spouseEmail,
-            'do_not_disclose' => false,
+            'hide' => 'no',
         ]);
         $idBroker = new IdBroker([
             'baseUrl' => $this->baseUrl,
