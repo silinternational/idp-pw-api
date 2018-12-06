@@ -124,8 +124,10 @@ return [
                 /*
                  * User  routes
                  */
+                'POST /user'       => 'user/create',
                 'GET /user/me'     => 'user/me',
                 'PUT /user/me'     => 'user/update',
+                'OPTIONS /user'    => 'user/options',
                 'OPTIONS /user/me' => 'user/options',
 
                 /*

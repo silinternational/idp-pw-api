@@ -1,9 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use common\helpers\Utils;
 use common\models\User;
 use frontend\components\BaseRestController;
-
+use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 
@@ -24,8 +25,16 @@ class UserController extends BaseRestController
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['?'],
+                    ],
                 ]
             ],
+            'authenticator' => [
+                'except' => ['create'] // bypass authentication for POST /user
+            ]
         ]);
     }
 
@@ -55,5 +64,27 @@ class UserController extends BaseRestController
         }
 
         return $user;
+    }
+
+    public function actionCreate()
+    {
+        $magicCode = \Yii::$app->request->getBodyParam('magic');
+
+        /**
+         * @var IdBrokerClient
+         */
+        $client = \Yii::$app->passwordStore->getClient();
+
+        // TODO: Replace with actual call to get user info from magic code
+        $response = $client->getUser('25921');
+
+        if ($response['employee_id'] ?? null) {
+            $user = User::findOrCreate(null, null, $response['employee_id']);
+            $clientId = \Yii::$app->request->getBodyParam('client_id');
+            $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
+            return [
+                'access_token' => $accessToken,
+            ];
+        }
     }
 }
