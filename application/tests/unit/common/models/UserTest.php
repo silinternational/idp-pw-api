@@ -157,9 +157,7 @@ class UserTest extends Test
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $personnelData->hide === 'no'
-            ? $personnelData->hide = 'yes'
-            : $personnelData->hide = 'no';
+        $personnelData->hide = ($personnelData->hide === 'no') ? 'yes' : 'no';
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
     }
