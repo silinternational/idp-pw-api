@@ -37,11 +37,12 @@ types:
         enum: [ primary, supervisor, spouse, email ]
       verified?: boolean
     example:
-      {
-        "id": "nFV7mQQJl3L0PB4kfS2tG1YYbmzT0Ghm",
-        "type": "email",
-        "value": "shep@gmail.com"
-      }
+      value:
+        {
+          "id": "nFV7mQQJl3L0PB4kfS2tG1YYbmzT0Ghm",
+          "type": "email",
+          "value": "shep@gmail.com"
+        }
   Mfa:
     type: object
     properties:
@@ -57,8 +58,8 @@ types:
         "id": 1,
         "type": "backupcode",
         "label": "a_label",
-        "created_utc": "2018-09-07T17:46:37+00:00",
-        "last_used_utc": "2018-09-07T17:47:06+00:00",
+        "created_utc": "2018-09-07T17:46:37Z",
+        "last_used_utc": "2018-09-07T17:47:06Z",
         "data": [
            "count": 9
         ]
@@ -70,8 +71,8 @@ types:
       expires: string
     example:
       {
-        "last_changed": "2018-09-13T19:21:57+00:00",
-        "expires": "2020-09-13T23:59:59+00:00"
+        "last_changed": "2018-09-13T19:21:57Z",
+        "expires": "2020-09-13T23:59:59Z"
       }
   Reset:
     description: |
@@ -126,8 +127,8 @@ types:
         "idp_username": "john_doe",
         "email": "john_doe@example.com",
         "password_meta": {
-          "last_changed": 2018-09-13T19:21:57+00:00,
-          "expires":  2020-09-13T23:59:59+00:00
+          "last_changed": 2018-09-13T19:21:57Z,
+          "expires":  2020-09-13T23:59:59Z
         }
         "hide": 'no'
       }
@@ -235,6 +236,9 @@ types:
       200:
         body:
           type: Mfa
+      500:
+        body:
+          type: Error
   post:
     description: |
       Create a new MFA object. Only properties `type` and `label` are
@@ -251,12 +255,32 @@ types:
           type: Mfa
       400:
         description: Property `type` was omitted.
+        body:
+          type: Error
   /{mfaId}:
+    put:
+      description: Update an MFA object.
+      body:
+        properties:
+          label: string
+      responses:
+        200:
+          description: Object updated
+          body:
+            type: Mfa
+        404:
+          description: Object not found
+          body:
+            type: Error
     delete:
       description: Delete an MFA object.
       responses:
         200:
           description: Object deleted
+        404:
+          description: Object not found
+          body:
+            type: Error
     /verify:
       post:
         description: Attempt to verify an MFA object.
@@ -268,6 +292,8 @@ types:
             description: MFA verified successfully.
           400:
             description: Property `value` was omitted or incorrect.
+          429:
+            description: Too many verify requests have been attempted.
 /password:
   put:
     description: Set a new password.

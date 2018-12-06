@@ -133,6 +133,7 @@ return [
                  */
                 'GET /mfa'                          => 'mfa/index',
                 'POST /mfa'                         => 'mfa/create',
+                'PUT /mfa/<mfaId:(\d+)>'            => 'mfa/update',
                 'DELETE /mfa/<mfaId:(\d+)>'         => 'mfa/delete',
                 'POST /mfa/<mfaId:(\d+)>/verify'    => 'mfa/verify',
                 'OPTIONS /mfa'                      => 'mfa/options',
