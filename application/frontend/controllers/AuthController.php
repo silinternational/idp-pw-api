@@ -73,16 +73,29 @@ class AuthController extends BaseRestController
              */
             $state = $this->getRequestState();
 
-            /** @var AuthUser $authUser */
-            $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
+            $inviteCode = \Yii::$app->request->get('invite');
 
-            $log['email'] = $authUser->email;
+            if (is_string($inviteCode)) {
+                $user = User::getUserFromInviteCode($inviteCode);
+            }
 
-            /*
-             * Get local user instance or create one.
-             * Use employeeId since username or email could change.
-             */
-            $user = User::findOrCreate(null, null, $authUser->employeeId);
+            if ( ! ($user ?? null)) {
+                /*
+                 * If invite code is not recognized, fail over to normal login
+                 */
+
+                /** @var AuthUser $authUser */
+                $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
+
+                /*
+                 * Get local user instance or create one.
+                 * Use employeeId since username or email could change.
+                 */
+                $user = User::findOrCreate(null, null, $authUser->employeeId);
+            }
+
+            $log['email'] = $user->email;
+
             $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);

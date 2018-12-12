@@ -7,6 +7,7 @@ use common\components\personnel\NotFoundException;
 use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
+use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\web\NotFoundHttpException;
@@ -607,5 +608,28 @@ class User extends UserBase implements IdentityInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param string $inviteCode
+     * @return User|null
+     * @throws NotFoundException
+     * @throws NotFoundHttpException
+     */
+    public static function getUserFromInviteCode(string $inviteCode)
+    {
+        /**
+         * @var IdBrokerClient
+         */
+        $client = \Yii::$app->passwordStore->getClient();
+
+        $response = $client->authenticateNewUser($inviteCode);
+
+        if ($response['employee_id'] ?? null) {
+            $user = User::findOrCreate(null, null, $response['employee_id']);
+            return $user;
+        }
+
+        return null;
     }
 }
