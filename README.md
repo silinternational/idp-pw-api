@@ -141,7 +141,7 @@ For details about what each of those fields is used for, see the documenting
 comments in the `/src/Google.php` file.
 
 ## API Documentation
-The API is described by [api.raml], and an auto-generated [api.html] created by
+The API is described by [api.raml](api.raml), and an auto-generated [api.html](api.html) created by
 `raml2html`. To regenerate the HTML file, run `make raml2html`. To view the
 rendered HTML file on Github, prepend the Github URL with 
 `https://htmlpreview.github.com/?`.
