@@ -626,7 +626,7 @@ class User extends UserBase implements IdentityInterface
         $response = $client->authenticateNewUser($inviteCode);
 
         if ($response['employee_id'] ?? null) {
-            $user = User::findOrCreate(null, null, $response['employee_id']);
+            $user = self::findOrCreate(null, null, $response['employee_id']);
             return $user;
         }
 
