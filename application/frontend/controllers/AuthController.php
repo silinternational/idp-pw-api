@@ -42,18 +42,8 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
-        /*
-         * Collect return to url of where to send user after successful login
-         * Expected as relative url starting with /
-         * Before redirecting user after login this will be prefixed with ui_url
-         */
-        $returnTo = \Yii::$app->request->get('ReturnTo', '');
-        if (substr($returnTo, 0, 1) == '/') {
-            $returnTo = \Yii::$app->params['uiUrl'] . $returnTo;
-        }
-
         if ( ! \Yii::$app->user->isGuest) {
-            $afterLogin = $this->getAfterLoginUrl($returnTo);
+            $afterLogin = $this->getAfterLoginUrl($this->getReturnTo());
             return $this->redirect($afterLogin);
         }
 
@@ -73,33 +63,13 @@ class AuthController extends BaseRestController
              */
             $state = $this->getRequestState();
 
-            $inviteCode = \Yii::$app->request->get('invite');
-
-            if (is_string($inviteCode)) {
-                $user = User::getUserFromInviteCode($inviteCode);
-            }
-
-            if ( ! ($user ?? null)) {
-                /*
-                 * If invite code is not recognized, fail over to normal login
-                 */
-
-                /** @var AuthUser $authUser */
-                $authUser = \Yii::$app->auth->login($returnTo, \Yii::$app->request);
-
-                /*
-                 * Get local user instance or create one.
-                 * Use employeeId since username or email could change.
-                 */
-                $user = User::findOrCreate(null, null, $authUser->employeeId);
-            }
-
-            $log['email'] = $user->email;
+            $user = $this->authenticateUser();
 
             $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 
+            $log['email'] = $user->email;
             $log['status'] = 'success';
             \Yii::warning($log, 'application');
 
@@ -237,5 +207,60 @@ class AuthController extends BaseRestController
         );
 
         return $url;
+    }
+
+    /**
+     * @return array|mixed|string
+     */
+    protected function getReturnTo()
+    {
+        /*
+                 * Collect return to url of where to send user after successful login
+                 * Expected as relative url starting with /
+                 * Before redirecting user after login this will be prefixed with ui_url
+                 */
+        $returnTo = \Yii::$app->request->get('ReturnTo', '');
+        if (substr($returnTo, 0, 1) == '/') {
+            $returnTo = \Yii::$app->params['uiUrl'] . $returnTo;
+        }
+        return $returnTo;
+    }
+
+    /**
+     * Authenticate User either by an invite code, or by an Auth login call
+     *
+     * @return User|null
+     * @throws \common\components\personnel\NotFoundException
+     * @throws \yii\web\NotFoundHttpException
+     */
+    protected function authenticateUser()
+    {
+        $inviteCode = \Yii::$app->request->get('invite');
+
+        /**
+         * @var $user User
+         */
+        $user = null;
+
+        if (is_string($inviteCode)) {
+            $user = User::getUserFromInviteCode($inviteCode);
+        }
+
+        if ($user === null) {
+            /*
+             * If invite code is not recognized, fail over to normal login
+             */
+
+            /** @var AuthUser $authUser */
+            $authUser = \Yii::$app->auth->login($this->getReturnTo(), \Yii::$app->request);
+
+            /*
+             * Get local user instance or create one.
+             * Use employeeId since username or email could change.
+             */
+            $user = User::findOrCreate(null, null, $authUser->employeeId);
+        }
+
+        return $user;
     }
 }
