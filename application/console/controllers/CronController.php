@@ -2,7 +2,6 @@
 namespace console\controllers;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
-use Sil\Idp\IdBroker\Client\ServiceException;
 use common\models\EmailQueue;
 use common\models\Method;
 use yii\console\Controller;
@@ -83,7 +82,7 @@ class CronController extends Controller
         }
 
         $methods = Method::find()
-            ->where(['verified' => 1, 'type' => Method::TYPE_EMAIL,])
+            ->where(['verified' => 1, 'type' => Method::TYPE_EMAIL, ])
             ->limit(100)
             ->all();
 
