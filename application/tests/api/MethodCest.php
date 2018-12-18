@@ -179,7 +179,7 @@ class MethodCest extends BaseCest
     public function test14(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PUT request to update a method');
-        $I->sendPUT('/method/11111111111111111111111111111111');
+        $I->sendPUT('/method/11111111111111111111111111111111/verify');
         $I->seeResponseCodeIs(401);
     }
 
@@ -188,7 +188,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated PUT request with valid code to a'
             . ' validated method when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/method/11111111111111111111111111111111',['code'=>'1234']);
+        $I->sendPUT('/method/11111111111111111111111111111111/verify',['code'=>'1234']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
 
@@ -205,7 +205,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated PUT request to update a method as a'
             . ' non-owner of the method');
         $I->haveHttpHeader('Authorization', 'Bearer user2');
-        $I->sendPUT('/method/11111111111111111111111111111111',['code'=>'1234']);
+        $I->sendPUT('/method/11111111111111111111111111111111/verify',['code'=>'1234']);
         $I->seeResponseCodeIs(404);
     }
 
@@ -214,7 +214,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated PUT request with invalid code and'
             . ' expired verification time when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/method/33333333333333333333333333333333',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333333/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(404);
     }
 
@@ -223,7 +223,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated PUT request with invalid code and'
             . ' unexpired verification time when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
 
@@ -235,7 +235,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated PUT request with valid code to an'
             . ' unvalidated method when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'123456789']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'123456789']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
 
@@ -252,7 +252,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making unauthenticated PUT request with valid code to'
             . ' an unvalidated method when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user2');
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'123456789']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'123456789']);
         $I->seeResponseCodeIs(404);
     }
 
@@ -261,30 +261,30 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making multiple authenticated PUT request with invalid'
             . ' code and unexpired verification time when trying to update a method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
 
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335',['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(429);
     }
 
@@ -293,7 +293,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response for authenticated PUT request to method/{uid} for a user'
             . ' with auth_type=reset');
         $I->haveHttpHeader('Authorization', 'Bearer user5');
-        $I->sendPUT('/method/55555555555555555555555555555555');
+        $I->sendPUT('/method/55555555555555555555555555555555/verify');
         $I->seeResponseCodeIs(403);
     }
 
