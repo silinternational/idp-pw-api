@@ -136,7 +136,7 @@ return [
                 'POST /mfa'                         => 'mfa/create',
                 'PUT /mfa/<mfaId:(\d+)>'            => 'mfa/update',
                 'DELETE /mfa/<mfaId:(\d+)>'         => 'mfa/delete',
-                'POST /mfa/<mfaId:(\d+)>/verify'    => 'mfa/verify',
+                'PUT /mfa/<mfaId:(\d+)>/verify'     => 'mfa/verify',
                 'OPTIONS /mfa'                      => 'mfa/options',
                 'OPTIONS /mfa/<mfaId:(\d+)>'        => 'mfa/options',
                 'OPTIONS /mfa/<mfaId:(\d+)>/verify' => 'mfa/options',
