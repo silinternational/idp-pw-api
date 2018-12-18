@@ -145,4 +145,4 @@ The API is described by [api.raml](api.raml), and an auto-generated [api.html](a
 `raml2html`. To regenerate the HTML file, run `make raml2html`. To view the
 rendered HTML file on Github, prepend the Github URL with 
 `https://htmlpreview.github.com/?`.
-[Example](https://htmlpreview.github.com/?https://github.com/silinternational/idp-pw-api/blob/69165e0532ef891a6cd7bd75955399e43343569a/api.html)
+[Example](https://htmlpreview.github.com/?https://github.com/silinternational/idp-pw-api/blob/develop-3.0/api.html)
