@@ -199,23 +199,8 @@ types:
             type: Method
         404:
           description: Method not found.
-    put:
-      description: Attempt to verify a recovery method.
-      body:
-        properties:
-          code: string
-      responses:
-        200:
           body:
-            type: Method
-        400:
-          description: Submitted code was incorrect or missing.
-        404:
-          description: Method not found.
-        429:
-          description: Too many verification attempts on this method.
-        500:
-          description: Database or other system error
+            type: Error
     delete:
       description: Delete a recovery method object.
       responses:
@@ -225,6 +210,26 @@ types:
           description: Method not found.
         500:
           description: Delete failed.
+    /verify:
+      put:
+        description: Attempt to verify a recovery method.
+        body:
+          properties:
+            code: string
+        responses:
+          200:
+            body:
+              type: Method
+          400:
+            description: Submitted code was incorrect or missing.
+          404:
+            description: Method not found.
+          410:
+            description: Expired verification code
+          429:
+            description: Too many verification attempts on this method.
+          500:
+            description: Database or other system error
     /resend:
       put:
         description: Resend recovery verification message.
@@ -288,7 +293,7 @@ types:
           body:
             type: Error
     /verify:
-      post:
+      put:
         description: Attempt to verify an MFA object.
         body:
           properties:
