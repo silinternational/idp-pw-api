@@ -70,3 +70,6 @@ bounce:
 clean:
 	docker-compose kill
 	docker-compose rm -f
+
+raml2html:
+	docker-compose run --rm raml2html

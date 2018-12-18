@@ -139,6 +139,9 @@ types:
         ReturnTo:
           description: URL to return to after login
           type: string
+        invite?:
+          description: New user invite code
+          type: string
       responses:
         302:
           description: Redirection to login page
@@ -146,6 +149,9 @@ types:
       queryParameters:
         ReturnTo:
           description: URL to return to after login
+          type: string
+        invite?:
+          description: New user invite code
           type: string
       responses:
         302:
