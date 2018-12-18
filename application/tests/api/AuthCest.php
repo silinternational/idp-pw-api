@@ -113,4 +113,12 @@ class AuthCest extends BaseCest
         $I->sendOPTIONS('/auth/logout?access_token=user2');
         $I->seeResponseCodeIs(200);
     }
+
+    public function test91(ApiTester $I)
+    {
+        $I->wantTo('check response for making a POST request for logging in with invite code and no access token');
+        $I->stopFollowingRedirects();
+        $I->sendGET('/auth/login?client_id=asdf&invite=abc123');
+        $I->seeResponseCodeIs(302);
+    }
 }

@@ -104,6 +104,10 @@ class IdBroker extends Component implements PasswordStoreInterface
         }
     }
 
+    /**
+     * @return IdBrokerClient
+     * @throws \Exception
+     */
     public function getClient()
     {
         return new IdBrokerClient($this->baseUrl, $this->accessToken, [
