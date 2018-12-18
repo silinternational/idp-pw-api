@@ -9,6 +9,7 @@ use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\TooManyRequestsHttpException;
 
@@ -125,12 +126,25 @@ class MethodController extends BaseRestController
      * @param string $uid
      * @return array<string,string>
      * @throws BadRequestHttpException
-     * @throws NotFoundHttpException
-     * @throws TooManyRequestsHttpException
+     * @throws HttpException
      * @throws \Exception
      */
-    public function actionUpdate($uid)
+    public function actionVerify($uid)
     {
+        $messages = [
+            400 => 'Invalid verification code',
+            404 => 'Recovery method not found',
+            410 => 'Expired verification code',
+            429 => 'Too many failures for this recovery method',
+        ];
+
+        $codes = [
+            400 => 1542749429,
+            404 => 1542749427,
+            410 => 1545144979,
+            429 => 1542749428,
+        ];
+
         $code = \Yii::$app->request->getBodyParam('code');
         if ($code === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1542749426);
@@ -141,18 +155,11 @@ class MethodController extends BaseRestController
         try {
             $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
         } catch (ServiceException $e) {
-            if ($e->httpStatusCode === 404) {
-                throw new NotFoundHttpException(\Yii::t('app', 'Recovery method not found'), 1542749427);
-            } elseif ($e->httpStatusCode === 429) {
-                throw new TooManyRequestsHttpException(
-                    \Yii::t('app', 'Too many failures for this recovery method'),
-                    1542749428
-                );
-            } elseif ($e->httpStatusCode === 400) {
-                throw new BadRequestHttpException(\Yii::t('app', 'Invalid verification code'), 1542749429);
-            } else {
-                throw $e;
-            }
+            throw new HttpException(
+                $e->httpStatusCode,
+                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                $codes[$e->httpStatusCode] ?? 0
+            );
         }
 
         $method['type'] = 'email';
