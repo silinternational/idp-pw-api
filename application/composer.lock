@@ -1620,6 +1620,7 @@
                 "typo3/cms-core": ">=8,<8.7.21|>=9,<9.5.2",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
+                "ua-parser/uap-php": "<3.8",
                 "wallabag/tcpdf": "<6.2.22",
                 "willdurand/js-translation-bundle": "<2.1.1",
                 "yiisoft/yii": ">=1.1.14,<1.1.15",
@@ -1668,7 +1669,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-12-11T16:56:18+00:00"
+            "time": "2018-12-14T13:12:19+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -1768,7 +1769,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client",
-                "reference": "e2d0be5c003916a532bbc70e273846e39db1043a"
+                "reference": "1d5213fef0d9905791c303a17aaa88dfc6b089b3"
             },
             "require": {
                 "guzzlehttp/guzzle-services": "^1.1",
@@ -1808,7 +1809,7 @@
                 "idp",
                 "php client"
             ],
-            "time": "2018-12-12T16:49:31+00:00"
+            "time": "2018-12-14T16:04:22+00:00"
         },
         {
             "name": "silinternational/php-env",
