@@ -278,7 +278,7 @@ class User extends UserBase implements IdentityInterface
                 unset($methods[$key]);
             }
         }
-        return $methods;
+        return array_values($methods);
     }
 
     /**
