@@ -91,14 +91,15 @@ return [
                 /*
                  * Method routes
                  */
-                'GET /method' => 'method/index',
-                'GET /method/' . UID_ROUTE_PATTERN => 'method/view',
-                'POST /method' => 'method/create',
-                'PUT /method/' . UID_ROUTE_PATTERN => 'method/update',
-                'PUT /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/resend',
-                'DELETE /method/' . UID_ROUTE_PATTERN => 'method/delete',
-                'OPTIONS /method' => 'method/options',
-                'OPTIONS /method/' . UID_ROUTE_PATTERN => 'method/options',
+                'GET /method'                                      => 'method/index',
+                'GET /method/' . UID_ROUTE_PATTERN                 => 'method/view',
+                'POST /method'                                     => 'method/create',
+                'PUT /method/' . UID_ROUTE_PATTERN . '/verify'     => 'method/verify',
+                'PUT /method/' . UID_ROUTE_PATTERN . '/resend'     => 'method/resend',
+                'DELETE /method/' . UID_ROUTE_PATTERN              => 'method/delete',
+                'OPTIONS /method'                                  => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN             => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN . '/verify' => 'method/options',
                 'OPTIONS /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/options',
 
                 /*
@@ -135,7 +136,7 @@ return [
                 'POST /mfa'                         => 'mfa/create',
                 'PUT /mfa/<mfaId:(\d+)>'            => 'mfa/update',
                 'DELETE /mfa/<mfaId:(\d+)>'         => 'mfa/delete',
-                'POST /mfa/<mfaId:(\d+)>/verify'    => 'mfa/verify',
+                'PUT /mfa/<mfaId:(\d+)>/verify'     => 'mfa/verify',
                 'OPTIONS /mfa'                      => 'mfa/options',
                 'OPTIONS /mfa/<mfaId:(\d+)>'        => 'mfa/options',
                 'OPTIONS /mfa/<mfaId:(\d+)>/verify' => 'mfa/options',
