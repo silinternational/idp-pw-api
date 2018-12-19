@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\components\passwordStore\AccountLockedException;
 use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\EventLog;
@@ -131,7 +132,16 @@ class ResetController extends BaseRestController
          * Clear out expired resets
          */
         Reset::deleteExpired();
-        
+
+        /*
+         * Calling getPasswordMeta simply to test for a locked account.
+         */
+        try {
+            $user->getPasswordMeta();
+        } catch (AccountLockedException $e) {
+            throw new NotFoundHttpException();
+        }
+
         /*
          * Find or create a reset
          */
