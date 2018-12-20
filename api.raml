@@ -136,6 +136,9 @@ types:
   /login:
     get:
       queryParameters:
+        client_id:
+          description: unique identifier provided by the UI client
+          type: string
         ReturnTo:
           description: URL to return to after login
           type: string
@@ -144,9 +147,20 @@ types:
           type: string
       responses:
         302:
-          description: Redirection to login page
+          description: >
+            Redirection to `ReturnTo` with `state`, `token_type`, `expires_utc` and
+            `access_token` appended as query string parameters.
+          headers:
+            location: string
+            example:
+              https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+        400:
+          description: Error or missing information in request.
     post:
       queryParameters:
+        client_id:
+          description: unique identifier provided by the UI client
+          type: string
         ReturnTo:
           description: URL to return to after login
           type: string
@@ -155,7 +169,15 @@ types:
           type: string
       responses:
         302:
-          description: Redirection to login page
+          description: >
+            Redirection to `ReturnTo` with `state`, `token_type`, `expires_utc` and
+            `access_token` appended as query string parameters.
+          headers:
+            location: string
+            example:
+              https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+        400:
+          description: Error or missing information in request.
   /logout:
     get:
       responses:
