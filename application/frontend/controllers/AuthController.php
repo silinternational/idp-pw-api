@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
 
 class AuthController extends BaseRestController
 {
@@ -56,7 +57,11 @@ class AuthController extends BaseRestController
             /*
              * Grab client_id for use in token after successful login
              */
-            $clientId = Utils::getClientIdOrFail();
+            try {
+                $clientId = Utils::getClientIdOrFail();
+            } catch (\Exception $e) {
+                throw new BadRequestHttpException(\Yii::t('app', 'Client ID is missing'), 1545316879);
+            }
 
             /*
              * Grab state for use in response after successful login

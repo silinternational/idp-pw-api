@@ -345,7 +345,7 @@ class Utils
     /**
      * Get client_id from request or session and then store in session
      * @return string
-     * @throws RedirectException
+     * @throws \Exception
      */
     public static function getClientIdOrFail()
     {
@@ -367,7 +367,7 @@ class Utils
                     'body_params' => $request->getBodyParams(),
                     'user_agent' => $request->getUserAgent(),
                 ]);
-                throw new RedirectException(\Yii::$app->params['uiUrl'] . '/auth/error', 'Missing client_id');
+                throw new \Exception('Missing client_id');
             }
         }
         \Yii::$app->session->set('clientId', $clientId);
