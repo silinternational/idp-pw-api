@@ -14,6 +14,54 @@ securitySchemes:
             example: Bearer gwgyxgf0vbuwYrI60sbbxLM3U1Jjw2lyvG53Kjjy9cq
 securedBy: [ AuthzBearerToken ]
 types:
+  Config:
+    type: object
+    properties:
+      idpName: string
+      idpUsernameHint: string
+      recaptchaKey: string
+      logoUrl: string
+      support:
+        type: object
+        properties:
+          phone: string
+          email: string
+          url: string
+          feedbackUrl: string
+      password:
+        type: object
+        properties:
+          minLength:
+            type: object
+            properties:
+              value: integer
+              pattern: string
+          zxcvbn:
+            type: object
+            properties:
+              minScore: integer
+    example:
+      {
+        "idpName": "Acme",
+        "idpUsernameHint": "Acme username, ex: first_last",
+        "recaptchaKey": null,
+        "logoUrl": "http://www.example.org",
+        "support": {
+          "phone": "1-234-567-8901",
+          "email": "support@example.com",
+          "url": "http://support.example.com",
+          "feedbackUrl": "feedback@example.com"
+        },
+        "password": {
+          "minLength": {
+            "value": 10,
+            "pattern": ".{10,}"
+          },
+          "zxcvbn": {
+            "minScore": 2
+          }
+        }
+      }
   Error:
     type: object
     properties:
@@ -135,6 +183,7 @@ types:
 /auth:
   /login:
     get:
+      securedBy: null
       queryParameters:
         client_id:
           description: unique identifier provided by the UI client
@@ -157,6 +206,7 @@ types:
         400:
           description: Error or missing information in request.
     post:
+      securedBy: null
       queryParameters:
         client_id:
           description: unique identifier provided by the UI client
@@ -180,11 +230,22 @@ types:
           description: Error or missing information in request.
   /logout:
     get:
+      securedBy: null
       responses:
         200:
+/config:
+  get:
+    securedBy: null
+    description: Request various configuration parameters.
+    responses:
+      200:
+        body:
+          type: Config
+      500:
+        description: Backend configuration is missing one or more parameters.
 /method:
   get:
-    description: |
+    description: >
       Request a list of password recovery methods, including methods
       not yet verified.
     responses:
@@ -194,7 +255,7 @@ types:
       500:
         description: User not found in personnel database.
   post:
-    description: |
+    description: >
       Create a new password recovery method. The creation of a method
       is not completed until the following verification call is made.
       Unverified Methods will automatically expire if not verified
@@ -354,6 +415,7 @@ types:
           type: PasswordMeta
 /reset:
   post:
+    securedBy: null
     description: |
       Initiate a password reset.
       Sends reset email to primary email address with a link like
@@ -375,13 +437,15 @@ types:
           type: Reset
   /{resetId}:
     get:
+      securedBy: null
       description: Request the reset object by its id.
       responses:
         200:
           body:
             type: Reset
     put:
-      description: |
+      securedBy: null
+      description: >
         Update the reset to use a different email. If `type` is `email`,
         then this request is for an alternate recovery Method, and
         `methodId` is required.
@@ -395,19 +459,20 @@ types:
           body:
             type: Reset
         400:
-          description: |
+          description: >
             The reset `type` was not provided or is not valid, or the
             `methodId` parameter was not provided when required.
           body:
             type: Error
         404:
-          description: |
+          description: >
             The reset could not be found or the referenced Method has
             not been verified.
           body:
             type: Error
     /resend:
       put:
+        securedBy: null
         description: Request to resend verification email.
         responses:
           200:
@@ -419,6 +484,7 @@ types:
               type: Error
     /validate:
       put:
+        securedBy: null
         description: Validate reset code to complete password reset process
         body:
           properties:
@@ -426,7 +492,7 @@ types:
             client_id: string
         responses:
           200:
-            description: |
+            description: >
               Reset was validated. Response contains a 32-character access
               token. Subsequent API calls should use `client_id` concatenated
               with `access_token` in the Authorization header.
@@ -434,11 +500,12 @@ types:
               properties:
                 access_token: string
           400:
-            description: |
+            description: >
               The provided code was incorrect or `client_id` was missing.
 /site:
   /system-status:
     get:
+      securedBy: null
       description: Check site status.
       responses:
         200:
@@ -453,7 +520,7 @@ types:
           body:
             type: User
     post:
-      description: |
+      description: >
         Limited options for updating the user record. If no
         properties are provided, no changes will be made.
       body:
