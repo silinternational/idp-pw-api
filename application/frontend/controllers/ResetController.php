@@ -244,17 +244,6 @@ class ResetController extends BaseRestController
             throw new NotFoundHttpException();
         }
 
-        /*
-         * Validate required parameters are present or throw 400 error
-         */
-        $code = \Yii::$app->request->getBodyParam('code', null);
-        if ($code === null) {
-            throw new BadRequestHttpException(
-                \Yii::t('app', 'Code is required'),
-                1462989866
-            );
-        }
-
         try {
             $clientId = Utils::getClientIdOrFail();
         } catch (\Exception $e) {
@@ -270,9 +259,7 @@ class ResetController extends BaseRestController
             'user' => $reset->user->email,
         ];
 
-        $isValid = $reset->isUserProvidedCodeCorrect($code);
-        if ($isValid === true) {
-
+        if ($reset->isUserProvidedCodeCorrect($this->getCodeFromRequestBody())) {
             $ipAddress = Utils::getClientIp(\Yii::$app->request);
 
             /*
@@ -341,5 +328,18 @@ class ResetController extends BaseRestController
             \Yii::t('app', 'Invalid verification code'),
             1462991098
         );
+    }
+
+    /**
+     * @return string
+     * @throws BadRequestHttpException
+     */
+    protected function getCodeFromRequestBody(): string
+    {
+        $code = \Yii::$app->request->getBodyParam('code', null);
+        if ($code === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1462989866);
+        }
+        return $code;
     }
 }
