@@ -192,7 +192,7 @@ class AuthController extends BaseRestController
         /*
          * Relay state holds the return to path from UI
          */
-        $relayState = \Yii::$app->request->post('RelayState', '/');
+        $relayState = \Yii::$app->request->post('RelayState', $this->getReturnTo());
 
         /*
          * build url to redirect user to
