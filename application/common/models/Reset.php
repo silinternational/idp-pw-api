@@ -331,12 +331,13 @@ class Reset extends ResetBase
     /**
      * Check if user provided code is valid
      * @param string $userProvided code submitted by user
-     * @return boolean
+     * @return bool
      * @throws \Exception
+     * @throws HttpException
      * @throws ServerErrorHttpException
      * @throws TooManyRequestsHttpException
      */
-    public function isUserProvidedCodeCorrect($userProvided)
+    public function isUserProvidedCodeCorrect($userProvided): bool
     {
         /*
          * Track attempt and throw error if disabled or limit is reached

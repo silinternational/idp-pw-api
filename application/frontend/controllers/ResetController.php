@@ -235,6 +235,7 @@ class ResetController extends BaseRestController
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
      * @throws \Exception
+     * @throws \Throwable
      */
     public function actionValidate($uid)
     {
@@ -247,10 +248,7 @@ class ResetController extends BaseRestController
         try {
             $clientId = Utils::getClientIdOrFail();
         } catch (\Exception $e) {
-            throw new BadRequestHttpException(
-                \Yii::t('app', 'Client ID is missing'),
-                1483979025
-            );
+            throw new BadRequestHttpException(\Yii::t('app', 'Client ID is missing'), 1483979025);
         }
 
         $log = [
