@@ -352,6 +352,19 @@ class Reset extends ResetBase
     }
 
     /**
+     * @throws ServerErrorHttpException
+     * @throws \Exception
+     */
+    public function restart()
+    {
+        $this->attempts = 0;
+        $this->code = null;
+        $this->expires = self::calculateExpireTime();
+        $this->saveOrError('restart reset');
+        $this->send();
+    }
+
+    /**
      * Check if reset is using an email type of verification
      * @return bool
      */
@@ -377,6 +390,20 @@ class Reset extends ResetBase
         }
 
         return Utils::getDatetime(time() + $params['reset']['lifetimeSeconds']);
+    }
+
+    /**
+     * @return bool
+     * @throws ServerErrorHttpException
+     */
+    public function isExpired(): bool
+    {
+        $expiresTimestamp = strtotime($this->expires);
+        if ($expiresTimestamp == false) {
+            throw new ServerErrorHttpException('Unable to check expiration', 1545341112);
+        }
+
+        return $expiresTimestamp < time();
     }
 
     /**

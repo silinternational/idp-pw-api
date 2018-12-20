@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -258,6 +259,11 @@ class ResetController extends BaseRestController
         ];
 
         if ($reset->isUserProvidedCodeCorrect($this->getCodeFromRequestBody())) {
+            if ($reset->isExpired()) {
+                $reset->restart();
+                throw new HttpException(410);
+            }
+
             $ipAddress = Utils::getClientIp(\Yii::$app->request);
 
             /*
