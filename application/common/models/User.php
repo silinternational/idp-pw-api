@@ -2,6 +2,7 @@
 namespace common\models;
 
 use common\components\auth\User as AuthUser;
+use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use common\components\personnel\NotFoundException;
 use common\components\personnel\PersonnelInterface;
@@ -29,6 +30,14 @@ class User extends UserBase implements IdentityInterface
      * @var PersonnelUser
      */
     public $personnelUser;
+
+    /**
+     * @return PersonnelInterface
+     */
+    protected static function getPersonnelComponent(): PersonnelInterface
+    {
+        return \Yii::$app->personnel;
+    }
 
     /**
      * Validation rules, applies User rules before UserBase rules
@@ -99,13 +108,14 @@ class User extends UserBase implements IdentityInterface
          * Always call Personnel system in case employee is no longer employed
          */
         try {
-            /** @var PersonnelUser $personnelUser */
+            $personnel = self::getPersonnelComponent();
+
             if ( ! is_null($employeeId)) {
-                $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
+                $personnelUser = $personnel->findByEmployeeId($employeeId);
             } elseif ( ! is_null($username)) {
-                $personnelUser = \Yii::$app->personnel->findByUsername($username);
+                $personnelUser = $personnel->findByUsername($username);
             } else {
-                $personnelUser = \Yii::$app->personnel->findByEmail($email);
+                $personnelUser = $personnel->findByEmail($email);
             }
         } catch (\Exception $e) {
             /*
@@ -224,8 +234,8 @@ class User extends UserBase implements IdentityInterface
         }
 
         try {
-            /** @var PersonnelUser $personnelUser */
-            $personnelUser = \Yii::$app->personnel->findByEmployeeId($user->employee_id);
+            $personnel = self::getPersonnelComponent();
+            $personnelUser = $personnel->findByEmployeeId($user->employee_id);
         } catch (NotFoundException $e) {
             /*
              * User no longer exists in personnel system, so update their email to release for use by other users
@@ -348,8 +358,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function getPersonnelUserFromInterface()
     {
-        /** @var PersonnelInterface $personnel */
-        $personnel = \Yii::$app->personnel;
+        $personnel = self::getPersonnelComponent();
 
         if ($this->employee_id) {
             return $personnel->findByEmployeeId($this->employee_id);
@@ -479,11 +488,14 @@ class User extends UserBase implements IdentityInterface
      */
     public function getPasswordMeta()
     {
+        /** @var PasswordStoreInterface $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
         /*
          * If password metadata is missing, fetch from passwordStore and update
          */
         /** @var UserPasswordMeta $pwMeta */
-        $pwMeta = \Yii::$app->passwordStore->getMeta($this->employee_id);
+        $pwMeta = $passwordStore->getMeta($this->employee_id);
 
         return [
             'last_changed' => Utils::getIso8601($pwMeta->passwordLastChangeDate),
@@ -602,7 +614,8 @@ class User extends UserBase implements IdentityInterface
 
         if ($this->getOldAttribute('hide') != $this->getAttribute('hide')) {
             try {
-                \Yii::$app->personnel->updateUser([
+                $personnel = self::getPersonnelComponent();
+                $personnel->updateUser([
                     'employee_id' => $this->employee_id,
                     'hide' => $this->hide,
                 ]);
