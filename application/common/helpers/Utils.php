@@ -1,7 +1,6 @@
 <?php
 namespace common\helpers;
 
-use common\components\auth\RedirectException;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;

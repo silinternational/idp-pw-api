@@ -635,9 +635,7 @@ class User extends UserBase implements IdentityInterface
      */
     public static function getUserFromInviteCode(string $inviteCode)
     {
-        /**
-         * @var IdBrokerClient
-         */
+        /** @var IdBrokerClient $client */
         $client = \Yii::$app->passwordStore->getClient();
 
         $response = $client->authenticateNewUser($inviteCode);
