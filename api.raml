@@ -1,7 +1,6 @@
 #%RAML 1.0
 title: Password Manager Backend
-version: v3
-baseUri: http://idp-pw-api.local:8080
+version: 4
 protocols: [ HTTPS ]
 mediaType: application/json
 securitySchemes:
@@ -200,9 +199,13 @@ types:
             Redirection to `ReturnTo` with `state`, `token_type`, `expires_utc` and
             `access_token` appended as query string parameters.
           headers:
-            location: string
-            example:
-              https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+            location:
+              description: redirect URL
+              type: string
+              example:
+                https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+          example:
+            https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
         400:
           description: Error or missing information in request.
     post:
@@ -223,9 +226,11 @@ types:
             Redirection to `ReturnTo` with `state`, `token_type`, `expires_utc` and
             `access_token` appended as query string parameters.
           headers:
-            location: string
-            example:
-              https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+            location:
+              description: redirect URL
+              type: string
+              example:
+                https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
         400:
           description: Error or missing information in request.
   /logout:
