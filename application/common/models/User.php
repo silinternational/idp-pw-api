@@ -60,13 +60,12 @@ class User extends UserBase implements IdentityInterface
      */
     public function fields()
     {
-        /** @var User $model */
         return [
             'first_name',
             'last_name',
             'idp_username',
             'email',
-            'password_meta' => function ($model) {
+            'password_meta' => function (self $model) {
                 return $model->getPasswordMeta();
             },
             'auth_type',
@@ -325,14 +324,17 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * @return null|string
+     * @throws \Exception
      */
     public function getSupervisorEmail()
     {
         $personnelUser = $this->getPersonnelUser();
         return $personnelUser->supervisorEmail;
     }
+
     /**
      * @return null|string
+     * @throws \Exception
      */
     public function getSpouseEmail()
     {
@@ -471,7 +473,9 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * @return array
-     * @throws ServerErrorHttpException
+     * @throws \common\components\passwordStore\UserNotFoundException
+     * @throws \common\components\passwordStore\AccountLockedException
+     * @throws \Exception
      */
     public function getPasswordMeta()
     {
