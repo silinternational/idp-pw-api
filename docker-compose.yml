@@ -76,6 +76,7 @@ services:
         depends_on:
             - testDb
             - zxcvbn
+            - email
         env_file:
             - ./common.env
             - ./test.env
@@ -96,6 +97,7 @@ services:
         - "8000:80"
         depends_on:
         - testDb
+        - email
         env_file:
         - ./common.env
         - ./test.env
