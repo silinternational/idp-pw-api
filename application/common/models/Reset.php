@@ -40,7 +40,7 @@ class Reset extends ResetBase
                 ],
 
                 [
-                    ['expires'], 'default', 'value' => Utils::getDatetime(self::getExpireTimestamp()),
+                    ['expires'], 'default', 'value' => self::calculateExpireTime(),
                 ],
 
                 [
@@ -363,11 +363,11 @@ class Reset extends ResetBase
     }
 
     /**
-     * Calculate expiration timestamp based on given timestamp and configured reset lifetime
+     * Calculate expiration time based on current time and configured reset lifetime
      * @return integer
      * @throws ServerErrorHttpException
      */
-    public static function getExpireTimestamp()
+    public static function calculateExpireTime()
     {
         $params = \Yii::$app->params;
         if ( ! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
@@ -375,9 +375,7 @@ class Reset extends ResetBase
             throw new ServerErrorHttpException('Application configuration for reset lifetime is not set', 1458676224);
         }
 
-        $time = time();
-
-        return $time + $params['reset']['lifetimeSeconds'];
+        return Utils::getDatetime(time() + $params['reset']['lifetimeSeconds']);
     }
 
     /**

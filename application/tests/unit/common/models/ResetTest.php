@@ -57,14 +57,14 @@ class ResetTest extends Test
         $this->assertNotNull($reset->created);
     }
 
-    public function testGetExpireTimestamp()
+    public function testCalculateExpireTime()
     {
         // Set config to consistent value
         \Yii::$app->params['reset']['lifetimeSeconds'] = 100;
         $reset = $this->resets('reset1');
         $time = time();
 
-        $expireTimestamp = $reset->getExpireTimestamp();
+        $expireTimestamp = strtotime($reset->calculateExpireTime());
 
         $this->assertEquals($time + 100, $expireTimestamp, null, 2);
     }
