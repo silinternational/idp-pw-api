@@ -17,8 +17,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Moved password recovery method storage to [ID Broker][idp-id-broker]
 - Changed password reuse error response code from 400 to 409
 - Changed expired method verification response code from 400 to 410
+- /auth/login returns 400 for client_id missing, instead of 302
 ### Removed
 - Removed support for phone password recovery methods 
+### Fixed
+- Password reset is now blocked for a locked account
 
 ## [3.0.0] - 2018-07-31
 ### Added
