@@ -35,7 +35,7 @@ return [
         'email' => 'email-1456769679@domain.org',
         'code' => 333,
         'attempts' => 0,
-        'expires' => '2016-03-01 12:00:00',
+        'expires' => '2029-03-01 12:00:00',
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],
