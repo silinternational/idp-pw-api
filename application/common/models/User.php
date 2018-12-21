@@ -630,13 +630,20 @@ class User extends UserBase implements IdentityInterface
     /**
      * @param string $inviteCode
      * @return User|null
+     * @throws \Exception
      * @throws NotFoundException
      * @throws NotFoundHttpException
      */
     public static function getUserFromInviteCode(string $inviteCode)
     {
-        /** @var IdBrokerClient $client */
-        $client = \Yii::$app->passwordStore->getClient();
+        /** @var IdBroker $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
+        if (! ($passwordStore instanceof IdBroker)) {
+            throw new \Exception('Configured passwordStore does not support new user invite.');
+        }
+
+        $client = $passwordStore->getClient();
 
         $response = $client->authenticateNewUser($inviteCode);
 
