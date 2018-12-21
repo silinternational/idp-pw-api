@@ -188,7 +188,10 @@ types:
           description: unique identifier provided by the UI client
           type: string
         ReturnTo:
-          description: URL to return to after login
+          description: URL to return to after login or invite
+          type: string
+        ReturnToOnError?:
+          description: URL to return to in case of expired invite
           type: string
         invite?:
           description: New user invite code
@@ -196,8 +199,9 @@ types:
       responses:
         302:
           description: >
-            Redirection to `ReturnTo` with `state`, `token_type`, `expires_utc` and
-            `access_token` appended as query string parameters.
+            On successful login or invite, a redirection to `ReturnTo` with `state`, `token_type`,
+            `expires_utc` and `access_token` appended as query string parameters. On error, a
+            redirection to `ReturnToOnError` with no query string parameters.
           headers:
             location:
               description: redirect URL
@@ -210,29 +214,11 @@ types:
           description: Error or missing information in request.
     post:
       securedBy: null
-      queryParameters:
-        client_id:
-          description: unique identifier provided by the UI client
-          type: string
-        ReturnTo:
-          description: URL to return to after login
-          type: string
-        invite?:
-          description: New user invite code
-          type: string
-      responses:
-        302:
-          description: >
-            Redirection to `ReturnTo` with `state`, `token_type`, `expires_utc` and
-            `access_token` appended as query string parameters.
-          headers:
-            location:
-              description: redirect URL
-              type: string
-              example:
-                https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
-        400:
-          description: Error or missing information in request.
+      body:
+        mediaType: application/x-www-form-urlencoded
+        properties:
+          SAMLResponse:
+          RelayState:
   /logout:
     get:
       securedBy: null
