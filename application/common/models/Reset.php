@@ -378,10 +378,10 @@ class Reset extends ResetBase
 
     /**
      * Calculate expiration time based on current time and configured reset lifetime
-     * @return integer
+     * @return string
      * @throws ServerErrorHttpException
      */
-    public static function calculateExpireTime()
+    public static function calculateExpireTime():string
     {
         $params = \Yii::$app->params;
         if ( ! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
