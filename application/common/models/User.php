@@ -2,6 +2,7 @@
 namespace common\models;
 
 use common\components\auth\User as AuthUser;
+use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use common\components\personnel\NotFoundException;
@@ -88,7 +89,6 @@ class User extends UserBase implements IdentityInterface
      * @param string|null $email [default=null]
      * @param string|null $employeeId [default=null]
      * @return User
-     * @throws NotFoundHttpException
      * @throws \Exception
      * @throws NotFoundException
      */
@@ -632,7 +632,7 @@ class User extends UserBase implements IdentityInterface
      * @return User|null
      * @throws \Exception
      * @throws NotFoundException
-     * @throws NotFoundHttpException
+     * @throws \Sil\Idp\IdBroker\Client\ServiceException
      */
     public static function getUserFromInviteCode(string $inviteCode)
     {

@@ -130,16 +130,16 @@ class AuthController extends BaseRestController
                     ]);
                 }
 
-                /*
-                 * Get AuthUser for call to auth component
-                 */
+                /** @var AuthUser $authUser */
                 $authUser = $user->getAuthUser();
 
                 /*
                  * Log user out of IdP
                  */
                 try {
-                    \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
+                    /** @var AuthnInterface $auth */
+                    $auth = \Yii::$app->auth;
+                    $auth->logout(\Yii::$app->params['uiUrl'], $authUser);
                 } catch (RedirectException $e) {
                     return $this->redirect($e->getUrl());
                 }
@@ -256,8 +256,10 @@ class AuthController extends BaseRestController
              * If invite code is not recognized, fail over to normal login
              */
 
+            /** @var AuthnInterface $auth */
+            $auth = \Yii::$app->auth;
             /** @var AuthUser $authUser */
-            $authUser = \Yii::$app->auth->login($this->getReturnTo(), \Yii::$app->request);
+            $authUser = $auth->login($this->getReturnTo(), \Yii::$app->request);
 
             /*
              * Get local user instance or create one.

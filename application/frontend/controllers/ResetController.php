@@ -292,7 +292,7 @@ class ResetController extends BaseRestController
                 /*
                  * Delete reset record, log errors, but let user proceed
                  */
-                if ( ! $reset->delete()) {
+                if (! $reset->delete()) {
                     \Yii::warning([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,
@@ -301,9 +301,6 @@ class ResetController extends BaseRestController
                     ]);
                 }
 
-                /*
-                 * return empty object so that it gets json encoded to {}
-                 */
                 return [
                     'access_token' => $accessToken,
                 ];
