@@ -3,14 +3,19 @@ namespace frontend\controllers;
 
 use common\components\auth\RedirectException;
 use common\components\auth\User as AuthUser;
+use common\components\auth\AuthnInterface;
+use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\User;
 use frontend\components\BaseRestController;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
+use yii\web\ServerErrorHttpException;
 
 class AuthController extends BaseRestController
 {
@@ -68,7 +73,20 @@ class AuthController extends BaseRestController
              */
             $state = $this->getRequestState();
 
-            $user = $this->authenticateUser();
+            try {
+                $user = $this->authenticateUser();
+            } catch (ServiceException $e) {
+                /*
+                 * ID Broker returns a 410 HTTP status code if the invite code has expired
+                */
+                $log['status'] = 'error';
+                $log['error'] = 'invite code expired';
+                \Yii::error($log, 'application');
+
+                if ($e->httpStatusCode == 410) {
+                    return $this->redirect($this->getReturnToOnError());
+                }
+            }
 
             $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
@@ -102,10 +120,7 @@ class AuthController extends BaseRestController
             $log['code'] = $e->getCode();
             \Yii::error($log, 'application');
 
-            /*
-             * redirect to login error page
-             */
-            return $this->redirect(\Yii::$app->params['uiUrl'] . '/auth/error');
+            throw new ServerErrorHttpException();
         }
 
     }
@@ -232,11 +247,27 @@ class AuthController extends BaseRestController
     }
 
     /**
+     * Get a return-to url for where to send browser in the event of an error
+     * If it's a relative url (starting with '/') it will be prefixed with uiUrl
+     * @return array|mixed|string
+     */
+    protected function getReturnToOnError()
+    {
+        $returnTo = \Yii::$app->request->get('ReturnToOnError', '');
+        if (substr($returnTo, 0, 1) == '/') {
+            $returnTo = \Yii::$app->params['uiUrl'] . $returnTo;
+        }
+        return $returnTo;
+    }
+
+    /**
      * Authenticate User either by an invite code, or by an Auth login call
      *
      * @return User|null
-     * @throws \common\components\personnel\NotFoundException
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundException
+     * @throws RedirectException
+     * @throws \common\components\auth\InvalidLoginException
+     * @throws ServiceException
      */
     protected function authenticateUser()
     {
