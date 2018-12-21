@@ -399,7 +399,7 @@ class Reset extends ResetBase
     public function isExpired(): bool
     {
         $expiresTimestamp = strtotime($this->expires);
-        if ($expiresTimestamp == false) {
+        if ($expiresTimestamp === false) {
             throw new ServerErrorHttpException('Unable to check expiration', 1545341112);
         }
 
