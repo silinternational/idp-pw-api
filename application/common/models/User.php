@@ -639,8 +639,8 @@ class User extends UserBase implements IdentityInterface
         /** @var IdBroker $passwordStore */
         $passwordStore = \Yii::$app->passwordStore;
 
-        if (! ($passwordStore instanceof IdBroker)) {
-            throw new \Exception('Configured passwordStore does not support new user invite.');
+        if (! (method_exists($passwordStore, 'getClient'))) {
+            throw new \Exception('Configured passwordStore does not support new user invite.', 1546441100);
         }
 
         $client = $passwordStore->getClient();
