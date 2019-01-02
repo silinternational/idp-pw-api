@@ -297,7 +297,7 @@ class Reset extends ResetBase
          * Generate code if needed, update attempt counter, save record, and send email
          */
         if ($this->code === null) {
-            $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+            $this->code = self::createCode();
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
@@ -358,7 +358,7 @@ class Reset extends ResetBase
     public function restart()
     {
         $this->attempts = 0;
-        $this->code = null;
+        $this->code = self::createCode();
         $this->expires = self::calculateExpireTime();
         $this->saveOrError('restart reset');
         $this->send();
@@ -670,5 +670,14 @@ class Reset extends ResetBase
         } else {
             return 'Invalid reset type';
         }
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private static function createCode(): string
+    {
+        return Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
     }
 }
