@@ -75,15 +75,14 @@ class AuthController extends BaseRestController
             try {
                 $user = $this->authenticateUser();
             } catch (ServiceException $e) {
-                /*
-                 * ID Broker returns a 410 HTTP status code if the invite code has expired
-                */
-                $log['status'] = 'error';
-                $log['error'] = 'invite code expired';
-                \Yii::error($log, 'application');
-
                 if ($e->httpStatusCode == 410) {
+                    $log['status'] = 'error';
+                    $log['error'] = 'invite code expired';
+                    \Yii::error($log, 'application');
+
                     return $this->redirect($this->getReturnToOnError());
+                } else {
+                    throw $e;
                 }
             }
 
