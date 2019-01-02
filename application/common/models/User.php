@@ -9,10 +9,8 @@ use common\components\personnel\NotFoundException;
 use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
-use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
