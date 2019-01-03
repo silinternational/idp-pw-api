@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Changed password reuse error response code from 400 to 409
 - Changed expired method verification response code from 400 to 410
 - /auth/login returns 400 for client_id missing, instead of 302
+- /method/{uid}/verify no longer requires authentication
 ### Removed
 - Removed support for phone password recovery methods 
 ### Fixed
