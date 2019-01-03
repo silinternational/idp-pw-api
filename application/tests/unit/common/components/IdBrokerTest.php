@@ -147,7 +147,6 @@ class IdBrokerTest extends TestCase
         ]);
 
         $expected = [
-            'uuid' => '726fa32e-015d-46fb-ba5c-a579b4a4dcbf',
             'employeeId' => $employeeId,
             'firstName' => $firstName,
             'lastName' => $lastName,
@@ -159,12 +158,12 @@ class IdBrokerTest extends TestCase
         ];
 
         $results = get_object_vars($idBroker->findByUsername($userName));
+        unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
 
     public function testFindByEmail()
     {
-        $uuid = '766b375d-3f71-4d2c-ae9b-4f9292991a3b';
         $employeeId = '44444';
         $firstName = 'Tommy';
         $lastName = 'Tester';
@@ -173,7 +172,6 @@ class IdBrokerTest extends TestCase
 
         // Setup
         $this->ensureUserExists([
-            'uuid' => $uuid,
             'employee_id' => $employeeId,
             'first_name' => $firstName,
             'last_name' => $lastName,
@@ -189,7 +187,6 @@ class IdBrokerTest extends TestCase
         ]);
 
         $expected = [
-            'uuid' => $uuid,
             'employeeId' => $employeeId,
             'firstName' => $firstName,
             'lastName' => $lastName,
@@ -201,12 +198,12 @@ class IdBrokerTest extends TestCase
         ];
 
         $results = get_object_vars($idBroker->findByEmail($email));
+        unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
 
     public function testFindByEmployeeId()
     {
-        $uuid = 'd7ced5b3-72cc-425d-94d5-582a26f95896';
         $employeeId = '55555';
         $firstName = 'Tommy';
         $lastName = 'Tester';
@@ -215,7 +212,6 @@ class IdBrokerTest extends TestCase
 
         // Setup
         $this->ensureUserExists([
-            'uuid' => $uuid,
             'employee_id' => $employeeId,
             'first_name' => $firstName,
             'last_name' => $lastName,
@@ -231,7 +227,6 @@ class IdBrokerTest extends TestCase
         ]);
 
         $expected = [
-            'uuid' => $uuid,
             'employeeId' => $employeeId,
             'firstName' => $firstName,
             'lastName' => $lastName,
@@ -243,6 +238,7 @@ class IdBrokerTest extends TestCase
         ];
 
         $results = get_object_vars($idBroker->findByEmployeeId($employeeId));
+        unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
 
