@@ -10,6 +10,11 @@ class PersonnelUser
     /**
      * @var string
      */
+    public $uuid;
+
+    /**
+     * @var string
+     */
     public $firstName;
 
     /**
