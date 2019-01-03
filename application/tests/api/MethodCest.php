@@ -178,9 +178,9 @@ class MethodCest extends BaseCest
 
     public function test14(ApiTester $I)
     {
-        $I->wantTo('check response when making unauthenticated PUT request to update a method');
+        $I->wantTo('check response when making a PUT request with no code');
         $I->sendPUT('/method/11111111111111111111111111111111/verify');
-        $I->seeResponseCodeIs(401);
+        $I->seeResponseCodeIs(400);
     }
 
     public function test15(ApiTester $I, $scenario)
@@ -286,15 +286,6 @@ class MethodCest extends BaseCest
         $I->seeResponseCodeIs(400);
         $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(429);
-    }
-
-    public function test158(ApiTester $I)
-    {
-        $I->wantTo('check response for authenticated PUT request to method/{uid} for a user'
-            . ' with auth_type=reset');
-        $I->haveHttpHeader('Authorization', 'Bearer user5');
-        $I->sendPUT('/method/55555555555555555555555555555555/verify');
-        $I->seeResponseCodeIs(403);
     }
 
     public function test16(ApiTester $I)
