@@ -41,7 +41,7 @@ class SiteController extends BaseRestController
                 ]
             ],
             'authenticator' => [
-                'except' => ['system-status'] // bypass authentication for /auth/login
+                'except' => ['system-status'] // bypass authentication for /site/system-status
             ]
         ]);
     }
