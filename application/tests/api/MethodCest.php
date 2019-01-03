@@ -178,16 +178,15 @@ class MethodCest extends BaseCest
 
     public function test14(ApiTester $I)
     {
-        $I->wantTo('check response when making a PUT request with no code');
+        $I->wantTo('check response when making an unauthenticated PUT request with no code');
         $I->sendPUT('/method/11111111111111111111111111111111/verify');
         $I->seeResponseCodeIs(400);
     }
 
     public function test15(ApiTester $I, $scenario)
     {
-        $I->wantTo('check response when making authenticated PUT request with valid code to a'
+        $I->wantTo('check response when making an unauthenticated PUT request with valid code to a'
             . ' validated method when trying to update a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/11111111111111111111111111111111/verify',['code'=>'1234']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
@@ -202,27 +201,24 @@ class MethodCest extends BaseCest
 
     public function test152(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated PUT request to update a method as a'
+        $I->wantTo('check response when making an unauthenticated PUT request to update a method as a'
             . ' non-owner of the method');
-        $I->haveHttpHeader('Authorization', 'Bearer user2');
         $I->sendPUT('/method/11111111111111111111111111111111/verify',['code'=>'1234']);
         $I->seeResponseCodeIs(404);
     }
 
     public function test153(ApiTester $I)
     {
-        $I->wantTo('check response when making authenticated PUT request with invalid code and'
+        $I->wantTo('check response when making an unauthenticated PUT request with invalid code and'
             . ' expired verification time when trying to update a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/33333333333333333333333333333333/verify',['code'=>'13245']);
         $I->seeResponseCodeIs(404);
     }
 
     public function test154(ApiTester $I, $scenario)
     {
-        $I->wantTo('check response when making authenticated PUT request with invalid code and'
+        $I->wantTo('check response when making an unauthenticated PUT request with invalid code and'
             . ' unexpired verification time when trying to update a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
@@ -232,9 +228,8 @@ class MethodCest extends BaseCest
 
     public function test155(ApiTester $I, $scenario)
     {
-        $I->wantTo('check response when making authenticated PUT request with valid code to an'
+        $I->wantTo('check response when making an unauthenticated PUT request with valid code to an'
             . ' unvalidated method when trying to update a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'123456789']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
@@ -249,18 +244,16 @@ class MethodCest extends BaseCest
 
     public function test156(ApiTester $I)
     {
-        $I->wantTo('check response when making unauthenticated PUT request with valid code to'
+        $I->wantTo('check response when making an unauthenticated PUT request with valid code to'
             . ' an unvalidated method when trying to update a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user2');
         $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'123456789']);
         $I->seeResponseCodeIs(404);
     }
 
     public function test157(ApiTester $I, $scenario)
     {
-        $I->wantTo('check response when making multiple authenticated PUT request with invalid'
+        $I->wantTo('check response when making multiple unauthenticated PUT requests with invalid'
             . ' code and unexpired verification time when trying to update a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/method/33333333333333333333333333333335/verify',['code'=>'13245']);
 
         $scenario->incomplete('test is broken because fake methods are not known by uid');
