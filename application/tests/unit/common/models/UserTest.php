@@ -47,6 +47,7 @@ class UserTest extends Test
         $user->last_name = 'One';
         $user->idp_username = 'user_1456771651';
         $user->email = 'user-1456771651@domain.org';
+        $user->hide = 'no';
         if ( ! $user->save()) {
             $this->fail('Failed to create User: ' . print_r($user->getFirstErrors(), true));
         }

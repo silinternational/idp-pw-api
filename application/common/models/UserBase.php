@@ -44,7 +44,7 @@ class UserBase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created'], 'required'],
+            [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created', 'hide'], 'required'],
             [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
             [['auth_type', 'hide'], 'string'],
             [['uid', 'employee_id'], 'string', 'max' => 32],
