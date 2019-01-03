@@ -158,6 +158,7 @@ class IdBrokerTest extends TestCase
         ];
 
         $results = get_object_vars($idBroker->findByUsername($userName));
+        unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
 
@@ -197,6 +198,7 @@ class IdBrokerTest extends TestCase
         ];
 
         $results = get_object_vars($idBroker->findByEmail($email));
+        unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
 
@@ -236,6 +238,7 @@ class IdBrokerTest extends TestCase
         ];
 
         $results = get_object_vars($idBroker->findByEmployeeId($employeeId));
+        unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
 
