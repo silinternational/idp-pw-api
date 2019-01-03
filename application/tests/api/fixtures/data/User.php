@@ -3,7 +3,7 @@ use common\helpers\Utils;
 return [
     'user1' => [
         'id' => 1,
-        'uid' => '11111111111111111111111111111111',
+        'uuid' => 'ab5489ea-48f3-4b37-b832-bcb3e95625a4',
         'employee_id' => '111111',
         'first_name' => 'User',
         'last_name' => 'One',
@@ -20,7 +20,7 @@ return [
     ],
     'user2' => [
         'id' => 2,
-        'uid' => '22222222222222222222222222222222',
+        'uuid' => 'e615784c-8646-4bc5-8a2b-ba087ca29277',
         'employee_id' => '222222',
         'first_name' => 'User',
         'last_name' => 'Two',
@@ -37,7 +37,7 @@ return [
     ],
     'user3' => [
         'id' => 3,
-        'uid' => '33333333333333333333333333333333',
+        'uuid' => '77c647e8-a622-4917-a748-e1bf16ac6c3f',
         'employee_id' => '333333',
         'first_name' => 'User',
         'last_name' => 'Three',
@@ -54,7 +54,7 @@ return [
     ],
     'user4' => [
         'id' => 4,
-        'uid' => '33333333333333333333333333333334',
+        'uuid' => '5bf9225b-8f95-4195-9998-bb76f3364d3b',
         'employee_id' => '444444',
         'first_name' => 'User',
         'last_name' => 'Four',
@@ -69,7 +69,7 @@ return [
     ],
     'user5' => [
         'id' => 5,
-        'uid' => '55555555555555555555555555555555',
+        'uuid' => '0bba13fe-d4ec-40be-baaa-ee07ce1d9438',
         'employee_id' => '5',
         'first_name' => 'User',
         'last_name' => 'Five',
@@ -86,7 +86,7 @@ return [
     ],
     'user6' => [
         'id' => 6,
-        'uid' => '66666666666666666666666666666666',
+        'uuid' => 'a3753e07-9cdb-450e-9921-a8db525dcea4',
         'employee_id' => '6',
         'first_name' => 'User',
         'last_name' => 'Six',
