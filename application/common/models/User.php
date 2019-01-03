@@ -48,10 +48,6 @@ class User extends UserBase implements IdentityInterface
         return ArrayHelper::merge(
             [
                 [
-                    ['uid'], 'default', 'value' => Utils::generateRandomString(),
-                ],
-
-                [
                     ['created'], 'default', 'value' => Utils::getDatetime(),
                 ],
 
@@ -70,6 +66,7 @@ class User extends UserBase implements IdentityInterface
     public function fields()
     {
         return [
+            'uuid',
             'first_name',
             'last_name',
             'idp_username',
@@ -142,6 +139,7 @@ class User extends UserBase implements IdentityInterface
         $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
         if ( ! $user) {
             $user = new User();
+            $user->uuid = $personnelUser->uuid;
             $user->employee_id = (string)$personnelUser->employeeId;
             $user->first_name = $personnelUser->firstName;
             $user->last_name = $personnelUser->lastName;
@@ -186,6 +184,14 @@ class User extends UserBase implements IdentityInterface
                 $dirty = true;
                 $this->$property = $value;
             }
+        }
+
+        /*
+         * Only allow uuid to be changed if blank. Allows for migration of existing records.
+         */
+        if (empty($this->uuid)) {
+            $dirty = true;
+            $this->uuid = $personnelUser->uuid;
         }
 
         if ($dirty) {

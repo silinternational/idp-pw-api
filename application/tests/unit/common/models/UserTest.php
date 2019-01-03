@@ -42,6 +42,7 @@ class UserTest extends Test
     {
         User::deleteAll();
         $user = new User();
+        $user->uuid = 'ccd9bb38-a656-4c62-80ba-2428468599b3';
         $user->employee_id = '1456771651';
         $user->first_name = 'User';
         $user->last_name = 'One';
@@ -52,7 +53,7 @@ class UserTest extends Test
             $this->fail('Failed to create User: ' . print_r($user->getFirstErrors(), true));
         }
 
-        $this->assertEquals(32, strlen($user->uid));
+        $this->assertEquals(36, strlen($user->uuid));
         $this->assertNull($user->last_login);
         $this->assertNull($user->pw_last_changed);
         $this->assertNull($user->pw_expires);
@@ -96,7 +97,7 @@ class UserTest extends Test
         User::deleteAll();
         $user = User::findOrCreate('first_last');
 
-        $this->assertEquals(32, strlen($user->uid));
+        $this->assertEquals(36, strlen($user->uuid));
         $this->assertNull($user->last_login);
         $this->assertNull($user->pw_last_changed);
         $this->assertNull($user->pw_expires);
@@ -127,6 +128,7 @@ class UserTest extends Test
         $user = $this->users('user1');
 
         $personnelData = new PersonnelUser();
+        $personnelData->uuid = $user->uuid;
         $personnelData->firstName = $user->first_name;
         $personnelData->lastName = $user->last_name;
         $personnelData->username = $user->idp_username;
@@ -140,8 +142,12 @@ class UserTest extends Test
         $this->assertFalse($changed);
 
         /*
-         * Test changed for each property
+         * Test changed for each property. uuid cannot be changed
          */
+        $personnelData->uuid = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+        $changed = $user->updateProfileIfNeeded($personnelData);
+        $this->assertFalse($changed);
+
         $personnelData->firstName .= 'a';
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
@@ -245,7 +251,7 @@ class UserTest extends Test
         $expected = $this->users('user1');
         $user = User::findIdentityByAccessToken('user1');
         $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals($expected->uid, $user->uid);
+        $this->assertEquals($expected->uuid, $user->uuid);
     }
 
     public function testGetAuthKey()

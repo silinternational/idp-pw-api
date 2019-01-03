@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "user".
  *
  * @property int $id
- * @property string $uid
  * @property string $employee_id
  * @property string $first_name
  * @property string $last_name
@@ -22,6 +21,7 @@ use Yii;
  * @property string $access_token_expiration
  * @property string $auth_type
  * @property string $hide
+ * @property string $uuid
  *
  * @property EventLog[] $eventLogs
  * @property Method[] $methods
@@ -44,13 +44,12 @@ class UserBase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created', 'hide'], 'required'],
+            [['employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created', 'hide'], 'required'],
             [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
             [['auth_type', 'hide'], 'string'],
-            [['uid', 'employee_id'], 'string', 'max' => 32],
+            [['employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
-            [['access_token'], 'string', 'max' => 64],
-            [['uid'], 'unique'],
+            [['access_token', 'uuid'], 'string', 'max' => 64],
             [['employee_id'], 'unique'],
             [['email'], 'unique'],
             [['access_token'], 'unique'],
@@ -64,7 +63,6 @@ class UserBase extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'uid' => Yii::t('app', 'Uid'),
             'employee_id' => Yii::t('app', 'Employee ID'),
             'first_name' => Yii::t('app', 'First Name'),
             'last_name' => Yii::t('app', 'Last Name'),
@@ -78,6 +76,7 @@ class UserBase extends \yii\db\ActiveRecord
             'access_token_expiration' => Yii::t('app', 'Access Token Expiration'),
             'auth_type' => Yii::t('app', 'Auth Type'),
             'hide' => Yii::t('app', 'Hide'),
+            'uuid' => Yii::t('app', 'Uuid'),
         ];
     }
 

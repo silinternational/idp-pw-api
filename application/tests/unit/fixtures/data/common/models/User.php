@@ -5,7 +5,7 @@ use common\helpers\Utils;
 return [
     'user1' => [
         'id' => 1,
-        'uid' => '11111111111111111111111111111111',
+        'uuid' => 'ccd9bb38-a656-4c62-80ba-2428468599b3',
         'employee_id' => '111111',
         'first_name' => 'User',
         'last_name' => 'One',
@@ -22,7 +22,7 @@ return [
     ],
     'user2' => [
         'id' => 2,
-        'uid' => '22222222222222222222222222222222',
+        'uuid' => 'e83a320a-de40-4ec2-a74a-e965b16bd338',
         'employee_id' => '222222',
         'first_name' => 'User',
         'last_name' => 'Two',
@@ -39,7 +39,7 @@ return [
     ],
     'user3' => [
         'id' => 3,
-        'uid' => '33333333333333333333333333333333',
+        'uuid' => '34797828-f348-4d9a-ba90-4c49ae27d15b',
         'employee_id' => '333333',
         'first_name' => 'User',
         'last_name' => 'Three',
@@ -56,7 +56,7 @@ return [
     ],
     'user4' => [
         'id' => 4,
-        'uid' => '44444444444444444444444444444444',
+        'uuid' => 'fa17fddb-730d-4d64-a6d1-dbf1a32fc004',
         'employee_id' => '444444',
         'first_name' => 'User',
         'last_name' => 'Three',
