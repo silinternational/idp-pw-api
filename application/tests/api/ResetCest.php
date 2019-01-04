@@ -144,6 +144,13 @@ class ResetCest extends BaseCest
         $I->seeResponseCodeIs(410);
     }
 
+    public function test812(ApiTester $I)
+    {
+        $I->wantTo('check response on unauthenticated PUT request to validate an expired, incorrect reset code');
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate',['code' => 'xxx', 'client_id' => 'abc123']);
+        $I->seeResponseCodeIs(400);
+    }
+
     public function test82(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to validate a reset code');
