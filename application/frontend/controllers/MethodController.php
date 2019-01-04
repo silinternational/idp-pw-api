@@ -47,13 +47,21 @@ class MethodController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
+                        'actions' => ['verify'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
                         'matchCallback' => function () {
                             $user = \Yii::$app->user->identity;
                             return ($user->isAuthScopeFull());
                         }
                     ],
                 ]
-            ]
+            ],
+            'authenticator' => [
+                'except' => ['verify'] // bypass authentication for /method/{id}/verify
+            ],
         ]);
     }
 
@@ -150,10 +158,8 @@ class MethodController extends BaseRestController
             throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1542749426);
         }
 
-        $employeeId = \Yii::$app->user->identity->employee_id;
-
         try {
-            $method = $this->idBrokerClient->verifyMethod($uid, $employeeId, $code);
+            $method = $this->idBrokerClient->verifyMethod($uid, '', $code);
         } catch (ServiceException $e) {
             throw new HttpException(
                 $e->httpStatusCode,
