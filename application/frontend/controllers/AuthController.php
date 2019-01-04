@@ -247,9 +247,8 @@ class AuthController extends BaseRestController
     /**
      * Get a return-to url for where to send browser in the event of an error
      * If it's a relative url (starting with '/') it will be prefixed with uiUrl
-     * @return array|mixed|string
      */
-    protected function getReturnToOnError()
+    protected function getReturnToOnError(): string
     {
         $returnTo = \Yii::$app->request->get('ReturnToOnError', '');
         if (substr($returnTo, 0, 1) == '/') {
