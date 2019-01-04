@@ -201,8 +201,9 @@ types:
         302:
           description: >
             On successful login or invite, a redirection to `ReturnTo` with `state`, `token_type`,
-            `expires_utc` and `access_token` appended as query string parameters. On error, a
-            redirection to `ReturnToOnError` with no query string parameters.
+            `expires_utc` and `access_token` appended as query string parameters. If `invite`
+            was provided, but it has expired, this response will be a redirection to
+            `ReturnToOnError` with no query string parameters.
           headers:
             location:
               description: redirect URL
