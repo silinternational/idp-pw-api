@@ -607,7 +607,7 @@ class User extends UserBase implements IdentityInterface
         $this->access_token_expiration = null;
         $this->auth_type = null;
 
-        if (!$this->save()) {
+        if (! $this->save()) {
             \Yii::error([
                 'action' => 'destroy access token',
                 'status' => 'error',
