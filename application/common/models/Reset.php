@@ -40,7 +40,7 @@ class Reset extends ResetBase
                 ],
 
                 [
-                    ['expires'], 'default', 'value' => Utils::getDatetime(self::getExpireTimestamp()),
+                    ['expires'], 'default', 'value' => self::calculateExpireTime(),
                 ],
 
                 [
@@ -297,7 +297,7 @@ class Reset extends ResetBase
          * Generate code if needed, update attempt counter, save record, and send email
          */
         if ($this->code === null) {
-            $this->code = Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+            $this->code = self::createCode();
             $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
         }
 
@@ -331,12 +331,13 @@ class Reset extends ResetBase
     /**
      * Check if user provided code is valid
      * @param string $userProvided code submitted by user
-     * @return boolean
+     * @return bool
      * @throws \Exception
+     * @throws HttpException
      * @throws ServerErrorHttpException
      * @throws TooManyRequestsHttpException
      */
-    public function isUserProvidedCodeCorrect($userProvided)
+    public function isUserProvidedCodeCorrect($userProvided): bool
     {
         /*
          * Track attempt and throw error if disabled or limit is reached
@@ -348,6 +349,19 @@ class Reset extends ResetBase
         } else {
             throw new \Exception('Unable to verify code because method type is invalid', 1462543005);
         }
+    }
+
+    /**
+     * @throws ServerErrorHttpException
+     * @throws \Exception
+     */
+    public function restart()
+    {
+        $this->attempts = 0;
+        $this->code = self::createCode();
+        $this->expires = self::calculateExpireTime();
+        $this->saveOrError('restart reset');
+        $this->send();
     }
 
     /**
@@ -363,11 +377,11 @@ class Reset extends ResetBase
     }
 
     /**
-     * Calculate expiration timestamp based on given timestamp and configured reset lifetime
-     * @return integer
+     * Calculate expiration time based on current time and configured reset lifetime
+     * @return string
      * @throws ServerErrorHttpException
      */
-    public static function getExpireTimestamp()
+    public static function calculateExpireTime():string
     {
         $params = \Yii::$app->params;
         if ( ! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
@@ -375,9 +389,21 @@ class Reset extends ResetBase
             throw new ServerErrorHttpException('Application configuration for reset lifetime is not set', 1458676224);
         }
 
-        $time = time();
+        return Utils::getDatetime(time() + $params['reset']['lifetimeSeconds']);
+    }
 
-        return $time + $params['reset']['lifetimeSeconds'];
+    /**
+     * @return bool
+     * @throws ServerErrorHttpException
+     */
+    public function isExpired(): bool
+    {
+        $expiresTimestamp = strtotime($this->expires);
+        if ($expiresTimestamp === false) {
+            throw new ServerErrorHttpException('Unable to check expiration', 1545341112);
+        }
+
+        return $expiresTimestamp < time();
     }
 
     /**
@@ -644,5 +670,14 @@ class Reset extends ResetBase
         } else {
             return 'Invalid reset type';
         }
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private static function createCode(): string
+    {
+        return Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
     }
 }

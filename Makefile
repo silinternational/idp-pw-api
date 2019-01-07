@@ -4,6 +4,7 @@ test: testunit testapi
 
 testunit: composer emailcron rmTestDb upTestDb broker ldapload yiimigratetestDb
 	docker-compose run --rm unittest
+	sed -i "s|/data/|`pwd`/application/|" application/tests/_output/coverage.xml
 
 # Run testunit first at least once. Otherwise, this will have 5 test failures.
 testapi: upTestDb broker yiimigratetestDb

@@ -3,14 +3,18 @@ namespace frontend\controllers;
 
 use common\components\auth\RedirectException;
 use common\components\auth\User as AuthUser;
+use common\components\auth\AuthnInterface;
+use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\User;
 use frontend\components\BaseRestController;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 class AuthController extends BaseRestController
 {
@@ -68,7 +72,19 @@ class AuthController extends BaseRestController
              */
             $state = $this->getRequestState();
 
-            $user = $this->authenticateUser();
+            try {
+                $user = $this->authenticateUser();
+            } catch (ServiceException $e) {
+                if ($e->httpStatusCode == 410) {
+                    $log['status'] = 'error';
+                    $log['error'] = 'invite code expired';
+                    \Yii::error($log, 'application');
+
+                    return $this->redirect($this->getReturnToOnError());
+                } else {
+                    throw $e;
+                }
+            }
 
             $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
 
@@ -102,10 +118,7 @@ class AuthController extends BaseRestController
             $log['code'] = $e->getCode();
             \Yii::error($log, 'application');
 
-            /*
-             * redirect to login error page
-             */
-            return $this->redirect(\Yii::$app->params['uiUrl'] . '/auth/error');
+            throw new ServerErrorHttpException('server error ' . $e->getCode(), 1546440970);
         }
 
     }
@@ -130,16 +143,16 @@ class AuthController extends BaseRestController
                     ]);
                 }
 
-                /*
-                 * Get AuthUser for call to auth component
-                 */
+                /** @var AuthUser $authUser */
                 $authUser = $user->getAuthUser();
 
                 /*
                  * Log user out of IdP
                  */
                 try {
-                    \Yii::$app->auth->logout(\Yii::$app->params['uiUrl'], $authUser);
+                    /** @var AuthnInterface $auth */
+                    $auth = \Yii::$app->auth;
+                    $auth->logout(\Yii::$app->params['uiUrl'], $authUser);
                 } catch (RedirectException $e) {
                     return $this->redirect($e->getUrl());
                 }
@@ -232,11 +245,26 @@ class AuthController extends BaseRestController
     }
 
     /**
+     * Get a return-to url for where to send browser in the event of an error
+     * If it's a relative url (starting with '/') it will be prefixed with uiUrl
+     */
+    protected function getReturnToOnError(): string
+    {
+        $returnTo = \Yii::$app->request->get('ReturnToOnError', '');
+        if (substr($returnTo, 0, 1) == '/') {
+            $returnTo = \Yii::$app->params['uiUrl'] . $returnTo;
+        }
+        return $returnTo;
+    }
+
+    /**
      * Authenticate User either by an invite code, or by an Auth login call
      *
      * @return User|null
-     * @throws \common\components\personnel\NotFoundException
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundException
+     * @throws RedirectException
+     * @throws \common\components\auth\InvalidLoginException
+     * @throws ServiceException
      */
     protected function authenticateUser()
     {
@@ -256,8 +284,10 @@ class AuthController extends BaseRestController
              * If invite code is not recognized, fail over to normal login
              */
 
+            /** @var AuthnInterface $auth */
+            $auth = \Yii::$app->auth;
             /** @var AuthUser $authUser */
-            $authUser = \Yii::$app->auth->login($this->getReturnTo(), \Yii::$app->request);
+            $authUser = $auth->login($this->getReturnTo(), \Yii::$app->request);
 
             /*
              * Get local user instance or create one.

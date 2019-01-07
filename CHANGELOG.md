@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - /auth/login returns 400 for client_id missing, instead of 302
 - Added `uuid` property to `/user/me` response
 - /method/{uid}/verify no longer requires authentication
+- Validation attempt on expired reset now issues a new reset
 ### Removed
 - Removed support for phone password recovery methods 
 ### Fixed

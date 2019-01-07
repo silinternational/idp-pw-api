@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -235,6 +236,7 @@ class ResetController extends BaseRestController
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
      * @throws \Exception
+     * @throws \Throwable
      */
     public function actionValidate($uid)
     {
@@ -244,24 +246,10 @@ class ResetController extends BaseRestController
             throw new NotFoundHttpException();
         }
 
-        /*
-         * Validate required parameters are present or throw 400 error
-         */
-        $code = \Yii::$app->request->getBodyParam('code', null);
-        if ($code === null) {
-            throw new BadRequestHttpException(
-                \Yii::t('app', 'Code is required'),
-                1462989866
-            );
-        }
-
         try {
             $clientId = Utils::getClientIdOrFail();
         } catch (\Exception $e) {
-            throw new BadRequestHttpException(
-                \Yii::t('app', 'Client ID is missing'),
-                1483979025
-            );
+            throw new BadRequestHttpException(\Yii::t('app', 'Client ID is missing'), 1483979025);
         }
 
         $log = [
@@ -270,8 +258,11 @@ class ResetController extends BaseRestController
             'user' => $reset->user->email,
         ];
 
-        $isValid = $reset->isUserProvidedCodeCorrect($code);
-        if ($isValid === true) {
+        if ($reset->isUserProvidedCodeCorrect($this->getCodeFromRequestBody())) {
+            if ($reset->isExpired()) {
+                $reset->restart();
+                throw new HttpException(410);
+            }
 
             $ipAddress = Utils::getClientIp(\Yii::$app->request);
 
@@ -301,7 +292,7 @@ class ResetController extends BaseRestController
                 /*
                  * Delete reset record, log errors, but let user proceed
                  */
-                if ( ! $reset->delete()) {
+                if (! $reset->delete()) {
                     \Yii::warning([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,
@@ -310,9 +301,6 @@ class ResetController extends BaseRestController
                     ]);
                 }
 
-                /*
-                 * return empty object so that it gets json encoded to {}
-                 */
                 return [
                     'access_token' => $accessToken,
                 ];
@@ -341,5 +329,18 @@ class ResetController extends BaseRestController
             \Yii::t('app', 'Invalid verification code'),
             1462991098
         );
+    }
+
+    /**
+     * @return string
+     * @throws BadRequestHttpException
+     */
+    protected function getCodeFromRequestBody(): string
+    {
+        $code = \Yii::$app->request->getBodyParam('code', null);
+        if ($code === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1462989866);
+        }
+        return $code;
     }
 }

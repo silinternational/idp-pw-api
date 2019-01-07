@@ -2,16 +2,15 @@
 namespace common\models;
 
 use common\components\auth\User as AuthUser;
+use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use common\components\personnel\NotFoundException;
 use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
-use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -85,7 +84,6 @@ class User extends UserBase implements IdentityInterface
      * @param string|null $email [default=null]
      * @param string|null $employeeId [default=null]
      * @return User
-     * @throws NotFoundHttpException
      * @throws \Exception
      * @throws NotFoundException
      */
@@ -636,13 +634,20 @@ class User extends UserBase implements IdentityInterface
     /**
      * @param string $inviteCode
      * @return User|null
+     * @throws \Exception
      * @throws NotFoundException
-     * @throws NotFoundHttpException
+     * @throws \Sil\Idp\IdBroker\Client\ServiceException
      */
     public static function getUserFromInviteCode(string $inviteCode)
     {
-        /** @var IdBrokerClient $client */
-        $client = \Yii::$app->passwordStore->getClient();
+        /** @var IdBroker $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
+        if (! (method_exists($passwordStore, 'getClient'))) {
+            throw new \Exception('Configured passwordStore does not support new user invite.', 1546441100);
+        }
+
+        $client = $passwordStore->getClient();
 
         $response = $client->authenticateNewUser($inviteCode);
 
