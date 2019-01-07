@@ -10,6 +10,7 @@ use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\IdentityInterface;
 use yii\web\ServerErrorHttpException;
 
@@ -560,6 +561,10 @@ class User extends UserBase implements IdentityInterface
             ],
             $this->id
         );
+
+        if ($this->auth_type == self::AUTH_TYPE_LOGIN) {
+            $this->destroyAccessToken();
+        }
     }
 
     /**
@@ -591,6 +596,24 @@ class User extends UserBase implements IdentityInterface
         }
 
         return $accessToken;
+    }
+
+    /**
+     *
+     */
+    public function destroyAccessToken(): void
+    {
+        $this->access_token = null;
+        $this->access_token_expiration = null;
+        $this->auth_type = null;
+
+        if (! $this->save()) {
+            \Yii::error([
+                'action' => 'destroy access token',
+                'status' => 'error',
+                'error' => Json::encode($this->getFirstErrors()),
+            ]);
+        }
     }
 
     /**

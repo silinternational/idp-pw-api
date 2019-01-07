@@ -12,7 +12,6 @@ use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -133,15 +132,7 @@ class AuthController extends BaseRestController
             $accessTokenHash = Utils::getAccessTokenHash($accessToken);
             $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
-                $user->access_token = null;
-                $user->access_token_expiration = null;
-                if ( ! $user->save()) {
-                    \Yii::error([
-                        'action' => 'user logout',
-                        'status' => 'error',
-                        'error' => Json::encode($user->getFirstErrors()),
-                    ]);
-                }
+                $user->destroyAccessToken();
 
                 /** @var AuthUser $authUser */
                 $authUser = $user->getAuthUser();
