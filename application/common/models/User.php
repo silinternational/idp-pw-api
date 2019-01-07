@@ -561,6 +561,10 @@ class User extends UserBase implements IdentityInterface
             ],
             $this->id
         );
+
+        if ($this->auth_type == self::AUTH_TYPE_LOGIN) {
+            $this->destroyAccessToken();
+        }
     }
 
     /**
