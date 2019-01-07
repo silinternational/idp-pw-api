@@ -128,12 +128,6 @@ class ResetController extends BaseRestController
             );
         }
 
-
-        /*
-         * Clear out expired resets
-         */
-        Reset::deleteExpired();
-
         /*
          * Calling getPasswordMeta simply to test for a locked account.
          */

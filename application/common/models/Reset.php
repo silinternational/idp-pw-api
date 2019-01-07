@@ -87,11 +87,6 @@ class Reset extends ResetBase
      */
     public static function findOrCreate($user)
     {
-        /*
-         * Clean up expired resets
-         */
-        self::deleteExpired();
-
         $log = [
             'action' => 'findOrCreate reset',
             'user_id' => $user->id,
@@ -623,33 +618,6 @@ class Reset extends ResetBase
                 'user' => $this->user->email,                
             ]);
             throw new ServerErrorHttpException(\Yii::t('app', $errorPrefix));
-        }
-    }
-
-    /**
-     * Delete all expired Reset records
-     */
-    public static function deleteExpired()
-    {
-        try {
-            $deleted = self::deleteAll(
-                ['<', 'expires', Utils::getDatetime()]
-            );
-
-            if ($deleted > 0) {
-                \Yii::warning([
-                    'action' => 'delete expired resets',
-                    'status' => 'success',
-                    'deleted count' => $deleted,
-                ]);
-            }
-        } catch (\Exception $e) {
-            \Yii::error([
-                'action' => 'delete expired resets',
-                'status' => 'error',
-                'error' => $e->getMessage(),
-                'code' => $e->getCode(),
-            ]);
         }
     }
 
