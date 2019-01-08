@@ -516,7 +516,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * @param string $newPassword
-     * @throws ServerErrorHttpException
+     * @throws \Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function setPassword($newPassword)
@@ -569,7 +569,7 @@ class User extends UserBase implements IdentityInterface
     /**
      * @param string $clientId
      * @return string
-     * @throws ServerErrorHttpException
+     * @throws \Exception
      */
     public function createAccessToken($clientId, $authType)
     {
