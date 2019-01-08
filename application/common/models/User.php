@@ -502,10 +502,25 @@ class User extends UserBase implements IdentityInterface
         /** @var UserPasswordMeta $pwMeta */
         $pwMeta = $passwordStore->getMeta($this->employee_id);
 
-        return [
-            'last_changed' => Utils::getIso8601($pwMeta->passwordLastChangeDate),
-            'expires' => Utils::getIso8601($pwMeta->passwordExpireDate),
-        ];
+        if ($pwMeta->passwordLastChangeDate === null && $pwMeta->passwordExpireDate === null) {
+            return null;
+        } else {
+            $this->pw_last_changed = Utils::getDatetime($pwMeta->passwordLastChangeDate);
+            $this->pw_expires = Utils::getDatetime($pwMeta->passwordExpireDate);
+
+            if (! $this->save()) {
+                \Yii::error([
+                    'action' => 'save password metadata',
+                    'status' => 'error',
+                    'error' => $this->getFirstErrors(),
+                ]);
+            }
+
+            return [
+                'last_changed' => Utils::getIso8601($pwMeta->passwordLastChangeDate),
+                'expires' => Utils::getIso8601($pwMeta->passwordExpireDate),
+            ];
+        }
     }
 
     /**
