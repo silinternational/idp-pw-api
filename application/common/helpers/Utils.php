@@ -1,7 +1,6 @@
 <?php
 namespace common\helpers;
 
-use \DateTime;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -21,48 +20,51 @@ class Utils
     /**
      * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
      *        the current time is used.
-     * @return bool|DateTime
+     * @return int
      * @throws \Exception
      */
-    public static function convertToDateTime($time)
+    protected static function convertToTimestamp($time)
     {
         $time = $time ?? time();
         $time = is_int($time) ? $time : strtotime($time);
         if ($time === false) {
             throw new \Exception('Unable to parse date to timestamp', 1468865840);
         }
-        return DateTime::createFromFormat('U', $time);
+        return $time;
     }
 
     /**
      * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
      *        the current time is used.
      * @return string
+     * @throws \Exception
      */
     public static function getDatetime($time = null)
     {
-        return self::convertToDateTime($time)->format(self::DT_FORMAT);
+        return date(self::DT_FORMAT, self::convertToTimestamp($time));
     }
 
     /**
-     * @param integer|string|null $time time as unix timestamp, mysql datetime, or null for now
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
      * @return string
      * @throws \Exception
      */
     public static function getIso8601($time = null)
     {
-        return self::convertToDateTime($time)->format(self::DT_ISO8601);
+        return date(self::DT_ISO8601, self::convertToTimestamp($time));
     }
 
     /**
      * Return human readable date time
-     * @param int|string|null $time Either a unix timestamp or a date in string format
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
      * @return string
      * @throws \Exception
      */
     public static function getFriendlyDate($time = null)
     {
-        return self::convertToDateTime($time)->format(self::FRIENDLY_DT_FORMAT);
+        return date(self::FRIENDLY_DT_FORMAT, self::convertToTimestamp($time));
     }
 
     /**
