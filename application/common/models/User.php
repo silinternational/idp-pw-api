@@ -65,18 +65,27 @@ class User extends UserBase implements IdentityInterface
      */
     public function fields()
     {
-        return [
+        $fields = [
             'uuid',
             'first_name',
             'last_name',
             'idp_username',
             'email',
-            'password_meta' => function (self $model) {
-                return $model->getPasswordMeta();
-            },
             'auth_type',
             'hide',
         ];
+
+        $pwMeta = $this->getPasswordMeta();
+        if ($pwMeta !== null) {
+            $fields['password_meta'] = function (self $model) {
+                $pwMeta['last_changed'] = Utils::getIso8601($model->pw_last_changed);
+                $pwMeta['expires'] = Utils::getIso8601($model->pw_expires);
+
+                return $pwMeta;
+            };
+        }
+
+        return $fields;
     }
 
     /**
