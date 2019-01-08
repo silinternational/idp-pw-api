@@ -659,6 +659,11 @@ class Reset extends ResetBase
          * Replace '+' with '-' just to be sure it's correctly defined
          */
         $resetGracePeriod = str_replace('+', '-', \Yii::$app->params['reset']['gracePeriod']);
+
+        /**
+         * @var string $removeExpireBefore   All records that expired before this date
+         * should be deleted. Calculated relative to now (time of execution).
+         */
         $removeExpireBefore = Utils::getDatetime(strtotime($resetGracePeriod));
         $resets = self::find()->andWhere(['<', 'expires', $removeExpireBefore])->all();
 
