@@ -1,6 +1,7 @@
 <?php
 namespace common\helpers;
 
+use \DateTime;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -18,45 +19,50 @@ class Utils
     const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
-     * @param integer|null $timestamp
-     * @return string
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
+     * @return bool|DateTime
+     * @throws \Exception
      */
-    public static function getDatetime($timestamp = null)
+    public static function convertToDateTime($time)
     {
-        $timestamp = $timestamp ?: time();
-
-        return date(self::DT_FORMAT, $timestamp);
+        $time = $time ?? time();
+        $time = is_int($time) ? $time : strtotime($time);
+        if ($time === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865840);
+        }
+        return DateTime::createFromFormat('U', $time);
     }
 
     /**
-     * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
+     * @return string
+     */
+    public static function getDatetime($time = null)
+    {
+        return self::convertToDateTime($time)->format(self::DT_FORMAT);
+    }
+
+    /**
+     * @param integer|string|null $time time as unix timestamp, mysql datetime, or null for now
      * @return string
      * @throws \Exception
      */
-    public static function getIso8601($timestamp = null)
+    public static function getIso8601($time = null)
     {
-        $timestamp = $timestamp !== null ? $timestamp : time();
-        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
-        if ($timestamp === false) {
-            throw new \Exception('Unable to parse date to timestamp', 1468865840);
-        }
-        return date(self::DT_ISO8601, $timestamp);
+        return self::convertToDateTime($time)->format(self::DT_ISO8601);
     }
 
     /**
      * Return human readable date time
-     * @param int|string|null $timestamp Either a unix timestamp or a date in string format
+     * @param int|string|null $time Either a unix timestamp or a date in string format
      * @return string
      * @throws \Exception
      */
-    public static function getFriendlyDate($timestamp = null)
+    public static function getFriendlyDate($time = null)
     {
-        $timestamp = $timestamp !== null ? $timestamp : time();
-        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
-        if ($timestamp === false) {
-            throw new \Exception('Unable to parse date to timestamp', 1468865838);
-        }
-        return date(self::FRIENDLY_DT_FORMAT, $timestamp);
+        return self::convertToDateTime($time)->format(self::FRIENDLY_DT_FORMAT);
     }
 
     /**
@@ -408,5 +414,4 @@ class Utils
     {
         return preg_replace('/[^0-9]/', '', $value);
     }
-
 }
