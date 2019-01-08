@@ -75,11 +75,16 @@ class User extends UserBase implements IdentityInterface
             'hide',
         ];
 
+        /*
+         * getPasswordMeta also updates the password metadata fields on the object
+         */
         $pwMeta = $this->getPasswordMeta();
         if ($pwMeta !== null) {
             $fields['password_meta'] = function (self $model) {
-                $pwMeta['last_changed'] = Utils::getIso8601($model->pw_last_changed);
-                $pwMeta['expires'] = Utils::getIso8601($model->pw_expires);
+                $pwMeta = [
+                    'last_changed' => Utils::getIso8601($model->pw_last_changed),
+                    'expires' => Utils::getIso8601($model->pw_expires),
+                ];
 
                 return $pwMeta;
             };
@@ -495,7 +500,7 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return array
+     * @return null|array
      * @throws \common\components\passwordStore\UserNotFoundException
      * @throws \common\components\passwordStore\AccountLockedException
      * @throws \Exception
