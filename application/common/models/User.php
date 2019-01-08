@@ -214,6 +214,7 @@ class User extends UserBase implements IdentityInterface
              * Save updated profile
              */
             $this->saveOrError('Unable to update profile', 1456760819);
+            return true;
         }
         return false;
     }
