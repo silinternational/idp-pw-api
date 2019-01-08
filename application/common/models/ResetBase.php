@@ -47,7 +47,6 @@ class ResetBase extends \yii\db\ActiveRecord
             [['email'], 'string', 'max' => 255],
             [['uid'], 'unique'],
             [['user_id'], 'unique'],
-            [['code'], 'unique'],
             [['method_id'], 'exist', 'skipOnError' => true, 'targetClass' => Method::className(), 'targetAttribute' => ['method_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
