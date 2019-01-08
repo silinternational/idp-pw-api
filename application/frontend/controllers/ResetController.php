@@ -128,12 +128,6 @@ class ResetController extends BaseRestController
             );
         }
 
-
-        /*
-         * Clear out expired resets
-         */
-        Reset::deleteExpired();
-
         /*
          * Calling getPasswordMeta simply to test for a locked account.
          */
@@ -148,10 +142,11 @@ class ResetController extends BaseRestController
          */
         $reset = Reset::findOrCreate($user);
 
-        /*
-         * Send reset notification
-         */
-        $reset->send();
+        if ($reset->isExpired()) {
+            $reset->restart();
+        } else {
+            $reset->send();
+        }
 
         if ($user->hide === 'yes') {
             throw new NotFoundHttpException(

@@ -236,8 +236,9 @@ return [
         'emailServiceStatus' => $emailServiceConfig,
         'emailVerification' => $emailServiceConfig,
         'reset' => [
-            'lifetimeSeconds' => 3600, // 1 hour
-            'disableDuration' => 900, // 15 minutes
+            'lifetimeSeconds' => 3600,  // 1 hour
+            'gracePeriod' => '-1 week', // time between expiration and deletion, relative to now (time of execution)
+            'disableDuration' => 900,   // 15 minutes
             'codeLength' => $codeLength,
             'maxAttempts' => 10,
         ],

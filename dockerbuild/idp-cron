@@ -1,4 +1,4 @@
 # m h dom mon dow user	command
 * * * * * root /data/yii cron/send-queued-email
-* * * * * root /data/yii cron/move-method-data
-
+*/10 * * * * root /data/yii cron/move-method-data
+10 */6 * * * root /data/yii cron/remove-old-records

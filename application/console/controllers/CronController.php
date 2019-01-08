@@ -4,6 +4,7 @@ namespace console\controllers;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use common\models\EmailQueue;
 use common\models\Method;
+use common\models\Reset;
 use yii\console\Controller;
 
 class CronController extends Controller
@@ -127,5 +128,21 @@ class CronController extends Controller
         echo (string)round($endTime - $startTime, 3) . ' sec, '
             . (string)round($msecPerRecord, 0) . ' ms per record' . PHP_EOL;
         echo 'finished cron/move-method-data' . PHP_EOL;
+    }
+
+    public function actionRemoveOldRecords()
+    {
+        \Yii::warning([
+            'action' => 'delete old reset records',
+            'status' => 'starting',
+        ]);
+
+        $numDeleted = Reset::purge();
+
+        \Yii::warning([
+            'action' => 'delete old reset records',
+            'status' => 'complete',
+            'count' => $numDeleted,
+        ]);
     }
 }

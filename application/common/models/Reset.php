@@ -87,11 +87,6 @@ class Reset extends ResetBase
      */
     public static function findOrCreate($user)
     {
-        /*
-         * Clean up expired resets
-         */
-        self::deleteExpired();
-
         $log = [
             'action' => 'findOrCreate reset',
             'user_id' => $user->id,
@@ -627,33 +622,6 @@ class Reset extends ResetBase
     }
 
     /**
-     * Delete all expired Reset records
-     */
-    public static function deleteExpired()
-    {
-        try {
-            $deleted = self::deleteAll(
-                ['<', 'expires', Utils::getDatetime()]
-            );
-
-            if ($deleted > 0) {
-                \Yii::warning([
-                    'action' => 'delete expired resets',
-                    'status' => 'success',
-                    'deleted count' => $deleted,
-                ]);
-            }
-        } catch (\Exception $e) {
-            \Yii::error([
-                'action' => 'delete expired resets',
-                'status' => 'error',
-                'error' => $e->getMessage(),
-                'code' => $e->getCode(),
-            ]);
-        }
-    }
-
-    /**
      * Return the masked value of whatever is used for this reset
      * @return string
      */
@@ -679,5 +647,41 @@ class Reset extends ResetBase
     private static function createCode(): string
     {
         return Utils::getRandomDigits(\Yii::$app->params['reset']['codeLength']);
+    }
+
+    /**
+     * Delete all Reset records with expiration date more than `gracePeriod` in the past
+     * @return int number of records deleted
+     */
+    public static function purge(): int
+    {
+        /*
+         * Replace '+' with '-' just to be sure it's correctly defined
+         */
+        $resetGracePeriod = str_replace('+', '-', \Yii::$app->params['reset']['gracePeriod']);
+
+        /**
+         * @var string $removeExpireBefore   All records that expired before this date
+         * should be deleted. Calculated relative to now (time of execution).
+         */
+        $removeExpireBefore = Utils::getDatetime(strtotime($resetGracePeriod));
+        $resets = self::find()->andWhere(['<', 'expires', $removeExpireBefore])->all();
+
+        $numDeleted = 0;
+        foreach ($resets as $reset) {
+            try {
+                if ($reset->delete() !== false) {
+                    $numDeleted += 1;
+                }
+            } catch (\Exception $e) {
+                \Yii::error([
+                    'action' => 'delete old resets',
+                    'status' => 'failed',
+                    'error' => $e->getMessage(),
+                    'uuid' => $reset->uid,
+                ]);
+            }
+        }
+        return $numDeleted;
     }
 }
