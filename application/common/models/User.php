@@ -517,8 +517,8 @@ class User extends UserBase implements IdentityInterface
             }
 
             return [
-                'last_changed' => Utils::getIso8601($pwMeta->passwordLastChangeDate),
-                'expires' => Utils::getIso8601($pwMeta->passwordExpireDate),
+                'last_changed' => $pwMeta->passwordLastChangeDate,
+                'expires' => $pwMeta->passwordExpireDate,
             ];
         }
     }
