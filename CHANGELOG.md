@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `uuid` property to `/user/me` response
 - /method/{uid}/verify no longer requires authentication
 - Validation attempt on expired reset now issues a new reset
-- Password change now clears out the auth token if `auth_type` is login
+- Password change now clears out the auth token if `auth_type` is reset
 ### Removed
 - Removed support for phone password recovery methods 
 ### Fixed
