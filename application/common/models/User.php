@@ -74,10 +74,7 @@ class User extends UserBase implements IdentityInterface
             'hide',
         ];
 
-        /*
-         * getPasswordMeta also updates the password metadata fields on the object
-         */
-        $pwMeta = $this->getPasswordMeta();
+        $pwMeta = $this->updatePasswordMeta();
         if ($pwMeta !== null) {
             $fields['password_meta'] = function (self $model) {
                 $pwMeta = [
@@ -484,7 +481,9 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return null|array
+     * Get password metadata from password store interface, and return in an array
+     * for use in an API response.
+     * @return array
      * @throws \common\components\passwordStore\UserNotFoundException
      * @throws \common\components\passwordStore\AccountLockedException
      * @throws \Exception
@@ -500,18 +499,41 @@ class User extends UserBase implements IdentityInterface
         /** @var UserPasswordMeta $pwMeta */
         $pwMeta = $passwordStore->getMeta($this->employee_id);
 
-        if ($pwMeta->passwordLastChangeDate === null && $pwMeta->passwordExpireDate === null) {
+
+        return [
+            'last_changed' => $pwMeta->passwordLastChangeDate,
+            'expires' => $pwMeta->passwordExpireDate,
+        ];
+    }
+
+    /**
+     * Retrieve password metadata from the password store interface, and update the local
+     * database with the new data. Returns an array containing the received properties,
+     * or null in case of error or empty data.
+     * @return null|array
+     */
+    public function updatePasswordMeta()
+    {
+        try {
+            $pwMeta = $this->getPasswordMeta();
+
+            if ($pwMeta['last_changed'] === null && $pwMeta['expires'] === null) {
+                return null;
+            } else {
+                $this->pw_last_changed = Utils::getDatetime($pwMeta['last_changed']);
+                $this->pw_expires = Utils::getDatetime($pwMeta['expires']);
+
+                $this->saveOrError('save password metadata');
+
+                return $pwMeta;
+            }
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'update password metadata',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
             return null;
-        } else {
-            $this->pw_last_changed = Utils::getDatetime($pwMeta->passwordLastChangeDate);
-            $this->pw_expires = Utils::getDatetime($pwMeta->passwordExpireDate);
-
-            $this->saveOrError('save password metadata');
-
-            return [
-                'last_changed' => $pwMeta->passwordLastChangeDate,
-                'expires' => $pwMeta->passwordExpireDate,
-            ];
         }
     }
 
