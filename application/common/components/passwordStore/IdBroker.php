@@ -34,74 +34,69 @@ class IdBroker extends Component implements PasswordStoreInterface
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
      * @return UserPasswordMeta
-     * @throws \Exception
-     * @throw \common\components\passwordStore\UserNotFoundException
-     * @throw \common\components\passwordStore\AccountLockedException
+     * @throws ServiceException
+     * @throws UserNotFoundException
+     * @throws AccountLockedException
      */
     public function getMeta($employeeId)
     {
-        try {
-            $client = $this->getClient();
+        $client = $this->getClient();
 
-            $user = $client->getUser($employeeId);
+        $user = $client->getUser($employeeId);
 
-            if ($user === null) {
-                throw new UserNotFoundException();
-            }
-
-            if ($user['locked'] == 'yes') {
-                throw new AccountLockedException();
-            }
-
-            $meta = UserPasswordMeta::create(
-                $user['password']['expires_on'] ?? null,
-                $user['password']['created_utc'] ?? null
-            );
-            return $meta;
-        } catch (\Exception $e) {
-            throw $e;
+        if ($user === null) {
+            throw new UserNotFoundException();
         }
+
+        if ($user['locked'] == 'yes') {
+            throw new AccountLockedException();
+        }
+
+        $meta = UserPasswordMeta::create(
+            $user['password']['expires_on'] ?? null,
+            $user['password']['created_utc'] ?? null
+        );
+        return $meta;
     }
 
     /**
      * Set user's password
      * @param string $employeeId
      * @param string $password
-     * @return \common\components\passwordStore\UserPasswordMeta
-     * @throws \Exception
-     * @throw \common\components\passwordStore\UserNotFoundException
-     * @throw \common\components\passwordStore\AccountLockedException
+     * @return UserPasswordMeta
+     * @throws UserNotFoundException
+     * @throws AccountLockedException
+     * @throws ServiceException
+     * @throws PasswordReuseException
      */
     public function set($employeeId, $password)
     {
+        $client = $this->getClient();
+
+        $user = $client->getUser($employeeId);
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        if ($user['locked'] == 'yes') {
+            throw new AccountLockedException();
+        }
+
         try {
-            $client = $this->getClient();
-
-            $user = $client->getUser($employeeId);
-
-            if ($user === null) {
-                throw new UserNotFoundException();
-            }
-
-            if ($user['locked'] == 'yes') {
-                throw new AccountLockedException();
-            }
-
             $update = $client->setPassword($employeeId, $password);
-
-            $meta = UserPasswordMeta::create(
-                $update['password']['expires_on'] ?? null,
-                $update['password']['created_utc'] ?? null
-            );
-            return $meta;
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 409) {
                 throw new PasswordReuseException();
             }
             throw $e;
-        } catch (\Exception $e) {
-            throw $e;
         }
+
+        $meta = UserPasswordMeta::create(
+            $update['password']['expires_on'] ?? null,
+            $update['password']['created_utc'] ?? null
+        );
+        return $meta;
     }
 
     /**
