@@ -493,12 +493,8 @@ class User extends UserBase implements IdentityInterface
         /** @var PasswordStoreInterface $passwordStore */
         $passwordStore = \Yii::$app->passwordStore;
 
-        /*
-         * If password metadata is missing, fetch from passwordStore and update
-         */
         /** @var UserPasswordMeta $pwMeta */
         $pwMeta = $passwordStore->getMeta($this->employee_id);
-
 
         return [
             'last_changed' => $pwMeta->passwordLastChangeDate,
