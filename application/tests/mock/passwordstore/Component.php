@@ -59,4 +59,9 @@ class Component implements PasswordStoreInterface
             IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
         ]);
     }
+
+    public function isLocked(string $employeeId): bool
+    {
+        return false;
+    }
 }

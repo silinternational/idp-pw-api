@@ -110,4 +110,25 @@ class IdBroker extends Component implements PasswordStoreInterface
             IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
         ]);
     }
+
+    /**
+     * @param string $employeeId
+     * @return bool
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws ServiceException
+     * @throws UserNotFoundException
+     */
+    public function isLocked(string $employeeId): bool
+    {
+        $client = $this->getClient();
+
+        $user = $client->getUser($employeeId);
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        return ($user['locked'] == 'yes');
+    }
 }

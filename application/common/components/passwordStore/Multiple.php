@@ -132,4 +132,14 @@ class Multiple extends Component implements PasswordStoreInterface
         }
         return $responses[0];
     }
+
+    public function isLocked(string $employeeId): bool
+    {
+        try {
+            $this->getMeta($employeeId);
+        } catch (AccountLockedException $e) {
+            return false;
+        }
+        return true;
+    }
 }

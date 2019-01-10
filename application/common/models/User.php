@@ -503,6 +503,19 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
+     * Is user account locked?
+     * @return true
+     * @throws \Exception
+     */
+    public function isLocked(): bool
+    {
+        /** @var PasswordStoreInterface $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
+        return $passwordStore->isLocked($this->employee_id);
+    }
+
+    /**
      * Retrieve password metadata from the password store interface, and update the local
      * database with the new data. Returns an array containing the received properties,
      * or null in case of error or empty data.

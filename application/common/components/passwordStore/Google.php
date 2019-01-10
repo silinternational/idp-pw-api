@@ -231,4 +231,9 @@ class Google extends Component implements PasswordStoreInterface
          * simply return an "empty" UserPasswordMeta object.  */
         return UserPasswordMeta::create('', '');
     }
+
+    public function isLocked(string $employeeId): bool
+    {
+        return false;
+    }
 }
