@@ -504,7 +504,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Is user account locked?
-     * @return true
+     * @return bool
      * @throws \Exception
      */
     public function isLocked(): bool
