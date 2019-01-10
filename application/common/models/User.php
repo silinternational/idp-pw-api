@@ -10,7 +10,6 @@ use common\components\personnel\PersonnelInterface;
 use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\web\IdentityInterface;
 use yii\web\ServerErrorHttpException;
 
@@ -65,18 +64,29 @@ class User extends UserBase implements IdentityInterface
      */
     public function fields()
     {
-        return [
+        $fields = [
             'uuid',
             'first_name',
             'last_name',
             'idp_username',
             'email',
-            'password_meta' => function (self $model) {
-                return $model->getPasswordMeta();
-            },
             'auth_type',
             'hide',
         ];
+
+        $pwMeta = $this->updatePasswordMeta();
+        if ($pwMeta !== null) {
+            $fields['password_meta'] = function (self $model) {
+                $pwMeta = [
+                    'last_changed' => Utils::getIso8601($model->pw_last_changed),
+                    'expires' => Utils::getIso8601($model->pw_expires),
+                ];
+
+                return $pwMeta;
+            };
+        }
+
+        return $fields;
     }
 
     /**
@@ -145,14 +155,7 @@ class User extends UserBase implements IdentityInterface
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
             $user->hide = $personnelUser->hide;
-            if ( ! $user->save()) {
-                \Yii::error([
-                    'action' => 'create new user',
-                    'status' => 'error',
-                    'error' => $user->getFirstErrors(),
-                ]);
-                throw new \Exception('Unable to create new user', 1456760294);
-            }
+            $user->saveOrError('Unable to create new user', 1456760294);
         } else {
             $user->updateProfileIfNeeded($personnelUser);
         }
@@ -207,16 +210,8 @@ class User extends UserBase implements IdentityInterface
             /*
              * Save updated profile
              */
-            if ($this->save()) {
-                return true;
-            } else {
-                \Yii::error([
-                    'action' => 'update user profile',
-                    'status' => 'error',
-                    'error' => $this->getFirstErrors(),
-                ]);
-                throw new \Exception('Unable to update profile', 1456760819);
-            }
+            $this->saveOrError('Unable to update profile', 1456760819);
+            return true;
         }
         return false;
     }
@@ -486,6 +481,8 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
+     * Get password metadata from password store interface, and return in an array
+     * for use in an API response.
      * @return array
      * @throws \common\components\passwordStore\UserNotFoundException
      * @throws \common\components\passwordStore\AccountLockedException
@@ -502,15 +499,47 @@ class User extends UserBase implements IdentityInterface
         /** @var UserPasswordMeta $pwMeta */
         $pwMeta = $passwordStore->getMeta($this->employee_id);
 
+
         return [
-            'last_changed' => Utils::getIso8601($pwMeta->passwordLastChangeDate),
-            'expires' => Utils::getIso8601($pwMeta->passwordExpireDate),
+            'last_changed' => $pwMeta->passwordLastChangeDate,
+            'expires' => $pwMeta->passwordExpireDate,
         ];
     }
 
     /**
+     * Retrieve password metadata from the password store interface, and update the local
+     * database with the new data. Returns an array containing the received properties,
+     * or null in case of error or empty data.
+     * @return null|array
+     */
+    public function updatePasswordMeta()
+    {
+        try {
+            $pwMeta = $this->getPasswordMeta();
+
+            if ($pwMeta['last_changed'] === null && $pwMeta['expires'] === null) {
+                return null;
+            } else {
+                $this->pw_last_changed = Utils::getDatetime($pwMeta['last_changed']);
+                $this->pw_expires = Utils::getDatetime($pwMeta['expires']);
+
+                $this->saveOrError('save password metadata');
+
+                return $pwMeta;
+            }
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'update password metadata',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            return null;
+        }
+    }
+
+    /**
      * @param string $newPassword
-     * @throws ServerErrorHttpException
+     * @throws \Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function setPassword($newPassword)
@@ -521,15 +550,8 @@ class User extends UserBase implements IdentityInterface
 
         $this->pw_last_changed = Utils::getDatetime();
         $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
-        
-        if ( ! $this->save()) {
-            \Yii::error([
-                'action' => 'set password for user',
-                'status' => 'error',
-                'error' => $this->getFirstErrors(),
-            ]);
-            throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
-        }
+
+        $this->saveOrError('Unable to save user profile after password change', 1466104537);
 
         /*
          * Check for request to get user's IP address for logging
@@ -570,7 +592,7 @@ class User extends UserBase implements IdentityInterface
     /**
      * @param string $clientId
      * @return string
-     * @throws ServerErrorHttpException
+     * @throws \Exception
      */
     public function createAccessToken($clientId, $authType)
     {
@@ -586,14 +608,7 @@ class User extends UserBase implements IdentityInterface
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );
-        if ( ! $this->save()) {
-            \Yii::error([
-                'action' => 'create access token for user',
-                'status' => 'error',
-                'error' => $this->getFirstErrors(),
-            ]);
-            throw new ServerErrorHttpException('Unable to create access token', 1465833228);
-        }
+        $this->saveOrError('Unable to create access token', 1465833228);
 
         return $accessToken;
     }
@@ -607,13 +622,7 @@ class User extends UserBase implements IdentityInterface
         $this->access_token_expiration = null;
         $this->auth_type = null;
 
-        if (! $this->save()) {
-            \Yii::error([
-                'action' => 'destroy access token',
-                'status' => 'error',
-                'error' => Json::encode($this->getFirstErrors()),
-            ]);
-        }
+        $this->saveOrError('destroy access token');
     }
 
     /**
@@ -680,5 +689,26 @@ class User extends UserBase implements IdentityInterface
         }
 
         return null;
+    }
+
+    /**
+     * Save attributes to database. In case of error, log an error message and optionally throw
+     * an exception.
+     * @param string $msg error message
+     * @param int $code exception code; if not provided, no exception will be thrown
+     * @throws \Exception if the save failed for any reason
+     */
+    private function saveOrError(string $msg, int $code = null): void
+    {
+        if (! $this->save()) {
+            \Yii::error([
+                'action' => $msg,
+                'status' => 'error',
+                'error' => $this->getFirstErrors(),
+            ]);
+            if ($code !== null) {
+                throw new \Exception($msg, $code);
+            }
+        }
     }
 }

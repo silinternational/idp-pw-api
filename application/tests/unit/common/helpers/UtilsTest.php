@@ -171,5 +171,12 @@ class UtilsTest extends Test
 
         $this->assertEquals($expected, Utils::getFriendlyDate($string));
     }
-    
+
+    public function testGetDatetime()
+    {
+        $expected = '2016-07-18 18:17:18';
+        $timestamp = 1468865838;
+
+        $this->assertEquals($expected, Utils::getDatetime($timestamp));
+    }
 }

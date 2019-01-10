@@ -18,45 +18,53 @@ class Utils
     const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
-     * @param integer|null $timestamp
-     * @return string
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
+     * @return int
+     * @throws \Exception
      */
-    public static function getDatetime($timestamp = null)
+    protected static function convertToTimestamp($time)
     {
-        $timestamp = $timestamp ?: time();
-
-        return date(self::DT_FORMAT, $timestamp);
+        $time = $time ?? time();
+        $time = is_int($time) ? $time : strtotime($time);
+        if ($time === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865840);
+        }
+        return $time;
     }
 
     /**
-     * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
      * @return string
      * @throws \Exception
      */
-    public static function getIso8601($timestamp = null)
+    public static function getDatetime($time = null)
     {
-        $timestamp = $timestamp !== null ? $timestamp : time();
-        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
-        if ($timestamp === false) {
-            throw new \Exception('Unable to parse date to timestamp', 1468865840);
-        }
-        return date(self::DT_ISO8601, $timestamp);
+        return date(self::DT_FORMAT, self::convertToTimestamp($time));
+    }
+
+    /**
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
+     * @return string
+     * @throws \Exception
+     */
+    public static function getIso8601($time = null)
+    {
+        return date(self::DT_ISO8601, self::convertToTimestamp($time));
     }
 
     /**
      * Return human readable date time
-     * @param int|string|null $timestamp Either a unix timestamp or a date in string format
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
      * @return string
      * @throws \Exception
      */
-    public static function getFriendlyDate($timestamp = null)
+    public static function getFriendlyDate($time = null)
     {
-        $timestamp = $timestamp !== null ? $timestamp : time();
-        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
-        if ($timestamp === false) {
-            throw new \Exception('Unable to parse date to timestamp', 1468865838);
-        }
-        return date(self::FRIENDLY_DT_FORMAT, $timestamp);
+        return date(self::FRIENDLY_DT_FORMAT, self::convertToTimestamp($time));
     }
 
     /**
@@ -408,5 +416,4 @@ class Utils
     {
         return preg_replace('/[^0-9]/', '', $value);
     }
-
 }
