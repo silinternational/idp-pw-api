@@ -34,6 +34,8 @@ class IdBroker extends Component implements PasswordStoreInterface
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
      * @return UserPasswordMeta
+     * @throws \Exception if a configured IP falls outside the approved range
+     * @throws \InvalidArgumentException if configuration is incomplete
      * @throws ServiceException
      * @throws UserNotFoundException
      * @throws AccountLockedException
@@ -64,6 +66,8 @@ class IdBroker extends Component implements PasswordStoreInterface
      * @param string $employeeId
      * @param string $password
      * @return UserPasswordMeta
+     * @throws \Exception if a configured IP falls outside the approved range
+     * @throws \InvalidArgumentException if configuration is incomplete
      * @throws UserNotFoundException
      * @throws AccountLockedException
      * @throws ServiceException
@@ -101,7 +105,8 @@ class IdBroker extends Component implements PasswordStoreInterface
 
     /**
      * @return IdBrokerClient
-     * @throws \Exception
+     * @throws \Exception if a configured IP falls outside the approved range
+     * @throws \InvalidArgumentException if configuration is incomplete
      */
     public function getClient()
     {
@@ -114,8 +119,8 @@ class IdBroker extends Component implements PasswordStoreInterface
     /**
      * @param string $employeeId
      * @return bool
-     * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws \Exception if a configured IP falls outside the approved range
+     * @throws \InvalidArgumentException if configuration is incomplete
      * @throws ServiceException
      * @throws UserNotFoundException
      */
