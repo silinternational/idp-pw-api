@@ -85,4 +85,9 @@ class Component extends YiiComponent implements PersonnelInterface
     {
         throw new \Exception(__METHOD__ . ' has not been implemented in this class.');
     }
+
+    public function findByInvite($invite)
+    {
+        throw new \Exception(__METHOD__ . ' has not been implemented in this class.');
+    }
 }
