@@ -30,6 +30,9 @@ class IdBroker extends Component implements PasswordStoreInterface
             [
                 IdBrokerClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'] ?? [],
                 IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $config['assertValidBrokerIp'] ?? true,
+                'http_client_options' => [
+                    'timeout' => 10, // An (optional) custom HTTP timeout, in seconds.
+                ],
             ]
         );
     }
