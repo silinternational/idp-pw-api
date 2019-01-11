@@ -493,17 +493,26 @@ class User extends UserBase implements IdentityInterface
         /** @var PasswordStoreInterface $passwordStore */
         $passwordStore = \Yii::$app->passwordStore;
 
-        /*
-         * If password metadata is missing, fetch from passwordStore and update
-         */
         /** @var UserPasswordMeta $pwMeta */
         $pwMeta = $passwordStore->getMeta($this->employee_id);
-
 
         return [
             'last_changed' => $pwMeta->passwordLastChangeDate,
             'expires' => $pwMeta->passwordExpireDate,
         ];
+    }
+
+    /**
+     * Is user account locked?
+     * @return bool
+     * @throws \Exception
+     */
+    public function isLocked(): bool
+    {
+        /** @var PasswordStoreInterface $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
+        return $passwordStore->isLocked($this->employee_id);
     }
 
     /**

@@ -128,12 +128,7 @@ class ResetController extends BaseRestController
             );
         }
 
-        /*
-         * Calling getPasswordMeta simply to test for a locked account.
-         */
-        try {
-            $user->getPasswordMeta();
-        } catch (AccountLockedException $e) {
+        if ($user->isLocked()) {
             throw new NotFoundHttpException();
         }
 

@@ -1,11 +1,9 @@
 <?php
 namespace common\models;
 
-use common\helpers\Utils;
 use common\helpers\ZxcvbnPasswordValidator;
 use common\components\passwordStore\PasswordReuseException;
 use yii\base\Model;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\ConflictHttpException;
 use yii\web\ServerErrorHttpException;

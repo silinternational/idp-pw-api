@@ -365,4 +365,16 @@ class Ldap extends Component implements PasswordStoreInterface
 
         return $user;
     }
+
+    public function isLocked(string $employeeId): bool
+    {
+        $user = $this->findUser($employeeId);
+
+        try {
+            $this->assertUserNotDisabled($user);
+        } catch (AccountLockedException $e) {
+            return true;
+        }
+        return false;
+    }
 }

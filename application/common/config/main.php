@@ -58,8 +58,8 @@ if ( ! $emailServiceConfig['useEmailService']) {
 }
 $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
 
-$mfaConfig = Env::getArrayFromPrefix('ID_BROKER_');
-$mfaConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
+$idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
+$idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
 
 return [
     'id' => 'app-common',
@@ -215,11 +215,7 @@ return [
             ['class' => 'common\components\auth\Saml'],
             Env::getArrayFromPrefix('AUTH_SAML_')
         ),
-        'passwordStore' => ArrayHelper::merge(
-            ['class' => 'common\components\passwordStore\IdBroker'],
-            Env::getArrayFromPrefix('ID_BROKER_'),
-            ['validIpRanges' => Env::getArray('ID_BROKER_validIpRanges')]
-        ),
+        'passwordStore' => ['class' => 'common\components\passwordStore\IdBroker'],
     ],
     'params' => [
         'idpName' => $idpName,
@@ -293,6 +289,6 @@ return [
             'url' => $supportUrl,
             'feedbackUrl' => $supportFeedback,
         ],
-        'mfa' => $mfaConfig,
+        'idBrokerConfig' => $idBrokerConfig,
     ],
 ];

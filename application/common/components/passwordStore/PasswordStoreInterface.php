@@ -26,4 +26,12 @@ interface PasswordStoreInterface
      * @throws \common\components\passwordStore\AccountLockedException
      */
     public function set($employeeId, $password);
+
+    /**
+     * Is user account locked?
+     * @param string $employeeId
+     * @return bool
+     * @throws \common\components\passwordStore\UserNotFoundException
+     */
+    public function isLocked(string $employeeId): bool;
 }

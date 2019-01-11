@@ -26,7 +26,7 @@ class Method extends MethodBase
     public function init()
     {
         parent::init();
-        $config = \Yii::$app->params['mfa'];
+        $config = \Yii::$app->params['idBrokerConfig'];
         $this->idBrokerClient = new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],

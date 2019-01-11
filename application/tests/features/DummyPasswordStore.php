@@ -45,4 +45,12 @@ class DummyPasswordStore extends Component implements PasswordStoreInterface
         }
         return UserPasswordMeta::create($this->uniqueDate, $this->uniqueDate);
     }
+
+    public function isLocked(string $employeeId): bool
+    {
+        if ( ! $this->isOnline) {
+            throw new \Exception('Failed to check if employeeId ' . $employeeId . ' is locked');
+        }
+        return false;
+    }
 }

@@ -53,10 +53,15 @@ class Component implements PasswordStoreInterface
      */
     public function getClient()
     {
-        $baseUrl = \Yii::$app->passwordStore->baseUrl;
-        $accessToken = \Yii::$app->passwordStore->accessToken;
+        $baseUrl = \Yii::$app->params['idBrokerConfig']['baseUrl'];
+        $accessToken = \Yii::$app->params['idBrokerConfig']['accessToken'];
         return new IdBrokerClient($baseUrl, $accessToken, [
             IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
         ]);
+    }
+
+    public function isLocked(string $employeeId): bool
+    {
+        return false;
     }
 }
