@@ -87,7 +87,7 @@ class IdBroker extends Component implements PasswordStoreInterface
         $this->getUser($employeeId);
 
         try {
-            $update = $this->client->setPassword($employeeId, $password);
+            $update = $this->getClient()->setPassword($employeeId, $password);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 409) {
                 throw new PasswordReuseException();
@@ -100,6 +100,15 @@ class IdBroker extends Component implements PasswordStoreInterface
             $update['password']['created_utc'] ?? null
         );
         return $meta;
+    }
+
+    /**
+     * This getter method facilitates test by allowing a fake client to be substituted.
+     * @return IdBrokerClient
+     */
+    public function getClient(): IdBrokerClient
+    {
+        return $this->client;
     }
 
     /**
@@ -128,7 +137,7 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     private function getUser($employeeId)
     {
-        $user = $this->client->getUser($employeeId);
+        $user = $this->getClient()->getUser($employeeId);
 
         if ($user === null) {
             throw new UserNotFoundException();
