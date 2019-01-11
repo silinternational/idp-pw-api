@@ -215,11 +215,7 @@ return [
             ['class' => 'common\components\auth\Saml'],
             Env::getArrayFromPrefix('AUTH_SAML_')
         ),
-        'passwordStore' => ArrayHelper::merge(
-            ['class' => 'common\components\passwordStore\IdBroker'],
-            Env::getArrayFromPrefix('ID_BROKER_'),
-            ['validIpRanges' => Env::getArray('ID_BROKER_validIpRanges')]
-        ),
+        'passwordStore' => ['class' => 'common\components\passwordStore\IdBroker'],
     ],
     'params' => [
         'idpName' => $idpName,

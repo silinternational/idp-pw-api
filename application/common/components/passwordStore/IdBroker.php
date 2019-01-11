@@ -9,26 +9,6 @@ use yii\base\Component;
 class IdBroker extends Component implements PasswordStoreInterface
 {
     /**
-     * @var string base Url for the API
-     */
-    public $baseUrl;
-
-    /**
-     * @var string access Token for the API
-     */
-    public $accessToken;
-
-    /**
-     * @var boolean
-     */
-    public $assertValidBrokerIp = true;
-
-    /**
-     * @var IPBlock[]
-     */
-    public $validIpRanges = [];
-
-    /**
      * @var IdBrokerClient $client
      */
     private $client;
@@ -43,12 +23,13 @@ class IdBroker extends Component implements PasswordStoreInterface
     public function init()
     {
         parent::init();
+        $config = \Yii::$app->params['idBrokerConfig'];
         $this->client = new IdBrokerClient(
-            $this->baseUrl,
-            $this->accessToken,
+            $config['baseUrl'],
+            $config['accessToken'],
             [
-                IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
-                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
+                IdBrokerClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'] ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $config['assertValidBrokerIp'] ?? true,
             ]
         );
     }
@@ -106,7 +87,7 @@ class IdBroker extends Component implements PasswordStoreInterface
      * This getter method facilitates test by allowing a fake client to be substituted.
      * @return IdBrokerClient
      */
-    public function getClient(): IdBrokerClient
+    public function getClient()
     {
         return $this->client;
     }
