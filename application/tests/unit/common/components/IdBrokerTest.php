@@ -9,18 +9,29 @@ use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
 class IdBrokerTest extends TestCase
 {
+    /**
+     * @var IdBroker
+     */
+    private $idBroker;
 
-    public $baseUrl = 'http://broker';
-    public $accessToken = 'abc123';
+    public $baseUrl;
+    public $accessToken;
 
-    public function getConfig()
+    public function __construct()
     {
-        return [
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-        ];
+        $this->baseUrl = \Yii::$app->params['idBrokerConfig']['baseUrl'];
+        $this->accessToken = \Yii::$app->params['idBrokerConfig']['accessToken'];
+        $this->idBroker = new IdBroker();
     }
-    
+
+    /**
+     * @return IdBroker
+     */
+    private function getIdBroker(): IdBroker
+    {
+        return $this->idBroker;
+    }
+
     protected function ensureUserExists($userInfo)
     {
         $idBrokerClient = new IdBrokerClient($this->baseUrl, $this->accessToken, [
@@ -46,7 +57,7 @@ class IdBrokerTest extends TestCase
                     sleep(1);
                 
                     // if user already created, ensure it matches
-                } else if ($e->getCode() == $userExistsCode) {
+                } elseif ($e->getCode() == $userExistsCode) {
                     $idBrokerClient->updateUser($userInfo);
                     $e = null;
                     break;
@@ -111,9 +122,6 @@ class IdBrokerTest extends TestCase
                     ->method('callIdBrokerGetUser')
                     ->willReturn($mockReturnValue);
 
-        $brokerMock->baseUrl = 'some.site.org';
-        $brokerMock->accessToken = 'abc123';
-
         $employeeId = '11111';
         $results = $brokerMock->findByEmployeeId($employeeId);
 
@@ -140,11 +148,7 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
+        $idBroker = $this->getIdBroker();
 
         $expected = [
             'employeeId' => $employeeId,
@@ -157,7 +161,7 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ];
 
-        $results = get_object_vars($idBroker->findByUsername($userName));
+        $results = get_object_vars($this->getIdBroker()->findByUsername($userName));
         unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
@@ -180,11 +184,6 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
 
         $expected = [
             'employeeId' => $employeeId,
@@ -197,7 +196,7 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ];
 
-        $results = get_object_vars($idBroker->findByEmail($email));
+        $results = get_object_vars($this->getIdBroker()->findByEmail($email));
         unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
@@ -220,11 +219,6 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
 
         $expected = [
             'employeeId' => $employeeId,
@@ -237,7 +231,7 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ];
 
-        $results = get_object_vars($idBroker->findByEmployeeId($employeeId));
+        $results = get_object_vars($this->getIdBroker()->findByEmployeeId($employeeId));
         unset($results['uuid']);
         $this->assertEquals($expected, $results);
     }
@@ -247,14 +241,9 @@ class IdBrokerTest extends TestCase
     {
         // Setup
         $employeeId = time();
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
 
         $this->expectException(NotFoundException::class);
-        $idBroker->findByEmployeeId($employeeId);
+        $this->getIdBroker()->findByEmployeeId($employeeId);
     }
     
     /**
@@ -266,11 +255,6 @@ class IdBrokerTest extends TestCase
     public function testReturnPersonnelUserFromResponse_NotActiveEqualsMissing()
     {
         // Arrange:
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
         $employeeId = '66666';
         $fakeIdBrokerClientResponse = $this->getMockReturnValue();
         $fakeIdBrokerClientResponse['active'] = 'no';
@@ -279,7 +263,7 @@ class IdBrokerTest extends TestCase
         $this->expectException(NotFoundException::class);
         
         // Act:
-        $idBroker->returnPersonnelUserFromResponse(
+        $this->getIdBroker()->returnPersonnelUserFromResponse(
             'employee_id',
             $employeeId,
             $fakeIdBrokerClientResponse
@@ -293,11 +277,6 @@ class IdBrokerTest extends TestCase
     public function testReturnPersonnelUserFromResponse_ActiveUnknown()
     {
         // Arrange:
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
         $employeeId = '77777';
         $fakeIdBrokerClientResponse = $this->getMockReturnValue();
         unset($fakeIdBrokerClientResponse['active']);
@@ -306,7 +285,7 @@ class IdBrokerTest extends TestCase
         $this->expectException(\Exception::class);
         
         // Act:
-        $idBroker->returnPersonnelUserFromResponse(
+        $this->getIdBroker()->returnPersonnelUserFromResponse(
             'employee_id',
             $employeeId,
             $fakeIdBrokerClientResponse
@@ -328,14 +307,9 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
             'manager_email' => $managerEmail,
         ]);
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
-        
+
         // Act:
-        $personnelUser = $idBroker->findByEmployeeId($employeeId);
+        $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
         
         // Assert:
         $this->assertEquals($managerEmail, $personnelUser->supervisorEmail);
@@ -356,14 +330,9 @@ class IdBrokerTest extends TestCase
             'spouse_email' => $spouseEmail,
             'hide' => 'no',
         ]);
-        $idBroker = new IdBroker([
-            'baseUrl' => $this->baseUrl,
-            'accessToken' => $this->accessToken,
-            'assertValidBrokerIp' => false,
-        ]);
-    
+
         // Act:
-        $personnelUser = $idBroker->findByEmployeeId($employeeId);
+        $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
     
         // Assert:
         $this->assertEquals($spouseEmail, $personnelUser->spouseEmail);
