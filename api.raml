@@ -224,6 +224,10 @@ types:
   /logout:
     get:
       securedBy: null
+      queryParameters:
+        access_token:
+          description: token provided at login
+          type: string
       responses:
         200:
 /config:
