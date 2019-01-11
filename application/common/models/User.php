@@ -11,6 +11,7 @@ use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
+use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -681,23 +682,13 @@ class User extends UserBase implements IdentityInterface
      */
     public static function getUserFromInviteCode(string $inviteCode)
     {
-        /** @var IdBroker $passwordStore */
-        $passwordStore = \Yii::$app->passwordStore;
-
-        if (! (method_exists($passwordStore, 'getClient'))) {
-            throw new \Exception('Configured passwordStore does not support new user invite.', 1546441100);
+        $personnel = self::getPersonnelComponent();
+        try {
+            $personnelUser = $personnel->findByInvite($inviteCode);
+            return self::findOrCreate(null, null, $personnelUser->employeeId);
+        } catch (NotFoundException $e) {
+            return null;
         }
-
-        $client = $passwordStore->getClient();
-
-        $response = $client->authenticateNewUser($inviteCode);
-
-        if ($response['employee_id'] ?? null) {
-            $user = self::findOrCreate(null, null, $response['employee_id']);
-            return $user;
-        }
-
-        return null;
     }
 
     /**

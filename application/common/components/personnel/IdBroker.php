@@ -218,4 +218,22 @@ class IdBroker extends Component implements PersonnelInterface
             }
         }
     }
+
+    /**
+     * @param string $invite
+     * @return PersonnelUser
+     * @throws NotFoundException
+     * @throws ServiceException
+     */
+    public function findByInvite($invite): PersonnelUser
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        $userAttributes = $idBrokerClient->authenticateNewUser($invite);
+        if ($userAttributes === null) {
+            throw new NotFoundException();
+        }
+
+        return $this->returnPersonnelUserFromResponse('invite', '********', $userAttributes);
+    }
 }
