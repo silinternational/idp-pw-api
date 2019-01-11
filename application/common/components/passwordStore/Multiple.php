@@ -79,8 +79,8 @@ class Multiple extends Component implements PasswordStoreInterface
      *
      * @param string $employeeId The Employee ID of the user.
      * @return UserPasswordMeta
-     * @throw UserNotFoundException
-     * @throw AccountLockedException
+     * @throws UserNotFoundException
+     * @throws AccountLockedException
      */
     public function getMeta($employeeId): UserPasswordMeta
     {
@@ -133,13 +133,18 @@ class Multiple extends Component implements PasswordStoreInterface
         return $responses[0];
     }
 
+    /**
+     * @param string $employeeId
+     * @return bool
+     * @throws UserNotFoundException
+     */
     public function isLocked(string $employeeId): bool
     {
-        try {
-            $this->getMeta($employeeId);
-        } catch (AccountLockedException $e) {
-            return false;
+        foreach ($this->passwordStores as $passwordStore) {
+            if ($passwordStore->isLocked($employeeId)) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 }
