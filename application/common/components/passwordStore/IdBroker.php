@@ -28,31 +28,42 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     public $validIpRanges = [];
 
+    /**
+     * @var IdBrokerClient $client
+     */
+    private $client;
 
-    
+    /**
+     * Initializes the object.
+     * This method is invoked at the end of the constructor after the object is initialized with the
+     * given configuration.
+     * @throws \Exception if a configured baseUrl falls outside the approved IP range
+     * @throws \InvalidArgumentException if configuration is incomplete
+     */
+    public function init()
+    {
+        parent::init();
+        $this->client = new IdBrokerClient(
+            $this->baseUrl,
+            $this->accessToken,
+            [
+                IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
+            ]
+        );
+    }
+
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
      * @return UserPasswordMeta
-     * @throws \Exception if a configured IP falls outside the approved range
-     * @throws \InvalidArgumentException if configuration is incomplete
      * @throws ServiceException
      * @throws UserNotFoundException
      * @throws AccountLockedException
      */
     public function getMeta($employeeId)
     {
-        $client = $this->getClient();
-
-        $user = $client->getUser($employeeId);
-
-        if ($user === null) {
-            throw new UserNotFoundException();
-        }
-
-        if ($user['locked'] == 'yes') {
-            throw new AccountLockedException();
-        }
+        $user = $this->getUser($employeeId);
 
         $meta = UserPasswordMeta::create(
             $user['password']['expires_on'] ?? null,
@@ -66,8 +77,6 @@ class IdBroker extends Component implements PasswordStoreInterface
      * @param string $employeeId
      * @param string $password
      * @return UserPasswordMeta
-     * @throws \Exception if a configured IP falls outside the approved range
-     * @throws \InvalidArgumentException if configuration is incomplete
      * @throws UserNotFoundException
      * @throws AccountLockedException
      * @throws ServiceException
@@ -75,20 +84,10 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password)
     {
-        $client = $this->getClient();
-
-        $user = $client->getUser($employeeId);
-
-        if ($user === null) {
-            throw new UserNotFoundException();
-        }
-
-        if ($user['locked'] == 'yes') {
-            throw new AccountLockedException();
-        }
+        $this->getUser($employeeId);
 
         try {
-            $update = $client->setPassword($employeeId, $password);
+            $update = $this->client->setPassword($employeeId, $password);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 409) {
                 throw new PasswordReuseException();
@@ -104,36 +103,40 @@ class IdBroker extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @return IdBrokerClient
-     * @throws \Exception if a configured IP falls outside the approved range
-     * @throws \InvalidArgumentException if configuration is incomplete
-     */
-    public function getClient()
-    {
-        return new IdBrokerClient($this->baseUrl, $this->accessToken, [
-            IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
-            IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
-        ]);
-    }
-
-    /**
      * @param string $employeeId
      * @return bool
-     * @throws \Exception if a configured IP falls outside the approved range
-     * @throws \InvalidArgumentException if configuration is incomplete
      * @throws ServiceException
      * @throws UserNotFoundException
      */
     public function isLocked(string $employeeId): bool
     {
-        $client = $this->getClient();
+        try {
+            $this->getUser($employeeId);
+        } catch (AccountLockedException $e) {
+            return true;
+        }
 
-        $user = $client->getUser($employeeId);
+        return false;
+    }
+
+    /**
+     * @param $employeeId
+     * @return array|null
+     * @throws ServiceException
+     * @throws UserNotFoundException
+     * @throws AccountLockedException
+     */
+    private function getUser($employeeId)
+    {
+        $user = $this->client->getUser($employeeId);
 
         if ($user === null) {
             throw new UserNotFoundException();
         }
 
-        return ($user['locked'] == 'yes');
+        if ($user['locked'] == 'yes') {
+            throw new AccountLockedException();
+        }
+        return $user;
     }
 }
