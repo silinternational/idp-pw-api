@@ -50,7 +50,7 @@ class CronController extends Controller
      */
     protected function getIdBrokerClient()
     {
-        $config = \Yii::$app->params['mfa'];
+        $config = \Yii::$app->params['idBrokerConfig'];
         return new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],

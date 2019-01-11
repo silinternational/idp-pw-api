@@ -58,8 +58,8 @@ if ( ! $emailServiceConfig['useEmailService']) {
 }
 $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
 
-$mfaConfig = Env::getArrayFromPrefix('ID_BROKER_');
-$mfaConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
+$idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
+$idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
 
 return [
     'id' => 'app-common',
@@ -293,6 +293,6 @@ return [
             'url' => $supportUrl,
             'feedbackUrl' => $supportFeedback,
         ],
-        'mfa' => $mfaConfig,
+        'idBrokerConfig' => $idBrokerConfig,
     ],
 ];
