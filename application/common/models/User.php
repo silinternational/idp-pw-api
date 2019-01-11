@@ -2,7 +2,6 @@
 namespace common\models;
 
 use common\components\auth\User as AuthUser;
-use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use common\components\personnel\NotFoundException;
@@ -11,7 +10,6 @@ use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
