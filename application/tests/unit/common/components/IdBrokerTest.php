@@ -148,8 +148,6 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $idBroker = $this->getIdBroker();
-
         $expected = [
             'employeeId' => $employeeId,
             'firstName' => $firstName,
