@@ -19,7 +19,7 @@ whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPa
 apt-get install -y php-xdebug
 
 # Run codeception tests
-whenavail broker 80 100 echo "broker ready"
+whenavail broker 80 100 echo "broker ready, running unit tests..."
 runny ./vendor/bin/codecept run unit --coverage --coverage-xml
 TESTRESULTS_UNIT=$?
 

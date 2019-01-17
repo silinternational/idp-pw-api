@@ -8,26 +8,34 @@ use yii\base\Component;
 
 class IdBroker extends Component implements PersonnelInterface
 {
+    /**
+     * @var IdBrokerClient $client
+     */
+    private $client;
 
     /**
-     * @var string
+     * Initializes the object.
+     * This method is invoked at the end of the constructor after the object is initialized with the
+     * given configuration.
+     * @throws \Exception if a configured baseUrl falls outside the approved IP range
+     * @throws \InvalidArgumentException if configuration is incomplete
      */
-    public $baseUrl;
-
-    /**
-     * @var string
-     */
-    public $accessToken;
-
-    /**
-     * @var boolean
-     */
-    public $assertValidBrokerIp = true;
-
-    /**
-     * @var IPBlock[]
-     */
-    public $validIpRanges = [];
+    public function init()
+    {
+        parent::init();
+        $config = \Yii::$app->params['idBrokerConfig'];
+        $this->client = new IdBrokerClient(
+            $config['baseUrl'],
+            $config['accessToken'],
+            [
+                IdBrokerClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'] ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $config['assertValidBrokerIp'] ?? true,
+                'http_client_options' => [
+                    'timeout' => 10, // An (optional) custom HTTP timeout, in seconds.
+                ],
+            ]
+        );
+    }
 
     /**
      * @param $userData
@@ -183,17 +191,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     private function getIdBrokerClient()
     {
-        return new IdBrokerClient(
-            $this->baseUrl, // The base URI for the API.
-            $this->accessToken, // Your HTTP header authorization bearer token.
-            [
-                IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
-                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
-                'http_client_options' => [
-                    'timeout' => 10, // An (optional) custom HTTP timeout, in seconds.
-                ],
-            ]
-        );
+        return $this->client;
     }
 
     /**

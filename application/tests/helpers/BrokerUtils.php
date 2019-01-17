@@ -10,8 +10,8 @@ class BrokerUtils
     {
         $data = include __DIR__ . '/BrokerFakeData.php';
 
-        $baseUrl = \Yii::$app->personnel->baseUrl;
-        $accessToken = \Yii::$app->personnel->accessToken;
+        $baseUrl = \Yii::$app->params['idBrokerConfig']['baseUrl'];
+        $accessToken = \Yii::$app->params['idBrokerConfig']['accessToken'];
         $idBrokerClient = new IdBrokerClient($baseUrl, $accessToken, [
             IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
         ]);
@@ -35,8 +35,8 @@ class BrokerUtils
     {
         $data = include __DIR__ . '/BrokerFakeMethods.php';
 
-        $baseUrl = \Yii::$app->personnel->baseUrl;
-        $accessToken = \Yii::$app->personnel->accessToken;
+        $baseUrl = \Yii::$app->params['idBrokerConfig']['baseUrl'];
+        $accessToken = \Yii::$app->params['idBrokerConfig']['accessToken'];
         $idBrokerClient = new IdBrokerClient($baseUrl, $accessToken, [
             IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
         ]);
