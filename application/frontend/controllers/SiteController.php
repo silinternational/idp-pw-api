@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\components\Emailer;
 use Exception;
 use frontend\components\BaseRestController;
 use Sil\EmailService\Client\EmailServiceClient;
@@ -81,19 +82,12 @@ class SiteController extends BaseRestController
         }
         
         try {
-            $config = \Yii::$app->params['emailServiceStatus'];
-            
-            $emailService = new EmailServiceClient(
-                $config['baseUrl'],
-                $config['accessToken'],
-                [
-                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => $config['assertValidIp'],
-                    EmailServiceClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'],
-                ]
-            );
-
-            $emailService->getSiteStatus();
-        } catch (Exception $e) {
+            /**
+             * @var $emailer Emailer
+             */
+            $emailer = \Yii::$app->emailer;
+            $emailer->getSiteStatus();
+        } catch (\Exception $e) {
             \Yii::error($e->getMessage());
             throw new ServerErrorHttpException('Problem with email service.');
         }
