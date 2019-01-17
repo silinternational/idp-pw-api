@@ -206,11 +206,7 @@ return [
                 'encryption' => 'ssl',
             ],
         ],
-        'personnel' => ArrayHelper::merge(
-            ['class' => 'common\components\personnel\IdBroker'],
-            Env::getArrayFromPrefix('ID_BROKER_'),
-            ['validIpRanges' => Env::getArray('ID_BROKER_validIpRanges')]
-        ),
+        'personnel' => ['class' => 'common\components\personnel\IdBroker'],
         'auth' => ArrayHelper::merge(
             ['class' => 'common\components\auth\Saml'],
             Env::getArrayFromPrefix('AUTH_SAML_')
