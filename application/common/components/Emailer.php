@@ -42,7 +42,7 @@ class Emailer extends Component
         ];
 
         foreach ($requiredParams as $param) {
-            if (!isset($this->emailServiceConfig[$param])) {
+            if (! isset($this->emailServiceConfig[$param])) {
                 throw new \InvalidArgumentException(
                     'Missing email service configuration for ' . $param,
                     1502311757
@@ -58,7 +58,7 @@ class Emailer extends Component
      * @param string $subject The subject.
      * @param string $htmlBody The email body (as HTML).
      * @param string $textBody The email body (as plain text).
-     * @param string $ccAddress The cc email address.
+     * @param null|string $ccAddress The cc email address.
      * @throws \Sil\EmailService\Client\EmailServiceClientException
      */
     public function email(

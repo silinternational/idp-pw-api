@@ -7,7 +7,6 @@ use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
 use tests\helpers\EmailUtils;
-use tests\mock\emailer\FakeEmailer;
 use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;

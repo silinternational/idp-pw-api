@@ -4,7 +4,6 @@ namespace tests\helpers;
 class EmailUtils
 {
     /**
-     * @param \Codeception\Module\Yii2 $tester
      * @param string $uniqueContent
      * @return bool
      * @throws
