@@ -570,17 +570,6 @@ class User extends UserBase implements IdentityInterface
         }
 
         /*
-         * Log password change
-         */
-        $scenario = ($this->auth_type === self::AUTH_TYPE_RESET) ?
-            PasswordChangeLog::SCENARIO_RESET : PasswordChangeLog::SCENARIO_CHANGE;
-        PasswordChangeLog::log(
-            $this->id,
-            $scenario,
-            $ipAddress
-        );
-
-        /*
          * Log event
          */
         EventLog::log(

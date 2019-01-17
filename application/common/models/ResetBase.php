@@ -11,7 +11,6 @@ use Yii;
  * @property string $uid
  * @property int $user_id
  * @property string $type
- * @property int $method_id
  * @property string $code
  * @property int $attempts
  * @property string $expires
@@ -19,7 +18,6 @@ use Yii;
  * @property string $created
  * @property string $email
  *
- * @property Method $method
  * @property User $user
  */
 class ResetBase extends \yii\db\ActiveRecord
@@ -39,7 +37,7 @@ class ResetBase extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'user_id', 'type', 'expires', 'created'], 'required'],
-            [['user_id', 'method_id', 'attempts'], 'integer'],
+            [['user_id', 'attempts'], 'integer'],
             [['type'], 'string'],
             [['expires', 'disable_until', 'created'], 'safe'],
             [['uid'], 'string', 'max' => 32],
@@ -47,7 +45,6 @@ class ResetBase extends \yii\db\ActiveRecord
             [['email'], 'string', 'max' => 255],
             [['uid'], 'unique'],
             [['user_id'], 'unique'],
-            [['method_id'], 'exist', 'skipOnError' => true, 'targetClass' => Method::className(), 'targetAttribute' => ['method_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -62,7 +59,6 @@ class ResetBase extends \yii\db\ActiveRecord
             'uid' => Yii::t('app', 'Uid'),
             'user_id' => Yii::t('app', 'User ID'),
             'type' => Yii::t('app', 'Type'),
-            'method_id' => Yii::t('app', 'Method ID'),
             'code' => Yii::t('app', 'Code'),
             'attempts' => Yii::t('app', 'Attempts'),
             'expires' => Yii::t('app', 'Expires'),
@@ -70,14 +66,6 @@ class ResetBase extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'email' => Yii::t('app', 'Email'),
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMethod()
-    {
-        return $this->hasOne(Method::className(), ['id' => 'method_id']);
     }
 
     /**

@@ -49,7 +49,6 @@ class ResetTest extends Test
 
         $this->assertEquals(32, strlen($reset->uid));
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
-        $this->assertNull($reset->method_id);
         $this->assertNull($reset->code);
         $this->assertEquals(0, $reset->attempts);
         $this->assertNotNull($reset->expires);
@@ -87,7 +86,6 @@ class ResetTest extends Test
 
         $this->assertEquals(32, strlen($reset->uid));
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
-        $this->assertNull($reset->method_id);
         $this->assertNull($reset->code);
         $this->assertEquals(0, $reset->attempts);
         $this->assertNotNull($reset->expires);
@@ -287,11 +285,9 @@ class ResetTest extends Test
 
         $reset->setType(Reset::TYPE_METHOD, $method->uid);
         $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
-        $this->assertEquals(1, $reset->method_id);
 
         $reset->setType(Reset::TYPE_PRIMARY);
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
-        $this->assertNull($reset->method_id);
     }
 
     public function testTrackAttempt()

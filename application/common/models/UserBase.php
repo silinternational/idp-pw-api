@@ -14,7 +14,6 @@ use Yii;
  * @property string $idp_username
  * @property string $email
  * @property string $created
- * @property string $last_login
  * @property string $pw_last_changed
  * @property string $pw_expires
  * @property string $access_token
@@ -25,7 +24,6 @@ use Yii;
  *
  * @property EventLog[] $eventLogs
  * @property Method[] $methods
- * @property PasswordChangeLog[] $passwordChangeLogs
  * @property Reset $reset
  */
 class UserBase extends \yii\db\ActiveRecord
@@ -45,7 +43,7 @@ class UserBase extends \yii\db\ActiveRecord
     {
         return [
             [['employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created', 'hide'], 'required'],
-            [['created', 'last_login', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
+            [['created', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
             [['auth_type', 'hide'], 'string'],
             [['employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
@@ -69,7 +67,6 @@ class UserBase extends \yii\db\ActiveRecord
             'idp_username' => Yii::t('app', 'Idp Username'),
             'email' => Yii::t('app', 'Email'),
             'created' => Yii::t('app', 'Created'),
-            'last_login' => Yii::t('app', 'Last Login'),
             'pw_last_changed' => Yii::t('app', 'Pw Last Changed'),
             'pw_expires' => Yii::t('app', 'Pw Expires'),
             'access_token' => Yii::t('app', 'Access Token'),
@@ -94,14 +91,6 @@ class UserBase extends \yii\db\ActiveRecord
     public function getMethods()
     {
         return $this->hasMany(Method::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPasswordChangeLogs()
-    {
-        return $this->hasMany(PasswordChangeLog::className(), ['user_id' => 'id']);
     }
 
     /**

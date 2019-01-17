@@ -53,8 +53,7 @@ class Verification extends Model
             $additionalEmailParameters
         );
 
-
-        $body = \Yii::$app->mailer->render(
+        $body = \Yii::$app->view->render(
             $view,
             $parameters
         );
@@ -97,19 +96,7 @@ class Verification extends Model
             if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
                 EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
             }
-        } else {
-            EmailQueue::sendOrQueue(
-                $toAddress,
-                $subject,
-                $body,
-                $body,
-                $ccAddress,
-                $eventLogUserId,
-                $eventLogTopic,
-                $eventLogDetails
-            );
         }
-
     }
 
     /**

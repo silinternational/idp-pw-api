@@ -4,9 +4,6 @@ declare -A models
 models["user"]="UserBase"
 models["method"]="MethodBase"
 models["reset"]="ResetBase"
-models["requests_by_ip"]="RequestsByIpBase"
-models["password_change_log"]="PasswordChangeLogBase"
-models["email_queue"]="EmailQueueBase"
 
 models["event_log"]="EventLogBase"
 

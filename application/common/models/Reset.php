@@ -92,7 +92,6 @@ class Reset extends ResetBase
             'user_id' => $user->id,
             'user' => $user->email,
             'type' => self::TYPE_PRIMARY,
-            'method_id' => null,
             'ip_address' => 'initiated outside web request context',
         ];
 
