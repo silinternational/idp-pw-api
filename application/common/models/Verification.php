@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\components\Emailer;
 use Sil\EmailService\Client\EmailServiceClient;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -58,44 +59,12 @@ class Verification extends Model
             $parameters
         );
 
-        /*
-         * If configured to use external email service send through that instead of using
-         * local EmailQueue service
-         */
-        if (\Yii::$app->params['emailVerification']['useEmailService']) {
+        /* @var $emailer Emailer */
+        $emailer = \Yii::$app->emailer;
+        $emailer->email($toAddress, $subject, $body, $body, $ccAddress);
 
-            $serviceConfig = \Yii::$app->params['emailVerification'];
-            $requiredParams = ['baseUrl', 'accessToken', 'assertValidIp', 'validIpRanges'];
-
-            foreach ($requiredParams as $param) {
-                if ( ! isset($serviceConfig[$param])) {
-                    throw new ServerErrorHttpException(
-                        'Missing email service configuration for ' . $param,
-                        1500916751
-                    );
-                }
-            }
-
-            $emailService = new EmailServiceClient(
-                $serviceConfig['baseUrl'],
-                $serviceConfig['accessToken'],
-                [
-                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => $serviceConfig['assertValidIp'],
-                    EmailServiceClient::TRUSTED_IPS_CONFIG => $serviceConfig['validIpRanges'],
-                ]
-            );
-
-            $emailService->email([
-                'to_address' => $toAddress,
-                'cc_address' => $ccAddress,
-                'subject' => $subject,
-                'text_body' => $body,
-                'html_body' => $body,
-            ]);
-
-            if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
-                EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
-            }
+        if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
+            EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
         }
     }
 

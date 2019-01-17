@@ -1,5 +1,6 @@
 <?php
 
+use common\components\Emailer;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonSyslogTarget;
 use Sil\Log\EmailTarget;
@@ -13,10 +14,9 @@ $mysqlHost = Env::get('MYSQL_HOST');
 $mysqlDatabase = Env::get('MYSQL_DATABASE');
 $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
-$mailerUseFiles = Env::get('MAILER_USEFILES', false);
-$mailerHost = Env::get('MAILER_HOST');
-$mailerUsername = Env::get('MAILER_USERNAME');
-$mailerPassword = Env::get('MAILER_PASSWORD');
+
+$emailerClass = Env::get('EMAILER_CLASS', Emailer::class);
+
 $adminEmail = Env::get('ADMIN_EMAIL');
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
@@ -41,21 +41,7 @@ $supportFeedback = Env::get('SUPPORT_FEEDBACK');
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
 
-/*
- * If using Email Service, the following ENV vars should be set:
- *   EMAIL_SERVICE_useEmailService=true
- *   EMAIL_SERVICE_baseUrl=
- *   EMAIL_SERVICE_accessToken=
- *   EMAIL_SERVICE_assertValidIp=true
- *   EMAIL_SERVICE_validIpRanges=127.0.0.1/32,10.0.55.0/24
- */
 $emailServiceConfig = Env::getArrayFromPrefix('EMAIL_SERVICE_');
-$emailServiceConfig['useEmailService'] = $emailServiceConfig['useEmailService'] ?? false;
-if ( ! $emailServiceConfig['useEmailService']) {
-    $emailServiceConfig['baseUrl'] = $emailServiceConfig['baseUrl'] ?? 'invalid';
-    $emailServiceConfig['accessToken'] = $emailServiceConfig['accessToken'] ?? 'invalid';
-    $emailServiceConfig['assertValidIp'] = $emailServiceConfig['assertValidIp'] ?? false;
-}
 $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
 
 $idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
@@ -122,7 +108,7 @@ return [
                     'accessToken' => $emailServiceConfig['accessToken'],
                     'assertValidIp' => $emailServiceConfig['assertValidIp'],
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
-                    'enabled' => $emailServiceConfig['useEmailService'] && $alertsEmailEnabled,
+                    'enabled' => $alertsEmailEnabled,
                     'prefix' => function($message) use ($appEnv) {
                         $prefixData = [
                             'env' => $appEnv,
@@ -150,61 +136,11 @@ return [
                         return $prefixData;
                     },
                 ],
-                [
-                    'class' => EmailTarget::class,
-                    'levels' => ['error'],
-                    'except' => [
-                        'yii\web\HttpException:400',
-                        'yii\web\HttpException:401',
-                        'yii\web\HttpException:404',
-                        'yii\web\HttpException:409',
-                        'yii\web\HttpException:422',
-                    ],
-                    'logVars' => [], // Disable logging of _SERVER, _POST, etc.
-                    'message' => [
-                        'from' => $fromEmail,
-                        'to' => $alertsEmail,
-                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
-                    ],
-                    'enabled' => $alertsEmailEnabled && ! $emailServiceConfig['useEmailService'],
-                    'prefix' => function($message) use ($appEnv) {
-                        $prefix = 'env=' . $appEnv . PHP_EOL;
-
-                        // There is no user when a console command is run
-                        try {
-                            $appUser = \Yii::$app->user;
-                        } catch (\Exception $e) {
-                            $appUser = null;
-                        }
-                        if ($appUser && ! \Yii::$app->user->isGuest) {
-                            $prefix .= 'user=' . \Yii::$app->user->identity->email . PHP_EOL;
-                        }
-
-                        // Try to get requested url and method
-                        try {
-                            $request = \Yii::$app->request;
-                            $prefix .= 'Requested URL: ' . $request->getUrl() . PHP_EOL;
-                            $prefix .= 'Request method: ' . $request->getMethod() . PHP_EOL;
-                        } catch (\Exception $e) {
-                            $prefix .= 'Requested URL: not available';
-                        }
-
-                        return PHP_EOL . $prefix;
-                    },
-                ],
             ],
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => $mailerUseFiles,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => $mailerHost,
-                'username' => $mailerUsername,
-                'password' => $mailerPassword,
-                'port' => '465',
-                'encryption' => 'ssl',
-            ],
+        'emailer' => [
+            'class' => $emailerClass,
+            'emailServiceConfig' => $emailServiceConfig,
         ],
         'personnel' => ['class' => 'common\components\personnel\IdBroker'],
         'auth' => ArrayHelper::merge(

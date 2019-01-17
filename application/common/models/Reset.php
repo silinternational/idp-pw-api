@@ -261,7 +261,7 @@ class Reset extends ResetBase
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
         );
-        $this->sendEmail($toAddress, $subject, 'on-behalf');
+        $this->sendEmail($toAddress, $subject, 'on-behalf', $this->user->email);
     }
 
     /**

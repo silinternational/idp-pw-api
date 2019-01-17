@@ -83,22 +83,19 @@ class SiteController extends BaseRestController
         try {
             $config = \Yii::$app->params['emailServiceStatus'];
             
-            if ($config['useEmailService']) {
-                $emailService = new EmailServiceClient(
-                    $config['baseUrl'],
-                    $config['accessToken'],
-                    [
-                        EmailServiceClient::ASSERT_VALID_IP_CONFIG => $config['assertValidIp'],
-                        EmailServiceClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'],
-                    ]
-                );
-                
-                $emailService->getSiteStatus();
-            }
+            $emailService = new EmailServiceClient(
+                $config['baseUrl'],
+                $config['accessToken'],
+                [
+                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => $config['assertValidIp'],
+                    EmailServiceClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'],
+                ]
+            );
+
+            $emailService->getSiteStatus();
         } catch (Exception $e) {
             \Yii::error($e->getMessage());
             throw new ServerErrorHttpException('Problem with email service.');
         }
     }
-
 }

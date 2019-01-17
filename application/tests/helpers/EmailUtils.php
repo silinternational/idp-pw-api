@@ -9,19 +9,12 @@ class EmailUtils
      * @return bool
      * @throws
      */
-    public static function hasEmailFileBeenCreated($tester, $uniqueContent)
+    public static function hasEmailFileBeenCreated($uniqueContent)
     {
-        try {
-            /** @var \yii\mail\MessageInterface[] $messages */
-            $messages = $tester->grabSentEmails();
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $fakeEmailsSent = \Yii::$app->emailer->getFakeEmailsSent();
 
-        /** @var \yii\mail\MessageInterface $message */
-        foreach ($messages as $message) {
-            $contents = quoted_printable_decode($message->toString());
-            if (substr_count($contents, $uniqueContent) > 0) {
+        foreach ($fakeEmailsSent as $fakeEmail) {
+            if (substr_count(implode(' ', $fakeEmail), $uniqueContent) > 0) {
                 return true;
             }
         }
@@ -29,8 +22,8 @@ class EmailUtils
         return false;
     }
 
-    public static function getEmailFilesCount($tester)
+    public static function getEmailFilesCount()
     {
-        return count($tester->grabSentEmails());
+        return count(\Yii::$app->emailer->getFakeEmailsSent());
     }
 }

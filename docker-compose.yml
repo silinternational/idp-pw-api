@@ -129,7 +129,6 @@ services:
             - emaildb
             - emailcron
         env_file:
-            - ./common.env
             - ./email.common.env
             - ./email.local.env
         ports:
