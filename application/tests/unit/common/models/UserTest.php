@@ -4,12 +4,10 @@ namespace tests\unit\common\models;
 use Sil\Codeception\TestCase\Test;
 use common\components\personnel\PersonnelUser;
 use common\models\Method;
-use common\models\PasswordChangeLog;
 use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
-use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 
@@ -34,7 +32,6 @@ class UserTest extends Test
             'users' => UserFixture::class,
             'methods' => MethodFixture::class,
             'resets' => ResetFixture::class,
-            'password_change_logs' => PasswordChangeLogFixture::class,
         ];
     }
 
@@ -54,7 +51,6 @@ class UserTest extends Test
         }
 
         $this->assertEquals(36, strlen($user->uuid));
-        $this->assertNull($user->last_login);
         $this->assertNull($user->pw_last_changed);
         $this->assertNull($user->pw_expires);
         $this->assertNotNull($user->created);
@@ -98,7 +94,6 @@ class UserTest extends Test
         $user = User::findOrCreate('first_last');
 
         $this->assertEquals(36, strlen($user->uuid));
-        $this->assertNull($user->last_login);
         $this->assertNull($user->pw_last_changed);
         $this->assertNull($user->pw_expires);
         $this->assertNotNull($user->created);
@@ -295,24 +290,6 @@ class UserTest extends Test
         $pwMeta = $user->getPasswordMeta();
         $this->assertArrayHasKey('last_changed', $pwMeta);
         $this->assertArrayHasKey('expires', $pwMeta);
-    }
-
-    public function testPasswordChangeLog()
-    {
-        $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
-        PasswordChangeLog::deleteAll();
-        $user = $this->users('user1');
-        $user->setPassword('This is a new 123 password!');
-
-        $log = PasswordChangeLog::findOne(['user_id' => $user->id]);
-        $this->assertEquals(PasswordChangeLog::SCENARIO_CHANGE, $log->scenario);
-
-        PasswordChangeLog::deleteAll();
-        $user3 = $this->users('user3');
-        $user3->setPassword('This is a new 123 password!');
-
-        $log = PasswordChangeLog::findOne(['user_id' => $user3->id]);
-        $this->assertEquals(PasswordChangeLog::SCENARIO_RESET, $log->scenario);
     }
 
     public function testIsEmailInUseByOtherUser()

@@ -21,12 +21,4 @@ return [
             ]
         ],
     ],
-    'components' => [
-        'mailer' => [
-            'useFileTransport' => true,
-            'transport' => [
-                'host' => null,
-            ],
-        ],
-    ],
 ];

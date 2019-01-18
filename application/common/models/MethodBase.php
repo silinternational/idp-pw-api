@@ -19,7 +19,6 @@ use Yii;
  * @property string $created
  *
  * @property User $user
- * @property Reset[] $resets
  */
 class MethodBase extends \yii\db\ActiveRecord
 {
@@ -76,13 +75,5 @@ class MethodBase extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getResets()
-    {
-        return $this->hasMany(Reset::className(), ['method_id' => 'id']);
     }
 }

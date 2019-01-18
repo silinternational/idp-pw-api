@@ -46,11 +46,8 @@ return [
         ],
     ],
     'components' => [
-        'mailer' => [
-            'useFileTransport' => true,
-            'transport' => [
-                'host' => null,
-            ],
+        'emailer' => [
+            'class' => 'tests\mock\emailer\FakeEmailer',
         ],
         'auth' => [
             'class' => 'tests\mock\auth\Component',

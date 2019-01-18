@@ -49,7 +49,6 @@ class ResetTest extends Test
 
         $this->assertEquals(32, strlen($reset->uid));
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
-        $this->assertNull($reset->method_id);
         $this->assertNull($reset->code);
         $this->assertEquals(0, $reset->attempts);
         $this->assertNotNull($reset->expires);
@@ -87,7 +86,6 @@ class ResetTest extends Test
 
         $this->assertEquals(32, strlen($reset->uid));
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
-        $this->assertNull($reset->method_id);
         $this->assertNull($reset->code);
         $this->assertEquals(0, $reset->attempts);
         $this->assertNotNull($reset->expires);
@@ -124,48 +122,40 @@ class ResetTest extends Test
 
     public function testSendPrimary()
     {
-        /* Since these tests depend on emails being written to files, don't
-         * use the email service for now.  */
-        \Yii::$app->params['emailVerification']['useEmailService'] = false;
-
         $reset = $this->resets('reset1');
         $attempts = $reset->attempts;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $reset->send();
 
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount($this->tester));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->user->email));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'password change for your'));
+        $this->assertEquals(1, EmailUtils::getEmailFilesCount());
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->user->email));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('password change for your'));
         $this->assertEquals($attempts + 1, $reset->attempts);
 
         $reset->send();
 
-        $this->assertEquals(2, EmailUtils::getEmailFilesCount($this->tester));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
+        $this->assertEquals(2, EmailUtils::getEmailFilesCount());
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
         $this->assertEquals($attempts + 2, $reset->attempts);
     }
 
     public function testSendSupervisorHasSupervisor()
     {
-        /* Since these tests depend on emails being written to files, don't
-         * use the email service for now.  */
-        \Yii::$app->params['emailVerification']['useEmailService'] = false;
-
         $reset = $this->resets('reset1');
         $reset->type = Reset::TYPE_SUPERVISOR;
         $attempts = $reset->attempts;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $reset->send();
 
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount($this->tester));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'supervisor@domain.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'requested a password change for their'));
+        $this->assertEquals(1, EmailUtils::getEmailFilesCount());
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('supervisor@domain.org'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
         $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
@@ -174,32 +164,28 @@ class ResetTest extends Test
         $reset = $this->resets('reset2');
         $reset->type = Reset::TYPE_SUPERVISOR;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461173406);
         $reset->send();
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }
 
     public function testSendSpouseHasSpouse()
     {
-        /* Since these tests depend on emails being written to files, don't
-         * use the email service for now.  */
-        \Yii::$app->params['emailVerification']['useEmailService'] = false;
-
         $reset = $this->resets('reset1');
         $reset->type = Reset::TYPE_SPOUSE;
         $attempts = $reset->attempts;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $reset->send();
 
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount($this->tester));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'spouse@domain.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'requested a password change for their'));
+        $this->assertEquals(1, EmailUtils::getEmailFilesCount());
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('spouse@domain.org'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
         $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
@@ -208,31 +194,27 @@ class ResetTest extends Test
         $reset = $this->resets('reset2');
         $reset->type = Reset::TYPE_SPOUSE;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $this->expectException(\Exception::class);
         $this->expectExceptionCode(1461173477);
         $reset->send();
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }
 
     public function testSendMethodEmail()
     {
-        /* Since these tests depend on emails being written to files, don't
-         * use the email service for now.  */
-        \Yii::$app->params['emailVerification']['useEmailService'] = false;
-
         $reset = $this->resets('reset3');
         $attempts = $reset->attempts;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $reset->send();
 
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount($this->tester));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'email-1456769679@domain.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'requested a password change for their'));
+        $this->assertEquals(1, EmailUtils::getEmailFilesCount());
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('email-1456769679@domain.org'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
         $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
@@ -240,22 +222,18 @@ class ResetTest extends Test
     {
         $this->markTestSkipped('test is broken because fake methods are not accessible in this context');
 
-        /* Since these tests depend on emails being written to files, don't
-         * use the email service for now.  */
-        \Yii::$app->params['emailVerification']['useEmailService'] = false;
-
         $reset = $this->resets('reset4');
         $attempts = $reset->attempts;
 
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount($this->tester));
+        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
 
         $reset->send();
 
-        $this->assertEquals(2, EmailUtils::getEmailFilesCount($this->tester));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, $reset->code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'first_last4@example.com'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'email-1543358588@example.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($this->tester, 'password change for your'));
+        $this->assertEquals(2, EmailUtils::getEmailFilesCount());
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('first_last4@example.com'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('email-1543358588@example.org'));
+        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('password change for your'));
         $this->assertEquals($attempts + 1, $reset->attempts);
     }
 
@@ -287,11 +265,9 @@ class ResetTest extends Test
 
         $reset->setType(Reset::TYPE_METHOD, $method->uid);
         $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
-        $this->assertEquals(1, $reset->method_id);
 
         $reset->setType(Reset::TYPE_PRIMARY);
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
-        $this->assertNull($reset->method_id);
     }
 
     public function testTrackAttempt()
