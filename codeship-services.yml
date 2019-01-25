@@ -14,8 +14,8 @@ zxcvbn:
 api:
     build:
         image: silintl/idp-pw-api
-        dockerfile_path: ./Dockerfile
-        cached: true
+        dockerfile: ./Dockerfile
+    cached: true
     depends_on:
         - db
         - zxcvbn
