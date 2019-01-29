@@ -12,4 +12,14 @@ class FakeEmailServiceClient extends EmailServiceClient
         $this->emailsSent[] = $config;
         return $config;
     }
+
+    /**
+     * Ping the /site/status URL, and throw an exception if there's a problem.
+     *
+     * @return string "OK".
+     */
+    public function getSiteStatus()
+    {
+        return "OK";
+    }
 }
