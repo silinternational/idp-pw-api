@@ -453,14 +453,23 @@ class User extends UserBase implements IdentityInterface
     {
         $methods = Method::getMethods($this->employee_id);
 
+        $numVerified = 0;
         foreach ($methods as $key => $method) {
             $methods[$key]['type'] = 'email';
+            $numVerified += ($method['verified'] === true);
         }
 
         $methods[] = [
             'type' => Reset::TYPE_PRIMARY,
             'value' => $this->email,
         ];
+
+        /*
+         * If alternate recovery methods exist, don't include the spouse and manager.
+         */
+        if ($numVerified > 0) {
+            return $methods;
+        }
 
         if ($this->hasSpouse()) {
             $methods[] = [
