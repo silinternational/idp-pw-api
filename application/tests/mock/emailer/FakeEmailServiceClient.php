@@ -20,6 +20,6 @@ class FakeEmailServiceClient extends EmailServiceClient
      */
     public function getSiteStatus()
     {
-        return "OK";
+        return 'OK';
     }
 }
