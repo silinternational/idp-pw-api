@@ -23,9 +23,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Validation attempt on expired reset now issues a new reset
 - Password change now clears out the auth token if `auth_type` is reset
 ### Removed
-- Removed support for phone password recovery methods 
+- Removed support for phone password recovery methods
+- Removed option to use local emailer. External email service is now required. 
 ### Fixed
 - Password reset is now blocked for a locked account
+- The response to /user/me would have incorrect password metadata in a new user scenario.
 
 ## [3.0.0] - 2018-07-31
 ### Added
