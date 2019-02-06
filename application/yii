@@ -15,17 +15,17 @@ defined('YII_ENV') or define('YII_ENV', 'dev');
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
-if (is_file(__DIR__ . '/common/config/local.php')) {
-    $localConfig = include(__DIR__ . '/common/config/local.php');
-} else {
-    $localConfig = [];
-}
-
 try {
     require(__DIR__ . '/vendor/autoload.php');
     require(__DIR__ . '/vendor/yiisoft/yii2/Yii.php');
     require(__DIR__ . '/common/config/bootstrap.php');
     require(__DIR__ . '/console/config/bootstrap.php');
+
+    if (is_file(__DIR__ . '/common/config/local.php')) {
+        $localConfig = require(__DIR__ . '/common/config/local.php');
+    } else {
+        $localConfig = [];
+    }
 
     $config = yii\helpers\ArrayHelper::merge(
         require(__DIR__ . '/common/config/main.php'),
