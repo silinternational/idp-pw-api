@@ -4,11 +4,6 @@
 cd /data
 runny composer install --prefer-dist --no-interaction --optimize-autoloader
 
-# Copy test version of common/config/local.php if doesn't exist
-if [ ! -f /data/common/config/local.php ]; then
-    runny cp /data/common/config/test.php /data/common/config/local.php
-fi
-
 mkdir -p /data/runtime/mail
 
 # Run database migrations

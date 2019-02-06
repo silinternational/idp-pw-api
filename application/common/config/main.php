@@ -14,8 +14,6 @@ $mysqlDatabase = Env::get('MYSQL_DATABASE');
 $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
-$emailerClass = Env::get('EMAILER_CLASS', Emailer::class);
-
 $adminEmail = Env::get('ADMIN_EMAIL');
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
@@ -40,8 +38,16 @@ $supportFeedback = Env::get('SUPPORT_FEEDBACK');
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
 
+$emailerClass = Env::get('EMAILER_CLASS', Emailer::class);
 $emailServiceConfig = Env::getArrayFromPrefix('EMAIL_SERVICE_');
 $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
+
+$authClass = Env::get('AUTH_CLASS', 'common\components\auth\Saml');
+$authConfig = Env::getArrayFromPrefix('AUTH_SAML_');
+
+$personnelClass = Env::get('PERSONNEL_CLASS', 'common\components\personnel\IdBroker');
+
+$passwordStoreClass = Env::get('PASSWORDSTORE_CLASS', 'common\components\passwordStore\IdBroker');
 
 $idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
 $idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
@@ -141,12 +147,12 @@ return [
             'class' => $emailerClass,
             'emailServiceConfig' => $emailServiceConfig,
         ],
-        'personnel' => ['class' => 'common\components\personnel\IdBroker'],
+        'personnel' => ['class' => $personnelClass],
         'auth' => ArrayHelper::merge(
-            ['class' => 'common\components\auth\Saml'],
-            Env::getArrayFromPrefix('AUTH_SAML_')
+            ['class' => $authClass],
+            $authConfig
         ),
-        'passwordStore' => ['class' => 'common\components\passwordStore\IdBroker'],
+        'passwordStore' => ['class' => $passwordStoreClass],
     ],
     'params' => [
         'idpName' => $idpName,
@@ -186,7 +192,7 @@ return [
                 'enabled' => true
             ],
             'minNum' => [
-                'value' => 0,
+                'value' => 2,
                 'phpRegex' => '/(\d.*){2,}/',
                 'jsRegex' => '(\d.*){2,}',
                 'enabled' => false

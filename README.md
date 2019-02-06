@@ -30,7 +30,7 @@ Backend API for Identity Provider Password Management
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```.
    This will allow the composer container to use your github auth token when pulling dependencies.
-5. Copy ```application/common/config/local.php.dist``` to ```application/common/config/local.php```
+5. (OPTIONAL) Copy ```application/common/config/local.php.dist``` to ```application/common/config/local.php```
    and update with appropriate settings
 6. Follow operating system specific steps below
 7. You should be able to access the API using a REST client or your browser
