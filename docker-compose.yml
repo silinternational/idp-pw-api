@@ -91,17 +91,17 @@ services:
     unittest:
         build: ./
         volumes_from:
-        - data
+            - data
         volumes:
-        - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         ports:
-        - "8000:80"
+            - "8000:80"
         depends_on:
-        - testDb
-        - email
+            - testDb
+            - email
         env_file:
-        - ./common.env
-        - ./test.env
+            - ./common.env
+            - ./test.env
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
@@ -163,7 +163,7 @@ services:
     brokerDb:
         image: silintl/mariadb:latest
         ports:
-        - "3306"
+            - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
             MYSQL_HOST: brokerDb
@@ -174,11 +174,11 @@ services:
     broker:
         image: silintl/idp-id-broker:develop-4.0
         ports:
-        - "8083:80"
+            - "8083:80"
         depends_on:
-        - brokerDb
+            - brokerDb
         volumes:
-        - ./run-broker.sh:/data/run-broker.sh
+            - ./run-broker.sh:/data/run-broker.sh
         working_dir: /data
         environment:
             EMAIL_SERVICE_accessToken: fake
@@ -207,16 +207,16 @@ services:
         build: ./dockerbuild/ldap
         container_name: ldap
         ports:
-        - "389:389"
+            - "389:389"
         working_dir: /data
         env_file:
-        - ./local.env
+            - ./local.env
 
     ldapload:
         build: ./dockerbuild/ldap
         container_name: ldapload
         depends_on:
-        - ldap
+            - ldap
         working_dir: /data
         command: ./load_ldap.sh
 
