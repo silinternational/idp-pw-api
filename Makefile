@@ -3,6 +3,8 @@ start: api
 test: testunit testapi
 
 testunit: composer emailcron rmTestDb upTestDb broker ldapload yiimigratetestDb
+	# create folder as user before test creates it as root
+	mkdir -p application/tests/_output
 	docker-compose run --rm unittest
 	sed -i "s|/data/|`pwd`/application/|" application/tests/_output/coverage.xml
 
