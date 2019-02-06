@@ -61,7 +61,7 @@ class Verification extends Model
 
         /* @var $emailer Emailer */
         $emailer = \Yii::$app->emailer;
-        $emailer->email($toAddress, $subject, $body, $body, $ccAddress);
+        $emailer->email($toAddress, $subject, $body, strip_tags($body), $ccAddress);
 
         if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
             EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
