@@ -40,6 +40,9 @@ api:
         EMAIL_SERVICE_assertValidIp: "false"
         EMAIL_SERVICE_baseUrl: fake
         EMAIL_SERVICE_validIpRanges: 10.0.0.0/128
+        EMAILER_CLASS: tests\mock\emailer\FakeEmailer
+        AUTH_CLASS: tests\mock\auth\Component
+        PASSWORDSTORE_CLASS: tests\mock\passwordstore\Component
     encrypted_env_file: codeship.env.encrypted
     working_dir: /data
     command: /data/run-tests.sh

@@ -45,15 +45,4 @@ return [
             ]
         ],
     ],
-    'components' => [
-        'emailer' => [
-            'class' => 'tests\mock\emailer\FakeEmailer',
-        ],
-        'auth' => [
-            'class' => 'tests\mock\auth\Component',
-        ],
-        'passwordStore' => [
-            'class' => 'tests\mock\passwordstore\Component',
-        ],
-    ],
 ];
