@@ -13,9 +13,15 @@ require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 require(__DIR__ . '/../../common/config/bootstrap.php');
 require(__DIR__ . '/../config/bootstrap.php');
 
+if (is_file(__DIR__ . '/../../common/config/local.php')) {
+    $localConfig = include(__DIR__ . '/../../common/config/local.php');
+} else {
+    $localConfig = [];
+}
+
 $config = ArrayHelper::merge(
     require(__DIR__ . '/../../common/config/main.php'),
-    require(__DIR__ . '/../../common/config/local.php'),
+    $localConfig,
     require(__DIR__ . '/../config/main.php')
 );
 
