@@ -106,7 +106,7 @@ return [
                     ],
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
                     'message' => [
-                        'to' => $alertsEmail,
+                        'to' => $alertsEmail ?? '(disabled)',
                         'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
                     ],
                     'baseUrl' => $emailServiceConfig['baseUrl'],
