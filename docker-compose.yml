@@ -71,7 +71,6 @@ services:
             - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-            - ./application/common/config/test.php:/data/common/config/local.php
         ports:
             - "8000:80"
         depends_on:

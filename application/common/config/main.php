@@ -35,7 +35,6 @@ $supportPhone = Env::get('SUPPORT_PHONE');
 $supportEmail = Env::get('SUPPORT_EMAIL');
 $supportUrl = Env::get('SUPPORT_URL');
 $supportFeedback = Env::get('SUPPORT_FEEDBACK');
-$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
 
 $emailerClass = Env::get('EMAILER_CLASS', Emailer::class);
@@ -51,6 +50,9 @@ $passwordStoreClass = Env::get('PASSWORDSTORE_CLASS', 'common\components\passwor
 
 $idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
 $idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
+
+$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
+$passwordRules = Env::getArrayFromPrefix('PASSWORD_RULE_');
 
 return [
     'id' => 'app-common',
@@ -180,38 +182,38 @@ return [
         'passwordLifetime' => 'P1Y', // See http://php.net/manual/en/dateinterval.construct.php
         'password' => [
             'minLength' => [
-                'value' => 10,
-                'phpRegex' => '/.{10,}/',
-                'jsRegex' => '.{10,}',
-                'enabled' => true
+                'value' => $passwordRules['minLength'],
+                'phpRegex' => '/.{' . $passwordRules['minLength'] . ',}/',
+                'jsRegex' => '.{' . $passwordRules['minLength'] . ',}',
+                'enabled' => $passwordRules['minLength'] !== null
             ],
             'maxLength' => [
-                'value' => 255,
-                'phpRegex' => '/^.{0,255}$/',
-                'jsRegex' => '.{0,255}',
-                'enabled' => true
+                'value' => $passwordRules['maxLength'],
+                'phpRegex' => '/^.{0,' . $passwordRules['maxLength'] . '}$/',
+                'jsRegex' => '.{0,' . $passwordRules['maxLength'] . '}',
+                'enabled' => $passwordRules['maxLength'] !== null
             ],
             'minNum' => [
-                'value' => 2,
-                'phpRegex' => '/(\d.*){2,}/',
-                'jsRegex' => '(\d.*){2,}',
-                'enabled' => false
+                'value' => $passwordRules['minNum'],
+                'phpRegex' => '/(\d.*){' . $passwordRules['minNum'] . ',}/',
+                'jsRegex' => '(\d.*){' . $passwordRules['minNum'] . ',}',
+                'enabled' => $passwordRules['minNum'] !== null
             ],
             'minUpper' => [
-                'value' => 0,
-                'phpRegex' => '/([A-Z].*){0,}/',
-                'jsRegex' => '([A-Z].*){0,}',
-                'enabled' => false
+                'value' => $passwordRules['minUpper'],
+                'phpRegex' => '/([A-Z].*){' . $passwordRules['minUpper'] . ',}/',
+                'jsRegex' => '([A-Z].*){' . $passwordRules['minUpper'] . ',}',
+                'enabled' => $passwordRules['minUpper'] !== null
             ],
             'minSpecial' => [
-                'value' => 0,
-                'phpRegex' => '/([\W_].*){0,}/',
-                'jsRegex' => '([\W_].*){0,}',
-                'enabled' => false
+                'value' => $passwordRules['minSpecial'],
+                'phpRegex' => '/([\W_].*){' . $passwordRules['minSpecial'] . ',}/',
+                'jsRegex' => '([\W_].*){' . $passwordRules['minSpecial'] . ',}',
+                'enabled' => $passwordRules['minSpecial'] !== null
             ],
             'zxcvbn' => [
-                'minScore' => 3,
-                'enabled' => true,
+                'minScore' => $passwordRules['minScore'],
+                'enabled' => $passwordRules['minScore'] !== null,
                 'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
         ],
