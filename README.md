@@ -146,3 +146,38 @@ The API is described by [api.raml](api.raml), and an auto-generated [api.html](a
 rendered HTML file on Github, prepend the Github URL with 
 `https://htmlpreview.github.com/?`.
 [Example](https://htmlpreview.github.com/?https://github.com/silinternational/idp-pw-api/blob/develop-3.0/api.html)
+
+## Test configuration
+Tests are configured in multiple places, using different test frameworks.
+The chart below summarizes the test configuration.
+
+| Suite | Framework   |  config   | Local, Docker        | Codeship              |
+|-------|-------------|-----------|----------------------|-----------------------|
+| Unit  | PHPUnit     | container | unittest             | api                   |
+|       |             | script    | run-tests.sh         | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
+|       |             | config    | tests/unit.suite.yml, tests/codeception/config/unit.php | (same) |
+|       |             | coverage  | IdBroker, IdBrokerPw, Ldap | (same)          |
+|-------|-------------|-----------|----------------------|-----------------------|
+| Unit  | Behat       | container | unittest             | api                   |
+|       |             | script    | run-tests.sh         | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | Composer             | (same)                |
+|       |             | config    | features/behat.yml   | (same)                |
+|       |             | coverage  | Multiple, Google     | (same)                |
+|-------|-------------|-----------|----------------------|-----------------------|
+| Unit  | Codeception | container | unittest             | api                   |
+|       |             | script    | run-tests.sh         | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
+|       |             | config    | tests/unit.suite.yml | (same)                |
+|       |             | coverage  | models, helpers      | (same)                |
+|-------|-------------|-----------|----------------------|-----------------------|
+| API   | Codeception | container | apitest              | api                   |
+|       |             | script    | run-tests-api.sh     | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
+|       |             | config    | tests/api.suite.yml  | (same)                |
+|       |             | coverage  | controllers          | (same)                |
+|-------|-------------|-----------|----------------------|-----------------------|
