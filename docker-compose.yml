@@ -172,8 +172,6 @@ services:
 
     ldap:
         build: ./dockerbuild/ldap
-        env_file:
-            - ./local.env
 
     ldapload:
         build: ./dockerbuild/ldap
