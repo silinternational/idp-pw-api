@@ -138,6 +138,33 @@ rendered HTML file on Github, prepend the Github URL with
 `https://htmlpreview.github.com/?`.
 [Example](https://htmlpreview.github.com/?https://github.com/silinternational/idp-pw-api/blob/develop-3.0/api.html)
 
+### Quick start for manually interacting with API
+To quickly get up and running to verify basic operation of the API, these are a 
+few endpoints to start with. GET endpoints can be exercised with any browser,
+but others will need something like [Insomnia](http://insomnia.rest).
+
+#### `GET /config`
+
+Returns configuration parameters supplied by environment variables.
+
+#### `GET /site/system-status`
+
+This endpoint verifies connectivity to the database and to the email service.
+
+#### `POST /reset` and `PUT /reset/{uid}/validate`
+
+This combination requires connection to a PasswordStore component and a Personnel
+component containing a valid user record. After sending the `POST`, retrieve the reset 
+code from the email or the database, and the reset uid from the response body, then
+supply them in the `PUT` request body and URI. The response will contain an 
+`access_token` to use for subsequent calls that require it.
+
+#### `GET /auth/login`
+
+This method of authentication will provide a full-scope `access_token`. The easiest
+method is to use an `invite` code, which can be found in the ID Broker database after
+creating a new user. The `access_token` can be found in the `Location` response header.
+
 ## Test configuration
 Tests are configured in multiple places, using different test frameworks.
 The chart below summarizes the test configuration.
