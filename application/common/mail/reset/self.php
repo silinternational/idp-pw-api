@@ -9,14 +9,14 @@ use yii\helpers\Html as yHtml;
  * @var string $fromName
  */
 ?>
-Hi there,
+    Hi there,
 <p>
-    Someone recently requested a password change for your <?php echo yHtml::encode($idpDisplayName); ?>
-    account. If this was you, click the link below to set a new password. This link is valid until
-    <?php echo yHtml::encode($expireTime); ?>.
+    Someone recently requested a password change for your <?= yHtml::encode($idpDisplayName) . PHP_EOL ?>
+    account. If this was you, click the link below to set a new password.
+    This link is valid until <?= yHtml::encode($expireTime) ?>.
 </p>
 <p>
-    <a href="<?php echo $resetUrl; ?>"><?php echo $resetUrl; ?></a>
+    <?= yHtml::a(yHtml::encode($resetUrl), $resetUrl) ?>
 </p>
 <p>
     If you don't want to change your password or didn't request this, just
@@ -24,9 +24,11 @@ Hi there,
 </p>
 <p>
     To keep your account secure, please don't forward this email to anyone.
-    See our Help Center for <a href="<?php echo yHtml::encode($helpCenterUrl); ?>">more security tips</a>.
+    See our Help Center at <?= yHtml::a(yHtml::encode($helpCenterUrl), $helpCenterUrl) ?> for more security tips.
 </p>
 <p>
-    Thanks!
-     - <?php echo yHtml::encode($fromName); ?>
+    Thanks,
+</p>
+<p>
+    <i><?= yHtml::encode($fromName) ?></i>
 </p>

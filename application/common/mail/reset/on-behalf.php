@@ -10,24 +10,26 @@ use yii\helpers\Html as yHtml;
  * @var string $fromName
  */
 ?>
-Hi there,
+    Hi there,
 <p>
-    <?php echo yHtml::encode($name); ?> recently requested a password change for their
-    <?php echo yHtml::encode($idpDisplayName); ?> account and they have requested your assistance.
+    <?= yHtml::encode($name) ?> recently requested a password change for their
+    <?= yHtml::encode($idpDisplayName) ?> account and they have requested your assistance.
 </p>
 <p>
-    Please contact them directly to ensure that you are only providing the following reset code to them
-    and not to someone else. This code is valid until <?php echo yHtml::encode($expireTime); ?>.
+    Please contact them directly to ensure that you are only providing the
+    following reset code to them and not to someone else. This code is valid
+    until <?= yHtml::encode($expireTime) ?>.
 </p>
 <p>
-    Reset Code: <?php echo yHtml::encode($code); ?>
+    Reset Code: <?= yHtml::encode($code) ?>
 </p>
 <p>
     To keep their account secure, please don't forward this email to anyone.
-    See our Help Center for <a href="<?php echo yHtml::encode($helpCenterUrl); ?>">more security tips</a>.
+    See our Help Center at <?= yHtml::a(yHtml::encode($helpCenterUrl), $helpCenterUrl) ?> for more security tips.
 </p>
 <p>
-    Thanks!
-    - <?php echo yHtml::encode($fromName); ?>
+    Thanks,
 </p>
-    
+<p>
+    <i><?= yHtml::encode($fromName) ?></i>
+</p>
