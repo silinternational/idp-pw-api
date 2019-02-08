@@ -89,15 +89,6 @@ The personnel component is used to look up informaton about users from your comp
 * Implement interface: ```common\components\personnel\PersonnelInterface```
 * [Example implementation](application/common/components/personnel/IdBroker.php)
 
-### Phone Verification Component
-This component is used for performing phone based verification of users.
-
-* Component ID: ```phone```
-* Implement interface: ```common\components\phoneVerification\PhoneVerificationInterface```
-* [Example implementation](application/common/components/phoneVerification/Sms.php)
-
-The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging.
-
 ### passwordStore/Google component
  Password store component for IdP PW API that uses Google as the backend.
 

@@ -8,8 +8,6 @@ services:
 
     db:
         image: silintl/mariadb:latest
-        ports:
-            - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
             MYSQL_DATABASE: pwmgr
@@ -18,8 +16,6 @@ services:
 
     testDb:
        image: silintl/mariadb:latest
-       ports:
-           - "3306"
        environment:
            MYSQL_ROOT_PASSWORD: r00tp@ss!
            MYSQL_DATABASE: test
@@ -39,8 +35,6 @@ services:
         build: ./
         volumes_from:
             - data
-        volumes:
-            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         ports:
             - "8080:80"
         depends_on:
@@ -59,24 +53,15 @@ services:
         env_file:
             - ./common.env
             - ./local.env
-        environment:
-            AUTH_SAML_idpCertificate:
-            AUTH_SAML_spCertificate:
-            AUTH_SAML_spPrivateKey:
         command: /data/run-cron.sh
 
     apitest:
         build: ./
         volumes_from:
             - data
-        volumes:
-            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-        ports:
-            - "8000:80"
         depends_on:
             - testDb
             - zxcvbn
-            - email
         env_file:
             - ./common.env
             - ./test.env
@@ -93,11 +78,8 @@ services:
             - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-        ports:
-            - "8000:80"
         depends_on:
             - testDb
-            - email
         env_file:
             - ./common.env
             - ./test.env
@@ -117,8 +99,6 @@ services:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
         user: "${DOCKER_UIDGID}"
-        depends_on:
-            - email
         env_file:
             - ./common.env
             - ./local.env
