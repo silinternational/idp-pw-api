@@ -36,7 +36,7 @@ Backend API for Identity Provider Password Management
 7. You should be able to access the API using a REST client or your browser
    at http://idp-pw-api.local:8080.
 8. You'll probably also want the web interface for this application which you can
-   clone at <https://github.com/silinternational/idp-pw-ui>
+   clone at <https://github.com/silinternational/idp-profile-ui>
 
 ### Additional setup for Linux & Mac
 1. Add entry to ```/etc/hosts``` for ```127.0.0.1 idp-pw-api.local```
