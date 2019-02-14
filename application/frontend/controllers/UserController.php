@@ -23,7 +23,7 @@ class UserController extends BaseRestController
                         'allow' => true,
                         'actions' => ['update'],
                         'matchCallback' => function () {
-                            $user = \Yii::$app->user->identity; return true;
+                            $user = \Yii::$app->user->identity;
                             return $user->isAuthScopeFull();
                         }
                     ],
