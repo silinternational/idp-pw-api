@@ -13,24 +13,15 @@ require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 require(__DIR__ . '/../../common/config/bootstrap.php');
 require(__DIR__ . '/../config/bootstrap.php');
 
-/*
- * Load environment config if present, else expect local.php
- */
-$appEnv = Env::get('APP_ENV', 'production');
-$validEnvs = ['test', 'development', 'dev', 'staging', 'stage', 'stg', 'production', 'prod', 'prd'];
-if (! in_array($appEnv, $validEnvs, true)) {
-    throw new ServerErrorHttpException('Invalid APP_ENV provided');
-}
-$configPath = __DIR__ . '/../../common/config';
-if (file_exists($configPath . '/' . $appEnv . '.php')) {
-    $envConfig = require $configPath . '/' . $appEnv . '.php';
-} elseif (file_exists($configPath . '/local.php')) {
-    $envConfig = require $configPath . '/local.php';
+if (is_file(__DIR__ . '/../../common/config/local.php')) {
+    $localConfig = require(__DIR__ . '/../../common/config/local.php');
+} else {
+    $localConfig = [];
 }
 
 $config = ArrayHelper::merge(
     require(__DIR__ . '/../../common/config/main.php'),
-    $envConfig,
+    $localConfig,
     require(__DIR__ . '/../config/main.php')
 );
 

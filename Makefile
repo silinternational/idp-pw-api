@@ -2,7 +2,9 @@ start: api
 
 test: testunit testapi
 
-testunit: composer emailcron rmTestDb upTestDb broker ldapload yiimigratetestDb
+testunit: codeship.env composer rmTestDb upTestDb broker ldapload yiimigratetestDb
+	# create folder as user before test creates it as root
+	mkdir -p application/tests/_output
 	docker-compose run --rm unittest
 	sed -i "s|/data/|`pwd`/application/|" application/tests/_output/coverage.xml
 
@@ -74,3 +76,6 @@ clean:
 
 raml2html:
 	docker-compose run --rm raml2html
+
+codeship.env: codeship.aes codeship.env.encrypted
+	jet decrypt codeship.env.encrypted codeship.env

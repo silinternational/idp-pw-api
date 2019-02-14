@@ -38,6 +38,16 @@ api:
         EMAIL_SERVICE_assertValidIp: "false"
         EMAIL_SERVICE_baseUrl: fake
         EMAIL_SERVICE_validIpRanges: 10.0.0.0/128
+        EMAILER_CLASS: tests\mock\emailer\FakeEmailer
+        AUTH_CLASS: tests\mock\auth\Component
+        PASSWORDSTORE_CLASS: tests\mock\passwordstore\Component
+        ZXCVBN_API_BASEURL: http://zxcvbn:3000
+        PASSWORD_RULE_minLength: 10
+        PASSWORD_RULE_maxLength: 255
+        PASSWORD_RULE_minNum: 2
+        PASSWORD_RULE_minUpper: 1
+        PASSWORD_RULE_minSpecial: 1
+        PASSWORD_RULE_minScore: 2
     encrypted_env_file: codeship.env.encrypted
     working_dir: /data
     command: /data/run-tests.sh
@@ -45,10 +55,9 @@ api:
 brokerDb:
     image: silintl/mariadb:latest
     ports:
-    - "3306"
+        - "3306"
     environment:
         MYSQL_ROOT_PASSWORD: r00tp@ss!
-        MYSQL_HOST: db
         MYSQL_DATABASE: app
         MYSQL_USER: user
         MYSQL_PASSWORD: pass
@@ -56,45 +65,37 @@ brokerDb:
 broker:
     image: silintl/idp-id-broker:develop-4.0
     depends_on:
-    - brokerDb
+        - brokerDb
     volumes:
-    - ./run-broker.sh:/data/run-broker.sh
-    working_dir: /data
+        - ./run-broker.sh:/data/run-broker.sh
     environment:
         EMAIL_SERVICE_accessToken: fake
         EMAIL_SERVICE_assertValidIp: "false"
         EMAIL_SERVICE_baseUrl: fake
         EMAIL_SERVICE_validIpRanges: 10.0.0.0/128
+        EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
         IDP_NAME: idp1
         MYSQL_HOST: brokerDb
         MYSQL_DATABASE: app
         MYSQL_USER: user
         MYSQL_PASSWORD: pass
-        MYSQL_ROOT_PASSWORD: dummy-root-password
         API_ACCESS_KEYS: abc123
         HELP_CENTER_URL: https://example.com/#/help
         PASSWORD_FORGOT_URL: https://example.com/#/forgot
         PASSWORD_PROFILE_URL: https://example.com/#/profile
         SUPPORT_EMAIL: support@example.com
         EMAIL_SIGNATURE: Dummy Signature for Tests
-        RESET_lifetimeSeconds: 3600
-        RESET_codeLength: 6
-        EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
-    command: whenavail brokerDb 3306 60 ./run-broker.sh
+        APP_ENV: test
+    command: ./run-broker.sh
 
 ldap:
     build: ./dockerbuild/ldap
-    container_name: ldap
-    ports:
-    - "389"
-    working_dir: /data
     environment:
         DEBUG_LEVEL: 320
 
 ldapload:
     build: ./dockerbuild/ldap
-    container_name: ldapload
     depends_on:
-    - ldap
+        - ldap
     working_dir: /data
     command: ./load_ldap.sh

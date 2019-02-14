@@ -14,12 +14,9 @@ $mysqlDatabase = Env::get('MYSQL_DATABASE');
 $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
-$emailerClass = Env::get('EMAILER_CLASS', Emailer::class);
-
 $adminEmail = Env::get('ADMIN_EMAIL');
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
-$fromEmail = Env::get('FROM_EMAIL');
 $fromName = Env::get('FROM_NAME');
 $appEnv = Env::get('APP_ENV');
 $idpName = Env::get('IDP_NAME');
@@ -30,21 +27,37 @@ $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
 $logoUrl = Env::get('LOGO_URL');
-$uiCorsOrigin = Env::get('UI_CORS_ORIGIN');
+$uiCorsOrigin = Env::get('UI_CORS_ORIGIN', $uiUrl);
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
 $supportPhone = Env::get('SUPPORT_PHONE');
 $supportEmail = Env::get('SUPPORT_EMAIL');
 $supportUrl = Env::get('SUPPORT_URL');
 $supportFeedback = Env::get('SUPPORT_FEEDBACK');
-$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
 
+$emailerClass = Env::get('EMAILER_CLASS', Emailer::class);
 $emailServiceConfig = Env::getArrayFromPrefix('EMAIL_SERVICE_');
 $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRanges');
 
+$authClass = Env::get('AUTH_CLASS', 'common\components\auth\Saml');
+$authConfig = Env::getArrayFromPrefix('AUTH_SAML_');
+
+$personnelClass = Env::get('PERSONNEL_CLASS', 'common\components\personnel\IdBroker');
+
+$passwordStoreClass = Env::get('PASSWORDSTORE_CLASS', 'common\components\passwordStore\IdBroker');
+
 $idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
 $idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
+
+$zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
+$passwordRules = Env::getArrayFromPrefix('PASSWORD_RULE_');
+$passwordRules['minLength'] = $passwordRules['minLength'] ?? null;
+$passwordRules['maxLength'] = $passwordRules['maxLength'] ?? null;
+$passwordRules['minNum'] = $passwordRules['minNum'] ?? null;
+$passwordRules['minUpper'] = $passwordRules['minUpper'] ?? null;
+$passwordRules['minSpecial'] = $passwordRules['minSpecial'] ?? null;
+$passwordRules['minScore'] = $passwordRules['minScore'] ?? null;
 
 return [
     'id' => 'app-common',
@@ -100,7 +113,7 @@ return [
                     ],
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
                     'message' => [
-                        'to' => $alertsEmail,
+                        'to' => $alertsEmail ?? '(disabled)',
                         'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
                     ],
                     'baseUrl' => $emailServiceConfig['baseUrl'],
@@ -141,19 +154,18 @@ return [
             'class' => $emailerClass,
             'emailServiceConfig' => $emailServiceConfig,
         ],
-        'personnel' => ['class' => 'common\components\personnel\IdBroker'],
+        'personnel' => ['class' => $personnelClass],
         'auth' => ArrayHelper::merge(
-            ['class' => 'common\components\auth\Saml'],
-            Env::getArrayFromPrefix('AUTH_SAML_')
+            ['class' => $authClass],
+            $authConfig
         ),
-        'passwordStore' => ['class' => 'common\components\passwordStore\IdBroker'],
+        'passwordStore' => ['class' => $passwordStoreClass],
     ],
     'params' => [
         'idpName' => $idpName,
         'idpDisplayName' => $idpDisplayName,
         'idpUsernameHint' => $idpUsernameHint,
         'adminEmail' => $adminEmail,
-        'fromEmail' => $fromEmail,
         'fromName' => $fromName,
         'helpCenterUrl' => $helpCenterUrl,
         'uiUrl' => $uiUrl,
@@ -174,38 +186,38 @@ return [
         'passwordLifetime' => 'P1Y', // See http://php.net/manual/en/dateinterval.construct.php
         'password' => [
             'minLength' => [
-                'value' => 10,
-                'phpRegex' => '/.{10,}/',
-                'jsRegex' => '.{10,}',
-                'enabled' => true
+                'value' => $passwordRules['minLength'],
+                'phpRegex' => '/.{' . $passwordRules['minLength'] . ',}/',
+                'jsRegex' => '.{' . $passwordRules['minLength'] . ',}',
+                'enabled' => $passwordRules['minLength'] !== null
             ],
             'maxLength' => [
-                'value' => 255,
-                'phpRegex' => '/^.{0,255}$/',
-                'jsRegex' => '.{0,255}',
-                'enabled' => true
+                'value' => $passwordRules['maxLength'],
+                'phpRegex' => '/^.{0,' . $passwordRules['maxLength'] . '}$/',
+                'jsRegex' => '.{0,' . $passwordRules['maxLength'] . '}',
+                'enabled' => $passwordRules['maxLength'] !== null
             ],
             'minNum' => [
-                'value' => 0,
-                'phpRegex' => '/(\d.*){2,}/',
-                'jsRegex' => '(\d.*){2,}',
-                'enabled' => false
+                'value' => $passwordRules['minNum'],
+                'phpRegex' => '/(\d.*){' . $passwordRules['minNum'] . ',}/',
+                'jsRegex' => '(\d.*){' . $passwordRules['minNum'] . ',}',
+                'enabled' => $passwordRules['minNum'] !== null
             ],
             'minUpper' => [
-                'value' => 0,
-                'phpRegex' => '/([A-Z].*){0,}/',
-                'jsRegex' => '([A-Z].*){0,}',
-                'enabled' => false
+                'value' => $passwordRules['minUpper'],
+                'phpRegex' => '/([A-Z].*){' . $passwordRules['minUpper'] . ',}/',
+                'jsRegex' => '([A-Z].*){' . $passwordRules['minUpper'] . ',}',
+                'enabled' => $passwordRules['minUpper'] !== null
             ],
             'minSpecial' => [
-                'value' => 0,
-                'phpRegex' => '/([\W_].*){0,}/',
-                'jsRegex' => '([\W_].*){0,}',
-                'enabled' => false
+                'value' => $passwordRules['minSpecial'],
+                'phpRegex' => '/([\W_].*){' . $passwordRules['minSpecial'] . ',}/',
+                'jsRegex' => '([\W_].*){' . $passwordRules['minSpecial'] . ',}',
+                'enabled' => $passwordRules['minSpecial'] !== null
             ],
             'zxcvbn' => [
-                'minScore' => 3,
-                'enabled' => true,
+                'minScore' => $passwordRules['minScore'],
+                'enabled' => $passwordRules['minScore'] !== null,
                 'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
         ],

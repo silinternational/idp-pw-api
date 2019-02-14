@@ -6,7 +6,6 @@ $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
 
 return [
     'params' => [
-        'accessTokenHashKey' => 'KEY4TESTING',
         'password' => [
             'minLength' => [
                 'value' => 10,
@@ -14,11 +13,87 @@ return [
                 'jsRegex' => '.{10,}',
                 'enabled' => true
             ],
+            'maxLength' => [
+                'value' => 255,
+                'phpRegex' => '/^.{0,255}$/',
+                'jsRegex' => '.{0,255}',
+                'enabled' => true
+            ],
+            'minNum' => [
+                'value' => 2,
+                'phpRegex' => '/(\d.*){2,}/',
+                'jsRegex' => '(\d.*){2,}',
+                'enabled' => true
+            ],
+            'minUpper' => [
+                'value' => 1,
+                'phpRegex' => '/([A-Z].*){1,}/',
+                'jsRegex' => '([A-Z].*){1,}',
+                'enabled' => true
+            ],
+            'minSpecial' => [
+                'value' => 1,
+                'phpRegex' => '/([\W_].*){1,}/',
+                'jsRegex' => '([\W_].*){1,}',
+                'enabled' => true
+            ],
             'zxcvbn' => [
                 'minScore' => 2,
                 'enabled' => true,
                 'apiBaseUrl' => $zxcvbnApiBaseUrl,
             ]
+        ],
+    ],
+    'components' => [
+        'auth' => [
+            'class' => 'common\components\auth\Saml',
+            'signRequest' => false,
+            'checkResponseSigning' => false,
+            'requireEncryptedAssertion' => false,
+            'idpCertificate' => '',
+            'spCertificate' => '',
+            'spPrivateKey' => '',
+            'entityId' => 'idp-pw-api.local',
+            'ssoUrl' => '',
+            'sloUrl' => '',
+            'attributeMap' => [
+                'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0 ],
+                'first_name' => ['field' => 'givenName', 'element' => 0 ],
+                'last_name' => ['field' => 'sn', 'element' => 0 ],
+                'email' => ['field' => 'mail', 'element' => 0 ],
+                'employee_id' => ['field' => 'employeeId', 'element' => 0],
+            ],
+        ],
+        'passwordStore' => [
+            'class' => 'common\components\passwordStore\Multiple',
+            'passwordStoresConfig' => [
+                [
+                    'class' => 'common\components\passwordStore\IdBroker'
+                ],
+                [
+                    'class' => 'common\components\passwordStore\Ldap',
+                    'host' => 'example.org',
+                    'port' => 636,
+                    'baseDn' => 'dc=example,dc=org',
+                    'adminUsername' => 'cn=ADMIN,ou=users,dc=example,dc=org',
+                    'adminPassword' => 'admin password',
+                    'useTls' => false,
+                    'useSsl' => true,
+                    'userPasswordAttribute' => 'userPassword',
+                    'employeeIdAttribute' => 'employeeId',
+                    'passwordLastChangeDateAttribute' => 'pwdchangedtime',
+                    'passwordExpireDateAttribute' => 'modifytimestamp',
+                    'updateAttributesOnSetPassword' => [
+                        'eventPwdChange' => 'Yes',
+                    ],
+                    'removeAttributesOnSetPassword' => [
+                        'pwdpolicysubentry',
+                        'pwdaccountlockedtime',
+                    ],
+                    'userAccountDisabledAttribute' => 'pwdaccountlockedtime',
+                    'userAccountDisabledValue' => '000001010000Z',
+                ],
+            ],
         ],
     ],
 ];
