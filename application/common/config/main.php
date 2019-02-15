@@ -54,9 +54,6 @@ $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 $passwordRules = Env::getArrayFromPrefix('PASSWORD_RULE_');
 $passwordRules['minLength'] = $passwordRules['minLength'] ?? null;
 $passwordRules['maxLength'] = $passwordRules['maxLength'] ?? null;
-$passwordRules['minNum'] = $passwordRules['minNum'] ?? null;
-$passwordRules['minUpper'] = $passwordRules['minUpper'] ?? null;
-$passwordRules['minSpecial'] = $passwordRules['minSpecial'] ?? null;
 $passwordRules['minScore'] = $passwordRules['minScore'] ?? null;
 
 return [
@@ -196,24 +193,6 @@ return [
                 'phpRegex' => '/^.{0,' . $passwordRules['maxLength'] . '}$/',
                 'jsRegex' => '.{0,' . $passwordRules['maxLength'] . '}',
                 'enabled' => $passwordRules['maxLength'] !== null
-            ],
-            'minNum' => [
-                'value' => $passwordRules['minNum'],
-                'phpRegex' => '/(\d.*){' . $passwordRules['minNum'] . ',}/',
-                'jsRegex' => '(\d.*){' . $passwordRules['minNum'] . ',}',
-                'enabled' => $passwordRules['minNum'] !== null
-            ],
-            'minUpper' => [
-                'value' => $passwordRules['minUpper'],
-                'phpRegex' => '/([A-Z].*){' . $passwordRules['minUpper'] . ',}/',
-                'jsRegex' => '([A-Z].*){' . $passwordRules['minUpper'] . ',}',
-                'enabled' => $passwordRules['minUpper'] !== null
-            ],
-            'minSpecial' => [
-                'value' => $passwordRules['minSpecial'],
-                'phpRegex' => '/([\W_].*){' . $passwordRules['minSpecial'] . ',}/',
-                'jsRegex' => '([\W_].*){' . $passwordRules['minSpecial'] . ',}',
-                'enabled' => $passwordRules['minSpecial'] !== null
             ],
             'zxcvbn' => [
                 'minScore' => $passwordRules['minScore'],

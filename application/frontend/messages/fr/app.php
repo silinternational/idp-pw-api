@@ -50,15 +50,6 @@ return [
     'Your password exceeds the maximum length of {maxLength} (code 110)' =>
         'Votre mot de passe dépasse la longueur maximale de {maxLength} (code 110)',
 
-    'Your password must contain at least {minNum} numbers (code 120)' =>
-        'Votre mot de passe doit contenir au moins {minNum} chiffres (code 120)',
-
-    'Your password must contain at least {minUpper} upper case letters (code 130)' =>
-        'Votre mot de passe doit contenir au moins {minUpper} lettres majuscules (code 130)',
-
-    'Your password must contain at least {minSpecial} special characters (code 140)' =>
-        'Votre mot de passe doit contenir au moins {minSpecial} caractères spéciaux (code 140)',
-
     'Your password does not meet the minimum strength of {minScore} (code 150)' =>
         'Votre mot de passe ne répond pas à la force minimale de {minScore} (code 150)',
 

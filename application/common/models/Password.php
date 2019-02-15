@@ -55,36 +55,6 @@ class Password extends Model
                 'when' => function() { return $this->config['maxLength']['enabled']; }
             ],
             [
-                'password', 'match', 'pattern' => $this->config['minNum']['phpRegex'],
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must contain at least {minNum} numbers (code 120)',
-                    ['minNum' => $this->config['minNum']['value']]
-                ),
-                'when' => function() { return $this->config['minNum']['enabled']; }
-            ],
-            [
-                'password', 'match', 'pattern' => $this->config['minUpper']['phpRegex'],
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must contain at least {minUpper} upper case letters (code 130)',
-                    ['minUpper' => $this->config['minUpper']['value']]
-                ),
-                'when' => function() { return $this->config['minUpper']['enabled']; }
-            ],
-            [
-                'password', 'match', 'pattern' => $this->config['minSpecial']['phpRegex'],
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must contain at least {minSpecial} special characters (code 140)',
-                    ['minSpecial' => $this->config['minSpecial']['value']]
-                ),
-                'when' => function() { return $this->config['minSpecial']['enabled']; }
-            ],
-            [
                 'password', ZxcvbnPasswordValidator::class, 'minScore' => $this->config['zxcvbn']['minScore'],
                 'skipOnError' => true,
                 'message' => \Yii::t(

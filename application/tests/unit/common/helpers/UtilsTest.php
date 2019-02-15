@@ -76,24 +76,6 @@ class UtilsTest extends Test
                     'jsRegex' => '.{0,255}',
                     'enabled' => true
                 ],
-                'minNum' => [
-                    'value' => 2,
-                    'phpRegex' => '/(\d.*){2,}/',
-                    'jsRegex' => '(\d.*){2,}',
-                    'enabled' => true
-                ],
-                'minUpper' => [
-                    'value' => 0,
-                    'phpRegex' => '/([A-Z].*){0,}/',
-                    'jsRegex' => '([A-Z].*){0,}',
-                    'enabled' => false
-                ],
-                'minSpecial' => [
-                    'value' => 0,
-                    'phpRegex' => '/([\W_].*){0,}/',
-                    'jsRegex' => '([\W_].*){0,}',
-                    'enabled' => false
-                ],
                 'zxcvbn' => [
                     'minScore' => 2,
                     'enabled' => true,

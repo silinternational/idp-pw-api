@@ -197,7 +197,7 @@ class Utils
 
         $config['password'] = [];
         $passwordRuleFields = [
-            'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
+            'minLength', 'maxLength'
         ];
 
         foreach ($passwordRuleFields as $rule) {

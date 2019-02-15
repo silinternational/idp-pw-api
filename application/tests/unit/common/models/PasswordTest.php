@@ -61,26 +61,6 @@ class PasswordTest extends Test
                 'Failed validating test case: ' . $testCase['password']
             );
 
-            $minNumStatus = ! substr_count($validationErrorsString, 'code 120') > 0;
-            $this->assertEquals(
-                $testCase['minNum'],
-                $minNumStatus,
-                'Failed validating test case: ' . $testCase['password']
-            );
-
-            $minUpperStatus = ! substr_count($validationErrorsString, 'code 130') > 0;
-            $this->assertEquals(
-                $testCase['minUpper'],
-                $minUpperStatus, 'Failed validating test case: ' . $testCase['password']
-            );
-
-            $minSpecialStatus = ! substr_count($validationErrorsString, 'code 140') > 0;
-            $this->assertEquals(
-                $testCase['minSpecial'],
-                $minSpecialStatus,
-                'Failed validating test case: ' . $testCase['password']
-            );
-
             /*
              * Zxcvbn validation is skipped if any other validation errors occur, so only assert
              * failure if other tests pass and this should fail
@@ -134,9 +114,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => false,
-                'minSpecial' => false,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -146,9 +123,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => true,
                 'nonZxcvbnPass' => true,
             ],
@@ -158,9 +132,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => true,
                 'nonZxcvbnPass' => true,
             ],
@@ -170,9 +141,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
-                'minNum' => false,
-                'minUpper' => false,
-                'minSpecial' => false,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -182,9 +150,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => true,
                 'nonZxcvbnPass' => true,
             ],
@@ -194,9 +159,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => false,
-                'minUpper' => false,
-                'minSpecial' => true,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -206,9 +168,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
-                'minNum' => false,
-                'minUpper' => false,
-                'minSpecial' => false,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -218,9 +177,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => false,
                 'nonZxcvbnPass' => true,
             ],
