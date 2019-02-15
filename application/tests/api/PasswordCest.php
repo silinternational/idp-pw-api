@@ -110,18 +110,6 @@ class PasswordCest extends BaseCest
         }
     }
 
-    public function test13(ApiTester $I)
-    {
-        $I->wantTo('check response when changing the password (PUT request) to something that does not meet minNumber requirement');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => 'A!sdfasdfasdfasdf1']);
-        $I->seeResponseCodeIs(400);
-        $body = json_decode($I->grabResponse(), true);
-        if (substr_count($body['message'], 'code 120') <= 0) {
-            throw new \Exception('Expected error code not present in message', 1466798391);
-        }
-    }
-
     public function test15(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 1');
