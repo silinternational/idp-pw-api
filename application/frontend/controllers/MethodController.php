@@ -9,6 +9,7 @@ use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\TooManyRequestsHttpException;
@@ -111,6 +112,12 @@ class MethodController extends BaseRestController
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
+        if (\Yii::$app->user->identity->email == $value) {
+            throw new ConflictHttpException(
+                \Yii::t('app', 'Primary email address supplied as alternate recovery method.'),
+                1550138424
+            );
+        }
         try {
             $method = $this->idBrokerClient->createMethod($employeeId, $value);
         } catch (ServiceException $e) {
