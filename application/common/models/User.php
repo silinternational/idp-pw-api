@@ -85,6 +85,13 @@ class User extends UserBase implements IdentityInterface
             };
         }
 
+        $managerEmail = $this->getSupervisorEmail();
+        if (! empty($managerEmail)) {
+            $fields['manager_email'] = function (self $model) use ($managerEmail) {
+                return $managerEmail;
+            };
+        }
+
         return $fields;
     }
 
