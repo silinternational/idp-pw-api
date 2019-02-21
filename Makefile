@@ -13,7 +13,7 @@ testapi: upTestDb broker yiimigratetestDb
 	docker-compose run --rm apitest
 
 api: upDb broker composer yiimigrate
-	docker-compose up -d api zxcvbn cron phpmyadmin
+	docker-compose up -d api zxcvbn cron phpmyadmin brokerpma emailpma
 
 composer:
 	docker-compose run --rm cli composer install
