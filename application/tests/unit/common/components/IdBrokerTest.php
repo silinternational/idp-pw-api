@@ -149,9 +149,9 @@ class IdBrokerTest extends TestCase
 
         // Assert
         $this->assertResultPropertiesMatch($results, [
-           'employeeId' => $employeeId,
-           'username' => $userName,
-           'email' => $email,
+            'employeeId' => $employeeId,
+            'username' => $userName,
+            'email' => $email,
         ]);
     }
 
