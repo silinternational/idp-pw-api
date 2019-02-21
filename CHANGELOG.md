@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added "Hide" feature for users with increased privacy concerns
 - Added `PUT /mfa/{mfaId}` endpoint to update MFA labels.
 - Added `invite` option on `/auth/login` for new user invite authentication
+- Added `last_login` to `GET /user/me` response.
 ### Changed
 - Limit access based on whether auth level is reset or login
 - Updated Adldap2 to latest version
