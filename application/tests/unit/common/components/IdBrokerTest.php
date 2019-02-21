@@ -144,11 +144,15 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $results = get_object_vars($this->getIdBroker()->findByUsername($userName));
-        unset($results['uuid']);
-        $this->assertEquals($employeeId, $results['employeeId']);
-        $this->assertEquals($userName, $results['username']);
-        $this->assertEquals($email, $results['email']);
+        // Act
+        $results = $this->getIdBroker()->findByUsername($userName);
+
+        // Assert
+        $this->assertResultPropertiesMatch($results, [
+           'employeeId' => $employeeId,
+           'username' => $userName,
+           'email' => $email,
+        ]);
     }
 
     public function testFindByEmail()
@@ -169,11 +173,15 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $results = get_object_vars($this->getIdBroker()->findByEmail($email));
-        unset($results['uuid']);
-        $this->assertEquals($employeeId, $results['employeeId']);
-        $this->assertEquals($userName, $results['username']);
-        $this->assertEquals($email, $results['email']);
+        // Act
+        $results = $this->getIdBroker()->findByEmail($email);
+
+        // Assert
+        $this->assertResultPropertiesMatch($results, [
+            'employeeId' => $employeeId,
+            'username' => $userName,
+            'email' => $email,
+        ]);
     }
 
     public function testFindByEmployeeId()
@@ -194,11 +202,15 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $results = get_object_vars($this->getIdBroker()->findByEmployeeId($employeeId));
-        unset($results['uuid']);
-        $this->assertEquals($employeeId, $results['employeeId']);
-        $this->assertEquals($userName, $results['username']);
-        $this->assertEquals($email, $results['email']);
+        // Act
+        $results = $this->getIdBroker()->findByEmployeeId($employeeId);
+
+        // Assert
+        $this->assertResultPropertiesMatch($results, [
+            'employeeId' => $employeeId,
+            'username' => $userName,
+            'email' => $email,
+        ]);
     }
 
 
@@ -277,7 +289,7 @@ class IdBrokerTest extends TestCase
         $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
         
         // Assert:
-        $this->assertEquals($managerEmail, $personnelUser->supervisorEmail);
+        $this->assertResultPropertiesMatch($personnelUser, ['supervisorEmail' => $managerEmail]);
     }
     
     public function testReturnPersonnelUserFromResponse_HasSpouseEmail()
@@ -300,6 +312,18 @@ class IdBrokerTest extends TestCase
         $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
     
         // Assert:
-        $this->assertEquals($spouseEmail, $personnelUser->spouseEmail);
+        $this->assertResultPropertiesMatch($personnelUser, ['spouseEmail' => $spouseEmail]);
+    }
+
+    protected function assertResultPropertiesMatch($results, $properties)
+    {
+        foreach ($properties as $propertyName => $propertyValue) {
+            $this->assertEquals($propertyValue, $results->$propertyName, sprintf(
+                "Returned property '%s' value '%s' does not match '%s'.",
+                $propertyName,
+                $results->$propertyName,
+                $propertyValue
+            ));
+        }
     }
 }
