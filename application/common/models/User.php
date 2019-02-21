@@ -92,6 +92,13 @@ class User extends UserBase implements IdentityInterface
             };
         }
 
+        $lastLogin = $this->getPersonnelUser()->lastLogin;
+        if (! empty($lastLogin)) {
+            $fields['last_login'] = function () use ($lastLogin) {
+                return $lastLogin;
+            };
+        }
+
         return $fields;
     }
 
