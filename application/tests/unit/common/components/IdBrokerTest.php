@@ -144,20 +144,11 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $expected = [
-            'employeeId' => $employeeId,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'supervisorEmail' => null,
-            'spouseEmail' => null,
-            'hide' => 'no',
-        ];
-
         $results = get_object_vars($this->getIdBroker()->findByUsername($userName));
         unset($results['uuid']);
-        $this->assertEquals($expected, $results);
+        $this->assertEquals($employeeId, $results['employeeId']);
+        $this->assertEquals($userName, $results['username']);
+        $this->assertEquals($email, $results['email']);
     }
 
     public function testFindByEmail()
@@ -178,21 +169,11 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-
-        $expected = [
-            'employeeId' => $employeeId,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'supervisorEmail' => null,
-            'spouseEmail' => null,
-            'hide' => 'no',
-        ];
-
         $results = get_object_vars($this->getIdBroker()->findByEmail($email));
         unset($results['uuid']);
-        $this->assertEquals($expected, $results);
+        $this->assertEquals($employeeId, $results['employeeId']);
+        $this->assertEquals($userName, $results['username']);
+        $this->assertEquals($email, $results['email']);
     }
 
     public function testFindByEmployeeId()
@@ -213,21 +194,11 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-
-        $expected = [
-            'employeeId' => $employeeId,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'supervisorEmail' => null,
-            'spouseEmail' => null,
-            'hide' => 'no',
-        ];
-
         $results = get_object_vars($this->getIdBroker()->findByEmployeeId($employeeId));
         unset($results['uuid']);
-        $this->assertEquals($expected, $results);
+        $this->assertEquals($employeeId, $results['employeeId']);
+        $this->assertEquals($userName, $results['username']);
+        $this->assertEquals($email, $results['email']);
     }
 
 
