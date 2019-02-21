@@ -71,6 +71,14 @@ class User extends UserBase implements IdentityInterface
             'email',
             'auth_type',
             'hide',
+            'last_login' => function () {
+                try {
+                    $lastLogin = $this->getPersonnelUser()->lastLogin;
+                } catch (\Exception $e) {
+                    $lastLogin = null;
+                }
+                return $lastLogin;
+            },
         ];
 
         $pwMeta = $this->updatePasswordMeta();
@@ -89,13 +97,6 @@ class User extends UserBase implements IdentityInterface
         if (! empty($managerEmail)) {
             $fields['manager_email'] = function (self $model) use ($managerEmail) {
                 return $managerEmail;
-            };
-        }
-
-        $lastLogin = $this->getPersonnelUser()->lastLogin;
-        if (! empty($lastLogin)) {
-            $fields['last_login'] = function () use ($lastLogin) {
-                return $lastLogin;
             };
         }
 
