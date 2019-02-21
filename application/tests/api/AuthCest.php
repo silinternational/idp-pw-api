@@ -5,13 +5,13 @@ require_once "BaseCest.php";
 class AuthCest extends BaseCest
 {
 
-//    public function test1(ApiTester $I)
-//    {
-//        $I->wantTo('check response when making a GET request for logging in with no client_id');
-//        $I->stopFollowingRedirects();
-//        $I->sendGET('/auth/login');
-//        $I->seeResponseCodeIs(400);
-//    }
+    public function test1(ApiTester $I)
+    {
+        $I->wantTo('check response when making a GET request for logging in with no client_id');
+        $I->stopFollowingRedirects();
+        $I->sendGET('/auth/login');
+        $I->seeResponseCodeIs(400);
+    }
 
     public function test2(ApiTester $I)
     {

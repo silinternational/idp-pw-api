@@ -108,6 +108,8 @@ class AuthController extends BaseRestController
              * Login triggered redirect to IdP to login, so return a redirect to it
              */
             return $this->redirect($e->getUrl());
+        } catch (BadRequestHttpException $e) {
+            throw $e;
         } catch (\Exception $e) {
             /*
              * log exception
