@@ -84,12 +84,8 @@ class IdBrokerTest extends TestCase
             'email' => 'john_smith@example.com',
             'active' => 'yes',
             'locked' => 'no',
+            'last_login_utc' => '2017-07-01T12:30:00Z',
             'hide' => 'no',
-            'password' => [
-                'created_utc' => '2017-05-24 14:04:51',
-                'expiration_utc' => '2018-05-24 14:04:51',
-                'grace_period_ends_utc' => '2018-06-23 14:04:51'
-            ]
         ];
     }
 
