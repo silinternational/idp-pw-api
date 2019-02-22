@@ -90,4 +90,22 @@ class UserCest extends BaseCest
         $I->sendOPTIONS('/user/me');
         $I->seeResponseCodeIs(200);
     }
+
+    public function test11(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to /user/me with correct token');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPUT('/user/me');
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function test12(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to /user/me with incorrect token');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
+        $I->sendPUT('/user/me');
+        $I->seeResponseCodeIs(401);
+    }
+
+    // TODO: test PUT with valid and invalid request body data
 }

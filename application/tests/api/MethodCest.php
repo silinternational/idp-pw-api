@@ -337,4 +337,21 @@ class MethodCest extends BaseCest
         $I->sendOPTIONS('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(200);
     }
+
+    public function test20(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to method/{uid}/resend with incorrect token');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
+        $I->sendPUT('/method/11111111111111111111111111111111/resend');
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function test21(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to method/{uid}/resend for a user'
+            . ' with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendPUT('/method/55555555555555555555555555555555/resend');
+        $I->seeResponseCodeIs(403);
+    }
 }
