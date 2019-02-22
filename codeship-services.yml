@@ -64,7 +64,10 @@ broker:
     depends_on:
         - brokerDb
     volumes:
-        - ./run-broker.sh:/data/run-broker.sh
+        - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
+        - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
+        - ./dockerbuild/broker/User.php:/data/console/migrations/User.php
+        - ./dockerbuild/broker/Method.php:/data/console/migrations/Method.php
     environment:
         EMAIL_SERVICE_accessToken: fake
         EMAIL_SERVICE_assertValidIp: "false"

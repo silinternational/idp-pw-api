@@ -9,7 +9,6 @@ mkdir -p /data/runtime/mail
 
 # Run database migrations
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
-whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test
 
 # Start apache
 runny apache2ctl start
