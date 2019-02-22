@@ -165,20 +165,28 @@ types:
       last_name: string
       idp_username: string
       email: string
-      password_meta?: PasswordMeta
+      auth_type:
+        enum: [ login, reset ]
       hide:
         enum: [ yes, no ]
+      last_login: string
+      password_meta?: PasswordMeta
+      manager_email?: string
     example:
       {
+        "uuid": "55b2447f-87f7-4286-8bd1-a7478f9dae38",
         "first_name": "John",
         "last_name": "Doe",
         "idp_username": "john_doe",
         "email": "john_doe@example.com",
+        "auth_type": "login",
+        "hide": "no",
+        "last_login": "2018-09-13T19:21:57Z",
         "password_meta": {
-          "last_changed": 2018-09-13T19:21:57Z,
-          "expires":  2020-09-13T23:59:59Z
+          "last_changed": "2018-09-13T19:21:57Z",
+          "expires":  "2020-09-13T23:59:59Z"
         }
-        "hide": "no"
+        "manager_email": "manager@example.com"
       }
 /auth:
   /login:

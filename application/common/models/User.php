@@ -71,6 +71,14 @@ class User extends UserBase implements IdentityInterface
             'email',
             'auth_type',
             'hide',
+            'last_login' => function () {
+                try {
+                    $lastLogin = $this->getPersonnelUser()->lastLogin;
+                } catch (\Exception $e) {
+                    $lastLogin = null;
+                }
+                return $lastLogin;
+            },
         ];
 
         $pwMeta = $this->updatePasswordMeta();

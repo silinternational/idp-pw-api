@@ -84,12 +84,8 @@ class IdBrokerTest extends TestCase
             'email' => 'john_smith@example.com',
             'active' => 'yes',
             'locked' => 'no',
+            'last_login_utc' => '2017-07-01T12:30:00Z',
             'hide' => 'no',
-            'password' => [
-                'created_utc' => '2017-05-24 14:04:51',
-                'expiration_utc' => '2018-05-24 14:04:51',
-                'grace_period_ends_utc' => '2018-06-23 14:04:51'
-            ]
         ];
     }
 
@@ -148,20 +144,15 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
-        $expected = [
+        // Act
+        $results = $this->getIdBroker()->findByUsername($userName);
+
+        // Assert
+        $this->assertResultPropertiesMatch($results, [
             'employeeId' => $employeeId,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
             'username' => $userName,
             'email' => $email,
-            'supervisorEmail' => null,
-            'spouseEmail' => null,
-            'hide' => 'no',
-        ];
-
-        $results = get_object_vars($this->getIdBroker()->findByUsername($userName));
-        unset($results['uuid']);
-        $this->assertEquals($expected, $results);
+        ]);
     }
 
     public function testFindByEmail()
@@ -182,21 +173,15 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
+        // Act
+        $results = $this->getIdBroker()->findByEmail($email);
 
-        $expected = [
+        // Assert
+        $this->assertResultPropertiesMatch($results, [
             'employeeId' => $employeeId,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
             'username' => $userName,
             'email' => $email,
-            'supervisorEmail' => null,
-            'spouseEmail' => null,
-            'hide' => 'no',
-        ];
-
-        $results = get_object_vars($this->getIdBroker()->findByEmail($email));
-        unset($results['uuid']);
-        $this->assertEquals($expected, $results);
+        ]);
     }
 
     public function testFindByEmployeeId()
@@ -217,21 +202,15 @@ class IdBrokerTest extends TestCase
             'hide' => 'no',
         ]);
 
+        // Act
+        $results = $this->getIdBroker()->findByEmployeeId($employeeId);
 
-        $expected = [
+        // Assert
+        $this->assertResultPropertiesMatch($results, [
             'employeeId' => $employeeId,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
             'username' => $userName,
             'email' => $email,
-            'supervisorEmail' => null,
-            'spouseEmail' => null,
-            'hide' => 'no',
-        ];
-
-        $results = get_object_vars($this->getIdBroker()->findByEmployeeId($employeeId));
-        unset($results['uuid']);
-        $this->assertEquals($expected, $results);
+        ]);
     }
 
 
@@ -310,7 +289,7 @@ class IdBrokerTest extends TestCase
         $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
         
         // Assert:
-        $this->assertEquals($managerEmail, $personnelUser->supervisorEmail);
+        $this->assertResultPropertiesMatch($personnelUser, ['supervisorEmail' => $managerEmail]);
     }
     
     public function testReturnPersonnelUserFromResponse_HasSpouseEmail()
@@ -333,6 +312,18 @@ class IdBrokerTest extends TestCase
         $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
     
         // Assert:
-        $this->assertEquals($spouseEmail, $personnelUser->spouseEmail);
+        $this->assertResultPropertiesMatch($personnelUser, ['spouseEmail' => $spouseEmail]);
+    }
+
+    protected function assertResultPropertiesMatch($results, $properties)
+    {
+        foreach ($properties as $propertyName => $propertyValue) {
+            $this->assertEquals($propertyValue, $results->$propertyName, sprintf(
+                "Returned property '%s' value '%s' does not match '%s'.",
+                $propertyName,
+                $results->$propertyName,
+                $propertyValue
+            ));
+        }
     }
 }
