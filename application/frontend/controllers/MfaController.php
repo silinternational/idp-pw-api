@@ -122,12 +122,6 @@ class MfaController extends BaseRestController
             429 => 'MFA rate limit failure',
         ];
 
-        $codes = [
-            400 => 1551109134,
-            404 => 1551109135,
-            429 => 1551109136,
-        ];
-
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));
@@ -145,7 +139,7 @@ class MfaController extends BaseRestController
             throw new HttpException(
                 $e->httpStatusCode,
                 \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
-                $codes[$e->httpStatusCode] ?? 0
+                1551109134
             );
         }
 
