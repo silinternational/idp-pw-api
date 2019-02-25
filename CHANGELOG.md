@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Password change now clears out the auth token if `auth_type` is reset
 - Only provide spouse and manager recovery methods if the user
   has not added and verified others.
+- /mfa/{id}/verify returns the verified mfa object
 ### Removed
 - Removed support for phone password recovery methods
 - Removed option to use local emailer. External email service is now required. 
