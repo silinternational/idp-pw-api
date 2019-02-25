@@ -212,7 +212,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making an unauthenticated PUT request with invalid code and'
             . ' expired verification time when trying to update a method');
         $I->sendPUT('/method/33333333333333333333333333333333/verify',['code'=>'13245']);
-        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(400);
     }
 
     public function test154(ApiTester $I, $scenario)
