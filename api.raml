@@ -388,8 +388,10 @@ types:
           properties:
             value: string
         responses:
-          204:
+          200:
             description: MFA verified successfully.
+            body:
+              type: Mfa
           400:
             description: Property `value` was omitted or incorrect.
           429:

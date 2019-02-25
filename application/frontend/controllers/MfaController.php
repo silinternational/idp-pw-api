@@ -3,14 +3,13 @@
 namespace frontend\controllers;
 
 use frontend\components\BaseRestController;
-use Sil\Idp\IdBroker\Client\exceptions\MfaRateLimitException;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\TooManyRequestsHttpException;
 
 class MfaController extends BaseRestController
 {
@@ -112,41 +111,39 @@ class MfaController extends BaseRestController
 
     /**
      * @param $mfaId
-     * @throws BadRequestHttpException
-     * @throws NotFoundHttpException
-     * @throws ServiceException
-     * @throws TooManyRequestsHttpException
+     * @return array|bool
+     * @throws HttpException
      */
     public function actionVerify($mfaId)
     {
+        $messages = [
+            400 => 'Invalid code provided',
+            404 => 'MFA verify failure',
+            429 => 'MFA rate limit failure',
+        ];
+
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));
         }
 
         try {
-            if ($this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value)) {
-                \Yii::$app->response->statusCode = 204;
-                return;
-            }
+            $mfa = $this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value);
         } catch (ServiceException $e) {
             \Yii::error([
                 'status' => 'MFA verify error',
                 'error' => $e->getMessage(),
+                'httpStatusCode' => $e->httpStatusCode,
             ], __METHOD__);
-            if ($e->httpStatusCode == 404) {
-                throw new NotFoundHttpException(\Yii::t('app', 'MFA verify failure'), $e->getCode());
-            }
 
-            /*
-             * Other status codes will result in a 500 response
-             */
-            throw $e;
-        } catch (MfaRateLimitException $e) {
-            throw new TooManyRequestsHttpException(\Yii::t('app', 'MFA rate limit failure'), $e->getCode());
+            throw new HttpException(
+                $e->httpStatusCode,
+                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                1551109134
+            );
         }
 
-        throw new BadRequestHttpException(\Yii::t('app', 'Invalid code provided'));
+        return $mfa;
     }
 
     /**
