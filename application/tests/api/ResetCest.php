@@ -67,8 +67,6 @@ class ResetCest extends BaseCest
             'methods' => [
                 'type' => "primary",
                 'value' => "f****_l**t@o***********.o**",
-                'type' => "spouse",
-                'value' => "s****e@d*****.o**",
             ]
         ]);
     }
