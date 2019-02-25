@@ -62,6 +62,7 @@ services:
         depends_on:
             - testDb
             - zxcvbn
+            - broker
         env_file:
             - ./common.env
             - ./test.env
@@ -80,6 +81,7 @@ services:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         depends_on:
             - testDb
+            - zxcvbn
         env_file:
             - ./common.env
             - ./test.env
@@ -167,7 +169,10 @@ services:
         depends_on:
             - brokerDb
         volumes:
-            - ./run-broker.sh:/data/run-broker.sh
+            - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
+            - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
+            - ./dockerbuild/broker/User.php:/data/console/migrations/User.php
+            - ./dockerbuild/broker/Method.php:/data/console/migrations/Method.php
         environment:
             EMAIL_SERVICE_accessToken: fake
             EMAIL_SERVICE_assertValidIp: "false"
