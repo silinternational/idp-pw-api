@@ -74,7 +74,6 @@ class MfaController extends BaseRestController
     public function actionCreate()
     {
         $messages = [
-            400 => 'Bad Request',
             409 => 'This 2SV already exists',
         ];
 
