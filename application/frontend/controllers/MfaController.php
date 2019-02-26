@@ -8,6 +8,7 @@ use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 
@@ -73,6 +74,11 @@ class MfaController extends BaseRestController
      */
     public function actionCreate()
     {
+        $messages = [
+            400 => 'Bad Request',
+            409 => 'This 2SV already exists',
+        ];
+
         $type = \Yii::$app->request->getBodyParam('type');
         if ($type === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Type is required'));
@@ -80,7 +86,23 @@ class MfaController extends BaseRestController
 
         $label = \Yii::$app->request->getBodyParam('label');
 
-        return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
+        try {
+            $mfa = $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA create error',
+                'error' => $e->getMessage(),
+                'httpStatusCode' => $e->httpStatusCode,
+            ], __METHOD__);
+
+            throw new HttpException(
+                $e->httpStatusCode,
+                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                1551192684
+            );
+        }
+
+        return $mfa;
     }
 
     /**
