@@ -8,7 +8,6 @@ use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
-use yii\web\ConflictHttpException;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 
@@ -31,7 +30,7 @@ class MfaController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
-                        'matchCallback' => function() {
+                        'matchCallback' => function () {
                             $user = \Yii::$app->user->identity;
                             return $user->isAuthScopeFull();
                         }
@@ -70,7 +69,7 @@ class MfaController extends BaseRestController
     /**
      * @return array|null
      * @throws BadRequestHttpException
-     * @throws ServiceException
+     * @throws HttpException
      */
     public function actionCreate()
     {
@@ -97,7 +96,7 @@ class MfaController extends BaseRestController
 
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                \Yii::t('app', $messages[$e->httpStatusCode] ?? 'Unexpected Problem'),
                 1551192684
             );
         }
