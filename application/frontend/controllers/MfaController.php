@@ -30,7 +30,7 @@ class MfaController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
-                        'matchCallback' => function() {
+                        'matchCallback' => function () {
                             $user = \Yii::$app->user->identity;
                             return $user->isAuthScopeFull();
                         }
@@ -69,10 +69,14 @@ class MfaController extends BaseRestController
     /**
      * @return array|null
      * @throws BadRequestHttpException
-     * @throws ServiceException
+     * @throws HttpException
      */
     public function actionCreate()
     {
+        $messages = [
+            409 => 'This 2SV already exists',
+        ];
+
         $type = \Yii::$app->request->getBodyParam('type');
         if ($type === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Type is required'));
@@ -80,7 +84,23 @@ class MfaController extends BaseRestController
 
         $label = \Yii::$app->request->getBodyParam('label');
 
-        return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
+        try {
+            $mfa = $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA create error',
+                'error' => $e->getMessage(),
+                'httpStatusCode' => $e->httpStatusCode,
+            ], __METHOD__);
+
+            throw new HttpException(
+                $e->httpStatusCode,
+                \Yii::t('app', $messages[$e->httpStatusCode] ?? 'Unexpected Problem'),
+                1551192684
+            );
+        }
+
+        return $mfa;
     }
 
     /**

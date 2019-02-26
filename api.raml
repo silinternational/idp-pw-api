@@ -353,6 +353,13 @@ types:
           backup codes.
         body:
           type: Mfa
+      409:
+        description: >
+          An MFA of the requested type already exists. Note that this would only
+          be returned for 'totp' or 'u2f'. The code types ('backupcode' and
+          'manager') reuse the existing MFA and create new codes.
+        body:
+          type: Error
       400:
         description: Property `type` was omitted.
         body:
