@@ -26,7 +26,6 @@ $recaptchaRequired = Env::get('RECAPTCHA_REQUIRED', true);
 $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
-$logoUrl = Env::get('LOGO_URL');
 $uiCorsOrigin = Env::get('UI_CORS_ORIGIN', $uiUrl);
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
@@ -166,7 +165,6 @@ return [
         'fromName' => $fromName,
         'helpCenterUrl' => $helpCenterUrl,
         'uiUrl' => $uiUrl,
-        'logoUrl' => $logoUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
         'emailQueueBatchSize' => 5,
         'emailServiceStatus' => $emailServiceConfig,

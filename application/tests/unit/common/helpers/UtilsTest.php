@@ -55,7 +55,6 @@ class UtilsTest extends Test
             'fromName' => 'From Me',
             'helpCenterUrl' => 'https://url',
             'ui_url' => 'https://ui',
-            'logoUrl' => 'http://logoUrl',
             'reset' => [
                 'lifetimeSeconds' => 3600, // 1 hour
                 'disableDuration' => 900, // 15 minutes

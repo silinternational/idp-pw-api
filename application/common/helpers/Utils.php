@@ -186,7 +186,6 @@ class Utils
         $config['idpName'] = $params['idpDisplayName'];
         $config['idpUsernameHint'] = $params['idpUsernameHint'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
-        $config['logoUrl'] = $params['logoUrl'];
 
         $config['support'] = [];
         foreach ($params['support'] as $supportOption => $value) {
