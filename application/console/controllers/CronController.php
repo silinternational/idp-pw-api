@@ -1,6 +1,7 @@
 <?php
 namespace console\controllers;
 
+use common\helpers\Utils;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use common\models\Method;
 use common\models\Reset;
@@ -47,7 +48,7 @@ class CronController extends Controller
         }
 
         $methods = Method::find()
-            ->where(['verified' => 1, 'type' => Method::TYPE_EMAIL, ])
+            ->where(['verified' => 1, 'type' => Method::TYPE_EMAIL, 'deleted_at' => null])
             ->limit(100)
             ->all();
 
@@ -74,9 +75,10 @@ class CronController extends Controller
                     throw new \Exception('received value does not equal sent value');
                 }
 
-                $method->delete();
+                $method->deleted_at = Utils::getDatetime();
+                $method->save();
             } catch (\Throwable $e) {
-                echo 'error occurred' . PHP_EOL;
+                echo 'error moving method, uid=' . $method->uid . PHP_EOL;
                 \Yii::error([
                     'action' => 'cron/moveMethodData',
                     'error' => $e->getMessage(),
