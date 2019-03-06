@@ -1,12 +1,10 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\Password;
 use common\models\User;
 use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 
 class PasswordController extends BaseRestController
