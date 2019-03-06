@@ -81,14 +81,9 @@ class User extends UserBase implements IdentityInterface
             },
         ];
 
-        $pwMeta = $this->updatePasswordMeta();
+        $pwMeta = $this->getPasswordMeta();
         if ($pwMeta !== null) {
-            $fields['password_meta'] = function (self $model) {
-                $pwMeta = [
-                    'last_changed' => Utils::getIso8601($model->pw_last_changed),
-                    'expires' => Utils::getIso8601($model->pw_expires),
-                ];
-
+            $fields['password_meta'] = function (self $model) use ($pwMeta) {
                 return $pwMeta;
             };
         }
@@ -514,37 +509,6 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * Retrieve password metadata from the password store interface, and update the local
-     * database with the new data. Returns an array containing the received properties,
-     * or null in case of error or empty data.
-     * @return null|array
-     */
-    public function updatePasswordMeta()
-    {
-        try {
-            $pwMeta = $this->getPasswordMeta();
-
-            if ($pwMeta['last_changed'] === null && $pwMeta['expires'] === null) {
-                return null;
-            } else {
-                $this->pw_last_changed = Utils::getDatetime($pwMeta['last_changed']);
-                $this->pw_expires = Utils::getDatetime($pwMeta['expires']);
-
-                $this->saveOrError('save password metadata');
-
-                return $pwMeta;
-            }
-        } catch (\Exception $e) {
-            \Yii::error([
-                'action' => 'update password metadata',
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-            return null;
-        }
-    }
-
-    /**
      * @param string $newPassword
      * @throws \Exception
      * @throws \yii\web\BadRequestHttpException
@@ -554,9 +518,6 @@ class User extends UserBase implements IdentityInterface
         $password = Password::create($this->employee_id, $newPassword);
         $password->user = $this;
         $password->save();
-
-        $this->pw_last_changed = Utils::getDatetime();
-        $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
 
         $this->saveOrError('Unable to save user profile after password change', 1466104537);
 

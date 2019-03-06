@@ -51,8 +51,6 @@ class UserTest extends Test
         }
 
         $this->assertEquals(36, strlen($user->uuid));
-        $this->assertNull($user->pw_last_changed);
-        $this->assertNull($user->pw_expires);
         $this->assertNotNull($user->created);
     }
 
@@ -94,8 +92,6 @@ class UserTest extends Test
         $user = User::findOrCreate('first_last');
 
         $this->assertEquals(36, strlen($user->uuid));
-        $this->assertNull($user->pw_last_changed);
-        $this->assertNull($user->pw_expires);
         $this->assertNotNull($user->created);
     }
 
