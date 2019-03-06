@@ -17,4 +17,4 @@ runny apache2ctl start
 whenavail broker 80 100 echo "broker ready"
 /data/vendor/bin/codecept run api -d
 
-echo "Note: If there are unexpected errors, ensure the unit tests are run first and try again."
+echo "Note: If there are unexpected errors, try 'make clean' or manually redo id-broker test migration."
