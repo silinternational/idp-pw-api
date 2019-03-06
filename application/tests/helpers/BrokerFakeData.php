@@ -7,7 +7,6 @@ return [
         'employee_id' => '111111',
         'username' => 'first_last',
         'manager_email' => 'supervisor@domain.org',
-        'spouse_email' => 'spouse@domain.org',
         'hide' => 'no',
     ],
     [
@@ -17,7 +16,6 @@ return [
         'employee_id' => '222222',
         'username' => 'first2_last2',
         'manager_email' => null,
-        'spouse_email' => null,
         'hide' => 'no',
     ],
     [
@@ -27,7 +25,6 @@ return [
         'employee_id' => '333333',
         'username' => 'first3_last3',
         'manager_email' => null,
-        'spouse_email' => null,
         'hide' => 'no',
     ],
     [
@@ -37,7 +34,6 @@ return [
         'employee_id' => '444444',
         'username' => 'first4_last4',
         'manager_email' => 'supervisor4@example.com',
-        'spouse_email' => 'spouse4@example.com',
         'hide' => 'no',
     ],
 ];

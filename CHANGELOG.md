@@ -23,12 +23,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - /method/{uid}/verify no longer requires authentication
 - Validation attempt on expired reset now issues a new reset
 - Password change now clears out the auth token if `auth_type` is reset
-- Only provide spouse and manager recovery methods if the user
+- Only provide manager password recovery method if the user
   has not added and verified others.
 - /mfa/{id}/verify returns the verified mfa object
 ### Removed
 - Removed support for phone password recovery methods
-- Removed option to use local emailer. External email service is now required. 
+- Removed option to use local emailer. External email service is now required.
+- Removed spouse_email from user model and from password recovery. 
 ### Fixed
 - Password reset is now blocked for a locked account
 - The response to /user/me would have incorrect password metadata in a new user scenario.

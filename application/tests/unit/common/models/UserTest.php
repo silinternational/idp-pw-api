@@ -178,13 +178,6 @@ class UserTest extends Test
         $this->assertEquals('supervisor@domain.org', $user->getSupervisorEmail());
     }
 
-    public function testSpouse()
-    {
-        $user = $this->users('user1');
-        $this->assertTrue($user->hasSpouse());
-        $this->assertEquals('spouse@domain.org', $user->getSpouseEmail());
-    }
-
     public function testGetMaskedMethods()
     {
         $this->markTestSkipped('test is broken because methods were moved to broker');
@@ -196,8 +189,6 @@ class UserTest extends Test
         foreach ($methods as $method) {
             if ($method['type'] == 'primary') {
                 $this->assertEquals('f****_l**t@o***********.o**', $method['value']);
-            } elseif ($method['type'] == 'spouse') {
-                $this->assertEquals('s****e@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'supervisor') {
                 $this->assertEquals('s********r@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '22222222222222222222222222222222') {

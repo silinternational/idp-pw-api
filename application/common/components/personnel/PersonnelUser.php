@@ -43,11 +43,6 @@ class PersonnelUser
     public $supervisorEmail;
 
     /**
-     * @var null|string
-     */
-    public $spouseEmail;
-
-    /**
      * @var string
      */
     public $hide;

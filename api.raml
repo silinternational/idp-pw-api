@@ -79,7 +79,7 @@ types:
       id?: string
       value: string
       type:
-        enum: [ primary, supervisor, spouse, email ]
+        enum: [ primary, supervisor, email ]
       verified?: boolean
     example:
       value:
@@ -135,10 +135,6 @@ types:
           {
             "type": "primary",
             "value": "i****@s**.com"
-          },
-          {
-            "type": "spouse",
-            "value": "a*******@s**.org"
           },
           {
             "type": "supervisor",
@@ -465,7 +461,7 @@ types:
       body:
         properties:
           type:
-            enum: [ primary, supervisor, spouse, email ]
+            enum: [ primary, supervisor, email ]
           methodId?: string
       responses:
         200:

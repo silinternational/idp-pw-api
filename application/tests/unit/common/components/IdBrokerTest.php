@@ -292,29 +292,6 @@ class IdBrokerTest extends TestCase
         $this->assertResultPropertiesMatch($personnelUser, ['supervisorEmail' => $managerEmail]);
     }
     
-    public function testReturnPersonnelUserFromResponse_HasSpouseEmail()
-    {
-        // Arrange:
-        $employeeId = '99999';
-        $userName = 'tommy_tester9';
-        $spouseEmail = 'spouse@example.com';
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => 'Tommy',
-            'last_name' => 'Tester',
-            'username' => $userName,
-            'email' => $userName . '@example.com',
-            'spouse_email' => $spouseEmail,
-            'hide' => 'no',
-        ]);
-
-        // Act:
-        $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
-    
-        // Assert:
-        $this->assertResultPropertiesMatch($personnelUser, ['spouseEmail' => $spouseEmail]);
-    }
-
     protected function assertResultPropertiesMatch($results, $properties)
     {
         foreach ($properties as $propertyName => $propertyValue) {

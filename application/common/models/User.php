@@ -339,14 +339,6 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return bool
-     */
-    public function hasSpouse()
-    {
-        return $this->getSpouseEmail() !== null;
-    }
-
-    /**
      * @return null|string
      * @throws \Exception
      */
@@ -354,16 +346,6 @@ class User extends UserBase implements IdentityInterface
     {
         $personnelUser = $this->getPersonnelUser();
         return $personnelUser->supervisorEmail;
-    }
-
-    /**
-     * @return null|string
-     * @throws \Exception
-     */
-    public function getSpouseEmail()
-    {
-        $personnelUser = $this->getPersonnelUser();
-        return $personnelUser->spouseEmail;
     }
 
     /**
@@ -480,17 +462,10 @@ class User extends UserBase implements IdentityInterface
         ];
 
         /*
-         * If alternate recovery methods exist, don't include the spouse and manager.
+         * If alternate recovery methods exist, don't include the manager.
          */
         if ($numVerified > 0) {
             return $methods;
-        }
-
-        if ($this->hasSpouse()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => $this->getSpouseEmail(),
-            ];
         }
 
         if ($this->hasSupervisor()) {

@@ -104,7 +104,7 @@ class ResetTest extends Test
     public function testFindOrCreateExistingResetTypeToPrimary()
     {
         $existing = $this->resets('reset1');
-        $existing->setType(Reset::TYPE_SPOUSE);
+        $existing->setType(Reset::TYPE_SUPERVISOR);
 
         $new = Reset::findOrCreate($existing->user);
         $this->assertEquals($existing->id, $new->id);
@@ -172,36 +172,6 @@ class ResetTest extends Test
         $this->assertEquals(0, EmailUtils::getEmailFilesCount());
     }
 
-    public function testSendSpouseHasSpouse()
-    {
-        $reset = $this->resets('reset1');
-        $reset->type = Reset::TYPE_SPOUSE;
-        $attempts = $reset->attempts;
-
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
-
-        $reset->send();
-
-        $this->assertEquals(1, EmailUtils::getEmailFilesCount());
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated($reset->code));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('spouse@domain.org'));
-        $this->assertTrue(EmailUtils::hasEmailFileBeenCreated('requested a password change for their'));
-        $this->assertEquals($attempts + 1, $reset->attempts);
-    }
-
-    public function testSendSpouseNoSpouse()
-    {
-        $reset = $this->resets('reset2');
-        $reset->type = Reset::TYPE_SPOUSE;
-
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(1461173477);
-        $reset->send();
-        $this->assertEquals(0, EmailUtils::getEmailFilesCount());
-    }
-
     public function testSendMethodEmail()
     {
         $reset = $this->resets('reset3');
@@ -258,9 +228,6 @@ class ResetTest extends Test
         $reset->setType(Reset::TYPE_SUPERVISOR);
         $this->assertEquals(Reset::TYPE_SUPERVISOR, $reset->type);
 
-        $reset->setType(Reset::TYPE_SPOUSE);
-        $this->assertEquals(Reset::TYPE_SPOUSE, $reset->type);
-
         $method = $this->methods('method1');
 
         $reset->setType(Reset::TYPE_METHOD, $method->uid);
@@ -302,9 +269,6 @@ class ResetTest extends Test
 
         $reset->setType(Reset::TYPE_SUPERVISOR);
         $this->assertEquals('s********r@d*****.o**', $reset->getMaskedValue());
-
-        $reset->setType(Reset::TYPE_SPOUSE);
-        $this->assertEquals('s****e@d*****.o**', $reset->getMaskedValue());
 
         $method2 = $this->methods('method2');
         $reset->setType(Reset::TYPE_METHOD, $method2->uid);
