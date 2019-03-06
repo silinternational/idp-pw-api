@@ -86,6 +86,11 @@ class Reset extends ResetBase
      */
     public static function findOrCreate($user)
     {
+        /*
+         * Clean up resets expired past the grace period
+         */
+        self::deleteResetsPastGracePeriod();
+
         $log = [
             'action' => 'findOrCreate reset',
             'user_id' => $user->id,
@@ -633,9 +638,8 @@ class Reset extends ResetBase
 
     /**
      * Delete all Reset records with expiration date more than `gracePeriod` in the past
-     * @return int number of records deleted
      */
-    public static function purge(): int
+    public static function deleteResetsPastGracePeriod()
     {
         /*
          * Replace '+' with '-' just to be sure it's correctly defined
@@ -664,6 +668,13 @@ class Reset extends ResetBase
                 ]);
             }
         }
-        return $numDeleted;
+
+        if ($numDeleted > 0) {
+            \Yii::warning([
+                'action' => 'delete old resets',
+                'status' => 'success',
+                'deleted count' => $numDeleted,
+            ]);
+        }
     }
 }

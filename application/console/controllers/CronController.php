@@ -95,20 +95,4 @@ class CronController extends Controller
             . (string)round($msecPerRecord, 0) . ' ms per record' . PHP_EOL;
         echo 'finished cron/move-method-data' . PHP_EOL;
     }
-
-    public function actionRemoveOldRecords()
-    {
-        \Yii::warning([
-            'action' => 'delete old reset records',
-            'status' => 'starting',
-        ]);
-
-        $numDeleted = Reset::purge();
-
-        \Yii::warning([
-            'action' => 'delete old reset records',
-            'status' => 'complete',
-            'count' => $numDeleted,
-        ]);
-    }
 }
