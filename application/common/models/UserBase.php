@@ -14,8 +14,6 @@ use Yii;
  * @property string $idp_username
  * @property string $email
  * @property string $created
- * @property string $pw_last_changed
- * @property string $pw_expires
  * @property string $access_token
  * @property string $access_token_expiration
  * @property string $auth_type
@@ -43,7 +41,7 @@ class UserBase extends \yii\db\ActiveRecord
     {
         return [
             [['employee_id', 'first_name', 'last_name', 'idp_username', 'email', 'created', 'hide'], 'required'],
-            [['created', 'pw_last_changed', 'pw_expires', 'access_token_expiration'], 'safe'],
+            [['created', 'access_token_expiration'], 'safe'],
             [['auth_type', 'hide'], 'string'],
             [['employee_id'], 'string', 'max' => 32],
             [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
@@ -67,8 +65,6 @@ class UserBase extends \yii\db\ActiveRecord
             'idp_username' => Yii::t('app', 'Idp Username'),
             'email' => Yii::t('app', 'Email'),
             'created' => Yii::t('app', 'Created'),
-            'pw_last_changed' => Yii::t('app', 'Pw Last Changed'),
-            'pw_expires' => Yii::t('app', 'Pw Expires'),
             'access_token' => Yii::t('app', 'Access Token'),
             'access_token_expiration' => Yii::t('app', 'Access Token Expiration'),
             'auth_type' => Yii::t('app', 'Auth Type'),
