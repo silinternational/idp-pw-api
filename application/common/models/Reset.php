@@ -19,7 +19,6 @@ class Reset extends ResetBase
     const TYPE_PRIMARY = 'primary'; // Used for primary email address
     const TYPE_METHOD = 'method';
     const TYPE_SUPERVISOR = 'supervisor';
-    const TYPE_SPOUSE = 'spouse';
 
     const TOPIC_RESET_EMAIL_SENT = 'Reset Email Sent';
     const TOPIC_RESET_PHONE_SENT = 'Reset Phone Sent';
@@ -53,10 +52,10 @@ class Reset extends ResetBase
 
                 [
                     ['type'], 'in', 'range' => [
-                        self::TYPE_PRIMARY, self::TYPE_METHOD, self::TYPE_SUPERVISOR, self::TYPE_SPOUSE
+                        self::TYPE_PRIMARY, self::TYPE_METHOD, self::TYPE_SUPERVISOR
                     ],
                     'message' => 'Reset type must be either ' . self::TYPE_PRIMARY . ' or ' . self::TYPE_METHOD .
-                        ' or ' . self::TYPE_SUPERVISOR . ' or ' . self::TYPE_SPOUSE . ' .',
+                        ' or ' . self::TYPE_SUPERVISOR . ' .',
                 ],
 
                 [
@@ -74,7 +73,7 @@ class Reset extends ResetBase
     {
         return [
             'uid',
-            'methods' => function($model) {
+            'methods' => function ($model) {
                 return $model->user->getMaskedMethods();
             },
         ];
@@ -183,9 +182,6 @@ class Reset extends ResetBase
             case self::TYPE_SUPERVISOR:
                 $this->sendSupervisor();
                 break;
-            case self::TYPE_SPOUSE:
-                $this->sendSpouse();
-                break;
             case self::TYPE_METHOD:
                 $this->sendMethod();
                 break;
@@ -214,16 +210,6 @@ class Reset extends ResetBase
             $this->sendOnBehalf($supervisor);
         } else {
             throw new \Exception('User does not have supervisor on record', 1461173406);
-        }
-    }
-
-    private function sendSpouse()
-    {
-        if ($this->user->hasSpouse()) {
-            $spouse = $this->user->getSpouseEmail();
-            $this->sendOnBehalf($spouse);
-        } else {
-            throw new \Exception('User does not have spouse on record', 1461173477);
         }
     }
 
@@ -366,7 +352,6 @@ class Reset extends ResetBase
     {
         return ($this->type === self::TYPE_PRIMARY
             || $this->type === self::TYPE_SUPERVISOR
-            || $this->type === self::TYPE_SPOUSE
             || $this->type === self::TYPE_METHOD);
     }
 
@@ -510,7 +495,7 @@ class Reset extends ResetBase
         /*
          * If type is not method, update or throw error
          */
-        if (in_array($type, [self::TYPE_SPOUSE, self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
+        if (in_array($type, [self::TYPE_SUPERVISOR, self::TYPE_PRIMARY])) {
             $this->type = $type;
             $this->email = null;
         } elseif ($type == self::TYPE_METHOD || $type == Method::TYPE_EMAIL) {
@@ -632,8 +617,6 @@ class Reset extends ResetBase
             return Utils::maskEmail($this->user->email);
         } elseif ($this->type == self::TYPE_SUPERVISOR) {
             return Utils::maskEmail($this->user->getSupervisorEmail());
-        } elseif ($this->type == self::TYPE_SPOUSE) {
-            return Utils::maskEmail($this->user->getSpouseEmail());
         } else {
             return 'Invalid reset type';
         }

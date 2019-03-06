@@ -70,7 +70,6 @@ class Component extends YiiComponent implements PersonnelInterface
         $user->employeeId = $data['employeeId'];
         $user->username = $data['username'];
         $user->supervisorEmail = $data['supervisorEmail'];
-        $user->spouseEmail = $data['spouseEmail'];
 
         return $user;
     }
