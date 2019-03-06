@@ -17,6 +17,7 @@ use Yii;
  * @property int $verification_attempts
  * @property string $verification_expires
  * @property string $created
+ * @property string $deleted_at
  *
  * @property User $user
  */
@@ -39,7 +40,7 @@ class MethodBase extends \yii\db\ActiveRecord
             [['uid', 'user_id', 'type', 'value', 'created'], 'required'],
             [['user_id', 'verified', 'verification_attempts'], 'integer'],
             [['type'], 'string'],
-            [['verification_expires', 'created'], 'safe'],
+            [['verification_expires', 'created', 'deleted_at'], 'safe'],
             [['uid'], 'string', 'max' => 32],
             [['value'], 'string', 'max' => 255],
             [['verification_code'], 'string', 'max' => 64],
@@ -66,6 +67,7 @@ class MethodBase extends \yii\db\ActiveRecord
             'verification_attempts' => Yii::t('app', 'Verification Attempts'),
             'verification_expires' => Yii::t('app', 'Verification Expires'),
             'created' => Yii::t('app', 'Created'),
+            'deleted_at' => Yii::t('app', 'Deleted At'),
         ];
     }
 
