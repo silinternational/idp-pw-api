@@ -37,7 +37,10 @@ class PasswordController extends BaseRestController
      */
     public function actionView()
     {
-        return \Yii::$app->user->identity->getPasswordMeta();
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+
+        return $user->getPasswordMeta();
     }
 
     /**
