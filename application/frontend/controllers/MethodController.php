@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\helpers\Utils;
 use common\models\Method;
 use common\models\User;
 use frontend\components\BaseRestController;
@@ -236,4 +237,70 @@ class MethodController extends BaseRestController
         return new \stdClass();
     }
 
+    /**
+     * Move data from local Method table to id-broker Method table
+     */
+    public function actionMove()
+    {
+        $startTime = microtime(true);
+
+        try {
+            Method::deleteExpiredUnverifiedMethods();
+        } catch (\Throwable $e) {
+            \Yii::error([
+                'action' => 'method/move',
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            throw $e;
+        }
+
+        $methods = Method::find()
+            ->where(['verified' => 1, 'type' => Method::TYPE_EMAIL, 'deleted_at' => null])
+            ->limit(100)
+            ->all();
+
+        if (empty($methods)) {
+            \Yii::$app->response->statusCode = 204;
+        }
+
+        $n = count($methods);
+        $errorCount = 0;
+
+        /**
+         * @var Method $method
+         */
+        foreach ($methods as $method) {
+            try {
+                $brokerMethod = $this->idBrokerClient->createMethod(
+                    $method->user->employee_id,
+                    $method->value,
+                    $method->created
+                );
+
+                if ($brokerMethod['value'] !== $method->value) {
+                    throw new \Exception('received value does not equal sent value');
+                }
+
+                $method->deleted_at = Utils::getDatetime();
+                $method->save();
+            } catch (\Throwable $e) {
+                \Yii::error([
+                    'action' => 'method/move',
+                    'error' => $e->getMessage(),
+                    'method_id' => $method->uid,
+                    'code' => $e->getCode(),
+                ]);
+                $errorCount++;
+            }
+        }
+
+        $endTime = microtime(true);
+
+        return [
+            'count' => $n,
+            'seconds' => (string)round($endTime - $startTime, 3),
+            'errors' => $errorCount,
+        ];
+    }
 }

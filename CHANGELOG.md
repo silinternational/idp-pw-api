@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Removed support for phone password recovery methods
 - Removed option to use local emailer. External email service is now required.
 - Removed spouse_email from user model and from password recovery. 
+- Removed cron controller and container
 ### Fixed
 - Password reset is now blocked for a locked account
 - The response to /user/me would have incorrect password metadata in a new user scenario.

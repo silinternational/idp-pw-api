@@ -4,7 +4,6 @@
 # reference: https://medium.com/@gchudnov/trapping-signals-in-docker-containers-7a57fdda7d86
 term_handler() {
   apache2ctl stop
-  killall cron
   exit 143; # 128 + 15 -- SIGTERM
 }
 trap 'kill ${!}; term_handler' SIGTERM
