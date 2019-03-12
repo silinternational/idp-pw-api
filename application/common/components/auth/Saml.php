@@ -187,7 +187,7 @@ class Saml extends Component implements AuthnInterface
              */
             if ($this->checkResponseSigning) {
                 $idpKey = new XMLSecurityKey(
-                    XMLSecurityKey::RSA_SHA1,
+                    XMLSecurityKey::RSA_SHA256,
                     ['type' => 'public']
                 );
                 $idpKey->loadKey($this->idpCertificate, false, true);
