@@ -13,18 +13,17 @@ use yii\helpers\Html as yHtml;
     Hi there,
 <p>
     <?= yHtml::encode($name) ?> recently requested a password change for their
-    <?= yHtml::encode($idpDisplayName) ?> account and they have requested your assistance.
-</p>
-<p>
-    Please contact them directly to ensure that you are only providing the
-    following reset code to them and not to someone else. This code is valid
+    <?= yHtml::encode($idpDisplayName) ?> account. If this was you, please use the link below
+    to reset your password. If it's not you but you do know them, you may provide the link
+    for them to use, but please contact them directly to ensure that you are only providing the
+    link to them and not to someone else. This link is valid
     until <?= yHtml::encode($expireTime) ?>.
 </p>
 <p>
-    Reset Code: <?= yHtml::encode($code) ?>
+    <?= yHtml::a(yHtml::encode($resetUrl), $resetUrl) ?>
 </p>
 <p>
-    To keep their account secure, please don't forward this email to anyone.
+    To maintain security, please don't forward this email to anyone.
     See our Help Center at <?= yHtml::a(yHtml::encode($helpCenterUrl), $helpCenterUrl) ?> for more security tips.
 </p>
 <p>
