@@ -69,6 +69,14 @@ class Password extends Model
                 'params'=>['first_name', 'last_name', 'idp_username', 'email'],
                 'skipOnError' => false,
             ],
+            [
+                'password', 'validateNotPwned',
+                'skipOnError' => true,
+            ],
+            [
+                'password', 'validateNotPublicPassword',
+                'skipOnError' => false,
+            ],
         ];
     }
 
@@ -214,5 +222,64 @@ class Password extends Model
         }
     }
 
+    public function validateNotPublicPassword($attribute)
+    {
+        /*
+         * block passwords provided in https://www.youtube.com/watch?v=3LRnjzA8auk&list=PLu5OsENIeX656zXJ96FCL169WNmvnPveo
+         */
+        $publicPasswords = [
+            'one4amzn',
+            'one4ggle',
+            'one4ebay',
+            '$$Ymh7Hp3dfgQr9L#!>s;',
+            '7startpenguins!snap',
+            'deserty.domes.slide2',
+            'about-slithers-quakely.',
+        ];
 
+        foreach ($publicPasswords as $publicPassword) {
+            if ($this->$attribute == $publicPassword) {
+                $msg = "Ha ha, good one. No, you shouldn't use a password you saw " .
+                    'in a video about creating good passwords.';
+                $this->addError($attribute, \Yii::t('app', $msg));
+            }
+        }
+    }
+
+    /**
+     * Validate a password against the havibeenpwned security breach database.
+     *
+     * Inspired by https://github.com/PayFast/laravel-validate-pwned-password
+     *
+     * @param $attribute
+     */
+    public function validateNotPwned($attribute)
+    {
+        $hash = sha1($this->$attribute);
+        $hashPrefix = substr($hash, 0, 5);
+        $url = 'https://api.pwnedpasswords.com/range/' . $hashPrefix;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $results = curl_exec($ch);
+        $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if (($httpStatusCode !== 200) || empty($results)) {
+            /*
+             * status will always be 200 if the service is working correctly
+             */
+            return;
+        }
+
+        $hashSuffix = preg_quote(substr($hash, 5));
+        $pattern = '/' . $hashSuffix . ':([0-9]+)/ism';
+        if (preg_match($pattern, $results, $matches) == 1) {
+            $breachCount = $matches[1];
+            $msg = 'This password is not secure. It has been revealed in {breachCount} ' .
+                'password breaches. Please choose a different password.';
+            $this->addError($attribute, \Yii::t('app', $msg, ['breachCount' => $breachCount]));
+        }
+    }
 }
