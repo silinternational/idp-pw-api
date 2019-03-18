@@ -221,7 +221,7 @@ class Password extends Model
     public function validateNotPublicPassword($attribute)
     {
         /*
-         * block passwords provided in https://www.youtube.com/watch?v=3LRnjzA8auk&list=PLu5OsENIeX656zXJ96FCL169WNmvnPveo
+         * block passwords provided in https://youtu.be/WTMZYuoztoM
          */
         $publicPasswords = [
             'one4amzn',
