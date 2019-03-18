@@ -5,7 +5,7 @@ use yii\helpers\Html as yHtml;
  * @var string $name
  * @var string $idpDisplayName
  * @var string $expireTime
- * @var string $code
+ * @var string $resetUrl
  * @var string $helpCenterUrl
  * @var string $fromName
  */

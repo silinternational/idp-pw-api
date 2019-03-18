@@ -69,6 +69,10 @@ class Password extends Model
                 'params'=>['first_name', 'last_name', 'idp_username', 'email'],
                 'skipOnError' => false,
             ],
+            [
+                'password', 'validateNotPublicPassword',
+                'skipOnError' => false,
+            ],
         ];
     }
 
@@ -214,5 +218,27 @@ class Password extends Model
         }
     }
 
+    public function validateNotPublicPassword($attribute)
+    {
+        /*
+         * block passwords provided in https://youtu.be/WTMZYuoztoM?list=PLu5OsENIeX656zXJ96FCL169WNmvnPveo
+         */
+        $publicPasswords = [
+            'one4amzn',
+            'one4ggle',
+            'one4ebay',
+            '$$Ymh7Hp3dfgQr9L#!>s;',
+            '7startpenguins!snap',
+            'deserty.domes.slide2',
+            'about-slithers-quakely.',
+        ];
 
+        foreach ($publicPasswords as $publicPassword) {
+            if ($this->$attribute == $publicPassword) {
+                $msg = "Ha ha, good one. No, you shouldn't use a password you saw " .
+                    'in a video about creating good passwords.';
+                $this->addError($attribute, \Yii::t('app', $msg));
+            }
+        }
+    }
 }
