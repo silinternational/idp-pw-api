@@ -72,6 +72,11 @@ return [
         'Impossible de mettre à jour le mot de passe, attendez une minute, puis réessayez. '
         . 'Si ce problème persiste, contactez le support technique. ',
 
+    'This password is not secure. It has been revealed {count} times in '
+    . 'password breaches. Please create a new password.' =>
+        'Ce mot de passe n\'est pas sécurisé. Il a été révélé {count} fois dans des violations '
+        . 'de mot de passe. S\'il vous plaît créer un nouveau mot de passe.',
+
     // MethodController.php
     'Type is required. Options are: {email}' => 'Le type est requis. Les options sont: {email} ',
     'Value is required' => 'Valeur est requise',

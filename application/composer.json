@@ -25,7 +25,8 @@
     "google/apiclient": "^2.0",
     "google/recaptcha": "^1.1.2",
     "adldap2/adldap2": "^9.0",
-    "fillup/fake-bower-assets": "2.0.9"
+    "fillup/fake-bower-assets": "2.0.9",
+    "icawebdesign/hibp-php": "^3.1.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "*",

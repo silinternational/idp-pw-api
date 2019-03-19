@@ -3,6 +3,8 @@ namespace common\models;
 
 use common\helpers\ZxcvbnPasswordValidator;
 use common\components\passwordStore\PasswordReuseException;
+use GuzzleHttp\Exception\GuzzleException;
+use Icawebdesign\Hibp\Password\PwnedPassword;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
 use yii\web\ConflictHttpException;
@@ -68,6 +70,10 @@ class Password extends Model
                 'password', 'validateNotUserAttributes',
                 'params'=>['first_name', 'last_name', 'idp_username', 'email'],
                 'skipOnError' => false,
+            ],
+            [
+                'password', 'validateNotBeenPwned',
+                'skipOnError' => true,
             ],
             [
                 'password', 'validateNotPublicPassword',
@@ -239,6 +245,30 @@ class Password extends Model
                     'in a video about creating good passwords.';
                 $this->addError($attribute, \Yii::t('app', $msg));
             }
+        }
+    }
+
+    /**
+     * @param string $attribute
+     */
+    public function validateNotBeenPwned($attribute)
+    {
+        $hash = sha1($this->$attribute);
+        $hashPrefix = substr($hash, 0, 5);
+
+        $pwnedPassword = new PwnedPassword();
+
+        try {
+            $count = $pwnedPassword->range($hashPrefix, $hash);
+        } catch (GuzzleException $e) {
+            \Yii::error('HaveIBeenPwned API error: ' . $e->getMessage());
+            return;
+        }
+
+        if ($count > 0) {
+            $msg = 'This password is not secure. It has been revealed {count} times in ' .
+                'password breaches. Please create a new password.';
+            $this->addError($attribute, \Yii::t('app', $msg, ['count' => $count]));
         }
     }
 }
