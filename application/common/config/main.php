@@ -21,7 +21,6 @@ $fromName = Env::get('FROM_NAME');
 $appEnv = Env::get('APP_ENV');
 $idpName = Env::get('IDP_NAME');
 $idpDisplayName = Env::get('IDP_DISPLAY_NAME', $idpName);
-$idpUsernameHint = Env::get('IDP_USERNAME_HINT', $idpDisplayName . ' username, ex: first_last');
 $recaptchaRequired = Env::get('RECAPTCHA_REQUIRED', true);
 $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
@@ -160,7 +159,6 @@ return [
     'params' => [
         'idpName' => $idpName,
         'idpDisplayName' => $idpDisplayName,
-        'idpUsernameHint' => $idpUsernameHint,
         'adminEmail' => $adminEmail,
         'fromName' => $fromName,
         'helpCenterUrl' => $helpCenterUrl,
