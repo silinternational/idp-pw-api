@@ -249,7 +249,8 @@ class Password extends Model
     }
 
     /**
-     * @param string $attribute
+     * @param string $attribute The name of the attribute being validated, typically
+     * 'password'.
      */
     public function validateNotBeenPwned($attribute)
     {
