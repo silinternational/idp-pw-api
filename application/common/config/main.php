@@ -103,7 +103,9 @@ return [
                         'yii\web\HttpException:401',
                         'yii\web\HttpException:404',
                         'yii\web\HttpException:409',
+                        'yii\web\HttpException:410',
                         'yii\web\HttpException:422',
+                        'yii\web\HttpException:429',
                         'Sil\EmailService\Client\EmailServiceClientException',
                     ],
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
