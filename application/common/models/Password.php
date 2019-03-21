@@ -30,41 +30,38 @@ class Password extends Model
     public function init()
     {
         $this->passwordStore = \Yii::$app->passwordStore;
-        $this->config = \Yii::$app->params['password'];
+        $this->config = \Yii::$app->params['passwordRules'];
     }
 
     public function rules()
     {
         return [
             [
-                'password', 'match', 'pattern' => $this->config['minLength']['phpRegex'],
+                'password', 'string', 'min' => $this->config['minLength'],
                 'skipOnError' => false,
-                'message' => \Yii::t(
+                'tooShort' => \Yii::t(
                     'app',
                     'Your password does not meet the minimum length of {minLength} (code 100)',
-                    ['minLength' => $this->config['minLength']['value']]
+                    ['minLength' => $this->config['minLength']]
                 ),
-                'when' => function() { return $this->config['minLength']['enabled']; }
             ],
             [
-                'password', 'match', 'pattern' => $this->config['maxLength']['phpRegex'],
+                'password', 'string', 'max' => $this->config['maxLength'],
                 'skipOnError' => false,
-                'message' => \Yii::t(
+                'tooLong' => \Yii::t(
                     'app',
                     'Your password exceeds the maximum length of {maxLength} (code 110)',
-                    ['maxLength' => $this->config['maxLength']['value']]
+                    ['maxLength' => $this->config['maxLength']]
                 ),
-                'when' => function() { return $this->config['maxLength']['enabled']; }
             ],
             [
-                'password', ZxcvbnPasswordValidator::class, 'minScore' => $this->config['zxcvbn']['minScore'],
+                'password', ZxcvbnPasswordValidator::class, 'minScore' => $this->config['minScore'],
                 'skipOnError' => true,
                 'message' => \Yii::t(
                     'app',
                     'Your password does not meet the minimum strength of {minScore} (code 150)',
-                    ['minScore' => $this->config['zxcvbn']['minScore']]
+                    ['minScore' => $this->config['minScore']]
                 ),
-                'when' => function() { return $this->config['zxcvbn']['enabled']; }
             ],
             [
                 'password', 'validateNotUserAttributes',

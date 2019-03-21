@@ -155,25 +155,7 @@ class Utils
             }
         }
 
-        $config['password'] = [];
-        $passwordRuleFields = [
-            'minLength', 'maxLength'
-        ];
-
-        foreach ($passwordRuleFields as $rule) {
-            if (empty($params['password'][$rule])) {
-                throw new ServerErrorHttpException('Missing configuration for ' . $rule);
-            }
-
-            if ($params['password'][$rule]['enabled']) {
-                $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
-                $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
-            }
-        }
-
-        $config['password']['zxcvbn'] = [
-            'minScore' => $params['password']['zxcvbn']['minScore'],
-        ];
+        $config['passwordRules'] = $params['passwordRules'];
 
         return $config;
     }
@@ -300,7 +282,7 @@ class Utils
         try {
             $zxcvbn = new \Zxcvbn\Score([
                 'description_override' => [
-                    'baseUrl' => \Yii::$app->params['password']['zxcvbn']['apiBaseUrl'],
+                    'baseUrl' => \Yii::$app->params['zxcvbnApiBaseUrl'],
                 ]
             ]);
             return $zxcvbn->getFull(['password' => $password])->toArray();

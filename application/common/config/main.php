@@ -14,7 +14,6 @@ $mysqlDatabase = Env::get('MYSQL_DATABASE');
 $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
-$adminEmail = Env::get('ADMIN_EMAIL');
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
 $fromName = Env::get('FROM_NAME');
@@ -174,25 +173,8 @@ return [
         ],
         'accessTokenHashKey' => $accessTokenHashKey,
         'accessTokenLifetime' => 1800, // 30 minutes
-        'password' => [
-            'minLength' => [
-                'value' => $passwordRules['minLength'],
-                'phpRegex' => '/.{' . $passwordRules['minLength'] . ',}/',
-                'jsRegex' => '.{' . $passwordRules['minLength'] . ',}',
-                'enabled' => $passwordRules['minLength'] !== null
-            ],
-            'maxLength' => [
-                'value' => $passwordRules['maxLength'],
-                'phpRegex' => '/^.{0,' . $passwordRules['maxLength'] . '}$/',
-                'jsRegex' => '.{0,' . $passwordRules['maxLength'] . '}',
-                'enabled' => $passwordRules['maxLength'] !== null
-            ],
-            'zxcvbn' => [
-                'minScore' => $passwordRules['minScore'],
-                'enabled' => $passwordRules['minScore'] !== null,
-                'apiBaseUrl' => $zxcvbnApiBaseUrl,
-            ]
-        ],
+        'passwordRules' => $passwordRules,
+        'zxcvbnApiBaseUrl' => $zxcvbnApiBaseUrl,
         'recaptcha' => [
             'required' => $recaptchaRequired,
             'siteKey' => $recaptchaSiteKey,
