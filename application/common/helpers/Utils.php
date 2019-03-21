@@ -78,29 +78,6 @@ class Utils
     }
 
     /**
-     * @param array $array
-     * @param string $key
-     * @return bool
-     */
-    public static function isArrayEntryTruthy($array, $key)
-    {
-        return (is_array($array) && isset($array[$key]) && $array[$key]);
-    }
-
-    /**
-     * Check if user is logged in and if so return the identity model
-     * @return null|\common\models\User
-     * @codeCoverageIgnore
-     */
-    public static function getCurrentUser()
-    {
-        if (\Yii::$app->user && ! \Yii::$app->user->isGuest) {
-            return \Yii::$app->user->identity;
-        }
-        return null;
-    }
-
-    /**
      * @param string $email an email address
      * @return string with most letters changed to asterisks
      * @throws BadRequestHttpException
@@ -156,21 +133,6 @@ class Utils
         $newEmail .= substr($domainB, 0, 1);
         $newEmail .= str_repeat('*', strlen($domainB) - 1);
         return $newEmail;
-    }
-
-    /**
-     * Replaces all the characters with asterisks, except for the last X characters.
-     *
-     * @param string $inString
-     * @param string $maskChar [optional, default #]
-     * @param int $goodCount [optional, default 3]
-     * @return string
-     */
-    public static function maskString($inString, $maskChar = '#', $goodCount = 3)
-    {
-        $newString = str_repeat($maskChar, strlen($inString) - $goodCount);
-        $newString .= substr($inString, - $goodCount);
-        return $newString;
     }
 
     /**
@@ -388,30 +350,5 @@ class Utils
     public static function getAccessTokenHash($accessToken)
     {
         return hash_hmac('sha256', $accessToken, \Yii::$app->params['accessTokenHashKey']);
-    }
-
-    /**
-     * Calculate expiration date based on
-     * @param string $changeDate
-     * @return string
-     */
-    public static function calculatePasswordExpirationDate($changeDate)
-    {
-        $passwordLifetime = \Yii::$app->params['passwordLifetime'];
-        $dateInterval = new \DateInterval($passwordLifetime);
-        $dateTime = new \DateTime($changeDate);
-        $expireDate = $dateTime->add($dateInterval);
-
-        return $expireDate->format(self::DT_FORMAT);
-    }
-
-    /**
-     * Remove all non-numeric characters
-     * @param string $value
-     * @return string
-     */
-    public static function stripNonNumbers($value)
-    {
-        return preg_replace('/[^0-9]/', '', $value);
     }
 }

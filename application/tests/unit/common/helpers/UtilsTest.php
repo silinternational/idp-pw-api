@@ -120,18 +120,6 @@ class UtilsTest extends Test
         $this->assertEquals($expected, Utils::getIso8601($timestamp));
     }
 
-    public function testIsArrayEntryTruthy()
-    {
-        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => true], 'key'));
-        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => 'string'], 'key'));
-        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => ['array']], 'key'));
-        $this->assertTrue(Utils::isArrayEntryTruthy(['key' => 1], 'key'));
-        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => false], 'key'));
-        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => ''], 'key'));
-        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => null], 'key'));
-        $this->assertFalse(Utils::isArrayEntryTruthy(['key' => 0], 'key'));
-    }
-
     public function testGetFriendlyDate()
     {
         /*

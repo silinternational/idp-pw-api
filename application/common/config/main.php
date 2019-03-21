@@ -159,16 +159,11 @@ return [
         'passwordStore' => ['class' => $passwordStoreClass],
     ],
     'params' => [
-        'idpName' => $idpName,
         'idpDisplayName' => $idpDisplayName,
-        'adminEmail' => $adminEmail,
         'fromName' => $fromName,
         'helpCenterUrl' => $helpCenterUrl,
         'uiUrl' => $uiUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
-        'emailQueueBatchSize' => 5,
-        'emailServiceStatus' => $emailServiceConfig,
-        'emailVerification' => $emailServiceConfig,
         'reset' => [
             'lifetimeSeconds' => 3600,  // 1 hour
             'gracePeriod' => '-1 week', // time between expiration and deletion, relative to now (time of execution)
@@ -178,7 +173,6 @@ return [
         ],
         'accessTokenHashKey' => $accessTokenHashKey,
         'accessTokenLifetime' => 1800, // 30 minutes
-        'passwordLifetime' => 'P1Y', // See http://php.net/manual/en/dateinterval.construct.php
         'password' => [
             'minLength' => [
                 'value' => $passwordRules['minLength'],
