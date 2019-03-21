@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `PUT /mfa/{mfaId}` endpoint to update MFA labels.
 - Added `invite` option on `/auth/login` for new user invite authentication
 - Added `last_login` to `GET /user/me` response.
+- Added password validation to prohibit passwords disclosed in breaches
+  and those given in a password help video. 
 ### Changed
 - Limit access based on whether auth level is reset or login
 - Updated Adldap2 to latest version
@@ -34,6 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Password reset is now blocked for a locked account
 - The response to /user/me would have incorrect password metadata in a new user scenario.
+- Password expiration was reported incorrectly when setting a new password for a
+  user with mfa enabled.
 
 ## [3.0.0] - 2018-07-31
 ### Added
