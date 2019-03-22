@@ -104,6 +104,12 @@ class MethodController extends BaseRestController
      */
     public function actionCreate()
     {
+        $messages = [
+            400 => 'Value is required',
+            409 => 'Recovery method already exists',
+            422 => 'Invalid email address provided',
+        ];
+
         $request = \Yii::$app->request;
 
         $value = $request->post('value');
@@ -122,16 +128,11 @@ class MethodController extends BaseRestController
         try {
             $method = $this->idBrokerClient->createMethod($employeeId, $value);
         } catch (ServiceException $e) {
-            if ($e->httpStatusCode === 409) {
-                throw new TooManyRequestsHttpException(
-                    \Yii::t('app', 'Recovery method already exists'),
-                    1542750430
-                );
-            } elseif ($e->httpStatusCode === 400) {
-                throw new BadRequestHttpException(\Yii::t('app', 'Value is required'), 1542750431);
-            } else {
-                throw $e;
-            }
+            throw new HttpException(
+                $e->httpStatusCode,
+                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                1542750430
+            );
         }
         $method['type'] = 'email';
         return $method;
