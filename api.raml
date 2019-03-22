@@ -25,18 +25,12 @@ types:
           email: string
           url: string
           feedbackUrl: string
-      password:
+      passwordRules:
         type: object
         properties:
-          minLength:
-            type: object
-            properties:
-              value: integer
-              pattern: string
-          zxcvbn:
-            type: object
-            properties:
-              minScore: integer
+          minLength: integer
+          maxLength: integer
+          minScore: integer
     example:
       {
         "idpName": "Acme",
@@ -47,13 +41,10 @@ types:
           "url": "http://support.example.com",
           "feedbackUrl": "feedback@example.com"
         },
-        "password": {
-          "minLength": {
-            "value": 10,
-            "pattern": ".{10,}"
-          },
-          "zxcvbn": {
-            "minScore": 2
+        "passwordRules": {
+          "minLength": 10,
+          "maxLength": 255,
+          "minScore": 3
           }
         }
       }

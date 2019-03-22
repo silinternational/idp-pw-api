@@ -48,10 +48,11 @@ $idBrokerConfig = Env::getArrayFromPrefix('ID_BROKER_');
 $idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
 
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
-$passwordRules = Env::getArrayFromPrefix('PASSWORD_RULE_');
-$passwordRules['minLength'] = $passwordRules['minLength'] ?? null;
-$passwordRules['maxLength'] = $passwordRules['maxLength'] ?? null;
-$passwordRules['minScore'] = $passwordRules['minScore'] ?? null;
+
+$passwordRulesEnv = Env::getArrayFromPrefix('PASSWORD_RULE_');
+$passwordRules['minLength'] = $passwordRulesEnv['minLength'] ?? 10;
+$passwordRules['maxLength'] = $passwordRulesEnv['maxLength'] ?? 255;
+$passwordRules['minScore'] = $passwordRulesEnv['minScore'] ?? 3;
 
 return [
     'id' => 'app-common',
@@ -172,25 +173,8 @@ return [
         ],
         'accessTokenHashKey' => $accessTokenHashKey,
         'accessTokenLifetime' => 1800, // 30 minutes
-        'password' => [
-            'minLength' => [
-                'value' => $passwordRules['minLength'],
-                'phpRegex' => '/.{' . $passwordRules['minLength'] . ',}/',
-                'jsRegex' => '.{' . $passwordRules['minLength'] . ',}',
-                'enabled' => $passwordRules['minLength'] !== null
-            ],
-            'maxLength' => [
-                'value' => $passwordRules['maxLength'],
-                'phpRegex' => '/^.{0,' . $passwordRules['maxLength'] . '}$/',
-                'jsRegex' => '.{0,' . $passwordRules['maxLength'] . '}',
-                'enabled' => $passwordRules['maxLength'] !== null
-            ],
-            'zxcvbn' => [
-                'minScore' => $passwordRules['minScore'],
-                'enabled' => $passwordRules['minScore'] !== null,
-                'apiBaseUrl' => $zxcvbnApiBaseUrl,
-            ]
-        ],
+        'passwordRules' => $passwordRules,
+        'zxcvbnApiBaseUrl' => $zxcvbnApiBaseUrl,
         'recaptcha' => [
             'required' => $recaptchaRequired,
             'siteKey' => $recaptchaSiteKey,

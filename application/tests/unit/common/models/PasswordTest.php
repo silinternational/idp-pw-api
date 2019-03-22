@@ -127,15 +127,6 @@ class PasswordTest extends Test
                 'nonZxcvbnPass' => true,
             ],
             [
-                'password' => 'ALL CAPS QUERTY 1234',
-                'zxcvbnScore' => 4,
-                'zxcvbnPass' => true,
-                'minLength' => true,
-                'maxLength' => true,
-                'overall' => true,
-                'nonZxcvbnPass' => true,
-            ],
-            [
                 'password' => 'password',
                 'zxcvbnScore' => 0,
                 'zxcvbnPass' => false,

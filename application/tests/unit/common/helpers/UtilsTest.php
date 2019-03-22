@@ -47,38 +47,11 @@ class UtilsTest extends Test
     public function testGetFrontendConfig()
     {
         \Yii::$app->params = [
-            'idpName' => 'idp',
             'idpDisplayName' => 'My IdP',
-            'adminEmail' => 'admin@domain.com',
-            'fromEmail' => 'from@domain.com',
-            'fromName' => 'From Me',
-            'helpCenterUrl' => 'https://url',
-            'ui_url' => 'https://ui',
-            'reset' => [
-                'lifetimeSeconds' => 3600, // 1 hour
-                'disableDuration' => 900, // 15 minutes
-                'codeLength' => 6,
-                'maxAttempts' => 10,
-            ],
-            'passwordLifetime' => 15552000, // 6 months
-            'password' => [
-                'minLength' => [
-                    'value' => 10,
-                    'phpRegex' => '/.{10,}/',
-                    'jsRegex' => '.{10,}',
-                    'enabled' => true
-                ],
-                'maxLength' => [
-                    'value' => 255,
-                    'phpRegex' => '/.{0,255}/',
-                    'jsRegex' => '.{0,255}',
-                    'enabled' => true
-                ],
-                'zxcvbn' => [
-                    'minScore' => 2,
-                    'enabled' => true,
-                    'apiBaseUrl' => 'http://zxcvbn',
-                ]
+            'passwordRules' => [
+                'minLength' => 10,
+                'maxLength' => 255,
+                'minScore' => 2,
             ],
             'recaptcha' => [
                 'siteKey' => 'key',
@@ -88,20 +61,21 @@ class UtilsTest extends Test
                 'phone' => '123-123-1234',
                 'email' => 'email@domain.com',
                 'url' => 'http://url',
-                'feedbackUrl' => null,
             ],
-        ];
-
-        $expectedZxcvbn = [
-            'minScore' => 2,
         ];
 
         $params = \Yii::$app->params;
         $config = Utils::getFrontendConfig();
         $this->assertEquals($params['idpDisplayName'], $config['idpName']);
         $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
-        $this->assertEquals($expectedZxcvbn, $config['password']['zxcvbn']);
-        $this->assertTrue(is_array($config['password']));
+
+        $expectedPasswordRules = [
+            'minLength' => 10,
+            'maxLength' => 255,
+            'minScore' => 2,
+        ];
+
+        $this->assertEquals($expectedPasswordRules, $config['passwordRules']);
 
         $expectedSupport = [
             'phone' => '123-123-1234',

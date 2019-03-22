@@ -5,27 +5,6 @@ use Sil\PhpEnv\Env;
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
 
 return [
-    'params' => [
-        'password' => [
-            'minLength' => [
-                'value' => 10,
-                'phpRegex' => '/.{10,}/',
-                'jsRegex' => '.{10,}',
-                'enabled' => true
-            ],
-            'maxLength' => [
-                'value' => 255,
-                'phpRegex' => '/^.{0,255}$/',
-                'jsRegex' => '.{0,255}',
-                'enabled' => true
-            ],
-            'zxcvbn' => [
-                'minScore' => 2,
-                'enabled' => true,
-                'apiBaseUrl' => $zxcvbnApiBaseUrl,
-            ]
-        ],
-    ],
     'components' => [
         'auth' => [
             'class' => 'common\components\auth\Saml',

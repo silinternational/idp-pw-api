@@ -100,7 +100,8 @@ class PasswordCest extends BaseCest
 
     public function test12(ApiTester $I)
     {
-        $I->wantTo('check response when changing the password (PUT request) to something that does not meet minLength requirement');
+        $I->wantTo('check response when changing the password (PUT request) to something that '
+            . 'does not meet minLength requirement');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/password', ['password' => 'A!dswo']);
         $I->seeResponseCodeIs(400);
@@ -112,7 +113,8 @@ class PasswordCest extends BaseCest
 
     public function test15(ApiTester $I)
     {
-        $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 1');
+        $I->wantTo('check response when changing the password (PUT request) to something that '
+            . 'has zxcvbn score of 1');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/password', ['password' => 'Je$u$12345']);
         $I->seeResponseCodeIs(400);
@@ -140,9 +142,15 @@ class PasswordCest extends BaseCest
 
     public function test18(ApiTester $I)
     {
-        $I->wantTo('check response when changing the password (PUT request) to something that does not meet maxLength requirement');
+        $I->wantTo('check response when changing the password (PUT request) to something that '
+            . 'does not meet maxLength requirement');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password', ['password' => 'Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non123. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehi. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehi']);
+        $I->sendPUT('/password', ['password' => 'Lorem ipsum dolor sit amet, nonummy ligula volutpat '
+            . 'hac integer nonummy. Suspendisse ultricies, congue etiam tellus, erat libero, nulla '
+            . 'eleifend, mauris pellentesque. Suspendisse integer praesent vel, integer gravida mauris, '
+            . 'fringilla vehicula lacinia non123. Suspendisse integer praesent vel, integer gravida '
+            . 'mauris, fringilla vehi. Suspendisse integer praesent vel, integer gravida mauris, '
+            . 'fringilla vehi']);
         $I->seeResponseCodeIs(400);
         $body = json_decode($I->grabResponse(), true);
         if (substr_count($body['message'], 'code 110') <= 0) {
