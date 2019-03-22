@@ -19,7 +19,7 @@ TESTRESULTS_UNIT=$?
 
 # Run behat tests
 #if [ -z "$TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail" ]; then
-#    echo -e "\e[31mGoogle passwordstore tests skipped\e[0m"
+    echo -e "\e[31mGoogle passwordstore tests skipped\e[0m"
 #else
 #    runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
 #    TESTRESULTS_BEHAT=$?
