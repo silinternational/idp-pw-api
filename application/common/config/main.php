@@ -50,9 +50,11 @@ $idBrokerConfig['validIpRanges'] = Env::getArray('ID_BROKER_validIpRanges');
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL');
 
 $passwordRulesEnv = Env::getArrayFromPrefix('PASSWORD_RULE_');
-$passwordRules['minLength'] = $passwordRulesEnv['minLength'] ?? 10;
-$passwordRules['maxLength'] = $passwordRulesEnv['maxLength'] ?? 255;
-$passwordRules['minScore'] = $passwordRulesEnv['minScore'] ?? 3;
+$passwordRules = [
+    'minLength' => $passwordRulesEnv['minLength'] ?? 10,
+    'maxLength' => $passwordRulesEnv['maxLength'] ?? 255,
+    'minScore' => $passwordRulesEnv['minScore'] ?? 3,
+];
 
 return [
     'id' => 'app-common',
