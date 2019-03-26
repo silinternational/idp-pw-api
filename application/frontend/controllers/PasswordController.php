@@ -6,6 +6,7 @@ use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 class PasswordController extends BaseRestController
 {
@@ -32,19 +33,27 @@ class PasswordController extends BaseRestController
     /**
      * Return password metadata
      * @return array
+     * @throws ServerErrorHttpException
      */
     public function actionView()
     {
         /** @var User $user */
         $user = \Yii::$app->user->identity;
 
-        return $user->getPasswordMeta();
+        $pwMeta = $user->getPasswordMeta();
+
+        if ($pwMeta === null) {
+            throw new ServerErrorHttpException('A system error has occurred.', 1553606573);
+        }
+
+        return $pwMeta;
     }
 
     /**
      * Save new password
      * @return array<string,string>
      * @throws BadRequestHttpException
+     * @throws ServerErrorHttpException
      */
     public function actionUpdate()
     {
@@ -57,9 +66,12 @@ class PasswordController extends BaseRestController
         $user = \Yii::$app->user->identity;
         $user->setPassword($newPassword);
 
-        return $user->getPasswordMeta();
+        $pwMeta = $user->getPasswordMeta();
+
+        if ($pwMeta === null) {
+            throw new ServerErrorHttpException('A system error has occurred.', 1553606574);
+        }
+
+        return $pwMeta;
     }
-
-    
-
 }

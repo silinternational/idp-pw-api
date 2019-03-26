@@ -275,6 +275,7 @@ class UserTest extends Test
     {
         $user = $this->users('user1');
         $pwMeta = $user->getPasswordMeta();
+        $this->assertNotNull($pwMeta);
         $this->assertArrayHasKey('last_changed', $pwMeta);
         $this->assertArrayHasKey('expires', $pwMeta);
     }
