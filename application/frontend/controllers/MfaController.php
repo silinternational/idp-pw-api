@@ -74,12 +74,12 @@ class MfaController extends BaseRestController
     public function actionCreate()
     {
         $messages = [
-            409 => \Yii::t('app', 'This 2SV already exists'),
+            409 => \Yii::t('app', 'Mfa.AlreadyExists'),
         ];
 
         $type = \Yii::$app->request->getBodyParam('type');
         if ($type === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Type is required'));
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.TypeMissing'));
         }
 
         $label = \Yii::$app->request->getBodyParam('label');
@@ -119,7 +119,7 @@ class MfaController extends BaseRestController
                 'message' => $e->getMessage(),
             ], __METHOD__);
             if ($e->httpStatusCode == 404) {
-                throw new NotFoundHttpException(\Yii::t('app', 'MFA record not found'));
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.RecordNotFound'));
             }
 
             /*
@@ -137,14 +137,14 @@ class MfaController extends BaseRestController
     public function actionVerify($mfaId)
     {
         $messages = [
-            400 => \Yii::t('app', 'Invalid code provided'),
-            404 => \Yii::t('app', 'MFA verify failure'),
-            429 => \Yii::t('app', 'MFA rate limit failure'),
+            400 => \Yii::t('app', 'Mfa.InvalidCode'),
+            404 => \Yii::t('app', 'Mfa.VerifyFailure'),
+            429 => \Yii::t('app', 'Mfa.RateLimitFailure'),
         ];
 
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Value is required'));
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
         }
 
         try {
@@ -187,7 +187,7 @@ class MfaController extends BaseRestController
                 'message' => $e->getMessage(),
             ], __METHOD__);
             if ($e->httpStatusCode == 404) {
-                throw new NotFoundHttpException(\Yii::t('app', 'MFA update failure'), $e->getCode());
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.UpdateFailure'), $e->getCode());
             }
 
             /*

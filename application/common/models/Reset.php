@@ -125,7 +125,7 @@ class Reset extends ResetBase
              */
             $reset->saveOrError(
                 'create new reset',
-                \Yii::t('app', 'Unable to create new reset.')
+                \Yii::t('app', 'Reset.CreateFailure')
             );
 
             EventLog::log(
@@ -202,7 +202,7 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{idpDisplayName} password reset request',
+            'Reset.PasswordResetSubject',
             [
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
@@ -225,7 +225,7 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{idpDisplayName} password reset request for {name}',
+            'Reset.PasswordResetForSubject',
             [
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
                 'name' => $this->user->first_name,
@@ -250,7 +250,7 @@ class Reset extends ResetBase
 
         $subject = \Yii::t(
             'app',
-            '{idpDisplayName} password reset request',
+            'Reset.PasswordResetSubject',
             [
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
@@ -288,7 +288,7 @@ class Reset extends ResetBase
             $this->code = self::createCode();
             $this->saveOrError(
                 'send email',
-                \Yii::t('app', 'Unable to update reset in database, email not sent.')
+                \Yii::t('app', 'Reset.UpdateFailure')
             );
         }
 
@@ -429,7 +429,7 @@ class Reset extends ResetBase
         $this->disable_until = Utils::getDatetime(time() + \Yii::$app->params['reset']['disableDuration']);
         $this->saveOrError(
             $log['action'],
-            \Yii::t('app', 'Unable to save reset with disable_until.')
+            \Yii::t('app', 'Reset.SetDisableTimeError')
         );
 
         EventLog::log(
@@ -458,7 +458,7 @@ class Reset extends ResetBase
         $this->attempts = 0;
         $this->saveOrError(
             'enable reset',
-            \Yii::t('app', 'Unable to enable reset.')
+            \Yii::t('app', 'Reset.CannotEnable')
         );
 
         EventLog::log(
@@ -525,7 +525,7 @@ class Reset extends ResetBase
              */
             if ($methodUid === null) {
                 throw new BadRequestHttpException(
-                    \Yii::t('app', 'Method UID required for reset type method'),
+                    \Yii::t('app', 'Reset.MissingMethodUID'),
                     1462988984
                 );
             }
@@ -538,7 +538,7 @@ class Reset extends ResetBase
             $this->email = $method['value'];
         } else {
             throw new BadRequestHttpException(
-                \Yii::t('app', 'Unknown reset type requested'),
+                \Yii::t('app', 'Reset.UnknownType'),
                 1462989489
             );
         }
@@ -553,7 +553,7 @@ class Reset extends ResetBase
          */
         $this->saveOrError(
             'Set type of reset',
-            \Yii::t('app', 'Unable to update reset type.')
+            \Yii::t('app', 'Reset.UpdateTypeError')
         );
 
         EventLog::log(
@@ -582,7 +582,7 @@ class Reset extends ResetBase
         $this->attempts++;
         $this->saveOrError(
             $action . ' reset',
-            \Yii::t('app', 'Unable to increment attempts count.')
+            \Yii::t('app', 'Reset.IncrementAttemptsError')
         );
 
         /*
