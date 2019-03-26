@@ -158,17 +158,6 @@ class Password extends Model
         ];
 
         /*
-         * If validation fails, return just the first error
-         */
-        if ( ! $this->validate()) {
-            $errors = $this->getFirstErrors();
-            $log['status'] = 'error';
-            $log['error'] = $errors;
-            \Yii::error($log);
-            throw new BadRequestHttpException($errors[0], 1463164336);
-        }
-
-        /*
          * Update password
          */
         try {
