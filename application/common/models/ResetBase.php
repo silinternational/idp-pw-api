@@ -55,16 +55,16 @@ class ResetBase extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'uid' => Yii::t('app', 'Uid'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'type' => Yii::t('app', 'Type'),
-            'code' => Yii::t('app', 'Code'),
-            'attempts' => Yii::t('app', 'Attempts'),
-            'expires' => Yii::t('app', 'Expires'),
-            'disable_until' => Yii::t('app', 'Disable Until'),
-            'created' => Yii::t('app', 'Created'),
-            'email' => Yii::t('app', 'Email'),
+            'id' => Yii::t('model', 'ID'),
+            'uid' => Yii::t('model', 'Uid'),
+            'user_id' => Yii::t('model', 'User ID'),
+            'type' => Yii::t('model', 'Type'),
+            'code' => Yii::t('model', 'Code'),
+            'attempts' => Yii::t('model', 'Attempts'),
+            'expires' => Yii::t('model', 'Expires'),
+            'disable_until' => Yii::t('model', 'Disable Until'),
+            'created' => Yii::t('model', 'Created'),
+            'email' => Yii::t('model', 'Email'),
         ];
     }
 
