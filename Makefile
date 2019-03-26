@@ -8,8 +8,9 @@ testunit: codeship.env composer rmTestDb upTestDb broker ldapload yiimigratetest
 	docker-compose run --rm unittest
 	sed -i "s|/data/|`pwd`/application/|" application/tests/_output/coverage.xml
 
-# Run testunit first at least once. Otherwise, this will have 5 test failures.
-testapi: upTestDb broker yiimigratetestDb
+testapi: upTestDb yiimigratetestDb
+	docker-compose kill broker
+	docker-compose up -d broker
 	docker-compose run --rm apitest
 
 api: upDb broker composer yiimigrate
