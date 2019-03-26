@@ -74,7 +74,7 @@ class MfaController extends BaseRestController
     public function actionCreate()
     {
         $messages = [
-            409 => 'This 2SV already exists',
+            409 => \Yii::t('app', 'This 2SV already exists'),
         ];
 
         $type = \Yii::$app->request->getBodyParam('type');
@@ -95,7 +95,7 @@ class MfaController extends BaseRestController
 
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? 'Unexpected Problem'),
+                $messages[$e->httpStatusCode] ?? 'Unexpected Problem',
                 1551192684
             );
         }
@@ -137,9 +137,9 @@ class MfaController extends BaseRestController
     public function actionVerify($mfaId)
     {
         $messages = [
-            400 => 'Invalid code provided',
-            404 => 'MFA verify failure',
-            429 => 'MFA rate limit failure',
+            400 => \Yii::t('app', 'Invalid code provided'),
+            404 => \Yii::t('app', 'MFA verify failure'),
+            429 => \Yii::t('app', 'MFA rate limit failure'),
         ];
 
         $value = \Yii::$app->request->getBodyParam('value');
@@ -158,7 +158,7 @@ class MfaController extends BaseRestController
 
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                $messages[$e->httpStatusCode] ?? '',
                 1551109134
             );
         }

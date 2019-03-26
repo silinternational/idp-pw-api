@@ -105,9 +105,9 @@ class MethodController extends BaseRestController
     public function actionCreate()
     {
         $messages = [
-            400 => 'Value is required',
-            409 => 'Recovery method already exists',
-            422 => 'Invalid email address provided',
+            400 => \Yii::t('app', 'Value is required'),
+            409 => \Yii::t('app', 'Recovery method already exists'),
+            422 => \Yii::t('app', 'Invalid email address provided'),
         ];
 
         $request = \Yii::$app->request;
@@ -130,7 +130,7 @@ class MethodController extends BaseRestController
         } catch (ServiceException $e) {
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                $messages[$e->httpStatusCode] ?? '',
                 1542750430
             );
         }
@@ -149,17 +149,10 @@ class MethodController extends BaseRestController
     public function actionVerify($uid)
     {
         $messages = [
-            400 => 'Invalid verification code',
-            404 => 'Recovery method not found',
-            410 => 'Expired verification code',
-            429 => 'Too many failures for this recovery method',
-        ];
-
-        $codes = [
-            400 => 1542749429,
-            404 => 1542749427,
-            410 => 1545144979,
-            429 => 1542749428,
+            400 => \Yii::t('app', 'Invalid verification code'),
+            404 => \Yii::t('app', 'Recovery method not found'),
+            410 => \Yii::t('app', 'Expired verification code'),
+            429 => \Yii::t('app', 'Too many failures for this recovery method'),
         ];
 
         $code = \Yii::$app->request->getBodyParam('code');
@@ -172,8 +165,8 @@ class MethodController extends BaseRestController
         } catch (ServiceException $e) {
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
-                $codes[$e->httpStatusCode] ?? 0
+                $messages[$e->httpStatusCode] ?? '',
+                1542749427
             );
         }
 

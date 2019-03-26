@@ -169,7 +169,7 @@ class Password extends Model
             $log['status'] = 'error';
             $log['error'] = $errors;
             \Yii::error($log);
-            throw new BadRequestHttpException(\Yii::t('app', $errors[0]), 1463164336);
+            throw new BadRequestHttpException($errors[0], 1463164336);
         }
 
         /*
@@ -238,9 +238,11 @@ class Password extends Model
 
         foreach ($publicPasswords as $publicPassword) {
             if ($this->$attribute == $publicPassword) {
-                $msg = "Ha ha, good one. No, you shouldn't use a password you saw " .
-                    'in a video about creating good passwords.';
-                $this->addError($attribute, \Yii::t('app', $msg));
+                $this->addError($attribute, \Yii::t(
+                    'app',
+                    "Ha ha, good one. No, you shouldn't use a password you saw "
+                    . 'in a video about creating good passwords.'
+                ));
             }
         }
     }
@@ -264,9 +266,12 @@ class Password extends Model
         }
 
         if ($count > 0) {
-            $msg = 'This password is not secure. It has been revealed {count} times in ' .
-                'password breaches. Please create a new password.';
-            $this->addError($attribute, \Yii::t('app', $msg, ['count' => $count]));
+            $this->addError($attribute, \Yii::t(
+                'app',
+                'This password is not secure. It has been revealed {count} times in '
+                . 'password breaches. Please create a new password.',
+                ['count' => $count]
+            ));
         }
     }
 }
