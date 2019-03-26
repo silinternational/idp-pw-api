@@ -131,7 +131,7 @@ class Method extends MethodBase
                     1462989221
                 );
             } else {
-                throw new \Exception($e->getMessage());
+                throw new \Exception('Error retrieving method', 1553537402, $e);
             }
         }
     }

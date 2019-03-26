@@ -316,10 +316,19 @@ class User extends UserBase implements IdentityInterface
             return $this->personnelUser;
         }
 
-        /*
-         * Fetch data from Personnel system and cache it
-         */
-        $this->personnelUser = $this->getPersonnelUserFromInterface();
+        try {
+            /*
+             * Fetch data from Personnel system and cache it
+             */
+            $this->personnelUser = $this->getPersonnelUserFromInterface();
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'get personnel user',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            throw new \Exception('Unexpected error accessing personnel system.', 1553532344, $e);
+        }
         \Yii::$app->session->set('personnelUser', $this->personnelUser);
 
         return $this->personnelUser;
@@ -476,18 +485,24 @@ class User extends UserBase implements IdentityInterface
     /**
      * Get password metadata from password store interface, and return in an array
      * for use in an API response.
-     * @return array
-     * @throws \common\components\passwordStore\UserNotFoundException
-     * @throws \common\components\passwordStore\AccountLockedException
-     * @throws \Exception
+     * @return array|null
      */
     public function getPasswordMeta()
     {
         /** @var PasswordStoreInterface $passwordStore */
         $passwordStore = \Yii::$app->passwordStore;
 
-        /** @var UserPasswordMeta $pwMeta */
-        $pwMeta = $passwordStore->getMeta($this->employee_id);
+        try {
+            /** @var UserPasswordMeta $pwMeta */
+            $pwMeta = $passwordStore->getMeta($this->employee_id);
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'getPasswordMeta',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            return null;
+        }
 
         return [
             'last_changed' => $pwMeta->passwordLastChangeDate,
@@ -498,14 +513,24 @@ class User extends UserBase implements IdentityInterface
     /**
      * Is user account locked?
      * @return bool
-     * @throws \Exception
      */
     public function isLocked(): bool
     {
         /** @var PasswordStoreInterface $passwordStore */
         $passwordStore = \Yii::$app->passwordStore;
 
-        return $passwordStore->isLocked($this->employee_id);
+        try {
+            $isLocked = $passwordStore->isLocked($this->employee_id);
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'getPasswordMeta',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            return true;
+        }
+
+        return $isLocked;
     }
 
     /**

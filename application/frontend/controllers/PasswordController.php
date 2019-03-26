@@ -45,7 +45,6 @@ class PasswordController extends BaseRestController
      * Save new password
      * @return array<string,string>
      * @throws BadRequestHttpException
-     * @throws \yii\web\ServerErrorHttpException
      */
     public function actionUpdate()
     {
