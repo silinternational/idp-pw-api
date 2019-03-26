@@ -44,7 +44,7 @@ class ZxcvbnPasswordValidator extends Validator
 
         if ($score < $this->minScore) {
             $message = $this->message !== null ? $this->message : \Yii::t(
-                    'application',
+                    'app',
                     'Password did not meet minimum strength of {minScore}.' .
                     'Try adding some words but avoid common phrases.',
                     ['minScore' => $this->minScore]
