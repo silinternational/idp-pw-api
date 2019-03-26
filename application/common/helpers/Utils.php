@@ -91,7 +91,7 @@ class Utils
                 'status' => 'error',
                 'error' => 'Invalid email address provided: ' . Html::encode($email),
             ]);
-            throw new BadRequestHttpException(\Yii::t('app', 'Invalid email address provided'), 1461459797);
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid email'), 1461459797);
         }
 
         list($part1, $domain) = explode('@', $email);
