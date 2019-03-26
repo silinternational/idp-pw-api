@@ -137,6 +137,31 @@ class IdBroker extends Component implements PersonnelInterface
     }
 
     /**
+     * @param string $field
+     * @param string $value
+     * @return PersonnelUser
+     * @throws NotFoundException
+     * @throws \Exception
+     */
+    public function findByField($field, $value): PersonnelUser
+    {
+        $results = $this->listUsers($field, $value);
+
+        if (count($results) > 1) {
+            throw new \Exception(
+                sprintf('More than one user found when searching by %s "%s"', $field, $value),
+                1497636205
+            );
+        } elseif (count($results) === 1) {
+            if (mb_strtolower($results[0][$field]) == mb_strtolower($value)) {
+                return $this->returnPersonnelUserFromResponse($field, $value, $results[0]);
+            }
+        }
+
+        throw new NotFoundException();
+    }
+
+    /**
      * @param string $username
      * @return PersonnelUser
      * @throws NotFoundException
@@ -144,21 +169,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     public function findByUsername($username): PersonnelUser
     {
-        $idBrokerClient = $this->getIdBrokerClient();
-
-        $results = $idBrokerClient->listUsers(null, ['username' => $username]);
-        if (count($results) > 1) {
-            throw new \Exception(
-                sprintf('More than one user found when searching by username "%s"', $username),
-                1497636205
-            );
-        } elseif (count($results) === 1) {
-            if (mb_strtolower($results[0]['username']) == mb_strtolower($username)) {
-                return $this->returnPersonnelUserFromResponse('username', $username, $results[0]);
-            }
-        }
-
-        throw new NotFoundException();
+        return $this->findByField('username', $username);
     }
 
     /**
@@ -169,21 +180,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     public function findByEmail($email): PersonnelUser
     {
-        $idBrokerClient = $this->getIdBrokerClient();
-
-        $results = $idBrokerClient->listUsers(null, ['email' => $email]);
-        if (count($results) > 1) {
-            throw new \Exception(
-                sprintf('More than one user found when searching by email "%s"', $email),
-                1497636210
-            );
-        } elseif (count($results) === 1) {
-            if (mb_strtolower($results[0]['email']) == mb_strtolower($email)) {
-                return $this->returnPersonnelUserFromResponse('email', $email, $results[0]);
-            }
-        }
-
-        throw new NotFoundException();
+        return $this->findByField('email', $email);
     }
 
     /**
@@ -233,5 +230,19 @@ class IdBroker extends Component implements PersonnelInterface
         }
 
         return $this->returnPersonnelUserFromResponse('invite', '********', $userAttributes);
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @return array
+     * @throws ServiceException
+     */
+    public function listUsers($field, $value): array
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        $results = $idBrokerClient->listUsers(null, [$field => $value]);
+        return $results;
     }
 }
