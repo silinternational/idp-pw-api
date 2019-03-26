@@ -59,6 +59,7 @@ $passwordRules = [
 return [
     'id' => 'app-common',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'sourceLanguage' => '00',
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
@@ -159,6 +160,22 @@ return [
             $authConfig
         ),
         'passwordStore' => ['class' => $passwordStoreClass],
+        /*
+         * i18n component must be defined in common because of unit tests that depend on it
+         */
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class'          => 'yii\i18n\PhpMessageSource',
+                    'basePath'       => '@frontend/messages',
+                    'sourceLanguage' => '00',
+                    'fileMap'        => [
+                        'app' => 'app.php',
+                        'model' => 'model.php',
+                    ],
+                ],
+            ],
+        ],
     ],
     'params' => [
         'idpDisplayName' => $idpDisplayName,
