@@ -99,8 +99,4 @@ return [
     'Invalid reset type' => 'Invalid reset type',
 
     'Client ID is missing' => 'Client ID is missing',
-
-    'test-context' => [
-        'test-key' => 'This is a test string to see how Crowdin handles subarrays.'
-    ],
 ];
