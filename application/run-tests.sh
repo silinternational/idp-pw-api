@@ -18,12 +18,12 @@ runny ./vendor/bin/codecept run unit --coverage --coverage-xml
 TESTRESULTS_UNIT=$?
 
 # Run behat tests
-#if [ -z "$TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail" ]; then
+if [ -z "$TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail" ]; then
     echo -e "\e[31mGoogle passwordstore tests skipped\e[0m"
-#else
-#    runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
-#    TESTRESULTS_BEHAT=$?
-#fi
+else
+    runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
+    TESTRESULTS_BEHAT=$?
+fi
 
 ## The ocular.php script sometimes works and sometimes hangs with no error message
 
