@@ -5,7 +5,7 @@
  */
 return [
     // Utils.php
-    'Invalid email address provided' => 'Invalid email address provided',
+    'Invalid email' => 'Invalid email address provided',
 
     'Unable to verify reCAPTCHA' => 'Unable to verify reCAPTCHA',
 
@@ -100,4 +100,7 @@ return [
 
     'Client ID is missing' => 'Client ID is missing',
 
+    'test-context' => [
+        'test-key' => 'This is a test string to see how Crowdin handles subarrays.'
+    ],
 ];
