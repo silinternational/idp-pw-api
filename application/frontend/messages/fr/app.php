@@ -5,7 +5,7 @@
  */
 return [
     // Utils.php
-    'Invalid email address provided' => 'Adresse email invalide fournie',
+    'Invalid email' => 'Adresse email invalide fournie',
 
     'Unable to verify reCAPTCHA' => 'Impossible de vérifier reCAPTCHA',
 
