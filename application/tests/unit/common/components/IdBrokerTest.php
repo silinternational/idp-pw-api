@@ -128,91 +128,37 @@ class IdBrokerTest extends TestCase
 
     public function testFindByUsername()
     {
-        $employeeId = '33333';
-        $firstName = 'Tommy';
-        $lastName = 'Tester';
-        $userName = 'tommy_tester3';
-        $email = $userName . '@any.org';
+        $mockReturnValue[] = $this->getMockReturnValue();
+        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
+            ->setMethods(['listUsers'])
+            ->getMock();
+        $brokerMock->expects($this->any())
+            ->method('listUsers')
+            ->willReturn($mockReturnValue);
 
-        // Setup
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'hide' => 'no',
-        ]);
+        $username = $mockReturnValue[0]['username'];
+        $results = $brokerMock->findByUsername($username);
 
-        // Act
-        $results = $this->getIdBroker()->findByUsername($userName);
-
-        // Assert
-        $this->assertResultPropertiesMatch($results, [
-            'employeeId' => $employeeId,
-            'username' => $userName,
-            'email' => $email,
-        ]);
+        $msg = ' *** Bad results for username';
+        $this->assertEquals($username, $results->username, $msg);
     }
 
     public function testFindByEmail()
     {
-        $employeeId = '44444';
-        $firstName = 'Tommy';
-        $lastName = 'Tester';
-        $userName = 'tommy_tester4';
-        $email = $userName . '@any.org';
+        $mockReturnValue[] = $this->getMockReturnValue();
+        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
+            ->setMethods(['listUsers'])
+            ->getMock();
+        $brokerMock->expects($this->any())
+            ->method('listUsers')
+            ->willReturn($mockReturnValue);
 
-        // Setup
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'hide' => 'no',
-        ]);
+        $email = $mockReturnValue[0]['email'];
+        $results = $brokerMock->findByEmail($email);
 
-        // Act
-        $results = $this->getIdBroker()->findByEmail($email);
-
-        // Assert
-        $this->assertResultPropertiesMatch($results, [
-            'employeeId' => $employeeId,
-            'username' => $userName,
-            'email' => $email,
-        ]);
+        $msg = ' *** Bad results for email';
+        $this->assertEquals($email, $results->email, $msg);
     }
-
-    public function testFindByEmployeeId()
-    {
-        $employeeId = '55555';
-        $firstName = 'Tommy';
-        $lastName = 'Tester';
-        $userName = 'tommy_tester5';
-        $email = $userName . '@any.org';
-
-        // Setup
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'hide' => 'no',
-        ]);
-
-        // Act
-        $results = $this->getIdBroker()->findByEmployeeId($employeeId);
-
-        // Assert
-        $this->assertResultPropertiesMatch($results, [
-            'employeeId' => $employeeId,
-            'username' => $userName,
-            'email' => $email,
-        ]);
-    }
-
 
     public function testFindByEmployeeId_MissingUser()
     {
