@@ -1,0 +1,3 @@
+files:
+  - source: /application/frontend/messages/en/*.php
+    translation: /application/frontend/messages/%two_letters_code%/%original_file_name%
