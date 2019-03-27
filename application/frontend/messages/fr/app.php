@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Auth.MissingClientID' => 'Client ID is missing',
+    'Auth.MissingClientID' => 'Client ID est manquant',
     'Method.AlreadyExists' => 'Recovery method already exists',
     'Method.CodeExpired' => 'Expired verification code',
     'Method.CodeMissing' => 'Code is required',
