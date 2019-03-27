@@ -80,7 +80,7 @@ class Method extends MethodBase
             return $method->idBrokerClient->listMethod($employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 400) {
-                throw new ServerErrorHttpException(\Yii::t('app', 'Error locating personnel record'), 1542752270);
+                throw new ServerErrorHttpException(\Yii::t('app', 'Method.PersonnelError'), 1542752270);
             } else {
                 throw $e;
             }
@@ -127,7 +127,7 @@ class Method extends MethodBase
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 404) {
                 throw new NotFoundHttpException(
-                    \Yii::t('app', 'Method not found'),
+                    \Yii::t('app', 'Method.NotFound'),
                     1462989221
                 );
             } else {

@@ -68,7 +68,7 @@ class ResetController extends BaseRestController
         $verificationToken = \Yii::$app->request->post('verification_token');
 
         if ( ! $username) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Username is required'));
+            throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingUsername'));
         }
 
         /*
@@ -78,12 +78,12 @@ class ResetController extends BaseRestController
          */
         if (\Yii::$app->params['recaptcha']['required']) {
             if ( ! $verificationToken) {
-                throw new BadRequestHttpException(\Yii::t('app', 'reCAPTCHA verification code is required'));
+                throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingRecaptchaCode'));
             }
             
             $clientIp = Utils::getClientIp(\Yii::$app->request);
             if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
-                throw new BadRequestHttpException(\Yii::t('app', 'reCAPTCHA failed verification'));
+                throw new BadRequestHttpException(\Yii::t('app', 'Reset.RecaptchaFailedVerification'));
             }
         }
 
@@ -112,7 +112,7 @@ class ResetController extends BaseRestController
                 'error' => 'user not found',
             ]);
             throw new NotFoundHttpException(
-                \Yii::t('app', 'User not found'),
+                \Yii::t('app', 'Reset.UserNotFound'),
                 1543338164
             );
         } catch (\Exception $e) {
@@ -123,7 +123,7 @@ class ResetController extends BaseRestController
                 'error' => $e->getMessage(),
             ]);
             throw new ServerErrorHttpException(
-                \Yii::t('app', 'Unable to create new reset'),
+                \Yii::t('app', 'Reset.CreateFailure'),
                 1469036552
             );
         }
@@ -145,7 +145,7 @@ class ResetController extends BaseRestController
 
         if ($user->hide === 'yes') {
             throw new NotFoundHttpException(
-                \Yii::t('app', 'User not found'),
+                \Yii::t('app', 'Reset.UserNotFound'),
                 1543338164
             );
         }
@@ -169,7 +169,7 @@ class ResetController extends BaseRestController
         $reset = Reset::findOne(['uid' => $uid]);
         if ($reset === null) {
             throw new NotFoundHttpException(
-                \Yii::t('app', 'Reset not found'),
+                \Yii::t('app', 'Reset.NotFound'),
                 1462989590
             );
         }
@@ -179,7 +179,7 @@ class ResetController extends BaseRestController
 
         if ($type === null) {
             throw new BadRequestHttpException(
-                \Yii::t('app', 'Invalid reset type'),
+                \Yii::t('app', 'Reset.MissingResetType'),
                 1462989664
             );
         }
@@ -239,7 +239,7 @@ class ResetController extends BaseRestController
         try {
             $clientId = Utils::getClientIdOrFail();
         } catch (\Exception $e) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Client ID is missing'), 1483979025);
+            throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingClientID'), 1483979025);
         }
 
         $log = [
@@ -316,7 +316,7 @@ class ResetController extends BaseRestController
         $log['error'] = 'Reset code verification failed';
         \Yii::warning($log);
         throw new BadRequestHttpException(
-            \Yii::t('app', 'Invalid verification code'),
+            \Yii::t('app', 'Reset.InvalidCode'),
             1462991098
         );
     }
@@ -329,7 +329,7 @@ class ResetController extends BaseRestController
     {
         $code = \Yii::$app->request->getBodyParam('code', null);
         if ($code === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1462989866);
+            throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingCode'), 1462989866);
         }
         return $code;
     }

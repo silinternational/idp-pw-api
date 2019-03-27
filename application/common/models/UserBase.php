@@ -58,18 +58,18 @@ class UserBase extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'employee_id' => Yii::t('app', 'Employee ID'),
-            'first_name' => Yii::t('app', 'First Name'),
-            'last_name' => Yii::t('app', 'Last Name'),
-            'idp_username' => Yii::t('app', 'Idp Username'),
-            'email' => Yii::t('app', 'Email'),
-            'created' => Yii::t('app', 'Created'),
-            'access_token' => Yii::t('app', 'Access Token'),
-            'access_token_expiration' => Yii::t('app', 'Access Token Expiration'),
-            'auth_type' => Yii::t('app', 'Auth Type'),
-            'hide' => Yii::t('app', 'Hide'),
-            'uuid' => Yii::t('app', 'Uuid'),
+            'id' => Yii::t('model', 'ID'),
+            'employee_id' => Yii::t('model', 'Employee ID'),
+            'first_name' => Yii::t('model', 'First Name'),
+            'last_name' => Yii::t('model', 'Last Name'),
+            'idp_username' => Yii::t('model', 'Idp Username'),
+            'email' => Yii::t('model', 'Email'),
+            'created' => Yii::t('model', 'Created'),
+            'access_token' => Yii::t('model', 'Access Token'),
+            'access_token_expiration' => Yii::t('model', 'Access Token Expiration'),
+            'auth_type' => Yii::t('model', 'Auth Type'),
+            'hide' => Yii::t('model', 'Hide'),
+            'uuid' => Yii::t('model', 'Uuid'),
         ];
     }
 

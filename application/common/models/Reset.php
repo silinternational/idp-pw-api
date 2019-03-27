@@ -123,7 +123,7 @@ class Reset extends ResetBase
             /*
              * Save new Reset
              */
-            $reset->saveOrError('create new reset', 'Unable to create new reset.');
+            $reset->saveOrError('create new reset', \Yii::t('app', 'Reset.CreateFailure'));
 
             EventLog::log(
                 'ResetCreated',
@@ -199,7 +199,7 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{idpDisplayName} password reset request',
+            'Reset.PasswordResetSubject',
             [
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
@@ -222,7 +222,7 @@ class Reset extends ResetBase
     {
         $subject = \Yii::t(
             'app',
-            '{idpDisplayName} password reset request for {name}',
+            'Reset.PasswordResetForSubject',
             [
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
                 'name' => $this->user->first_name,
@@ -247,7 +247,7 @@ class Reset extends ResetBase
 
         $subject = \Yii::t(
             'app',
-            '{idpDisplayName} password reset request',
+            'Reset.PasswordResetSubject',
             [
                 'idpDisplayName' => \Yii::$app->params['idpDisplayName'],
             ]
@@ -283,7 +283,7 @@ class Reset extends ResetBase
          */
         if ($this->code === null) {
             $this->code = self::createCode();
-            $this->saveOrError('send email', 'Unable to update reset in database, email not sent.');
+            $this->saveOrError('send email', \Yii::t('app', 'Reset.UpdateFailure'));
         }
 
         $resetUrl = sprintf('%s/password/reset/%s/verify/%s', \Yii::$app->params['uiUrl'], $this->uid, $this->code);
@@ -421,7 +421,7 @@ class Reset extends ResetBase
             'user' => $this->user->email,
         ];
         $this->disable_until = Utils::getDatetime(time() + \Yii::$app->params['reset']['disableDuration']);
-        $this->saveOrError($log['action'], 'Unable to save reset with disable_until.');
+        $this->saveOrError($log['action'], \Yii::t('app', 'Reset.SetDisableTimeError'));
 
         EventLog::log(
             'ResetDisabled',
@@ -447,7 +447,7 @@ class Reset extends ResetBase
     {
         $this->disable_until = null;
         $this->attempts = 0;
-        $this->saveOrError('enable reset', 'Unable to enable reset.');
+        $this->saveOrError('enable reset', \Yii::t('app', 'Reset.CannotEnable'));
 
         EventLog::log(
             'ResetEnabled',
@@ -513,7 +513,7 @@ class Reset extends ResetBase
              */
             if ($methodUid === null) {
                 throw new BadRequestHttpException(
-                    \Yii::t('app', 'Method UID required for reset type method'),
+                    \Yii::t('app', 'Reset.MissingMethodUID'),
                     1462988984
                 );
             }
@@ -526,7 +526,7 @@ class Reset extends ResetBase
             $this->email = $method['value'];
         } else {
             throw new BadRequestHttpException(
-                \Yii::t('app', 'Unknown reset type requested'),
+                \Yii::t('app', 'Reset.UnknownType'),
                 1462989489
             );
         }
@@ -539,7 +539,7 @@ class Reset extends ResetBase
         /*
          * Save changes
          */
-        $this->saveOrError('Set type of reset', 'Unable to update reset type.');
+        $this->saveOrError('Set type of reset', \Yii::t('app', 'Reset.UpdateTypeError'));
 
         EventLog::log(
             'ResetChangeType',
@@ -565,7 +565,7 @@ class Reset extends ResetBase
          * Increment attempts count first thing
          */
         $this->attempts++;
-        $this->saveOrError($action . ' reset', 'Unable to increment attempts count.');
+        $this->saveOrError($action . ' reset', \Yii::t('app', 'Reset.IncrementAttemptsError'));
 
         /*
          * Enable / disable reset as needed
@@ -606,7 +606,7 @@ class Reset extends ResetBase
                 'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
                 'user' => $this->user->email,                
             ]);
-            throw new ServerErrorHttpException(\Yii::t('app', $errorPrefix));
+            throw new ServerErrorHttpException($errorPrefix);
         }
     }
 

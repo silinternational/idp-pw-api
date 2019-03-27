@@ -41,7 +41,7 @@ class Password extends Model
                 'skipOnError' => false,
                 'tooShort' => \Yii::t(
                     'app',
-                    'Your password does not meet the minimum length of {minLength} (code 100)',
+                    'Password.TooShort',
                     ['minLength' => $this->config['minLength']]
                 ),
             ],
@@ -50,7 +50,7 @@ class Password extends Model
                 'skipOnError' => false,
                 'tooLong' => \Yii::t(
                     'app',
-                    'Your password exceeds the maximum length of {maxLength} (code 110)',
+                    'Password.TooLong',
                     ['maxLength' => $this->config['maxLength']]
                 ),
             ],
@@ -59,7 +59,7 @@ class Password extends Model
                 'skipOnError' => true,
                 'message' => \Yii::t(
                     'app',
-                    'Your password does not meet the minimum strength of {minScore} (code 150)',
+                    'Password.TooWeak',
                     ['minScore' => $this->config['minScore']]
                 ),
             ],
@@ -96,7 +96,7 @@ class Password extends Model
             throw new ServerErrorHttpException(
                 \Yii::t(
                     'app',
-                    'Unable to update password. Please contact support.'
+                    'Password.UpdateError'
                 ),
                 1511195430
             );
@@ -112,7 +112,7 @@ class Password extends Model
                 mb_strtolower($this->user->$disallowedAttribute)) !== false) {
                 $this->addError($attribute, \Yii::t(
                     'app',
-                    'Your password may not contain any of these: {labelList} (code 180)',
+                    'Password.DisallowedContent',
                     ['labelList' => join(', ', $labelList)]
                 ));
             }
@@ -149,28 +149,13 @@ class Password extends Model
                 'employee_id' => $this->employeeId,
                 'error' => $this->getErrors('password'),
             ]);
-            throw new BadRequestHttpException(\Yii::t(
-                'app',
-                'New password validation failed: {errors}',
-                ['errors' => $errors]
-            ));
+            throw new BadRequestHttpException($errors);
         }
         
         $log = [
             'action' => 'save password',
             'employee_id' => $this->employeeId,
         ];
-
-        /*
-         * If validation fails, return just the first error
-         */
-        if ( ! $this->validate()) {
-            $errors = $this->getFirstErrors();
-            $log['status'] = 'error';
-            $log['error'] = $errors;
-            \Yii::error($log);
-            throw new BadRequestHttpException(\Yii::t('app', $errors[0]), 1463164336);
-        }
 
         /*
          * Update password
@@ -198,24 +183,11 @@ class Password extends Model
              */
             if ($e instanceof  PasswordReuseException) {
                 \Yii::warning($log);
-                throw new ConflictHttpException(
-                    \Yii::t(
-                        'app',
-                        'Unable to update password. ' .
-                            'If this password has been used before please use something different.'
-                    ),
-                    1469194882
-                );
+                throw new ConflictHttpException(\Yii::t('app', 'Password.PasswordReuse'), 1469194882);
             } else {
                 \Yii::error($log);
                 throw new ServerErrorHttpException(
-                    \Yii::t(
-                        'app',
-                        'Unable to update password, please wait a minute and try again. If this problem ' .
-                            'persists, please contact support.'
-                    ), 
-                    1463165209
-                );
+                    \Yii::t('app', 'Password.UpdateFailure'), 1463165209);
             }
 
         }
@@ -238,9 +210,7 @@ class Password extends Model
 
         foreach ($publicPasswords as $publicPassword) {
             if ($this->$attribute == $publicPassword) {
-                $msg = "Ha ha, good one. No, you shouldn't use a password you saw " .
-                    'in a video about creating good passwords.';
-                $this->addError($attribute, \Yii::t('app', $msg));
+                $this->addError($attribute, \Yii::t('app', 'Password.PublicPasswordUsed'));
             }
         }
     }
@@ -264,9 +234,7 @@ class Password extends Model
         }
 
         if ($count > 0) {
-            $msg = 'This password is not secure. It has been revealed {count} times in ' .
-                'password breaches. Please create a new password.';
-            $this->addError($attribute, \Yii::t('app', $msg, ['count' => $count]));
+            $this->addError($attribute, \Yii::t('app', 'Password.Breached', ['count' => $count]));
         }
     }
 }

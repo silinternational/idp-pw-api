@@ -105,23 +105,23 @@ class MethodController extends BaseRestController
     public function actionCreate()
     {
         $messages = [
-            400 => 'Value is required',
-            409 => 'Recovery method already exists',
-            422 => 'Invalid email address provided',
+            400 => \Yii::t('app', 'Method.MissingValue'),
+            409 => \Yii::t('app', 'Method.AlreadyExists'),
+            422 => \Yii::t('app', 'Method.InvalidEmail'),
         ];
 
         $request = \Yii::$app->request;
 
         $value = $request->post('value');
         if ($value === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Value is required'), 1542750428);
+            throw new BadRequestHttpException(\Yii::t('app', 'Method.MissingValue'), 1542750428);
         }
 
         $employeeId = \Yii::$app->user->identity->employee_id;
 
         if (\Yii::$app->user->identity->email == $value) {
             throw new ConflictHttpException(
-                \Yii::t('app', 'Primary email address supplied as alternate recovery method.'),
+                \Yii::t('app', 'Method.EmailReuseError'),
                 1550138424
             );
         }
@@ -130,7 +130,7 @@ class MethodController extends BaseRestController
         } catch (ServiceException $e) {
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
+                $messages[$e->httpStatusCode] ?? '',
                 1542750430
             );
         }
@@ -149,22 +149,15 @@ class MethodController extends BaseRestController
     public function actionVerify($uid)
     {
         $messages = [
-            400 => 'Invalid verification code',
-            404 => 'Recovery method not found',
-            410 => 'Expired verification code',
-            429 => 'Too many failures for this recovery method',
-        ];
-
-        $codes = [
-            400 => 1542749429,
-            404 => 1542749427,
-            410 => 1545144979,
-            429 => 1542749428,
+            400 => \Yii::t('app', 'Method.InvalidCode'),
+            404 => \Yii::t('app', 'Method.NotFound'),
+            410 => \Yii::t('app', 'Method.CodeExpired'),
+            429 => \Yii::t('app', 'Method.TooManyFailures'),
         ];
 
         $code = \Yii::$app->request->getBodyParam('code');
         if ($code === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Code is required'), 1542749426);
+            throw new BadRequestHttpException(\Yii::t('app', 'Method.CodeMissing'), 1542749426);
         }
 
         try {
@@ -172,8 +165,8 @@ class MethodController extends BaseRestController
         } catch (ServiceException $e) {
             throw new HttpException(
                 $e->httpStatusCode,
-                \Yii::t('app', $messages[$e->httpStatusCode] ?? ''),
-                $codes[$e->httpStatusCode] ?? 0
+                $messages[$e->httpStatusCode] ?? '',
+                1542749427
             );
         }
 
@@ -196,7 +189,7 @@ class MethodController extends BaseRestController
             $this->idBrokerClient->deleteMethod($uid, $employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 404) {
-                throw new NotFoundHttpException(\Yii::t('app', 'Recovery method not found'), 1542749425);
+                throw new NotFoundHttpException(\Yii::t('app', 'Method.NotFound'), 1542749425);
             } else {
                 throw $e;
             }
@@ -224,7 +217,7 @@ class MethodController extends BaseRestController
             $this->idBrokerClient->resendMethod($uid, $employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 404) {
-                throw new NotFoundHttpException(\Yii::t('app', 'Recovery method not found'), 1542749424);
+                throw new NotFoundHttpException(\Yii::t('app', 'Method.NotFound'), 1542749424);
             } else {
                 throw $e;
             }

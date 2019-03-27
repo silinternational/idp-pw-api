@@ -57,17 +57,17 @@ class MethodBase extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'uid' => Yii::t('app', 'Uid'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'type' => Yii::t('app', 'Type'),
-            'value' => Yii::t('app', 'Value'),
-            'verified' => Yii::t('app', 'Verified'),
-            'verification_code' => Yii::t('app', 'Verification Code'),
-            'verification_attempts' => Yii::t('app', 'Verification Attempts'),
-            'verification_expires' => Yii::t('app', 'Verification Expires'),
-            'created' => Yii::t('app', 'Created'),
-            'deleted_at' => Yii::t('app', 'Deleted At'),
+            'id' => Yii::t('model', 'ID'),
+            'uid' => Yii::t('model', 'Uid'),
+            'user_id' => Yii::t('model', 'User ID'),
+            'type' => Yii::t('model', 'Type'),
+            'value' => Yii::t('model', 'Value'),
+            'verified' => Yii::t('model', 'Verified'),
+            'verification_code' => Yii::t('model', 'Verification Code'),
+            'verification_attempts' => Yii::t('model', 'Verification Attempts'),
+            'verification_expires' => Yii::t('model', 'Verification Expires'),
+            'created' => Yii::t('model', 'Created'),
+            'deleted_at' => Yii::t('model', 'Deleted At'),
         ];
     }
 
