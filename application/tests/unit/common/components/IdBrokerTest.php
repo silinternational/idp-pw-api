@@ -7,26 +7,6 @@ use common\components\personnel\NotFoundException;
 
 class IdBrokerTest extends TestCase
 {
-    /**
-     * @param string $mockedMethod name of method to replace with mocked implementation
-     * @param mixed $returnValue return value from mocked method
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getMockComponent($mockedMethod = null, $returnValue = null)
-    {
-        $brokerMock = $this->getMockBuilder(IdBroker::class)
-            ->setMethods(['callIdBrokerGetUser', 'listUsers'])
-            ->getMock();
-
-        if ($mockedMethod) {
-            $brokerMock->expects($this->any())
-                ->method($mockedMethod)
-                ->willReturn($returnValue);
-        }
-
-        return $brokerMock;
-    }
-
     private function getMockReturnValue()
     {
         return [
@@ -171,5 +151,25 @@ class IdBrokerTest extends TestCase
                 $propertyValue
             ));
         }
+    }
+    
+    /**
+     * @param string $mockedMethod name of method to replace with mocked implementation
+     * @param mixed $returnValue return value from mocked method
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getMockComponent($mockedMethod = null, $returnValue = null)
+    {
+        $brokerMock = $this->getMockBuilder(IdBroker::class)
+            ->setMethods(['callIdBrokerGetUser', 'listUsers'])
+            ->getMock();
+
+        if ($mockedMethod) {
+            $brokerMock->expects($this->any())
+                ->method($mockedMethod)
+                ->willReturn($returnValue);
+        }
+
+        return $brokerMock;
     }
 }
