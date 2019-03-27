@@ -59,10 +59,15 @@ class IdBroker extends Component implements PersonnelInterface
      * @param string $employeeId
      * @return PersonnelUser
      * @throws NotFoundException
+     * @throws ServiceException
      */
     public function findByEmployeeId($employeeId): PersonnelUser
     {
         $results = $this->callIdBrokerGetUser($employeeId);
+        if ($results === null) {
+            throw new NotFoundException();
+        }
+
         return $this->returnPersonnelUserFromResponse('employeeId', $employeeId, $results);
     }
 
@@ -71,7 +76,7 @@ class IdBroker extends Component implements PersonnelInterface
      *
      * @param string $employeeId
      * @return array|null
-     * @throws NotFoundException
+     * @throws ServiceException
      */
     public function callIdBrokerGetUser($employeeId)
     {
@@ -79,9 +84,6 @@ class IdBroker extends Component implements PersonnelInterface
         $idBrokerClient = $this->getIdBrokerClient();
 
         $results = $idBrokerClient->getUser($employeeId);
-        if ($results === null) {
-            throw new NotFoundException();
-        }
 
         return $results;
     }
@@ -233,12 +235,12 @@ class IdBroker extends Component implements PersonnelInterface
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @return array
+     * @param string $field field name to search
+     * @param string $value search value
+     * @return array raw array of zero or more arrays of user properties
      * @throws ServiceException
      */
-    public function listUsers($field, $value): array
+    protected function listUsers($field, $value): array
     {
         $idBrokerClient = $this->getIdBrokerClient();
 
