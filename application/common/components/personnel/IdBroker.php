@@ -1,7 +1,6 @@
 <?php
 namespace common\components\personnel;
 
-use IPBlock;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Component;
@@ -244,7 +243,6 @@ class IdBroker extends Component implements PersonnelInterface
     {
         $idBrokerClient = $this->getIdBrokerClient();
 
-        $results = $idBrokerClient->listUsers(null, [$field => $value]);
-        return $results;
+        return $idBrokerClient->listUsers(null, [$field => $value]);
     }
 }

@@ -2,8 +2,8 @@
 namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
-use common\components\personnel\NotFoundException;
 use common\components\personnel\IdBroker;
+use common\components\personnel\NotFoundException;
 
 class IdBrokerTest extends TestCase
 {
