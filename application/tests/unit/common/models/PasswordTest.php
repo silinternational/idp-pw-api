@@ -97,8 +97,13 @@ class PasswordTest extends Test
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));
 
+            /*
+             * Codeception is not working with Yii i18n as we have it
+             * set up, so the error comparison is using the error message
+             * translation key.
+             */
             $this->assertTrue(
-                substr_count($validationErrorsString, 'code 180') > 0,
+                substr_count($validationErrorsString, 'Password.DisallowedContent') > 0,
                 'Failed validating test case: ' . $testPassword .
                 '. No error for matching a user attribute.'
             );

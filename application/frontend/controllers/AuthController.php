@@ -63,7 +63,7 @@ class AuthController extends BaseRestController
             try {
                 $clientId = Utils::getClientIdOrFail();
             } catch (\Exception $e) {
-                throw new BadRequestHttpException(\Yii::t('app', 'Client ID is missing'), 1545316879);
+                throw new BadRequestHttpException(\Yii::t('app', 'Auth.MissingClientID'), 1545316879);
             }
 
             /*
