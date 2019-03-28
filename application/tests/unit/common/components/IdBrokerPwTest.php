@@ -2,7 +2,6 @@
 namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
-use Phake;
 use common\components\passwordStore\AccountLockedException;
 use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\UserNotFoundException;
@@ -15,14 +14,21 @@ class IdBrokerPwTest extends TestCase
      * array of users' information.
      *
      * @param array $listOfUserData
-     * @return IdBroker
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getIdBrokerForTest($listOfUserData)
     {
         $fakeIdBrokerClient = new FakeIdBrokerClient($listOfUserData);
-        $idBrokerForTest = Phake::partialMock(IdBroker::class);
-        Phake::when($idBrokerForTest)->getClient()->thenReturn($fakeIdBrokerClient);
-        return $idBrokerForTest;
+
+        $brokerMock = $this->getMockBuilder(IdBroker::class)
+            ->setMethods(['getClient'])
+            ->getMock();
+
+        $brokerMock->expects($this->any())
+            ->method('getClient')
+            ->willReturn($fakeIdBrokerClient);
+
+        return $brokerMock;
     }
 
     public function testGetMetaOk()

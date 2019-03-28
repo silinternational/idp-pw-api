@@ -2,76 +2,11 @@
 namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
-
-use common\components\personnel\NotFoundException;
 use common\components\personnel\IdBroker;
-use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use common\components\personnel\NotFoundException;
 
 class IdBrokerTest extends TestCase
 {
-    /**
-     * @var IdBroker
-     */
-    private $idBroker;
-
-    public $baseUrl;
-    public $accessToken;
-
-    public function __construct()
-    {
-        $this->baseUrl = \Yii::$app->params['idBrokerConfig']['baseUrl'];
-        $this->accessToken = \Yii::$app->params['idBrokerConfig']['accessToken'];
-        $this->idBroker = new IdBroker();
-    }
-
-    /**
-     * @return IdBroker
-     */
-    private function getIdBroker(): IdBroker
-    {
-        return $this->idBroker;
-    }
-
-    protected function ensureUserExists($userInfo)
-    {
-        $idBrokerClient = new IdBrokerClient($this->baseUrl, $this->accessToken, [
-            IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
-        ]);
-        
-        $i = 0;
-        $e = null;
-        
-        $userExistsCode = 1490802526;
-        
-        // Make sure broker container is available to deal with requests
-        while ($i < 60) {
-            $i++;
-        
-            try {
-                $idBrokerClient->createUser($userInfo);
-                $e = null;
-                break;
-            } catch (\Exception $e) {
-                // If broker not available, wait longer
-                if ($e instanceof \GuzzleHttp\Command\Exception\CommandException) {
-                    sleep(1);
-                
-                    // if user already created, ensure it matches
-                } elseif ($e->getCode() == $userExistsCode) {
-                    $idBrokerClient->updateUser($userInfo);
-                    $e = null;
-                    break;
-                } else {
-                    throw $e;
-                }
-            }
-        }
-        
-        if ($e !== null) {
-            throw $e;
-        }
-    }
-
     private function getMockReturnValue()
     {
         return [
@@ -82,6 +17,7 @@ class IdBrokerTest extends TestCase
             'display_name' => 'John Smith',
             'username' => 'john_smith',
             'email' => 'john_smith@example.com',
+            'manager_email' => 'manager@example.com',
             'active' => 'yes',
             'locked' => 'no',
             'last_login_utc' => '2017-07-01T12:30:00Z',
@@ -89,16 +25,11 @@ class IdBrokerTest extends TestCase
         ];
     }
 
-    public function testReturnPersonnelUserFromResponse_Mocked()
+    public function testReturnPersonnelUserFromResponse()
     {
         $mockReturnValue = $this->getMockReturnValue();
         unset($mockReturnValue['email']);
-        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
-            ->setMethods(['callIdBrokerGetUser'])
-            ->getMock();
-        $brokerMock->expects($this->any())
-            ->method('callIdBrokerGetUser')
-            ->willReturn($mockReturnValue);
+        $brokerMock = $this->getMockComponent('callIdBrokerGetUser', $mockReturnValue);
 
         $employeeId = '11111';
         $this->expectExceptionCode(1496260921);
@@ -108,119 +39,48 @@ class IdBrokerTest extends TestCase
         $brokerMock->findByEmployeeId($employeeId);
     }
 
-    public function testFindByEmployeeId_Mocked()
+    public function testFindByEmployeeId()
     {
         $mockReturnValue = $this->getMockReturnValue();
-        $brokerMock = $this->getMockBuilder('common\components\personnel\IdBroker')
-                            ->setMethods(['callIdBrokerGetUser'])
-                            ->getMock();
-        $brokerMock->expects($this->any())
-                    ->method('callIdBrokerGetUser')
-                    ->willReturn($mockReturnValue);
+        $brokerMock = $this->getMockComponent('callIdBrokerGetUser', $mockReturnValue);
 
         $employeeId = '11111';
         $results = $brokerMock->findByEmployeeId($employeeId);
 
-        $expected = $mockReturnValue['username'];
-        $msg = ' *** Bad results for username';
-        $this->assertEquals($expected, $results->username, $msg);
+        $this->assertResultPropertiesMatch($results, $mockReturnValue);
     }
 
     public function testFindByUsername()
     {
-        $employeeId = '33333';
-        $firstName = 'Tommy';
-        $lastName = 'Tester';
-        $userName = 'tommy_tester3';
-        $email = $userName . '@any.org';
+        $mockReturnValue = [ $this->getMockReturnValue() ];
+        $brokerMock = $this->getMockComponent('listUsers', $mockReturnValue);
 
-        // Setup
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'hide' => 'no',
-        ]);
+        $username = $mockReturnValue[0]['username'];
+        $results = $brokerMock->findByUsername($username);
 
-        // Act
-        $results = $this->getIdBroker()->findByUsername($userName);
-
-        // Assert
-        $this->assertResultPropertiesMatch($results, [
-            'employeeId' => $employeeId,
-            'username' => $userName,
-            'email' => $email,
-        ]);
+        $this->assertResultPropertiesMatch($results, $mockReturnValue[0]);
     }
 
     public function testFindByEmail()
     {
-        $employeeId = '44444';
-        $firstName = 'Tommy';
-        $lastName = 'Tester';
-        $userName = 'tommy_tester4';
-        $email = $userName . '@any.org';
+        $mockReturnValue = [ $this->getMockReturnValue() ];
+        $brokerMock = $this->getMockComponent('listUsers', $mockReturnValue);
 
-        // Setup
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'hide' => 'no',
-        ]);
+        $email = $mockReturnValue[0]['email'];
+        $results = $brokerMock->findByEmail($email);
 
-        // Act
-        $results = $this->getIdBroker()->findByEmail($email);
-
-        // Assert
-        $this->assertResultPropertiesMatch($results, [
-            'employeeId' => $employeeId,
-            'username' => $userName,
-            'email' => $email,
-        ]);
+        $this->assertResultPropertiesMatch($results, $mockReturnValue[0]);
     }
-
-    public function testFindByEmployeeId()
-    {
-        $employeeId = '55555';
-        $firstName = 'Tommy';
-        $lastName = 'Tester';
-        $userName = 'tommy_tester5';
-        $email = $userName . '@any.org';
-
-        // Setup
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $userName,
-            'email' => $email,
-            'hide' => 'no',
-        ]);
-
-        // Act
-        $results = $this->getIdBroker()->findByEmployeeId($employeeId);
-
-        // Assert
-        $this->assertResultPropertiesMatch($results, [
-            'employeeId' => $employeeId,
-            'username' => $userName,
-            'email' => $email,
-        ]);
-    }
-
 
     public function testFindByEmployeeId_MissingUser()
     {
+        $brokerMock = $this->getMockComponent('callIdBrokerGetUser', null);
+
         // Setup
         $employeeId = time();
 
         $this->expectException(NotFoundException::class);
-        $this->getIdBroker()->findByEmployeeId($employeeId);
+        $brokerMock->findByEmployeeId($employeeId);
     }
     
     /**
@@ -240,7 +100,7 @@ class IdBrokerTest extends TestCase
         $this->expectException(NotFoundException::class);
         
         // Act:
-        $this->getIdBroker()->returnPersonnelUserFromResponse(
+        $this->getMockComponent()->returnPersonnelUserFromResponse(
             'employee_id',
             $employeeId,
             $fakeIdBrokerClientResponse
@@ -262,38 +122,27 @@ class IdBrokerTest extends TestCase
         $this->expectException(\Exception::class);
         
         // Act:
-        $this->getIdBroker()->returnPersonnelUserFromResponse(
+        $this->getMockComponent()->returnPersonnelUserFromResponse(
             'employee_id',
             $employeeId,
             $fakeIdBrokerClientResponse
         );
     }
 
-    public function testReturnPersonnelUserFromResponse_HasManagerEmail()
+    protected function assertResultPropertiesMatch($results, $mockReturnValue)
     {
-        // Arrange:
-        $employeeId = '88888';
-        $userName = 'tommy_tester8';
-        $managerEmail = 'manager@example.com';
-        $this->ensureUserExists([
-            'employee_id' => $employeeId,
-            'first_name' => 'Tommy',
-            'last_name' => 'Tester',
-            'username' => $userName,
-            'email' => $userName . '@example.com',
-            'hide' => 'no',
-            'manager_email' => $managerEmail,
-        ]);
+        $properties = [
+            'uuid' => $mockReturnValue['uuid'],
+            'employeeId' => $mockReturnValue['employee_id'],
+            'firstName' => $mockReturnValue['first_name'],
+            'lastName' => $mockReturnValue['last_name'],
+            'username' => $mockReturnValue['username'],
+            'email' => $mockReturnValue['email'],
+            'supervisorEmail' => $mockReturnValue['manager_email'],
+            'hide' => $mockReturnValue['hide'],
+            'lastLogin' => $mockReturnValue['last_login_utc'],
+        ];
 
-        // Act:
-        $personnelUser = $this->getIdBroker()->findByEmployeeId($employeeId);
-        
-        // Assert:
-        $this->assertResultPropertiesMatch($personnelUser, ['supervisorEmail' => $managerEmail]);
-    }
-    
-    protected function assertResultPropertiesMatch($results, $properties)
-    {
         foreach ($properties as $propertyName => $propertyValue) {
             $this->assertEquals($propertyValue, $results->$propertyName, sprintf(
                 "Returned property '%s' value '%s' does not match '%s'.",
@@ -302,5 +151,25 @@ class IdBrokerTest extends TestCase
                 $propertyValue
             ));
         }
+    }
+    
+    /**
+     * @param string $mockedMethod name of method to replace with mocked implementation
+     * @param mixed $returnValue return value from mocked method
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getMockComponent($mockedMethod = null, $returnValue = null)
+    {
+        $brokerMock = $this->getMockBuilder(IdBroker::class)
+            ->setMethods(['callIdBrokerGetUser', 'listUsers'])
+            ->getMock();
+
+        if ($mockedMethod) {
+            $brokerMock->expects($this->any())
+                ->method($mockedMethod)
+                ->willReturn($returnValue);
+        }
+
+        return $brokerMock;
     }
 }
