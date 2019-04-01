@@ -15,16 +15,13 @@ class Password extends Model
     /** @var string */
     public $password;
 
-    /** @var  string */
-    public $employeeId;
-
     /** @var \common\components\passwordStore\PasswordStoreInterface */
     public $passwordStore;
 
     /** @var array */
     public $config;
 
-    /** @var common\models\User **/
+    /** @var User **/
     public $user;
 
     public function init()
@@ -121,15 +118,15 @@ class Password extends Model
 
     /**
      * Shortcut method to initialize a Password object
-     * @param string $employeeId
+     * @param User $user
      * @param string $newPassword
      * @return Password
      */
-    public static function create($employeeId, $newPassword)
+    public static function create($user, $newPassword)
     {
         $password = new Password();
         $password->password = $newPassword;
-        $password->employeeId = $employeeId;
+        $password->user = $user;
 
         return $password;
     }
@@ -140,13 +137,12 @@ class Password extends Model
      */
     public function save()
     {
-
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
             \Yii::warning([
                 'action' => 'save password',
                 'status' => 'error',
-                'employee_id' => $this->employeeId,
+                'employee_id' => $this->user->employee_id,
                 'error' => $this->getErrors('password'),
             ]);
             throw new BadRequestHttpException($errors);
@@ -154,14 +150,14 @@ class Password extends Model
         
         $log = [
             'action' => 'save password',
-            'employee_id' => $this->employeeId,
+            'employee_id' => $this->user->employee_id,
         ];
 
         /*
          * Update password
          */
         try {
-            $this->passwordStore->set($this->employeeId, $this->password);
+            $this->passwordStore->set($this->user->employee_id, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
         } catch (\Exception $e) {
