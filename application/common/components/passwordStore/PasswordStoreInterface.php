@@ -33,7 +33,6 @@ interface PasswordStoreInterface
      * @param string $password
      * @return bool
      * @throws \Exception
-     * @throws \common\components\passwordStore\UserNotFoundException
      */
     public function assess($employeeId, $password);
 
