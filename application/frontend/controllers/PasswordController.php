@@ -104,10 +104,10 @@ class PasswordController extends BaseRestController
     }
 
     /**
-     * @return mixed
+     * @return string|null
      * @throws BadRequestHttpException
      */
-    protected function getPasswordFromRequestBody(): mixed
+    protected function getPasswordFromRequestBody()
     {
         $newPassword = \Yii::$app->request->getBodyParam('password');
         if ($newPassword === null) {
