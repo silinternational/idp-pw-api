@@ -13,7 +13,7 @@ testapi: upTestDb yiimigratetestDb
 	docker-compose up -d broker
 	docker-compose run --rm apitest
 
-api: upDb broker composer yiimigrate
+api: upDb broker composer yiimigrate api.html
 	docker-compose up -d api zxcvbn phpmyadmin brokerpma emailpma
 
 composer:
@@ -75,7 +75,9 @@ clean:
 	docker-compose kill
 	docker-compose rm -f
 
-raml2html:
+raml2html: api.html
+
+api.html: api.raml
 	docker-compose run --rm raml2html
 
 codeship.env: codeship.aes codeship.env.encrypted

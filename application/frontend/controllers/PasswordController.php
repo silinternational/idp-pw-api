@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Password;
 use common\models\User;
 use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
@@ -57,10 +58,8 @@ class PasswordController extends BaseRestController
      */
     public function actionUpdate()
     {
-        $newPassword = \Yii::$app->request->getBodyParam('password');
-        if ($newPassword === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Password.MissingPassword'));
-        }
+        /** @var string $newPassword */
+        $newPassword = $this->getPasswordFromRequestBody();
 
         /** @var User $user */
         $user = \Yii::$app->user->identity;
@@ -73,5 +72,47 @@ class PasswordController extends BaseRestController
         }
 
         return $pwMeta;
+    }
+
+    /**
+     * Assess whether a password will pass validation checks without actually saving the password.
+     * @throws BadRequestHttpException
+     */
+    public function actionAssess()
+    {
+        /** @var string $newPassword */
+        $newPassword = $this->getPasswordFromRequestBody();
+
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+
+        $testPassword = Password::create($user, $newPassword);
+
+        if (! $testPassword->validate('password')) {
+            $errors = join(', ', $testPassword->getErrors('password'));
+            \Yii::warning([
+                'action' => 'password/assess',
+                'status' => 'error',
+                'employee_id' => $user->employee_id,
+                'error' => $errors,
+            ]);
+            throw new BadRequestHttpException($errors, 1554151659);
+        }
+
+        \Yii::$app->response->statusCode = 204;
+        return;
+    }
+
+    /**
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    protected function getPasswordFromRequestBody(): mixed
+    {
+        $newPassword = \Yii::$app->request->getBodyParam('password');
+        if ($newPassword === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Password.MissingPassword'));
+        }
+        return $newPassword;
     }
 }

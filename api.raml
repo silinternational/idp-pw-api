@@ -401,6 +401,10 @@ types:
       200:
         body:
           type: PasswordMeta
+      400:
+        description: A password was not provided or it does not pass validation.
+        body:
+          type: Error
       409:
         description: The requested password has been used too recently.
         body:
@@ -411,6 +415,27 @@ types:
       200:
         body:
           type: PasswordMeta
+  /assess:
+    put:
+      description: Assess whether a new password will pass all validation rules.
+      body:
+        properties:
+          password: string
+        example:
+          {
+            "password": "abc123!@#ABC"
+          }
+      responses:
+        204:
+          description: All validation rules pass.
+        400:
+          description: A password was not provided or it does not pass validation.
+          body:
+            type: Error
+        409:
+          description: The requested password has been used too recently.
+          body:
+            type: Error
 /reset:
   post:
     securedBy: null

@@ -35,8 +35,11 @@ class PasswordTest extends Test
         $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
         $testData = $this->getTestData();
 
+        $employeeId = '111111';
+        $user = User::findOne(['employee_id' => $employeeId]);
+
         foreach ($testData as $testCase) {
-            $password = Password::create(1234, $testCase['password']);
+            $password = Password::create($user, $testCase['password']);
             $valid = $password->validate();
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));
@@ -90,8 +93,7 @@ class PasswordTest extends Test
             $user->email,
         ];
         foreach ($testData as $testPassword) {
-            $password = Password::create($employeeId, $testPassword);
-            $password->user = $user;
+            $password = Password::create($user, $testPassword);
 
             $password->validate();
             $errors = $password->getErrors('password');
