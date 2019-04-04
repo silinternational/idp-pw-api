@@ -5,6 +5,7 @@ use common\helpers\ZxcvbnPasswordValidator;
 use common\components\passwordStore\PasswordReuseException;
 use GuzzleHttp\Exception\GuzzleException;
 use Icawebdesign\Hibp\Password\PwnedPassword;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
 use yii\web\ConflictHttpException;
@@ -73,6 +74,10 @@ class Password extends Model
                 'password', 'validateNotPublicPassword',
                 'skipOnError' => false,
             ],
+            [
+                'password', 'passwordStoreInterfaceAssess',
+                'skipOnError' => true,
+            ]
         ];
     }
 
@@ -231,6 +236,29 @@ class Password extends Model
 
         if ($count > 0) {
             $this->addError($attribute, \Yii::t('app', 'Password.Breached', ['count' => $count]));
+        }
+    }
+
+    /**
+     * Request an assesment of the password from the PasswordStore Interface, to check against
+     * previously-used passwords, for instance.
+     *
+     * Called by Yii validation upon record save or explicit call to validate()
+     *
+     * @param string $attribute The name of the attribute being validated, typically
+     * 'password'.
+     * @throws ConflictHttpException
+     */
+    public function passwordStoreInterfaceAssess($attribute)
+    {
+        try {
+            $this->passwordStore->assess($this->user->employee_id, $this->$attribute);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 409) {
+                throw new ConflictHttpException(\Yii::t('app', 'Password.PasswordReuse'));
+            } else {
+                throw new \Exception('Password.UnknownProblem');
+            }
         }
     }
 }
