@@ -132,4 +132,16 @@ class IdBroker extends Component implements PasswordStoreInterface
         }
         return $user;
     }
+
+    /**
+     * Assess a potential new password for a user
+     * @param string $employeeId
+     * @param string $password
+     * @return bool
+     * @throws ServiceException
+     */
+    public function assess($employeeId, $password)
+    {
+        return $this->getClient()->assessPassword($employeeId, $password);
+    }
 }

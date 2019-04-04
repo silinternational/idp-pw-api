@@ -53,4 +53,12 @@ class DummyPasswordStore extends Component implements PasswordStoreInterface
         }
         return false;
     }
+
+    public function assess($employeeId, $password): bool
+    {
+        if ( ! $this->isOnline) {
+            throw new \Exception('Failed to assess password for ' . $employeeId);
+        }
+        return true;
+    }
 }

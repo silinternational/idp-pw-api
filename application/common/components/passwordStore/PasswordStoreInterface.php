@@ -28,6 +28,16 @@ interface PasswordStoreInterface
     public function set($employeeId, $password);
 
     /**
+     * Assess a potential new password for a user
+     * @param string $employeeId
+     * @param string $password
+     * @return bool
+     * @throws \Exception
+     * @throws \common\components\passwordStore\UserNotFoundException
+     */
+    public function assess($employeeId, $password);
+
+    /**
      * Is user account locked?
      * @param string $employeeId
      * @return bool
