@@ -54,6 +54,7 @@ $passwordRules = [
     'minLength' => $passwordRulesEnv['minLength'] ?? 10,
     'maxLength' => $passwordRulesEnv['maxLength'] ?? 255,
     'minScore' => $passwordRulesEnv['minScore'] ?? 3,
+    'enableHIBP' => $passwordRulesEnv['enableHIBP'] ?? true,
 ];
 
 return [

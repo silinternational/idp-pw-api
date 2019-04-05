@@ -52,6 +52,7 @@ class UtilsTest extends Test
                 'minLength' => 10,
                 'maxLength' => 255,
                 'minScore' => 2,
+                'enableHIBP' => true,
             ],
             'recaptcha' => [
                 'siteKey' => 'key',
@@ -73,6 +74,7 @@ class UtilsTest extends Test
             'minLength' => 10,
             'maxLength' => 255,
             'minScore' => 2,
+            'enableHIBP' => true,
         ];
 
         $this->assertEquals($expectedPasswordRules, $config['passwordRules']);

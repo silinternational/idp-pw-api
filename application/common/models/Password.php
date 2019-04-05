@@ -69,6 +69,9 @@ class Password extends Model
             [
                 'password', 'validateNotBeenPwned',
                 'skipOnError' => true,
+                'when' => function () {
+                    return $this->config['enableHIBP'];
+                },
             ],
             [
                 'password', 'validateNotPublicPassword',
