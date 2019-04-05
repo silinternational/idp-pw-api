@@ -93,7 +93,7 @@ class PasswordController extends BaseRestController
             \Yii::warning([
                 'action' => 'password/assess',
                 'status' => 'error',
-                'employee_id' => $user->employee_id,
+                'email' => $user->email,
                 'error' => $errors,
             ]);
             throw new BadRequestHttpException($errors, 1554151659);
