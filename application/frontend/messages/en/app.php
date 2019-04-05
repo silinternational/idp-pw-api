@@ -36,7 +36,7 @@ return [
     'Mfa.TypeMissing' => 'Type is required',
     'Mfa.UpdateFailure' => 'MFA update failure',
     'Mfa.VerifyFailure' => 'MFA verify failure',
-    'Password.Breached' => 'The password you entered was previously discovered in a data breach of a different website. It may or may not have been your own account that was compromised. Please use a different password here and then visit <a href="https://bit.ly/idp-pwd-recomendations" target="_blank">this help page</a> to learn more.',
+    'Password.Breached' => 'The password you entered was previously discovered in a data breach of a different website. It may or may not have been your own account that was compromised. Please use a different password here and then visit <a href="https://sites.google.com/sil.org/idphelp/password-recommendations" target="_blank">this help page</a> to learn more.',
     'Password.DisallowedContent' => 'Your password may not contain any of these: {labelList} (code 180)',
     'Password.MissingPassword' => 'Password is required',
     'Password.PasswordReuse' => 'Unable to update password. If this password has been used before please use something different.',
