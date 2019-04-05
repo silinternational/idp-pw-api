@@ -64,4 +64,9 @@ class Component implements PasswordStoreInterface
     {
         return false;
     }
+
+    public function assess($employeeId, $password): bool
+    {
+        return true;
+    }
 }

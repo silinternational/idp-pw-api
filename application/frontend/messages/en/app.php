@@ -44,6 +44,7 @@ return [
     'Password.TooLong' => 'Your password exceeds the maximum length of {maxLength} (code 110)',
     'Password.TooShort' => 'Your password does not meet the minimum length of {minLength} (code 100)',
     'Password.TooWeak' => 'Your password does not meet the minimum strength of {minScore} (code 150)',
+    'Password.UnknownProblem' => 'There was a problem with your password. Please try again. If this problem persists, please contact support.',
     'Password.UpdateError' => 'Unable to update password, please wait a minute and try again. If this problem persists, please contact support.',
     'Password.UpdateFailure' => 'Unable to update password. Please contact support.',
     'Reset.CannotEnable' => 'Unable to enable reset.',

@@ -147,4 +147,22 @@ class Multiple extends Component implements PasswordStoreInterface
         }
         return false;
     }
+
+    /**
+     * Assess a potential new password for a user
+     * @param string $employeeId
+     * @param string $password
+     * @return bool
+     * @throws \Exception
+     * @throws \common\components\passwordStore\UserNotFoundException
+     */
+    public function assess($employeeId, $password)
+    {
+        foreach ($this->passwordStores as $passwordStore) {
+            if (! $passwordStore->assess($employeeId, $password)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

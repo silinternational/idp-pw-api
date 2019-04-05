@@ -236,4 +236,15 @@ class Google extends Component implements PasswordStoreInterface
     {
         return false;
     }
+
+    /**
+     * Assess a potential new password for a user
+     * @param string $employeeId
+     * @param string $password
+     * @return bool
+     */
+    public function assess($employeeId, $password)
+    {
+        return true;
+    }
 }

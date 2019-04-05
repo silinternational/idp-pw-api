@@ -540,7 +540,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function setPassword($newPassword)
     {
-        $password = Password::create($this->employee_id, $newPassword);
+        $password = Password::create($this, $newPassword);
         $password->user = $this;
         $password->save();
 

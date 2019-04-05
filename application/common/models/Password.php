@@ -5,6 +5,7 @@ use common\helpers\ZxcvbnPasswordValidator;
 use common\components\passwordStore\PasswordReuseException;
 use GuzzleHttp\Exception\GuzzleException;
 use Icawebdesign\Hibp\Password\PwnedPassword;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
 use yii\web\ConflictHttpException;
@@ -15,16 +16,13 @@ class Password extends Model
     /** @var string */
     public $password;
 
-    /** @var  string */
-    public $employeeId;
-
     /** @var \common\components\passwordStore\PasswordStoreInterface */
     public $passwordStore;
 
     /** @var array */
     public $config;
 
-    /** @var common\models\User **/
+    /** @var User **/
     public $user;
 
     public function init()
@@ -76,6 +74,10 @@ class Password extends Model
                 'password', 'validateNotPublicPassword',
                 'skipOnError' => false,
             ],
+            [
+                'password', 'passwordStoreInterfaceAssess',
+                'skipOnError' => true,
+            ]
         ];
     }
 
@@ -121,15 +123,15 @@ class Password extends Model
 
     /**
      * Shortcut method to initialize a Password object
-     * @param string $employeeId
+     * @param User $user
      * @param string $newPassword
      * @return Password
      */
-    public static function create($employeeId, $newPassword)
+    public static function create($user, $newPassword)
     {
         $password = new Password();
         $password->password = $newPassword;
-        $password->employeeId = $employeeId;
+        $password->user = $user;
 
         return $password;
     }
@@ -140,13 +142,12 @@ class Password extends Model
      */
     public function save()
     {
-
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
             \Yii::warning([
                 'action' => 'save password',
                 'status' => 'error',
-                'employee_id' => $this->employeeId,
+                'employee_id' => $this->user->employee_id,
                 'error' => $this->getErrors('password'),
             ]);
             throw new BadRequestHttpException($errors);
@@ -154,14 +155,14 @@ class Password extends Model
         
         $log = [
             'action' => 'save password',
-            'employee_id' => $this->employeeId,
+            'employee_id' => $this->user->employee_id,
         ];
 
         /*
          * Update password
          */
         try {
-            $this->passwordStore->set($this->employeeId, $this->password);
+            $this->passwordStore->set($this->user->employee_id, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
         } catch (\Exception $e) {
@@ -235,6 +236,29 @@ class Password extends Model
 
         if ($count > 0) {
             $this->addError($attribute, \Yii::t('app', 'Password.Breached', ['count' => $count]));
+        }
+    }
+
+    /**
+     * Request an assesment of the password from the PasswordStore Interface, to check against
+     * previously-used passwords, for instance.
+     *
+     * Called by Yii validation upon record save or explicit call to validate()
+     *
+     * @param string $attribute The name of the attribute being validated, typically
+     * 'password'.
+     * @throws ConflictHttpException
+     */
+    public function passwordStoreInterfaceAssess($attribute)
+    {
+        try {
+            $this->passwordStore->assess($this->user->employee_id, $this->$attribute);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 409) {
+                throw new ConflictHttpException(\Yii::t('app', 'Password.PasswordReuse'));
+            } else {
+                throw new \Exception('Password.UnknownProblem');
+            }
         }
     }
 }

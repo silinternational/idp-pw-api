@@ -108,7 +108,9 @@ return [
                  */
                 'GET /password' => 'password/view',
                 'PUT /password' => 'password/update',
+                'PUT /password/assess' => 'password/assess',
                 'OPTIONS /password' => 'password/options',
+                'OPTIONS /password/assess' => 'password/options',
 
                 /*
                  * Reset routes
