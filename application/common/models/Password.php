@@ -238,7 +238,7 @@ class Password extends Model
         }
 
         if ($count > 0) {
-            $this->addError($attribute, \Yii::t('app', 'Password.Breached', ['count' => $count]));
+            throw new BadRequestHttpException(\Yii::t('app', 'Password.Breached'), 1554734183);
         }
     }
 
