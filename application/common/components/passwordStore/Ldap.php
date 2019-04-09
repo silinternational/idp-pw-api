@@ -174,6 +174,10 @@ class Ldap extends Component implements PasswordStoreInterface
 
         $this->assertUserNotDisabled($user);
 
+        if ($this->userPasswordAttribute === 'unicodePwd') {
+            $password = $this->encodeForUnicodePwdField($password);
+        }
+
         $this->updatePassword($user, $password);
 
         /*
@@ -212,6 +216,28 @@ class Ldap extends Component implements PasswordStoreInterface
         return $this->getMeta($employeeId);
     }
 
+    /**
+     * Encode the given password as necessary for use in the `unicodePwd` field.
+     *
+     * For details, see
+     * https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/6e803168-f140-4d23-b2d3-c3a8ab5917d2
+     *
+     * @param $password
+     * @return false|string
+     * @throws \Exception
+     */
+    protected function encodeForUnicodePwdField($password)
+    {
+        $encodedPassword = iconv('UTF-8', 'UTF-16LE', '"' . $password . '"');
+        if ($encodedPassword === false) {
+            throw new \Exception(
+                'Did not set password: Cannot encode it properly.',
+                1554296385
+            );
+        }
+        return $encodedPassword;
+    }
+    
     /**
      * @param \Adldap\Models\Entry $user
      * @param string $password
