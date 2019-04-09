@@ -222,8 +222,8 @@ class Ldap extends Component implements PasswordStoreInterface
      * For details, see
      * https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/6e803168-f140-4d23-b2d3-c3a8ab5917d2
      *
-     * @param $password
-     * @return false|string
+     * @param string $password
+     * @return string
      * @throws \Exception
      */
     protected function encodeForUnicodePwdField($password)
