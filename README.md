@@ -30,13 +30,13 @@ Backend API for Identity Provider Password Management
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```.
    This will allow the composer container to use your github auth token when pulling dependencies.
-5. Copy ```application/common/config/local.php.dist``` to ```application/common/config/local.php```
+5. (OPTIONAL) Copy ```application/common/config/local.php.dist``` to ```application/common/config/local.php```
    and update with appropriate settings
 6. Follow operating system specific steps below
 7. You should be able to access the API using a REST client or your browser
    at http://idp-pw-api.local:8080.
 8. You'll probably also want the web interface for this application which you can
-   clone at <https://github.com/silinternational/idp-pw-ui>
+   clone at <https://github.com/silinternational/idp-profile-ui>
 
 ### Additional setup for Linux & Mac
 1. Add entry to ```/etc/hosts``` for ```127.0.0.1 idp-pw-api.local```
@@ -73,27 +73,138 @@ We use SAML for authentication but this component can be replaced to support wha
 
 * Component ID: ```auth```
 * Implement interface: ```common\components\auth\AuthnInterface```
-* [Example implementation](./common/components/auth/Saml.php)
+* [Example implementation](application/common/components/auth/Saml.php)
 
 ### Password Store Component
 You can store your passwords wherever you like, whether it is LDAP, Active Directory, a database, or even Redis.
 
 * Component ID: ```passwordstore```
 * Implement interface: ```common\components\passwordStore\PasswordStoreInterface```
-* [Example implementation](./common/components/passwordStore/Ldap.php)
+* [Example implementation](application/common/components/passwordStore/Ldap.php)
 
 ### Personnel Component
-The personnel component is used to look up informaton about users from your company's personnel system. This includes verifying that they are an active employee, getting information about them like name, email, employee id, whether they have a supervisor and what their supervisors email address is. If the personnel system is aware of spouses it can also provide the spouse's email address.
+The personnel component is used to look up informaton about users from your company's personnel system. This includes verifying that they are an active employee, getting information about them like name, email, employee id, whether they have a supervisor and what their supervisors email address is.
 
 * Component ID: ```personnel```
 * Implement interface: ```common\components\personnel\PersonnelInterface```
-* [Example implementation](./common/components/personnel/IdBroker.php)
+* [Example implementation](application/common/components/personnel/IdBroker.php)
 
-### Phone Verification Component
-This component is used for performing phone based verification of users.
+### passwordStore/Google component
+ Password store component for IdP PW API that uses Google as the backend.
 
-* Component ID: ```phone```
-* Implement interface: ```common\components\phoneVerification\PhoneVerificationInterface```
-* [Example implementation](./common/components/phoneVerification/Sms.php)
+#### To Use
 
-The Nexmo implementation supports using either Nexmo Verify or Nexmo SMS services. Nexmo Verify can send SMS messages or make phone calls so it is nice when your users may or may not understand text messaging.
+1. Create a project on <https://console.developers.google.com/>.
+2. Still in the Google Developers Console, create a Service Account.
+3. Check "Furnish a new private key" and "Enable G Suite Domain-wide Delegation".
+4. Save the JSON file it provides (containing your private key), but **DO NOT**
+   store it in public version control (such as in a public GitHub repo).
+5. Enable the "Admin SDK" API for your project in the Google Developers Console.
+6. Have an admin for the relevant Google Apps domain go to
+   <http://admin.google.com/> and, under Security, Advanced, Manage API Client
+   Access, grant your Client ID access to the following scope:  
+   `https://www.googleapis.com/auth/admin.directory.user`
+7. Set up a delegated admin account in Google Apps, authorized to make changes
+   to users. You will use that email address as the value for an env. var.
+8. See the `local.env.dist` file to know what environment variables to provide
+   when using this library.
+
+#### Example Configuration
+
+    $googlePasswordStore = new GooglePasswordStore([
+        
+        // Required config fields (dummy values are shown here):
+        'applicationName' => 'Name of Your Application',
+        'delegatedAdminEmail' => 'some_admin@yourgoogledomain.com',
+        
+        // You must provide one of these two fields:
+        'jsonAuthConfigBase64' => '...', // A base64-encoded string of the JSON
+                                         // auth file provided by Google.
+        'jsonAuthFilePath' => '/somewhere/in/your/filesystem/google-auth.json',
+        
+        // Optional config fields (current defaults are shown here):
+        'emailFieldName' => 'email',
+        'employeeIdFieldName' => 'employee_id',
+        'userActiveRecordClass' => '\common\models\User',
+    ]);
+
+For details about what each of those fields is used for, see the documenting
+comments in the `/src/Google.php` file.
+
+#### Testing the Google PasswordStore component
+
+Credentials are stored in the encrypted file: `codeship.env.encrypted`. Either
+provide the correct `codeship.aes` (if you're part of the SIL AppsDev team)
+in the root directory of this repo or provide your own `codeship.env` containing
+`TEST_GOOGLE_USER_EMAIL`, `TEST_GOOGLE_PWSTORE_CONFIG_jsonAuthConfigBase64`, 
+and `TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail`. See above for instructions 
+on obtaining this information.
+
+## API Documentation
+The API is described by [api.raml](api.raml), and an auto-generated [api.html](api.html) created by
+`raml2html`. To regenerate the HTML file, run `make raml2html`. To view the
+rendered HTML file on Github, prepend the Github URL with 
+`https://htmlpreview.github.com/?`.
+[Example](https://htmlpreview.github.com/?https://github.com/silinternational/idp-pw-api/blob/develop-3.0/api.html)
+
+### Quick start for manually interacting with API
+To quickly get up and running to verify basic operation of the API, these are a 
+few endpoints to start with. GET endpoints can be exercised with any browser,
+but others will need something like [Insomnia](http://insomnia.rest).
+
+#### `GET /config`
+
+Returns configuration parameters supplied by environment variables.
+
+#### `GET /site/system-status`
+
+This endpoint verifies connectivity to the database and to the email service.
+
+#### `POST /reset` and `PUT /reset/{uid}/validate`
+
+This combination requires connection to a PasswordStore component and a Personnel
+component containing a valid user record. After sending the `POST`, retrieve the reset 
+code from the email or the database, and the reset uid from the response body, then
+supply them in the `PUT` request body and URI. The response will contain an 
+`access_token` to use for subsequent calls that require it.
+
+#### `GET /auth/login`
+
+This method of authentication will provide a full-scope `access_token`. The easiest
+method is to use an `invite` code, which can be found in the ID Broker database after
+creating a new user. The `access_token` can be found in the `Location` response header.
+
+## Test configuration
+Tests are configured in multiple places, using different test frameworks.
+The chart below summarizes the test configuration.
+
+| Suite | Framework   |  config   | Local, Docker        | Codeship              |
+|-------|-------------|-----------|----------------------|-----------------------|
+| Unit  | PHPUnit     | container | unittest             | api                   |
+|       |             | script    | run-tests.sh         | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
+|       |             | config    | tests/unit.suite.yml, tests/codeception/config/unit.php | (same) |
+|       |             | coverage  | IdBroker, IdBrokerPw, Ldap | (same)          |
+|-------|-------------|-----------|----------------------|-----------------------|
+| Unit  | Behat       | container | unittest             | api                   |
+|       |             | script    | run-tests.sh         | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | Composer             | (same)                |
+|       |             | config    | features/behat.yml   | (same)                |
+|       |             | coverage  | Multiple, Google     | (same)                |
+|-------|-------------|-----------|----------------------|-----------------------|
+| Unit  | Codeception | container | unittest             | api                   |
+|       |             | script    | run-tests.sh         | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
+|       |             | config    | tests/unit.suite.yml | (same)                |
+|       |             | coverage  | models, helpers      | (same)                |
+|-------|-------------|-----------|----------------------|-----------------------|
+| API   | Codeception | container | apitest              | api                   |
+|       |             | script    | run-tests-api.sh     | (same)                | 
+|       |             | env.      | common.env, test.env | codeship-services.yml |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
+|       |             | config    | tests/api.suite.yml  | (same)                |
+|       |             | coverage  | controllers          | (same)                |
+|-------|-------------|-----------|----------------------|-----------------------|

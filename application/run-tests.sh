@@ -1,32 +1,29 @@
 #!/usr/bin/env bash
-set -x
 
 # Install composer dev dependencies
 cd /data
 runny composer install --prefer-dist --no-interaction --optimize-autoloader
 
-# Copy test version of common/config/local.php if doesn't exist
-if [ ! -f /data/common/config/local.php ]; then
-    runny cp /data/common/config/test.php /data/common/config/local.php
-fi
-
 mkdir -p /data/runtime/mail
 
 # Run database migrations
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
-whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0 --migrationPath=console/migrations-test
 
 # Install and enable xdebug for code coverage
 apt-get install -y php-xdebug
 
 # Run codeception tests
-whenavail broker 80 100 echo "broker ready"
+whenavail broker 80 100 echo "broker ready, running unit tests..."
 runny ./vendor/bin/codecept run unit --coverage --coverage-xml
 TESTRESULTS_UNIT=$?
 
 # Run behat tests
-runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
-TESTRESULTS_BEHAT=$?
+if [ -z "$TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail" ]; then
+    echo -e "\e[31mGoogle passwordstore tests skipped\e[0m"
+else
+    runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
+    TESTRESULTS_BEHAT=$?
+fi
 
 ## The ocular.php script sometimes works and sometimes hangs with no error message
 

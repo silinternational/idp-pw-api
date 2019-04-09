@@ -1,8 +1,8 @@
 <?php
 namespace common\models;
 
+use common\components\Emailer;
 use Sil\EmailService\Client\EmailServiceClient;
-use common\components\phoneVerification\NotMatchException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
@@ -54,89 +54,18 @@ class Verification extends Model
             $additionalEmailParameters
         );
 
-
-        $body = \Yii::$app->mailer->render(
+        $body = \Yii::$app->view->render(
             $view,
             $parameters
         );
 
-        /*
-         * If configured to use external email service send through that instead of using
-         * local EmailQueue service
-         */
-        if (\Yii::$app->params['emailVerification']['useEmailService']) {
+        /* @var $emailer Emailer */
+        $emailer = \Yii::$app->emailer;
+        $emailer->email($toAddress, $subject, $body, strip_tags($body), $ccAddress);
 
-            $serviceConfig = \Yii::$app->params['emailVerification'];
-            $requiredParams = ['baseUrl', 'accessToken', 'assertValidIp', 'validIpRanges'];
-
-            foreach ($requiredParams as $param) {
-                if ( ! isset($serviceConfig[$param])) {
-                    throw new ServerErrorHttpException(
-                        'Missing email service configuration for ' . $param,
-                        1500916751
-                    );
-                }
-            }
-
-            $emailService = new EmailServiceClient(
-                $serviceConfig['baseUrl'],
-                $serviceConfig['accessToken'],
-                [
-                    EmailServiceClient::ASSERT_VALID_IP_CONFIG => $serviceConfig['assertValidIp'],
-                    EmailServiceClient::TRUSTED_IPS_CONFIG => $serviceConfig['validIpRanges'],
-                ]
-            );
-
-            $emailService->email([
-                'to_address' => $toAddress,
-                'cc_address' => $ccAddress,
-                'subject' => $subject,
-                'text_body' => $body,
-                'html_body' => $body,
-            ]);
-
-            if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
-                EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
-            }
-        } else {
-            EmailQueue::sendOrQueue(
-                $toAddress,
-                $subject,
-                $body,
-                $body,
-                $ccAddress,
-                $eventLogUserId,
-                $eventLogTopic,
-                $eventLogDetails
-            );
-        }
-
-    }
-
-    /**
-     * Send code to phone for verification
-     * @param string $phoneNumber
-     * @param string $code
-     * @param null|integer $eventLogUserId
-     * @param null|string $eventLogTopic
-     * @param null|string $eventLogDetails
-     * @return string
-     * @throws \Exception
-     */
-    public static function sendPhone(
-        $phoneNumber,
-        $code,
-        $eventLogUserId = null,
-        $eventLogTopic = null,
-        $eventLogDetails = null
-    ) {
-        $result = \Yii::$app->phone->send($phoneNumber, $code);
-
-        if ($eventLogUserId !== null && $eventLogTopic !== null && $eventLogDetails !== null) {
+        if ($eventLogTopic !== null && $eventLogDetails !== null && $eventLogUserId !== null) {
             EventLog::log($eventLogTopic, $eventLogDetails, $eventLogUserId);
         }
-
-        return $result;
     }
 
     /**
@@ -150,22 +79,4 @@ class Verification extends Model
         return strval($code) === strval($userProvided);
     }
 
-    /**
-     * Check if user submitted code matches the code sent to their phone
-     * @param string $code
-     * @param string $userProvided
-     * @return boolean
-     * @throws \Exception
-     * @throws \common\components\phoneVerification\NotMatchException
-     */
-    public static function isPhoneCodeValid($code, $userProvided)
-    {
-        try {
-            return \Yii::$app->phone->verify($code, $userProvided);
-        } catch (NotMatchException $e) {
-            return false;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
 }

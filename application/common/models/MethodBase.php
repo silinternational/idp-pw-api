@@ -7,24 +7,24 @@ use Yii;
 /**
  * This is the model class for table "method".
  *
- * @property integer $id
+ * @property int $id
  * @property string $uid
- * @property integer $user_id
+ * @property int $user_id
  * @property string $type
  * @property string $value
- * @property integer $verified
+ * @property int $verified
  * @property string $verification_code
- * @property integer $verification_attempts
+ * @property int $verification_attempts
  * @property string $verification_expires
  * @property string $created
+ * @property string $deleted_at
  *
  * @property User $user
- * @property Reset[] $resets
  */
 class MethodBase extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -32,7 +32,7 @@ class MethodBase extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -40,33 +40,34 @@ class MethodBase extends \yii\db\ActiveRecord
             [['uid', 'user_id', 'type', 'value', 'created'], 'required'],
             [['user_id', 'verified', 'verification_attempts'], 'integer'],
             [['type'], 'string'],
-            [['verification_expires', 'created'], 'safe'],
+            [['verification_expires', 'created', 'deleted_at'], 'safe'],
             [['uid'], 'string', 'max' => 32],
             [['value'], 'string', 'max' => 255],
             [['verification_code'], 'string', 'max' => 64],
             [['uid'], 'unique'],
-            [['user_id', 'type', 'value'], 'unique', 'targetAttribute' => ['user_id', 'type', 'value'], 'message' => 'The combination of User ID, Type and Value has already been taken.'],
+            [['user_id', 'type', 'value'], 'unique', 'targetAttribute' => ['user_id', 'type', 'value']],
             [['verification_code'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'uid' => Yii::t('app', 'Uid'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'type' => Yii::t('app', 'Type'),
-            'value' => Yii::t('app', 'Value'),
-            'verified' => Yii::t('app', 'Verified'),
-            'verification_code' => Yii::t('app', 'Verification Code'),
-            'verification_attempts' => Yii::t('app', 'Verification Attempts'),
-            'verification_expires' => Yii::t('app', 'Verification Expires'),
-            'created' => Yii::t('app', 'Created'),
+            'id' => Yii::t('model', 'ID'),
+            'uid' => Yii::t('model', 'Uid'),
+            'user_id' => Yii::t('model', 'User ID'),
+            'type' => Yii::t('model', 'Type'),
+            'value' => Yii::t('model', 'Value'),
+            'verified' => Yii::t('model', 'Verified'),
+            'verification_code' => Yii::t('model', 'Verification Code'),
+            'verification_attempts' => Yii::t('model', 'Verification Attempts'),
+            'verification_expires' => Yii::t('model', 'Verification Expires'),
+            'created' => Yii::t('model', 'Created'),
+            'deleted_at' => Yii::t('model', 'Deleted At'),
         ];
     }
 
@@ -76,13 +77,5 @@ class MethodBase extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getResets()
-    {
-        return $this->hasMany(Reset::className(), ['method_id' => 'id']);
     }
 }

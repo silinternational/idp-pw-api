@@ -11,8 +11,8 @@ interface PasswordStoreInterface
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
      * @return \common\components\passwordStore\UserPasswordMeta
-     * @throw \common\components\passwordStore\UserNotFoundException
-     * @throw \common\components\passwordStore\AccountLockedException
+     * @throws \common\components\passwordStore\UserNotFoundException
+     * @throws \common\components\passwordStore\AccountLockedException
      */
     public function getMeta($employeeId);
 
@@ -22,8 +22,25 @@ interface PasswordStoreInterface
      * @param string $password
      * @return \common\components\passwordStore\UserPasswordMeta
      * @throws \Exception
-     * @throw \common\components\passwordStore\UserNotFoundException
-     * @throw \common\components\passwordStore\AccountLockedException
+     * @throws \common\components\passwordStore\UserNotFoundException
+     * @throws \common\components\passwordStore\AccountLockedException
      */
     public function set($employeeId, $password);
+
+    /**
+     * Assess a potential new password for a user
+     * @param string $employeeId
+     * @param string $password
+     * @return bool
+     * @throws \Exception
+     */
+    public function assess($employeeId, $password);
+
+    /**
+     * Is user account locked?
+     * @param string $employeeId
+     * @return bool
+     * @throws \common\components\passwordStore\UserNotFoundException
+     */
+    public function isLocked(string $employeeId): bool;
 }

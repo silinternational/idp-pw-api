@@ -4,10 +4,12 @@ namespace frontend\controllers;
 
 use frontend\components\BaseRestController;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
-use yii\web\ServerErrorHttpException;
+use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 
 class MfaController extends BaseRestController
 {
@@ -17,6 +19,9 @@ class MfaController extends BaseRestController
      */
     public $idBrokerClient;
 
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         return ArrayHelper::merge(parent::behaviors(), [
@@ -25,17 +30,23 @@ class MfaController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function () {
+                            $user = \Yii::$app->user->identity;
+                            return $user->isAuthScopeFull();
+                        }
                     ],
                 ]
             ]
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function init()
     {
         parent::init();
-        $config = \Yii::$app->params['mfa'];
+        $config = \Yii::$app->params['idBrokerConfig'];
         $this->idBrokerClient = new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],
@@ -46,64 +57,143 @@ class MfaController extends BaseRestController
         );
     }
 
+    /**
+     * @return array
+     * @throws ServiceException
+     */
     public function actionIndex()
     {
-        try {
-            return $this->idBrokerClient->mfaList(\Yii::$app->user->identity->employee_id);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        return $this->idBrokerClient->mfaList(\Yii::$app->user->identity->employee_id);
     }
 
+    /**
+     * @return array|null
+     * @throws BadRequestHttpException
+     * @throws HttpException
+     */
     public function actionCreate()
     {
+        $messages = [
+            409 => \Yii::t('app', 'Mfa.AlreadyExists'),
+        ];
+
         $type = \Yii::$app->request->getBodyParam('type');
         if ($type === null) {
-            throw new BadRequestHttpException('Type is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.TypeMissing'));
         }
 
         $label = \Yii::$app->request->getBodyParam('label');
 
         try {
-            return $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
-        } catch (\Exception $e) {
-            throw $e;
+            $mfa = $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA create error',
+                'error' => $e->getMessage(),
+                'httpStatusCode' => $e->httpStatusCode,
+            ], __METHOD__);
+
+            throw new HttpException(
+                $e->httpStatusCode,
+                $messages[$e->httpStatusCode] ?? 'Unexpected Problem',
+                1551192684
+            );
         }
+
+        return $mfa;
     }
 
+    /**
+     * @param $mfaId
+     * @return null
+     * @throws ServiceException
+     * @throws NotFoundHttpException
+     */
     public function actionDelete($mfaId)
     {
         try {
             return $this->idBrokerClient->mfaDelete($mfaId, \Yii::$app->user->identity->employee_id);
-        } catch (\Exception $e) {
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA delete error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.RecordNotFound'));
+            }
+
+            /*
+             * Other status codes will result in a 500 response
+             */
             throw $e;
         }
     }
 
+    /**
+     * @param $mfaId
+     * @return array|bool
+     * @throws HttpException
+     */
     public function actionVerify($mfaId)
     {
+        $messages = [
+            400 => \Yii::t('app', 'Mfa.InvalidCode'),
+            404 => \Yii::t('app', 'Mfa.VerifyFailure'),
+            429 => \Yii::t('app', 'Mfa.RateLimitFailure'),
+        ];
+
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
-            throw new BadRequestHttpException('Value is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
         }
 
         try {
-            if ($this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value)) {
-                \Yii::$app->response->statusCode = 204;
-                return;
-            }
-        } catch (\Exception $e) {
+            $mfa = $this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value);
+        } catch (ServiceException $e) {
             \Yii::error([
-                'action' => 'verify mfa',
-                'status' => 'error',
+                'status' => 'MFA verify error',
                 'error' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'user' => \Yii::$app->user->identity->email,
-            ]);
-            throw new ServerErrorHttpException('Unable to verify MFA code, error code: ' . $e->getCode());
+                'httpStatusCode' => $e->httpStatusCode,
+            ], __METHOD__);
+
+            throw new HttpException(
+                $e->httpStatusCode,
+                $messages[$e->httpStatusCode] ?? '',
+                1551109134
+            );
         }
 
-        throw new BadRequestHttpException('Invalid code provided');
+        return $mfa;
     }
 
+    /**
+     * @param $mfaId
+     * @throws NotFoundHttpException
+     * @throws ServiceException
+     */
+    public function actionUpdate($mfaId)
+    {
+        $label = \Yii::$app->request->getBodyParam('label');
+        if ($label === null) {
+            \Yii::$app->response->statusCode = 204;
+            return;
+        }
+
+        try {
+            return $this->idBrokerClient->mfaUpdate($mfaId, \Yii::$app->user->identity->employee_id, $label);
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA update error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.UpdateFailure'), $e->getCode());
+            }
+
+            /*
+             * Other status codes will result in a 500 response
+             */
+            throw $e;
+        }
+    }
 }

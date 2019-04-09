@@ -6,8 +6,8 @@ use common\models\User;
 use frontend\components\BaseRestController;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 class PasswordController extends BaseRestController
 {
@@ -34,32 +34,85 @@ class PasswordController extends BaseRestController
     /**
      * Return password metadata
      * @return array
+     * @throws ServerErrorHttpException
      */
     public function actionView()
     {
-        return \Yii::$app->user->identity->getPasswordMeta();
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+
+        $pwMeta = $user->getPasswordMeta();
+
+        if ($pwMeta === null) {
+            throw new ServerErrorHttpException('A system error has occurred.', 1553606573);
+        }
+
+        return $pwMeta;
     }
 
     /**
      * Save new password
      * @return array<string,string>
      * @throws BadRequestHttpException
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws ServerErrorHttpException
      */
     public function actionUpdate()
     {
-        $newPassword = \Yii::$app->request->getBodyParam('password');
-        if ($newPassword === null) {
-            throw new BadRequestHttpException('Password is required');
-        }
+        /** @var string $newPassword */
+        $newPassword = $this->getPasswordFromRequestBody();
 
         /** @var User $user */
         $user = \Yii::$app->user->identity;
         $user->setPassword($newPassword);
 
-        return $user->getPasswordMeta();
+        $pwMeta = $user->getPasswordMeta();
+
+        if ($pwMeta === null) {
+            throw new ServerErrorHttpException('A system error has occurred.', 1553606574);
+        }
+
+        return $pwMeta;
     }
 
-    
+    /**
+     * Assess whether a password will pass validation checks without actually saving the password.
+     * @throws BadRequestHttpException
+     */
+    public function actionAssess()
+    {
+        /** @var string $newPassword */
+        $newPassword = $this->getPasswordFromRequestBody();
 
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+
+        $testPassword = Password::create($user, $newPassword);
+
+        if (! $testPassword->validate('password')) {
+            $errors = join(', ', $testPassword->getErrors('password'));
+            \Yii::warning([
+                'action' => 'password/assess',
+                'status' => 'error',
+                'email' => $user->email,
+                'error' => $errors,
+            ]);
+            throw new BadRequestHttpException($errors, 1554151659);
+        }
+
+        \Yii::$app->response->statusCode = 204;
+        return;
+    }
+
+    /**
+     * @return string|null
+     * @throws BadRequestHttpException
+     */
+    protected function getPasswordFromRequestBody()
+    {
+        $newPassword = \Yii::$app->request->getBodyParam('password');
+        if ($newPassword === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Password.MissingPassword'));
+        }
+        return $newPassword;
+    }
 }

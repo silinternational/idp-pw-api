@@ -10,6 +10,11 @@ class PersonnelUser
     /**
      * @var string
      */
+    public $uuid;
+
+    /**
+     * @var string
+     */
     public $firstName;
 
     /**
@@ -38,7 +43,12 @@ class PersonnelUser
     public $supervisorEmail;
 
     /**
-     * @var null|string
+     * @var string
      */
-    public $spouseEmail;
+    public $hide;
+
+    /**
+     * @var string
+     */
+    public $lastLogin;
 }

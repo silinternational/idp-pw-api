@@ -1,5 +1,15 @@
 ######## Set this as appropriate for the project. ########
 
+### The following runs the "new" Scrutinizer PHP Analysis which
+### adds a bunch of false errors. Some additional configuration
+### must be needed.
+#build:
+#  nodes:
+#    analysis:
+#      tests:
+#        override:
+#          - php-scrutinizer-run
+
 filter:
     paths:
         - application/*
@@ -134,7 +144,7 @@ coding_style:
 build_failure_conditions:
 
     # No classes/methods with a rating of D or worse.
-    - 'elements.rating(<= D).exists' 
+#    - 'elements.rating(<= D).exists' 
 
     # No more than two new classes/methods with a rating of C.
     - 'elements.rating(<= C).new.count > 2'

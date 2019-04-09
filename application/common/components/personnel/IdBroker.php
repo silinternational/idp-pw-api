@@ -1,32 +1,40 @@
 <?php
 namespace common\components\personnel;
 
-use IPBlock;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Component;
 
 class IdBroker extends Component implements PersonnelInterface
 {
+    /**
+     * @var IdBrokerClient $client
+     */
+    private $client;
 
     /**
-     * @var string
+     * Initializes the object.
+     * This method is invoked at the end of the constructor after the object is initialized with the
+     * given configuration.
+     * @throws \Exception if a configured baseUrl falls outside the approved IP range
+     * @throws \InvalidArgumentException if configuration is incomplete
      */
-    public $baseUrl;
-
-    /**
-     * @var string
-     */
-    public $accessToken;
-
-    /**
-     * @var boolean
-     */
-    public $assertValidBrokerIp = true;
-
-    /**
-     * @var IPBlock[]
-     */
-    public $validIpRanges = [];
+    public function init()
+    {
+        parent::init();
+        $config = \Yii::$app->params['idBrokerConfig'];
+        $this->client = new IdBrokerClient(
+            $config['baseUrl'],
+            $config['accessToken'],
+            [
+                IdBrokerClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'] ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $config['assertValidBrokerIp'] ?? true,
+                'http_client_options' => [
+                    'timeout' => 10, // An (optional) custom HTTP timeout, in seconds.
+                ],
+            ]
+        );
+    }
 
     /**
      * @param $userData
@@ -34,7 +42,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     private function assertRequiredAttributesPresent($userData)
     {
-        $required = ['first_name', 'last_name', 'email', 'employee_id', 'username'];
+        $required = ['uuid', 'first_name', 'last_name', 'email', 'employee_id', 'username', 'hide'];
 
         foreach ($required as $requiredAttr) {
             if ( ! array_key_exists($requiredAttr, $userData)) {
@@ -50,19 +58,24 @@ class IdBroker extends Component implements PersonnelInterface
      * @param string $employeeId
      * @return PersonnelUser
      * @throws NotFoundException
+     * @throws ServiceException
      */
     public function findByEmployeeId($employeeId): PersonnelUser
     {
         $results = $this->callIdBrokerGetUser($employeeId);
+        if ($results === null) {
+            throw new NotFoundException();
+        }
+
         return $this->returnPersonnelUserFromResponse('employeeId', $employeeId, $results);
     }
 
     /**
      * Get the user attributes for the user with the given Employee ID.
      *
-     * @param $employeeId string
+     * @param string $employeeId
      * @return array|null
-     * @throws NotFoundException
+     * @throws ServiceException
      */
     public function callIdBrokerGetUser($employeeId)
     {
@@ -70,9 +83,6 @@ class IdBroker extends Component implements PersonnelInterface
         $idBrokerClient = $this->getIdBrokerClient();
 
         $results = $idBrokerClient->getUser($employeeId);
-        if ($results === null) {
-            throw new NotFoundException();
-        }
 
         return $results;
     }
@@ -83,8 +93,8 @@ class IdBroker extends Component implements PersonnelInterface
      *
      * NOTE: Inactive users will be treated as not found.
      *
-     * @param $field string The field searched. EXAMPLE: 'employee_id'
-     * @param $value string The value searched for. EXAMPLE: '12345'
+     * @param string $field The field searched. EXAMPLE: 'employee_id'
+     * @param string $value The value searched for. EXAMPLE: '12345'
      * @param $response array|null The response returned by the IdBrokerClient.
      * @return PersonnelUser
      * @throws NotFoundException
@@ -108,13 +118,15 @@ class IdBroker extends Component implements PersonnelInterface
         try {
             $this->assertRequiredAttributesPresent($response);
             $pUser = new PersonnelUser();
+            $pUser->uuid = $response['uuid'];
             $pUser->firstName = $response['first_name'];
             $pUser->lastName = $response['last_name'];
             $pUser->email = $response['email'];
             $pUser->employeeId = $response['employee_id'];
             $pUser->username = $response['username'];
             $pUser->supervisorEmail = $response['manager_email'] ?? null;
-            $pUser->spouseEmail = $response['spouse_email'] ?? null;
+            $pUser->hide = $response['hide'];
+            $pUser->lastLogin = $response['last_login_utc'];
 
             return $pUser;
         } catch (\Exception $e) {
@@ -126,6 +138,31 @@ class IdBroker extends Component implements PersonnelInterface
     }
 
     /**
+     * @param string $field
+     * @param string $value
+     * @return PersonnelUser
+     * @throws NotFoundException
+     * @throws \Exception
+     */
+    public function findByField($field, $value): PersonnelUser
+    {
+        $results = $this->listUsers($field, $value);
+
+        if (count($results) > 1) {
+            throw new \Exception(
+                sprintf('More than one user found when searching by %s "%s"', $field, $value),
+                1497636205
+            );
+        } elseif (count($results) === 1) {
+            if (mb_strtolower($results[0][$field]) == mb_strtolower($value)) {
+                return $this->returnPersonnelUserFromResponse($field, $value, $results[0]);
+            }
+        }
+
+        throw new NotFoundException();
+    }
+
+    /**
      * @param string $username
      * @return PersonnelUser
      * @throws NotFoundException
@@ -133,21 +170,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     public function findByUsername($username): PersonnelUser
     {
-        $idBrokerClient = $this->getIdBrokerClient();
-
-        $results = $idBrokerClient->listUsers(null, ['username' => $username]);
-        if (count($results) > 1) {
-            throw new \Exception(
-                sprintf('More than one user found when searching by username "%s"', $username),
-                1497636205
-            );
-        } elseif (count($results) === 1) {
-            if (mb_strtolower($results[0]['username']) == mb_strtolower($username)) {
-                return $this->returnPersonnelUserFromResponse('username', $username, $results[0]);
-            }
-        }
-
-        throw new NotFoundException();
+        return $this->findByField('username', $username);
     }
 
     /**
@@ -158,21 +181,7 @@ class IdBroker extends Component implements PersonnelInterface
      */
     public function findByEmail($email): PersonnelUser
     {
-        $idBrokerClient = $this->getIdBrokerClient();
-
-        $results = $idBrokerClient->listUsers(null, ['email' => $email]);
-        if (count($results) > 1) {
-            throw new \Exception(
-                sprintf('More than one user found when searching by email "%s"', $email),
-                1497636210
-            );
-        } elseif (count($results) === 1) {
-            if (mb_strtolower($results[0]['email']) == mb_strtolower($email)) {
-                return $this->returnPersonnelUserFromResponse('email', $email, $results[0]);
-            }
-        }
-
-        throw new NotFoundException();
+        return $this->findByField('email', $email);
     }
 
     /**
@@ -180,17 +189,60 @@ class IdBroker extends Component implements PersonnelInterface
      */
     private function getIdBrokerClient()
     {
-        return new IdBrokerClient(
-            $this->baseUrl, // The base URI for the API.
-            $this->accessToken, // Your HTTP header authorization bearer token.
-            [
-                IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
-                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
-                'http_client_options' => [
-                    'timeout' => 10, // An (optional) custom HTTP timeout, in seconds.
-                ],
-            ]
-        );
+        return $this->client;
     }
 
+    /**
+     * Updates properties on a personnel record. At a minimum, `$properties` must
+     * contain an `'employee_id'` key.
+     *
+     * @param array $properties
+     * @throws NotFoundException
+     * @throws ServiceException
+     */
+    public function updateUser($properties)
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        try {
+            $idBrokerClient->updateUser($properties);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode == 204) {
+                throw new NotFoundException();
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * @param string $invite
+     * @return PersonnelUser
+     * @throws NotFoundException
+     * @throws ServiceException
+     */
+    public function findByInvite($invite): PersonnelUser
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        $userAttributes = $idBrokerClient->authenticateNewUser($invite);
+        if ($userAttributes === null) {
+            throw new NotFoundException();
+        }
+
+        return $this->returnPersonnelUserFromResponse('invite', '********', $userAttributes);
+    }
+
+    /**
+     * @param string $field field name to search
+     * @param string $value search value
+     * @return array raw array of zero or more arrays of user properties
+     * @throws ServiceException
+     */
+    protected function listUsers($field, $value): array
+    {
+        $idBrokerClient = $this->getIdBrokerClient();
+
+        return $idBrokerClient->listUsers(null, [$field => $value]);
+    }
 }

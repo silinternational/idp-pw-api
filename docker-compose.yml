@@ -8,8 +8,6 @@ services:
 
     db:
         image: silintl/mariadb:latest
-        ports:
-            - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
             MYSQL_DATABASE: pwmgr
@@ -18,8 +16,6 @@ services:
 
     testDb:
        image: silintl/mariadb:latest
-       ports:
-           - "3306"
        environment:
            MYSQL_ROOT_PASSWORD: r00tp@ss!
            MYSQL_DATABASE: test
@@ -39,8 +35,6 @@ services:
         build: ./
         volumes_from:
             - data
-        volumes:
-            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
         ports:
             - "8080:80"
         depends_on:
@@ -50,50 +44,52 @@ services:
             - ./common.env
             - ./local.env
 
-    cron:
+    apitest:
         build: ./
         volumes_from:
             - data
         depends_on:
-            - db
+            - testDb
+            - zxcvbn
+            - broker
         env_file:
             - ./common.env
-            - ./local.env
+            - ./test.env
         environment:
-            AUTH_SAML_idpCertificate:
-            AUTH_SAML_spCertificate:
-            AUTH_SAML_spPrivateKey:
-        command: /data/run-cron.sh
+            MYSQL_HOST: testDb
+            MYSQL_DATABASE: test
+            APP_ENV: test
+            ID_BROKER_baseUrl: http://broker
+        command: ["/data/run-tests-api.sh"]
 
-    apitest:
+    unittest:
         build: ./
         volumes_from:
             - data
         volumes:
             - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-        ports:
-            - "8000:80"
         depends_on:
             - testDb
+            - zxcvbn
         env_file:
             - ./common.env
-            - ./local.env
+            - ./test.env
+            - ./codeship.env
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
             APP_ENV: test
-        command: ["/data/run-tests-api.sh"]
+            ID_BROKER_baseUrl: http://broker
+        command: ["/data/run-tests.sh"]
 
     cli:
-        image: silintl/php7:latest
+        image: silintl/php7:7.2
         volumes_from:
             - data
         volumes:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
         user: "${DOCKER_UIDGID}"
-        depends_on:
-            - email
         env_file:
             - ./common.env
             - ./local.env
@@ -105,7 +101,6 @@ services:
             - emaildb
             - emailcron
         env_file:
-            - ./common.env
             - ./email.common.env
             - ./email.local.env
         ports:
@@ -116,7 +111,6 @@ services:
         depends_on:
             - emaildb
         env_file:
-            - ./common.env
             - ./email.common.env
             - ./email.local.env
         command: /data/run-cron.sh
@@ -124,38 +118,50 @@ services:
     emaildb:
         image: silintl/mariadb:latest
         env_file:
-            - ./common.env
+            - ./email.common.env
         environment:
             MYSQL_ROOT_PASSWORD: not-a-secret
-            MYSQL_DATABASE: email
-            MYSQL_USER: email
-            MYSQL_PASSWORD: email
+
+    emailpma:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - "8086:80"
+        environment:
+            PMA_HOST: emaildb
+            PMA_USER: email
+            PMA_PASSWORD: email
 
     zxcvbn:
         image: wcjr/zxcvbn-api:1.1.0
-        ports:
-            - "3000"
 
     brokerDb:
         image: silintl/mariadb:latest
-        ports:
-        - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
-            MYSQL_HOST: brokerDb
-            MYSQL_DATABASE: app
-            MYSQL_USER: user
-            MYSQL_PASSWORD: pass
+            MYSQL_DATABASE: broker
+            MYSQL_USER: broker
+            MYSQL_PASSWORD: broker
+
+    brokerpma:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - "8085:80"
+        environment:
+            PMA_HOST: brokerDb
+            PMA_USER: broker
+            PMA_PASSWORD: broker
 
     broker:
-        image: silintl/idp-id-broker:latest
+        image: silintl/idp-id-broker:develop-4.0
         ports:
-        - "8083:80"
+            - "8083:80"
         depends_on:
-        - brokerDb
+            - brokerDb
         volumes:
-        - ./run-broker.sh:/data/run-broker.sh
-        working_dir: /data
+            - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
+            - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
+            - ./dockerbuild/broker/User.php:/data/console/migrations/User.php
+            - ./dockerbuild/broker/Method.php:/data/console/migrations/Method.php
         environment:
             EMAIL_SERVICE_accessToken: fake
             EMAIL_SERVICE_assertValidIp: "false"
@@ -164,17 +170,34 @@ services:
             EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
             IDP_NAME: idp1
             MYSQL_HOST: brokerDb
-            MYSQL_DATABASE: app
-            MYSQL_USER: user
-            MYSQL_PASSWORD: pass
-            MYSQL_ROOT_PASSWORD: dummy-root-password
+            MYSQL_DATABASE: broker
+            MYSQL_USER: broker
+            MYSQL_PASSWORD: broker
             API_ACCESS_KEYS: abc123
             HELP_CENTER_URL: https://example.com/#/help
             PASSWORD_FORGOT_URL: https://example.com/#/forgot
             PASSWORD_PROFILE_URL: https://example.com/#/profile
             SUPPORT_EMAIL: support@example.com
             EMAIL_SIGNATURE: Dummy Signature for Tests
-        command: whenavail brokerDb 3306 60 ./run-broker.sh
+            APP_ENV: test
+        command: ./run-broker.sh
+
+    ldap:
+        build: ./dockerbuild/ldap
+
+    ldapload:
+        build: ./dockerbuild/ldap
+        depends_on:
+            - ldap
+        working_dir: /data
+        command: ./load_ldap.sh
+
+    raml2html:
+        image: mattjtodd/raml2html
+        volumes:
+            - ./api.raml:/api.raml
+            - ./api.html:/api.html
+        command: -i api.raml -o api.html
 
 networks:
     default:

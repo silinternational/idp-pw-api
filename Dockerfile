@@ -1,4 +1,4 @@
-FROM silintl/php7:latest
+FROM silintl/php7:7.2
 MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
 
 ENV REFRESHED_AT 2016-04-22
@@ -10,10 +10,6 @@ RUN mkdir -p /data
 # Copy in syslog config
 RUN rm -f /etc/rsyslog.d/*
 COPY dockerbuild/rsyslog.conf /etc/rsyslog.conf
-
-# Copy in cron configuration
-COPY dockerbuild/idp-cron /etc/cron.d/
-RUN chmod 0644 /etc/cron.d/idp-cron
 
 # get s3-expand
 RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/1.5/s3-expand -o /usr/local/bin/s3-expand

@@ -1,35 +1,26 @@
 start: api
 
-test:
-	make testunit && make testapi && make testbehat
+test: testunit testapi
 
-testunit: composer emailcron rmTestDb upTestDb broker yiimigratetestDb
-	docker-compose run emailcron whenavail emaildb 3306 100 ./yii migrate --interactive=0
-	docker-compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./vendor/bin/codecept run unit'
+testunit: codeship.env composer rmTestDb upTestDb broker ldapload yiimigratetestDb
+	# create folder as user before test creates it as root
+	mkdir -p application/tests/_output
+	docker-compose run --rm unittest
+	sed -i "s|/data/|`pwd`/application/|" application/tests/_output/coverage.xml
 
-# Run testunit first at least once. Otherwise, this will have 5 test failures.
-testapi: upTestDb broker yiimigratetestDb
-	docker-compose up -d zxcvbn
+testapi: upTestDb yiimigratetestDb
+	docker-compose kill broker
+	docker-compose up -d broker
 	docker-compose run --rm apitest
 
-testbehat:
-	docker-compose run --rm cli bash -c './vendor/bin/behat --config=tests/features/behat.yml --strict'
-
-api: upDb broker composer yiimigrate
-	docker-compose up -d api zxcvbn cron phpmyadmin
+api: upDb broker composer yiimigrate api.html
+	docker-compose up -d api zxcvbn phpmyadmin brokerpma emailpma
 
 composer:
 	docker-compose run --rm cli composer install
 
 composerupdate:
 	docker-compose run --rm cli composer update
-
-dockerpullall:
-	docker pull phpmyadmin/phpmyadmin:latest
-	docker pull silintl/data-volume:latest
-	docker pull silintl/mariadb:latest
-	docker pull silintl/php7:latest
-	docker pull wcjr/zxcvbn-api:1.1.0
 
 email:
 	docker-compose up -d email
@@ -69,9 +60,25 @@ upTestDb:
 broker:
 	docker-compose up -d broker
 
+ldap:
+	docker-compose up -d ldap
+
+ldapload:
+	docker-compose kill ldap
+	docker-compose rm -f ldap
+	docker-compose run --rm ldapload
+
 bounce:
 	docker-compose up -d api
 
 clean:
 	docker-compose kill
 	docker-compose rm -f
+
+raml2html: api.html
+
+api.html: api.raml
+	docker-compose run --rm raml2html
+
+codeship.env: codeship.aes codeship.env.encrypted
+	jet decrypt codeship.env.encrypted codeship.env

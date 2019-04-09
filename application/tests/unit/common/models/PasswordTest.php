@@ -1,11 +1,11 @@
 <?php
 namespace tests\unit\common\models;
 
+use Sil\Codeception\TestCase\Test;
 use common\helpers\Utils;
 use common\models\Password;
 use common\models\User;
 use tests\unit\fixtures\common\models\UserFixture;
-use Sil\Codeception\TestCase\Test;
 
 class PasswordTest extends Test
 {
@@ -35,8 +35,11 @@ class PasswordTest extends Test
         $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
         $testData = $this->getTestData();
 
+        $employeeId = '111111';
+        $user = User::findOne(['employee_id' => $employeeId]);
+
         foreach ($testData as $testCase) {
-            $password = Password::create(1234, $testCase['password']);
+            $password = Password::create($user, $testCase['password']);
             $valid = $password->validate();
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));
@@ -58,26 +61,6 @@ class PasswordTest extends Test
             $this->assertEquals(
                 $testCase['maxLength'],
                 $maxLengthStatus,
-                'Failed validating test case: ' . $testCase['password']
-            );
-
-            $minNumStatus = ! substr_count($validationErrorsString, 'code 120') > 0;
-            $this->assertEquals(
-                $testCase['minNum'],
-                $minNumStatus,
-                'Failed validating test case: ' . $testCase['password']
-            );
-
-            $minUpperStatus = ! substr_count($validationErrorsString, 'code 130') > 0;
-            $this->assertEquals(
-                $testCase['minUpper'],
-                $minUpperStatus, 'Failed validating test case: ' . $testCase['password']
-            );
-
-            $minSpecialStatus = ! substr_count($validationErrorsString, 'code 140') > 0;
-            $this->assertEquals(
-                $testCase['minSpecial'],
-                $minSpecialStatus,
                 'Failed validating test case: ' . $testCase['password']
             );
 
@@ -110,15 +93,19 @@ class PasswordTest extends Test
             $user->email,
         ];
         foreach ($testData as $testPassword) {
-            $password = Password::create($employeeId, $testPassword);
-            $password->user = $user;
+            $password = Password::create($user, $testPassword);
 
             $password->validate();
             $errors = $password->getErrors('password');
             $validationErrorsString = join('|', array_values($errors));
 
+            /*
+             * Codeception is not working with Yii i18n as we have it
+             * set up, so the error comparison is using the error message
+             * translation key.
+             */
             $this->assertTrue(
-                substr_count($validationErrorsString, 'code 180') > 0,
+                substr_count($validationErrorsString, 'Password.DisallowedContent') > 0,
                 'Failed validating test case: ' . $testPassword .
                 '. No error for matching a user attribute.'
             );
@@ -134,9 +121,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => false,
-                'minSpecial' => false,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -146,21 +130,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
-                'overall' => true,
-                'nonZxcvbnPass' => true,
-            ],
-            [
-                'password' => 'ALL CAPS QUERTY 1234',
-                'zxcvbnScore' => 4,
-                'zxcvbnPass' => true,
-                'minLength' => true,
-                'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => true,
                 'nonZxcvbnPass' => true,
             ],
@@ -170,9 +139,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
-                'minNum' => false,
-                'minUpper' => false,
-                'minSpecial' => false,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -182,9 +148,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => true,
                 'nonZxcvbnPass' => true,
             ],
@@ -194,9 +157,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => true,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => false,
-                'minUpper' => false,
-                'minSpecial' => true,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -206,9 +166,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => false,
                 'maxLength' => true,
-                'minNum' => false,
-                'minUpper' => false,
-                'minSpecial' => false,
                 'overall' => false,
                 'nonZxcvbnPass' => false,
             ],
@@ -218,9 +175,6 @@ class PasswordTest extends Test
                 'zxcvbnPass' => false,
                 'minLength' => true,
                 'maxLength' => true,
-                'minNum' => true,
-                'minUpper' => true,
-                'minSpecial' => true,
                 'overall' => false,
                 'nonZxcvbnPass' => true,
             ],

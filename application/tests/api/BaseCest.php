@@ -15,7 +15,6 @@ class BaseCest
 
     public function _before(ApiTester $I)
     {
-        BrokerUtils::insertFakeUsers();
         $this->fixtureHelper->_beforeSuite();
     }
 

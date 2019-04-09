@@ -4,7 +4,6 @@ use Sil\PhpEnv\Env;
 
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
-$cookieValidationKey = Env::get('COOKIE_VALIDATION_KEY');
 
 $sessionLifetime = 1800; // 30 minutes
 
@@ -13,7 +12,19 @@ const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'errorHandler'],
+    'bootstrap' => [
+        'log',
+        'errorHandler',
+        [
+            'class' => 'yii\filters\ContentNegotiator',
+            'languages' => [
+                'en',
+                'fr',
+                'es',
+                'ko',
+            ],
+        ],
+    ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'user' => [
@@ -30,6 +41,21 @@ return [
                 'secure' => $frontCookieSecure,
             ],
         ],
+        'response' => [
+            'class' => 'yii\web\Response',
+            'on beforeSend' => function($event) {
+                /** @var yii\web\Response $response */
+                $response = $event->sender;
+                $response->headers->set('Access-Control-Allow-Origin', \Yii::$app->params['uiCorsOrigin']);
+                $response->headers->set('Access-Control-Allow-Credentials', 'true');
+                $response->headers->set(
+                    'Access-Control-Allow-Methods', 
+                    'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS'
+                );
+                $response->headers->set('Access-Control-Allow-Headers', 'authorization, content-type');
+                $response->headers->set('Access-Control-Max-Age', 86400);
+            },
+        ],
         'log' => [
 
         ],
@@ -37,8 +63,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'cookieValidationKey' => $cookieValidationKey,
-            'enableCookieValidation' => !empty($cookieValidationKey),
+            'enableCookieValidation' => false,
             'enableCsrfValidation' => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
@@ -66,22 +91,26 @@ return [
                 /*
                  * Method routes
                  */
-                'GET /method' => 'method/index',
-                'GET /method/' . UID_ROUTE_PATTERN => 'method/view',
-                'POST /method' => 'method/create',
-                'PUT /method/' . UID_ROUTE_PATTERN => 'method/update',
-                'PUT /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/resend',
-                'DELETE /method/' . UID_ROUTE_PATTERN => 'method/delete',
-                'OPTIONS /method' => 'method/options',
-                'OPTIONS /method/' . UID_ROUTE_PATTERN => 'method/options',
+                'GET /method'                                      => 'method/index',
+                'GET /method/' . UID_ROUTE_PATTERN                 => 'method/view',
+                'POST /method'                                     => 'method/create',
+                'PUT /method/' . UID_ROUTE_PATTERN . '/verify'     => 'method/verify',
+                'PUT /method/' . UID_ROUTE_PATTERN . '/resend'     => 'method/resend',
+                'DELETE /method/' . UID_ROUTE_PATTERN              => 'method/delete',
+                'OPTIONS /method'                                  => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN             => 'method/options',
+                'OPTIONS /method/' . UID_ROUTE_PATTERN . '/verify' => 'method/options',
                 'OPTIONS /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/options',
+                'GET /method/move'                                 => 'method/move',
 
                 /*
                  * Password routes
                  */
                 'GET /password' => 'password/view',
                 'PUT /password' => 'password/update',
+                'PUT /password/assess' => 'password/assess',
                 'OPTIONS /password' => 'password/options',
+                'OPTIONS /password/assess' => 'password/options',
 
                 /*
                  * Reset routes
@@ -99,7 +128,8 @@ return [
                 /*
                  * User  routes
                  */
-                'GET /user/me' => 'user/me',
+                'GET /user/me'     => 'user/me',
+                'PUT /user/me'     => 'user/update',
                 'OPTIONS /user/me' => 'user/options',
 
                 /*
@@ -107,8 +137,9 @@ return [
                  */
                 'GET /mfa'                          => 'mfa/index',
                 'POST /mfa'                         => 'mfa/create',
+                'PUT /mfa/<mfaId:(\d+)>'            => 'mfa/update',
                 'DELETE /mfa/<mfaId:(\d+)>'         => 'mfa/delete',
-                'POST /mfa/<mfaId:(\d+)>/verify'    => 'mfa/verify',
+                'PUT /mfa/<mfaId:(\d+)>/verify'     => 'mfa/verify',
                 'OPTIONS /mfa'                      => 'mfa/options',
                 'OPTIONS /mfa/<mfaId:(\d+)>'        => 'mfa/options',
                 'OPTIONS /mfa/<mfaId:(\d+)>/verify' => 'mfa/options',

@@ -11,8 +11,6 @@ class LdapTest extends TestCase
 {
     public function testGetMeta()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
 
         $userMeta = $ldap->getMeta('10161');
@@ -23,7 +21,6 @@ class LdapTest extends TestCase
 
     public function testGetMetaDoesntExist()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
         $ldap = $this->getClient();
 
         $this->expectException(UserNotFoundException::class);
@@ -33,8 +30,6 @@ class LdapTest extends TestCase
 
     public function testSet()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
 
         $userMeta = $ldap->set('10161', 'testpass');
@@ -45,8 +40,6 @@ class LdapTest extends TestCase
 
     public function testRemoveAttributesOnSet()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
         $ldap->connect();
         $criteria = $ldap->getSearchCriteria();
@@ -59,7 +52,10 @@ class LdapTest extends TestCase
             ->findByOrFail($ldap->employeeIdAttribute, '10131');
 
         foreach ($ldap->removeAttributesOnSetPassword as $attrName) {
-            $this->assertTrue($user->hasAttribute($attrName));
+            $user->setAttribute($attrName, 'anything');
+            $this->assertTrue(
+                $user->hasAttribute($attrName), 'Attribute "' . $attrName . '" not found.'
+            );
         }
 
         $userMeta = $ldap->set('10131', 'testpass');
@@ -82,8 +78,6 @@ class LdapTest extends TestCase
 
     public function testUpdateAttributesOnSet()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
         $ldap->connect();
         $criteria = $ldap->getSearchCriteria();
@@ -114,26 +108,22 @@ class LdapTest extends TestCase
 
         foreach ($ldap->updateAttributesOnSetPassword as $attrName => $attrValue) {
             $this->assertTrue($user->hasAttribute($attrName) &&
-                $user->getAttribute($attrName) == [ 0 => $attrValue]);
+                $user->getAttribute($attrName) == [0 => $attrValue]);
         }
 
     }
 
     public function testAccountDisabled()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
 
         $this->expectException(AccountLockedException::class);
         $this->expectExceptionCode(1472740480);
-        $ldap->getMeta('10121');
+        $ldap->getMeta('10141');
     }
 
     public function testSetPasswordWithMatchingAttributeAndValue()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
         $ldap->connect();
         $ldap->set('10171', 'startpassword');
@@ -169,8 +159,6 @@ class LdapTest extends TestCase
 
     public function testSetPasswordWithNotMatchingAttributeAndValue()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
         $ldap->connect();
         $ldap->set('10161', 'startpassword');
@@ -205,8 +193,6 @@ class LdapTest extends TestCase
 
     public function testSetPasswordWithoutSpecifyingMatchingAttributeAndValue()
     {
-        $this->markTestSkipped('Depends on LDAP. Need to build a mock or add a test container.');
-
         $ldap = $this->getClient();
         $ldap->connect();
         $ldap->set('10171', 'startpassword');
@@ -239,7 +225,7 @@ class LdapTest extends TestCase
     public function getClient()
     {
         $ldap = new Ldap();
-        $ldap->host = '127.0.0.1';
+        $ldap->host = 'ldap';
         $ldap->port = 389;
         $ldap->baseDn = 'ou=gis_affiliated_person,dc=acme,dc=org';
         $ldap->adminUsername = 'cn=Manager,dc=acme,dc=org';

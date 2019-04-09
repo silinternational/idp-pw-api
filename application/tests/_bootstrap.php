@@ -9,10 +9,7 @@ require_once(__DIR__ . '/../frontend/config/bootstrap.php');
 $_SERVER['SERVER_NAME'] = 'localhost';
 $_SERVER['SERVER_PORT'] = '80';
 
-$config = yii\helpers\ArrayHelper::merge(
-    require(__DIR__ . '/../common/config/main.php'),
-    require(__DIR__ . '/../common/config/test.php')
-);
+$config = require(__DIR__ . '/../common/config/main.php');
 
 $config['basePath'] = dirname(__DIR__);
 

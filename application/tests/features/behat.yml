@@ -1,5 +1,8 @@
 default:
   suites:
     multiple:
-      paths:    [ %paths.base%/../features/multiple.feature ]
+      paths:    [ "%paths.base%/../features/multiple.feature" ]
       contexts: [ tests\features\Context\MultipleContext ]
+    google:
+      paths:    [ "%paths.base%/../features/google.feature" ]
+      contexts: [ tests\features\Context\GoogleContext ]

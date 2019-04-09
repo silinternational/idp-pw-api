@@ -5,6 +5,7 @@ use common\helpers\Utils;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserNotFoundException;
 use common\components\passwordStore\UserPasswordMeta;
+use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
 class Component implements PasswordStoreInterface
 {
@@ -28,7 +29,7 @@ class Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password)
     {
-        if ( $employeeId == 'notfound') {
+        if ($employeeId == 'notfound') {
             throw new UserNotFoundException();
         }
 
@@ -44,5 +45,28 @@ class Component implements PasswordStoreInterface
             Utils::getIso8601(time() + 31556926),
             Utils::getIso8601()
         );
+    }
+
+    /**
+     * @return IdBrokerClient
+     * @throws \Exception
+     */
+    public function getClient()
+    {
+        $baseUrl = \Yii::$app->params['idBrokerConfig']['baseUrl'];
+        $accessToken = \Yii::$app->params['idBrokerConfig']['accessToken'];
+        return new IdBrokerClient($baseUrl, $accessToken, [
+            IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => false,
+        ]);
+    }
+
+    public function isLocked(string $employeeId): bool
+    {
+        return false;
+    }
+
+    public function assess($employeeId, $password): bool
+    {
+        return true;
     }
 }
