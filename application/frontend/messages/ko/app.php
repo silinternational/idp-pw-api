@@ -67,6 +67,6 @@ return [
     'Reset.UpdateTypeError' => '설정을 업데이트할 수 없습니다.',
     'Reset.UserNotFound' => '사용자를 찾지 못했습니다',
     'Utils.InvalidEmail' => '유효하지 않은 이메일 주소',
-    'Utils.RecaptchaVerifyFailure' => 'Unable to verify reCAPTCHA',
-    'Zxcvbn.LowScore' => 'Password did not meet minimum strength of {minScore}.Try adding some words but avoid common phrases.',
+    'Utils.RecaptchaVerifyFailure' => 'reCAPTCHA를 확인할 수 없습니다.',
+    'Zxcvbn.LowScore' => '암호가 최소 강도 {minScore}충족시키지 못했습니다. 일부 단어를 추가하고 일반적인 문구는 피하십시오.',
 ];
