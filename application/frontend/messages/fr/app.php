@@ -68,5 +68,5 @@ return [
     'Reset.UserNotFound' => 'Utilisateur introuvable',
     'Utils.InvalidEmail' => 'Adresse email invalide fournie',
     'Utils.RecaptchaVerifyFailure' => 'Impossible de vérifier reCAPTCHA',
-    'Zxcvbn.LowScore' => 'Password did not meet minimum strength of {minScore}.Try adding some words but avoid common phrases.',
+    'Zxcvbn.LowScore' => 'Le mot de passe n\'a pas atteint la valeur minimale de {minScore}Essayez d\'ajouter des mots, mais évitez les expressions courantes.',
 ];
