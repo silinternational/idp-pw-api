@@ -17,6 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'An internal server error occurred.' => 'An internal server error occurred.',
-    'Error' => 'Error',
+    'An internal server error occurred.' => '내부 오류가 발생하였습니다.',
+    'Error' => '에러',
 ];
