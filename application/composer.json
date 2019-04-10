@@ -19,7 +19,7 @@
     "silinternational/php-env": "^2.1.1",
     "silinternational/yii2-json-log-targets": "^1.0.0",
     "silinternational/yii2-email-log-target": "^1.0.1",
-    "silinternational/idp-id-broker-php-client": "dev-develop",
+    "silinternational/idp-id-broker-php-client": "^3.1.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",
     "simplesamlphp/saml2": "^3.1.5",
     "google/apiclient": "^2.0",
