@@ -152,7 +152,7 @@ services:
             PMA_PASSWORD: broker
 
     broker:
-        image: silintl/idp-id-broker:develop-4.0
+        image: silintl/idp-id-broker:develop
         ports:
             - "8083:80"
         depends_on:
