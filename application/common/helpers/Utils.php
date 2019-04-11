@@ -1,7 +1,6 @@
 <?php
 namespace common\helpers;
 
-use Sil\IdpPw\Common\Auth\RedirectException;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -15,48 +14,57 @@ class Utils
 
     const DT_FORMAT = 'Y-m-d H:i:s';
     const FRIENDLY_DT_FORMAT = 'l F j, Y g:iA T';
+    const DT_ISO8601 = 'Y-m-d\TH:i:s\Z';
     const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
-     * @param integer|null $timestamp
-     * @return string
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
+     * @return int
+     * @throws \Exception
      */
-    public static function getDatetime($timestamp = null)
+    protected static function convertToTimestamp($time)
     {
-        $timestamp = $timestamp ?: time();
-
-        return date(self::DT_FORMAT, $timestamp);
+        $time = $time ?? time();
+        $time = is_int($time) ? $time : strtotime($time);
+        if ($time === false) {
+            throw new \Exception('Unable to parse date to timestamp', 1468865840);
+        }
+        return $time;
     }
 
     /**
-     * @param integer|string|null $timestamp time as unix timestamp, mysql datetime, or null for now
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
      * @return string
      * @throws \Exception
      */
-    public static function getIso8601($timestamp = null)
+    public static function getDatetime($time = null)
     {
-        $timestamp = $timestamp !== null ? $timestamp : time();
-        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
-        if ($timestamp === false) {
-            throw new \Exception('Unable to parse date to timestamp', 1468865840);
-        }
-        return date('c', $timestamp);
+        return date(self::DT_FORMAT, self::convertToTimestamp($time));
+    }
+
+    /**
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
+     * @return string
+     * @throws \Exception
+     */
+    public static function getIso8601($time = null)
+    {
+        return date(self::DT_ISO8601, self::convertToTimestamp($time));
     }
 
     /**
      * Return human readable date time
-     * @param int|string|null $timestamp Either a unix timestamp or a date in string format
+     * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
+     *        the current time is used.
      * @return string
      * @throws \Exception
      */
-    public static function getFriendlyDate($timestamp = null)
+    public static function getFriendlyDate($time = null)
     {
-        $timestamp = $timestamp !== null ? $timestamp : time();
-        $timestamp = is_int($timestamp) ? $timestamp : strtotime($timestamp);
-        if ($timestamp === false) {
-            throw new \Exception('Unable to parse date to timestamp', 1468865838);
-        }
-        return date(self::FRIENDLY_DT_FORMAT, $timestamp);
+        return date(self::FRIENDLY_DT_FORMAT, self::convertToTimestamp($time));
     }
 
     /**
@@ -67,60 +75,6 @@ class Utils
     {
         $security = new Security();
         return $security->generateRandomString($length);
-    }
-
-    /**
-     * @param array $array
-     * @param string $key
-     * @return bool
-     */
-    public static function isArrayEntryTruthy($array, $key)
-    {
-        return (is_array($array) && isset($array[$key]) && $array[$key]);
-    }
-
-    /**
-     * Check if user is logged in and if so return the identity model
-     * @return null|\common\models\User
-     * @codeCoverageIgnore
-     */
-    public static function getCurrentUser()
-    {
-        if (\Yii::$app->user && ! \Yii::$app->user->isGuest) {
-            return \Yii::$app->user->identity;
-        }
-        return null;
-    }
-
-    /**
-     * @param string $phone
-     * @return string
-     */
-    public static function maskPhone($phone)
-    {
-        /*
-         * $phone may be formatted with country code followed by a comma followed by the rest of the phone number
-         * Example: 1,4085551212 or 77,8588923456
-         */
-        if (substr_count($phone, ',') > 0) {
-            list($countryCode, $number) = explode(',', $phone);
-        } else {
-            $countryCode = null;
-            $number = $phone;
-        }
-
-        $string = '';
-
-        /*
-         * If country code is present, prepend string with + followed by country code
-         */
-        if ( ! is_null($countryCode)) {
-            $string .= '+' . $countryCode . ' ';
-        }
-
-        $string .= self::maskString($number);
-
-        return $string;
     }
 
     /**
@@ -137,7 +91,7 @@ class Utils
                 'status' => 'error',
                 'error' => 'Invalid email address provided: ' . Html::encode($email),
             ]);
-            throw new BadRequestHttpException('Invalid email address provided.', 1461459797);
+            throw new BadRequestHttpException(\Yii::t('app', 'Utils.InvalidEmail'), 1461459797);
         }
 
         list($part1, $domain) = explode('@', $email);
@@ -182,21 +136,6 @@ class Utils
     }
 
     /**
-     * Replaces all the characters with asterisks, except for the last X characters.
-     *
-     * @param string $inString
-     * @param string $maskChar [optional, default #]
-     * @param int $goodCount [optional, default 3]
-     * @return string
-     */
-    public static function maskString($inString, $maskChar = '#', $goodCount = 3)
-    {
-        $newString = str_repeat($maskChar, strlen($inString) - $goodCount);
-        $newString .= substr($inString, - $goodCount);
-        return $newString;
-    }
-
-    /**
      * @return array
      * @throws ServerErrorHttpException
      */
@@ -207,9 +146,7 @@ class Utils
         $config = [];
 
         $config['idpName'] = $params['idpDisplayName'];
-        $config['idpUsernameHint'] = $params['idpUsernameHint'];
         $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
-        $config['logoUrl'] = $params['logoUrl'];
 
         $config['support'] = [];
         foreach ($params['support'] as $supportOption => $value) {
@@ -218,25 +155,7 @@ class Utils
             }
         }
 
-        $config['password'] = [];
-        $passwordRuleFields = [
-            'minLength', 'maxLength', 'minNum', 'minUpper', 'minSpecial'
-        ];
-
-        foreach ($passwordRuleFields as $rule) {
-            if (empty($params['password'][$rule])) {
-                throw new ServerErrorHttpException('Missing configuration for ' . $rule);
-            }
-
-            if ($params['password'][$rule]['enabled']) {
-                $config['password'][$rule]['value'] = $params['password'][$rule]['value'];
-                $config['password'][$rule]['pattern'] = $params['password'][$rule]['jsRegex'];
-            }
-        }
-
-        $config['password']['zxcvbn'] = [
-            'minScore' => $params['password']['zxcvbn']['minScore'],
-        ];
+        $config['passwordRules'] = $params['passwordRules'];
 
         return $config;
     }
@@ -305,7 +224,7 @@ class Utils
             'status' => 'error',
             'error' => Json::encode($response->getErrorCodes()),
         ]);
-        throw new BadRequestHttpException('Unable to verify recaptcha', 1462904023);
+        throw new BadRequestHttpException(\Yii::t('app', 'Utils.RecaptchaVerifyFailure'), 1462904023);
     }
 
     /**
@@ -363,7 +282,7 @@ class Utils
         try {
             $zxcvbn = new \Zxcvbn\Score([
                 'description_override' => [
-                    'baseUrl' => \Yii::$app->params['password']['zxcvbn']['apiBaseUrl'],
+                    'baseUrl' => \Yii::$app->params['zxcvbnApiBaseUrl'],
                 ]
             ]);
             return $zxcvbn->getFull(['password' => $password])->toArray();
@@ -375,7 +294,7 @@ class Utils
     /**
      * Get client_id from request or session and then store in session
      * @return string
-     * @throws RedirectException
+     * @throws \Exception
      */
     public static function getClientIdOrFail()
     {
@@ -397,7 +316,7 @@ class Utils
                     'body_params' => $request->getBodyParams(),
                     'user_agent' => $request->getUserAgent(),
                 ]);
-                throw new RedirectException(\Yii::$app->params['uiUrl'] . '/auth/error', 'Missing client_id');
+                throw new \Exception('Missing client_id');
             }
         }
         \Yii::$app->session->set('clientId', $clientId);
@@ -414,30 +333,4 @@ class Utils
     {
         return hash_hmac('sha256', $accessToken, \Yii::$app->params['accessTokenHashKey']);
     }
-
-    /**
-     * Calculate expiration date based on
-     * @param string $changeDate
-     * @return string
-     */
-    public static function calculatePasswordExpirationDate($changeDate)
-    {
-        $passwordLifetime = \Yii::$app->params['passwordLifetime'];
-        $dateInterval = new \DateInterval($passwordLifetime);
-        $dateTime = new \DateTime($changeDate);
-        $expireDate = $dateTime->add($dateInterval);
-
-        return $expireDate->format(self::DT_FORMAT);
-    }
-
-    /**
-     * Remove all non-numeric characters
-     * @param string $value
-     * @return string
-     */
-    public static function stripNonNumbers($value)
-    {
-        return preg_replace('/[^0-9]/', '', $value);
-    }
-
 }

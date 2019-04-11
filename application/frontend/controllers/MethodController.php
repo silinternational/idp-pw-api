@@ -1,21 +1,41 @@
 <?php
 namespace frontend\controllers;
 
-use common\exception\InvalidCodeException;
+use common\helpers\Utils;
 use common\models\Method;
-use common\models\Reset;
 use common\models\User;
 use frontend\components\BaseRestController;
+use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\ConflictHttpException;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\ServerErrorHttpException;
 use yii\web\TooManyRequestsHttpException;
 
 class MethodController extends BaseRestController
 {
+    /**
+     * @var IdBrokerClient
+     */
+    public $idBrokerClient;
+
+    public function init()
+    {
+        parent::init();
+        $config = \Yii::$app->params['idBrokerConfig'];
+        $this->idBrokerClient = new IdBrokerClient(
+            $config['baseUrl'],
+            $config['accessToken'],
+            [
+                IdBrokerClient::TRUSTED_IPS_CONFIG              => $config['validIpRanges']       ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG   => $config['assertValidBrokerIp']   ?? true,
+            ]
+        );
+    }
+
     /**
      * Access Control Filter
      * REMEMBER: NEEDS TO BE UPDATED FOR EVERY ACTION
@@ -25,252 +45,256 @@ class MethodController extends BaseRestController
     {
         return ArrayHelper::merge(parent::behaviors(), [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'actions' => ['verify'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'matchCallback' => function () {
+                            $user = \Yii::$app->user->identity;
+                            return ($user->isAuthScopeFull());
+                        }
                     ],
                 ]
-            ]
+            ],
+            'authenticator' => [
+                'except' => ['verify'] // bypass authentication for /method/{id}/verify
+            ],
         ]);
     }
 
     /**
      * Return list of available reset methods for user.
-     * @return Method[]
+     * @return array<Method|array>
      */
     public function actionIndex()
     {
         /** @var User $user */
         $user = \Yii::$app->user->identity;
 
-        $verifiedMethods = $user->getVerifiedMethods();
-
-        $verifiedMethods[] = [
-            'type' => Reset::TYPE_PRIMARY,
-            'value' => $user->email,
-        ];
-
-        if ($user->hasSpouse()) {
-            $verifiedMethods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => $user->getSpouseEmail(),
-            ];
-        }
-
-        if ($user->hasSupervisor()) {
-            $verifiedMethods[] = [
-                'type' => Reset::TYPE_SUPERVISOR,
-                'value' => $user->getSupervisorEmail(),
-            ];
-        }
-
-        return $verifiedMethods;
+        return $user->getMethodsAndPersonnelEmails();
     }
 
     /**
      * View single method
      * @param string $uid
-     * @return Method
+     * @return array<string,string>
      * @throws NotFoundHttpException
+     * @throws \Exception
      */
     public function actionView($uid)
     {
-        $method = Method::findOne(['uid' => $uid, 'user_id' => \Yii::$app->user->getId()]);
-        if ($method === null) {
-            throw new NotFoundHttpException();
-        }
+        $employeeId = \Yii::$app->user->identity->employee_id;
 
+        $method = Method::getOneVerifiedMethod($uid, $employeeId);
+
+        $method['type'] = 'email';
         return $method;
     }
 
     /**
      * Create new unverified method and send verification
-     * @return Method
+     * @return array<string,string>
      * @throws BadRequestHttpException
-     * @throws ConflictHttpException
      * @throws \Exception
      */
     public function actionCreate()
     {
+        $messages = [
+            400 => \Yii::t('app', 'Method.MissingValue'),
+            409 => \Yii::t('app', 'Method.AlreadyExists'),
+            422 => \Yii::t('app', 'Method.InvalidEmail'),
+        ];
+
         $request = \Yii::$app->request;
 
-        $type = $request->post('type');
         $value = $request->post('value');
+        if ($value === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Method.MissingValue'), 1542750428);
+        }
 
-        if ($type === null || ! in_array($type, [Method::TYPE_EMAIL, Method::TYPE_PHONE])) {
-            throw new BadRequestHttpException(
-                sprintf('Type is required. Options are: %s or %s', Method::TYPE_EMAIL, Method::TYPE_PHONE)
+        $employeeId = \Yii::$app->user->identity->employee_id;
+
+        if (\Yii::$app->user->identity->email == $value) {
+            throw new ConflictHttpException(
+                \Yii::t('app', 'Method.EmailReuseError'),
+                1550138424
             );
-        } elseif ($value === null) {
-            throw new BadRequestHttpException('Value is required.');
         }
-
-        /*
-         * Check for existing method with this value
-         */
-        $method = Method::findOne(['value' => $value, 'user_id' => \Yii::$app->user->getId()]);
-        if ($method !== null) {
-            /*
-             * if not verified yet, resend verification
-             */
-            if ($method->verified === 0) {
-                $method->sendVerification();
-                return $method;
-            } else {
-                /*
-                 * method exists and is verified, throw conflict
-                 */
-                throw new ConflictHttpException('Method already exists');
-            }
+        try {
+            $method = $this->idBrokerClient->createMethod($employeeId, $value);
+        } catch (ServiceException $e) {
+            throw new HttpException(
+                $e->httpStatusCode,
+                $messages[$e->httpStatusCode] ?? '',
+                1542750430
+            );
         }
-
-        /*
-         * Create method entry to be verified
-         */
-        $newMethod = Method::createAndSendVerification(
-            \Yii::$app->user->getId(),
-            $type,
-            $value
-        );
-
-        return $newMethod;
+        $method['type'] = 'email';
+        return $method;
     }
 
     /**
      * Validates user submitted code and marks method as verified if valid
      * @param string $uid
-     * @return Method
+     * @return array<string,string>
      * @throws BadRequestHttpException
-     * @throws NotFoundHttpException
-     * @throws TooManyRequestsHttpException
+     * @throws HttpException
      * @throws \Exception
      */
-    public function actionUpdate($uid)
+    public function actionVerify($uid)
     {
-        /*
-         * Delete methods not yet verified that have expired - Just-in-time cleanup
-         */
-        try {
-            Method::deleteExpiredUnverifiedMethods();
-        } catch (\Exception $e) {
-            \Yii::error([
-                'action' => 'deleteExpiredUnverifiedMethods',
-                'status' => 'error',
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $messages = [
+            400 => \Yii::t('app', 'Method.InvalidCode'),
+            404 => \Yii::t('app', 'Method.NotFound'),
+            410 => \Yii::t('app', 'Method.CodeExpired'),
+            429 => \Yii::t('app', 'Method.TooManyFailures'),
+        ];
 
-        /*
-         * Find method if belongs to user and is not expired
-         */
-        /** @var Method $method */
-        $method = Method::findOne([
-            'uid' => $uid,
-            'user_id' => \Yii::$app->user->getId(),
-        ]);
-
-        /*
-         * If not found, throw 404
-         */
-        if ($method === null) {
-            throw new NotFoundHttpException();
-        }
-
-        /*
-         * If method is already verified, just return it as if successful
-         */
-        if ($method->verified === 1) {
-            return $method;
-        }
-
-        /*
-         * Ensure verification attempts is not above limit
-         */
-        if ($method->verification_attempts >= \Yii::$app->params['reset']['maxAttempts']) {
-            throw new TooManyRequestsHttpException();
-        }
-
-        /*
-         * Get verification code and attempt to verify
-         */
-        $request = \Yii::$app->request;
-        $code = $request->getBodyParam('code');
+        $code = \Yii::$app->request->getBodyParam('code');
         if ($code === null) {
-            throw new BadRequestHttpException('Code is required');
+            throw new BadRequestHttpException(\Yii::t('app', 'Method.CodeMissing'), 1542749426);
         }
 
         try {
-            $method->validateAndSetAsVerified($code);
-        } catch (InvalidCodeException $e) {
-            throw new BadRequestHttpException('Invalid verification code', 1470315942);
-        } catch (\Exception $e) {
-            throw new ServerErrorHttpException(
-                'Unable to set method as verified: ' . $e->getMessage(),
-                1470315941,
-                $e
+            $method = $this->idBrokerClient->verifyMethod($uid, '', $code);
+        } catch (ServiceException $e) {
+            throw new HttpException(
+                $e->httpStatusCode,
+                $messages[$e->httpStatusCode] ?? '',
+                1542749427
             );
         }
 
+        $method['type'] = 'email';
         return $method;
     }
 
     /**
      * Delete method
      * @param string $uid
-     * @return array
+     * @return \stdClass
      * @throws NotFoundHttpException
-     * @throws ServerErrorHttpException
      * @throws \Exception
      */
     public function actionDelete($uid)
     {
-        /** @var Method $method */
-        $method = Method::findOne([
-            'uid' => $uid,
-            'user_id' => \Yii::$app->user->getId()
-        ]);
+        $employeeId = \Yii::$app->user->identity->employee_id;
 
-        if ($method === null) {
-            throw new NotFoundHttpException();
+        try {
+            $this->idBrokerClient->deleteMethod($uid, $employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Method.NotFound'), 1542749425);
+            } else {
+                throw $e;
+            }
         }
 
-        if ( ! $method->delete()) {
-            throw new ServerErrorHttpException('Unable to delete method');
-        }
+        \Yii::$app->response->statusCode = 204;
 
-        return [];
+        /*
+         * Return empty object
+         */
+        return new \stdClass();
     }
 
     /**
      * @param string $uid
      * @return \stdClass
      * @throws NotFoundHttpException
-     * @throws BadRequestHttpException
      * @throws \Exception
      */
     public function actionResend($uid)
     {
-        $method = Method::findOne([
-            'uid' => $uid,
-            'user_id' => \Yii::$app->user->getId(),
-        ]);
+        $employeeId = \Yii::$app->user->identity->employee_id;
 
-        if ($method === null) {
-            throw new NotFoundHttpException();
-        } elseif ($method->verified === 1) {
-            throw new BadRequestHttpException('Method already verified');
+        try {
+            $this->idBrokerClient->resendMethod($uid, $employeeId);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Method.NotFound'), 1542749424);
+            } else {
+                throw $e;
+            }
         }
 
-        /*
-         * resend verification
-         */
-        $method->sendVerification();
+        \Yii::$app->response->statusCode = 204;
 
         /*
          * Return empty object
          */
         return new \stdClass();
+    }
+
+    /**
+     * Move data from local Method table to id-broker Method table
+     */
+    public function actionMove()
+    {
+        $startTime = microtime(true);
+
+        try {
+            Method::deleteExpiredUnverifiedMethods();
+        } catch (\Throwable $e) {
+            \Yii::error([
+                'action' => 'method/move',
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            throw $e;
+        }
+
+        $methods = Method::find()
+            ->where(['verified' => 1, 'type' => Method::TYPE_EMAIL, 'deleted_at' => null])
+            ->limit(100)
+            ->all();
+
+        if (empty($methods)) {
+            \Yii::$app->response->statusCode = 204;
+        }
+
+        $n = count($methods);
+        $errorCount = 0;
+
+        /**
+         * @var Method $method
+         */
+        foreach ($methods as $method) {
+            try {
+                $brokerMethod = $this->idBrokerClient->createMethod(
+                    $method->user->employee_id,
+                    $method->value,
+                    $method->created
+                );
+
+                if ($brokerMethod['value'] !== $method->value) {
+                    throw new \Exception('received value does not equal sent value');
+                }
+
+                $method->deleted_at = Utils::getDatetime();
+                $method->save();
+            } catch (\Throwable $e) {
+                \Yii::error([
+                    'action' => 'method/move',
+                    'error' => $e->getMessage(),
+                    'method_id' => $method->uid,
+                    'code' => $e->getCode(),
+                ]);
+                $errorCount++;
+            }
+        }
+
+        $endTime = microtime(true);
+
+        return [
+            'count' => $n,
+            'seconds' => (string)round($endTime - $startTime, 3),
+            'errors' => $errorCount,
+        ];
     }
 }

@@ -1,12 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\components\BaseRestController;
-
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
-use yii\web\UnauthorizedHttpException;
 
 class UserController extends BaseRestController
 {
@@ -19,10 +17,19 @@ class UserController extends BaseRestController
     {
         return ArrayHelper::merge(parent::behaviors(), [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
+                        'actions' => ['update'],
+                        'matchCallback' => function () {
+                            $user = \Yii::$app->user->identity;
+                            return $user->isAuthScopeFull();
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['me'],
                         'roles' => ['@'],
                     ],
                 ]
@@ -37,5 +44,24 @@ class UserController extends BaseRestController
     {
         return \Yii::$app->user->identity;
     }
-    
+
+    /**
+     * @return null|\yii\web\IdentityInterface
+     */
+    public function actionUpdate()
+    {
+        /**
+         * @var User $user
+         */
+        $user = \Yii::$app->user->identity;
+
+        $hide = \Yii::$app->request->getBodyParam('hide');
+
+        if ($hide !== null) {
+            $user->hide = $hide;
+            $user->save();
+        }
+
+        return $user;
+    }
 }

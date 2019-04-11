@@ -1,5 +1,15 @@
 ######## Set this as appropriate for the project. ########
 
+### The following runs the "new" Scrutinizer PHP Analysis which
+### adds a bunch of false errors. Some additional configuration
+### must be needed.
+#build:
+#  nodes:
+#    analysis:
+#      tests:
+#        override:
+#          - php-scrutinizer-run
+
 filter:
     paths:
         - application/*
@@ -134,7 +144,7 @@ coding_style:
 build_failure_conditions:
 
     # No classes/methods with a rating of D or worse.
-    - 'elements.rating(<= D).exists' 
+#    - 'elements.rating(<= D).exists' 
 
     # No more than two new classes/methods with a rating of C.
     - 'elements.rating(<= C).new.count > 2'
@@ -147,37 +157,3 @@ build_failure_conditions:
 
     # Don't let Code Quality Rating drop below 6.
     - 'project.metric("scrutinizer.quality", < 6)'
-
-build:
-    environment:
-        php:
-            version: 7.0.6
-            ini:
-                'variables_order': 'EGPCS'
-        
-    dependencies:
-        before:
-            - cd application/ && composer install
-
-    project_setup:
-        before:
-            - mysql -e "CREATE DATABASE idpmgmt"
-
-    tests:
-        override:
-            -
-                command: cp ./common/config/local.test.php ./common/config/local.php
-            -
-                command: mkdir -p runtime/mail
-            -
-                command: ./yii migrate --interactive=0
-                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt', MAILER_USEFILES: true, ALERTS_EMAIL_ENABLED: false, ALERTS_EMAIL: alerts@nowhere.com }
-            -
-                command: ./yii migrate --interactive=0 --migrationPath=console/migrations-test
-                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt', MAILER_USEFILES: true, ALERTS_EMAIL_ENABLED: false, ALERTS_EMAIL: alerts@nowhere.com }
-            -
-                command: ./vendor/bin/codecept run unit --coverage --coverage-xml
-                environment: { MYSQL_HOST: '127.0.0.1', MYSQL_USER: 'root', MYSQL_DATABASE: 'idpmgmt', MAILER_USEFILES: true, ALERTS_EMAIL_ENABLED: false, ALERTS_EMAIL: alerts@nowhere.com }
-                coverage:
-                    file: ./application/tests/_output/coverage.xml
-                    format: php-clover

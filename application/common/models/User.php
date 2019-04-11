@@ -1,16 +1,15 @@
 <?php
 namespace common\models;
 
-use Sil\IdpPw\Common\Auth\User as AuthUser;
-use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
-use Sil\IdpPw\Common\Personnel\NotFoundException;
-use Sil\IdpPw\Common\Personnel\PersonnelInterface;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
+use common\components\auth\User as AuthUser;
+use common\components\passwordStore\PasswordStoreInterface;
+use common\components\passwordStore\UserPasswordMeta;
+use common\components\personnel\NotFoundException;
+use common\components\personnel\PersonnelInterface;
+use common\components\personnel\PersonnelUser;
 use common\helpers\Utils;
 use yii\helpers\ArrayHelper;
-use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -31,6 +30,14 @@ class User extends UserBase implements IdentityInterface
     public $personnelUser;
 
     /**
+     * @return PersonnelInterface
+     */
+    protected static function getPersonnelComponent(): PersonnelInterface
+    {
+        return \Yii::$app->personnel;
+    }
+
+    /**
      * Validation rules, applies User rules before UserBase rules
      * @return string[]
      */
@@ -38,10 +45,6 @@ class User extends UserBase implements IdentityInterface
     {
         return ArrayHelper::merge(
             [
-                [
-                    ['uid'], 'default', 'value' => Utils::generateRandomString(),
-                ],
-
                 [
                     ['created'], 'default', 'value' => Utils::getDatetime(),
                 ],
@@ -60,16 +63,39 @@ class User extends UserBase implements IdentityInterface
      */
     public function fields()
     {
-        /** @var User $model */
-        return [
+        $fields = [
+            'uuid',
             'first_name',
             'last_name',
             'idp_username',
             'email',
-            'password_meta' => function($model) {
-                return $model->getPasswordMeta();
-            }
+            'auth_type',
+            'hide',
+            'last_login' => function () {
+                try {
+                    $lastLogin = $this->getPersonnelUser()->lastLogin;
+                } catch (\Exception $e) {
+                    $lastLogin = null;
+                }
+                return $lastLogin;
+            },
         ];
+
+        $pwMeta = $this->getPasswordMeta();
+        if ($pwMeta !== null) {
+            $fields['password_meta'] = function (self $model) use ($pwMeta) {
+                return $pwMeta;
+            };
+        }
+
+        $managerEmail = $this->getSupervisorEmail();
+        if (! empty($managerEmail)) {
+            $fields['manager_email'] = function (self $model) use ($managerEmail) {
+                return $managerEmail;
+            };
+        }
+
+        return $fields;
     }
 
     /**
@@ -78,7 +104,6 @@ class User extends UserBase implements IdentityInterface
      * @param string|null $email [default=null]
      * @param string|null $employeeId [default=null]
      * @return User
-     * @throws NotFoundHttpException
      * @throws \Exception
      * @throws NotFoundException
      */
@@ -98,13 +123,14 @@ class User extends UserBase implements IdentityInterface
          * Always call Personnel system in case employee is no longer employed
          */
         try {
-            /** @var PersonnelUser $personnelUser */
+            $personnel = self::getPersonnelComponent();
+
             if ( ! is_null($employeeId)) {
-                $personnelUser = \Yii::$app->personnel->findByEmployeeId($employeeId);
+                $personnelUser = $personnel->findByEmployeeId($employeeId);
             } elseif ( ! is_null($username)) {
-                $personnelUser = \Yii::$app->personnel->findByUsername($username);
+                $personnelUser = $personnel->findByUsername($username);
             } else {
-                $personnelUser = \Yii::$app->personnel->findByEmail($email);
+                $personnelUser = $personnel->findByEmail($email);
             }
         } catch (\Exception $e) {
             /*
@@ -131,26 +157,16 @@ class User extends UserBase implements IdentityInterface
         $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
         if ( ! $user) {
             $user = new User();
+            $user->uuid = $personnelUser->uuid;
             $user->employee_id = (string)$personnelUser->employeeId;
             $user->first_name = $personnelUser->firstName;
             $user->last_name = $personnelUser->lastName;
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
-            if ( ! $user->save()) {
-                \Yii::error([
-                    'action' => 'create new user',
-                    'status' => 'error',
-                    'error' => $user->getFirstErrors(),
-                ]);
-                throw new \Exception('Unable to create new user', 1456760294);
-            }
+            $user->hide = $personnelUser->hide;
+            $user->saveOrError('Unable to create new user', 1456760294);
         } else {
-            $user->updateProfileIfNeeded(
-                $personnelUser->firstName,
-                $personnelUser->lastName,
-                $personnelUser->username,
-                $personnelUser->email
-            );
+            $user->updateProfileIfNeeded($personnelUser);
         }
 
         return $user;
@@ -159,21 +175,19 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Update local user record if given properties are different than currently stored
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $username
-     * @param string $email
+     * @param PersonnelUser $personnelUser
      * @return bool True if profile was updated, false if no updates were needed
      * @throws \Exception
      */
-    public function updateProfileIfNeeded($firstName, $lastName, $username, $email)
+    public function updateProfileIfNeeded($personnelUser)
     {
         $dirty = false;
         $properties = [
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'idp_username' => $username,
-            'email' => $email,
+            'first_name' => $personnelUser->firstName,
+            'last_name' => $personnelUser->lastName,
+            'idp_username' => $personnelUser->username,
+            'email' => $personnelUser->email,
+            'hide' => $personnelUser->hide,
         ];
 
         foreach ($properties as $property => $value) {
@@ -183,30 +197,30 @@ class User extends UserBase implements IdentityInterface
             }
         }
 
+        /*
+         * Only allow uuid to be changed if blank. Allows for migration of existing records.
+         */
+        if (empty($this->uuid)) {
+            $dirty = true;
+            $this->uuid = $personnelUser->uuid;
+        }
+
         if ($dirty) {
 
             /*
-             * Check that $email is not already in use by another user
+             * Check that email is not already in use by another user
              * If it is, refresh that user's profile from personnel in
              * case their email address has also changed
              */
-            if ($this->isEmailInUseByOtherUser($email)) {
-                self::refreshPersonnelDataForUserWithSpecificEmail($email);
+            if ($this->isEmailInUseByOtherUser($personnelUser->email)) {
+                self::refreshPersonnelDataForUserWithSpecificEmail($personnelUser->email);
             }
 
             /*
              * Save updated profile
              */
-            if ($this->save()) {
-                return true;
-            } else {
-                \Yii::error([
-                    'action' => 'update user profile',
-                    'status' => 'error',
-                    'error' => $this->getFirstErrors(),
-                ]);
-                throw new \Exception('Unable to update profile', 1456760819);
-            }
+            $this->saveOrError('Unable to update profile', 1456760819);
+            return true;
         }
         return false;
     }
@@ -229,8 +243,8 @@ class User extends UserBase implements IdentityInterface
         }
 
         try {
-            /** @var PersonnelUser $personnelUser */
-            $personnelUser = \Yii::$app->personnel->findByEmployeeId($user->employee_id);
+            $personnel = self::getPersonnelComponent();
+            $personnelUser = $personnel->findByEmployeeId($user->employee_id);
         } catch (NotFoundException $e) {
             /*
              * User no longer exists in personnel system, so update their email to release for use by other users
@@ -240,6 +254,7 @@ class User extends UserBase implements IdentityInterface
             $personnelUser->lastName = $user->last_name;
             $personnelUser->username = $user->idp_username;
             $personnelUser->email = sprintf('notfound-%s-%s', $user->email, time());
+            $personnelUser->hide = $user->hide;
 
             \Yii::error([
                 'action' => 'updateProfileForExistingUserWithEmailFromPersonnel',
@@ -252,12 +267,7 @@ class User extends UserBase implements IdentityInterface
             ]);
         }
 
-        return $user->updateProfileIfNeeded(
-            $personnelUser->firstName,
-            $personnelUser->lastName,
-            $personnelUser->username,
-            $personnelUser->email
-        );
+        return $user->updateProfileIfNeeded($personnelUser);
     }
 
     /**
@@ -274,52 +284,19 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Return array of arrays of masked out methods
-     * @return array
+     * @return array<Method|array>
      */
     public function getMaskedMethods()
     {
-        /*
-         * Include primary email address
-         */
-        $methods = [
-            [
-                'type' => Reset::TYPE_PRIMARY,
-                'value' => Utils::maskEmail($this->email),
-            ],
-        ];
-
-        /*
-         * Add spouse if available
-         */
-        if ($this->hasSpouse()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SPOUSE,
-                'value' => Utils::maskEmail($this->getSpouseEmail()),
-            ];
+        $methods = $this->getMethodsAndPersonnelEmails();
+        foreach ($methods as $key => $method) {
+            if ($method['verified'] ?? true) {
+                $methods[$key]['value'] = Utils::maskEmail($method['value']);
+            } else {
+                unset($methods[$key]);
+            }
         }
-
-        /*
-         * Add supervisor if available
-         */
-        if ($this->hasSupervisor()) {
-            $methods[] = [
-                'type' => Reset::TYPE_SUPERVISOR,
-                'value' => Utils::maskEmail($this->getSupervisorEmail()),
-            ];
-        }
-        
-        /*
-         * Then get other verified methods
-         */
-        $verifiedMethods = $this->getVerifiedMethods();
-        foreach ($verifiedMethods as $method) {
-            $methods[] = [
-                'uid' => $method->uid,
-                'type' => $method->type,
-                'value' => $method->getMaskedValue(),
-            ];
-        }
-        return $methods;
+        return array_values($methods);
     }
 
     /**
@@ -339,10 +316,19 @@ class User extends UserBase implements IdentityInterface
             return $this->personnelUser;
         }
 
-        /*
-         * Fetch data from Personnel system and cache it
-         */
-        $this->personnelUser = $this->getPersonnelUserFromInterface();
+        try {
+            /*
+             * Fetch data from Personnel system and cache it
+             */
+            $this->personnelUser = $this->getPersonnelUserFromInterface();
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'get personnel user',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            throw new \Exception('Unexpected error accessing personnel system.', 1553532344, $e);
+        }
         \Yii::$app->session->set('personnelUser', $this->personnelUser);
 
         return $this->personnelUser;
@@ -357,28 +343,13 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return bool
-     */
-    public function hasSpouse()
-    {
-        return $this->getSpouseEmail() !== null;
-    }
-
-    /**
      * @return null|string
+     * @throws \Exception
      */
     public function getSupervisorEmail()
     {
         $personnelUser = $this->getPersonnelUser();
         return $personnelUser->supervisorEmail;
-    }
-    /**
-     * @return null|string
-     */
-    public function getSpouseEmail()
-    {
-        $personnelUser = $this->getPersonnelUser();
-        return $personnelUser->spouseEmail;
     }
 
     /**
@@ -387,8 +358,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function getPersonnelUserFromInterface()
     {
-        /** @var PersonnelInterface $personnel */
-        $personnel = \Yii::$app->personnel;
+        $personnel = self::getPersonnelComponent();
 
         if ($this->employee_id) {
             return $personnel->findByEmployeeId($this->employee_id);
@@ -455,7 +425,7 @@ class User extends UserBase implements IdentityInterface
 
     /**
      * Get this user as an AuthUser object
-     * @return \Sil\IdpPw\Common\Auth\User
+     * @return \common\components\auth\User
      */
     public function getAuthUser()
     {
@@ -478,53 +448,103 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @return Method[]
+     * @return array<Method|array>
      */
-    public function getVerifiedMethods()
+    public function getMethodsAndPersonnelEmails()
     {
-        return Method::findAll(['user_id' => $this->id, 'verified' => 1]);
+        $methods = Method::getMethods($this->employee_id);
+
+        $numVerified = 0;
+        foreach ($methods as $key => $method) {
+            $methods[$key]['type'] = 'email';
+            $numVerified += ($method['verified'] === true);
+        }
+
+        $methods[] = [
+            'type' => Reset::TYPE_PRIMARY,
+            'value' => $this->email,
+        ];
+
+        /*
+         * If alternate recovery methods exist, don't include the manager.
+         */
+        if ($numVerified > 0) {
+            return $methods;
+        }
+
+        if ($this->hasSupervisor()) {
+            $methods[] = [
+                'type' => Reset::TYPE_SUPERVISOR,
+                'value' => $this->getSupervisorEmail(),
+            ];
+        }
+
+        return $methods;
     }
 
     /**
-     * @return array
-     * @throws ServerErrorHttpException
+     * Get password metadata from password store interface, and return in an array
+     * for use in an API response.
+     * @return array|null
      */
     public function getPasswordMeta()
     {
-        /*
-         * If password metadata is missing, fetch from passwordStore and update
-         */
-        /** @var UserPasswordMeta $pwMeta */
-        $pwMeta = \Yii::$app->passwordStore->getMeta($this->employee_id);
+        /** @var PasswordStoreInterface $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
+        try {
+            /** @var UserPasswordMeta $pwMeta */
+            $pwMeta = $passwordStore->getMeta($this->employee_id);
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'getPasswordMeta',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            return null;
+        }
 
         return [
-            'last_changed' => Utils::getIso8601($pwMeta->passwordLastChangeDate),
-            'expires' => Utils::getIso8601($pwMeta->passwordExpireDate),
+            'last_changed' => $pwMeta->passwordLastChangeDate,
+            'expires' => $pwMeta->passwordExpireDate,
         ];
     }
 
     /**
+     * Is user account locked?
+     * @return bool
+     */
+    public function isLocked(): bool
+    {
+        /** @var PasswordStoreInterface $passwordStore */
+        $passwordStore = \Yii::$app->passwordStore;
+
+        try {
+            $isLocked = $passwordStore->isLocked($this->employee_id);
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'getPasswordMeta',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            return true;
+        }
+
+        return $isLocked;
+    }
+
+    /**
      * @param string $newPassword
-     * @throws ServerErrorHttpException
+     * @throws \Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function setPassword($newPassword)
     {
-        $password = Password::create($this->employee_id, $newPassword);
+        $password = Password::create($this, $newPassword);
         $password->user = $this;
         $password->save();
 
-        $this->pw_last_changed = Utils::getDatetime();
-        $this->pw_expires = Utils::calculatePasswordExpirationDate($this->pw_last_changed);
-        
-        if ( ! $this->save()) {
-            \Yii::error([
-                'action' => 'set password for user',
-                'status' => 'error',
-                'error' => $this->getFirstErrors(),
-            ]);
-            throw new ServerErrorHttpException('Unable to save user profile after password change', 1466104537);
-        }
+        $this->saveOrError('Unable to save user profile after password change', 1466104537);
 
         /*
          * Check for request to get user's IP address for logging
@@ -533,17 +553,6 @@ class User extends UserBase implements IdentityInterface
         if (empty($ipAddress)) {
             $ipAddress = 'Not web request';
         }
-
-        /*
-         * Log password change
-         */
-        $scenario = ($this->auth_type === self::AUTH_TYPE_RESET) ?
-            PasswordChangeLog::SCENARIO_RESET : PasswordChangeLog::SCENARIO_CHANGE;
-        PasswordChangeLog::log(
-            $this->id,
-            $scenario,
-            $ipAddress
-        );
 
         /*
          * Log event
@@ -556,12 +565,16 @@ class User extends UserBase implements IdentityInterface
             ],
             $this->id
         );
+
+        if ($this->auth_type == self::AUTH_TYPE_RESET) {
+            $this->destroyAccessToken();
+        }
     }
 
     /**
      * @param string $clientId
      * @return string
-     * @throws ServerErrorHttpException
+     * @throws \Exception
      */
     public function createAccessToken($clientId, $authType)
     {
@@ -577,15 +590,97 @@ class User extends UserBase implements IdentityInterface
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );
-        if ( ! $this->save()) {
+        $this->saveOrError('Unable to create access token', 1465833228);
+
+        return $accessToken;
+    }
+
+    /**
+     *
+     */
+    public function destroyAccessToken(): void
+    {
+        $this->access_token = null;
+        $this->access_token_expiration = null;
+        $this->auth_type = null;
+
+        $this->saveOrError('destroy access token');
+    }
+
+    /**
+     * Check auth level. Returns true if user is authenticated by a full login.
+     *
+     * @return bool
+     */
+    public function isAuthScopeFull(): bool
+    {
+        return $this->auth_type === self::AUTH_TYPE_LOGIN;
+    }
+
+    /**
+     * Called by Yii before an insert or update
+     *
+     * @param bool $insert
+     * @return bool
+     * @throws ServerErrorHttpException
+     */
+    public function beforeSave($insert): bool
+    {
+        if ( ! parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($this->getOldAttribute('hide') != $this->getAttribute('hide')) {
+            try {
+                $personnel = self::getPersonnelComponent();
+                $personnel->updateUser([
+                    'employee_id' => $this->employee_id,
+                    'hide' => $this->hide,
+                ]);
+            } catch (\Exception $e) {
+                \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $inviteCode
+     * @return User|null
+     * @throws \Exception
+     * @throws NotFoundException
+     * @throws \Sil\Idp\IdBroker\Client\ServiceException
+     */
+    public static function getUserFromInviteCode(string $inviteCode)
+    {
+        $personnel = self::getPersonnelComponent();
+        try {
+            $personnelUser = $personnel->findByInvite($inviteCode);
+            return self::findOrCreate(null, null, $personnelUser->employeeId);
+        } catch (NotFoundException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Save attributes to database. In case of error, log an error message and optionally throw
+     * an exception.
+     * @param string $msg error message
+     * @param int $code exception code; if not provided, no exception will be thrown
+     * @throws \Exception if the save failed for any reason
+     */
+    private function saveOrError(string $msg, int $code = null): void
+    {
+        if (! $this->save()) {
             \Yii::error([
-                'action' => 'create access token for user',
+                'action' => $msg,
                 'status' => 'error',
                 'error' => $this->getFirstErrors(),
             ]);
-            throw new ServerErrorHttpException('Unable to create access token', 1465833228);
+            if ($code !== null) {
+                throw new \Exception($msg, $code);
+            }
         }
-
-        return $accessToken;
     }
 }

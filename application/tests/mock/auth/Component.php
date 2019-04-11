@@ -1,15 +1,75 @@
 <?php
 namespace tests\mock\auth;
 
-use Sil\IdpPw\Common\Auth\AuthnInterface;
-use Sil\IdpPw\Common\Auth\InvalidLoginException;
-use Sil\IdpPw\Common\Auth\RedirectException;
-use Sil\IdpPw\Common\Auth\User as AuthUser;
+use common\components\auth\AuthnInterface;
+use common\components\auth\InvalidLoginException;
+use common\components\auth\RedirectException;
+use common\components\auth\User as AuthUser;
 use yii\base\Component as YiiComponent;
 use yii\web\Request;
 
 class Component extends YiiComponent implements AuthnInterface
 {
+    /**
+     * Whether or not to sign request
+     * @var bool [default=true]
+     */
+    public $signRequest = true;
+
+    /**
+     * Whether or not response should be signed
+     * @var bool [default=true]
+     */
+    public $checkResponseSigning = true;
+
+    /**
+     * Whether or not to require response assertion to be encrypted
+     * @var bool [default=true]
+     */
+    public $requireEncryptedAssertion = true;
+
+    /**
+     * Certificate contents for remote IdP
+     * @var string
+     */
+    public $idpCertificate;
+
+    /**
+     * Certificate contents for this SP
+     * @var string|null If null, request will not be signed
+     */
+    public $spCertificate;
+
+    /**
+     * PEM encoded private key file associated with $spCertificate
+     * @var string|null If null, request will not be signed
+     */
+    public $spPrivateKey;
+
+    /**
+     * This SP Entity ID as known by the remote IdP
+     * @var string
+     */
+    public $entityId;
+
+    /**
+     * Single-Sign-On url for remote IdP
+     * @var string
+     */
+    public $ssoUrl;
+
+    /**
+     * Single-Log-Out url for remote IdP
+     * @var string
+     */
+    public $sloUrl;
+
+    /**
+     * Mapping configuration for IdP attributes to User
+     * @var array
+     */
+    public $attributeMap;
+
     /**
      * @param string $returnTo Where to have IdP send user after login
      * @param \yii\web\Request|null $request
@@ -53,7 +113,7 @@ class Component extends YiiComponent implements AuthnInterface
 
     /**
      * @param string $returnTo Where to have IdP send user after login
-     * @param \Sil\IdpPw\Common\Auth\User|null $user
+     * @param \common\components\auth\User|null $user
      * @return void
      * @throws RedirectException
      */
@@ -67,7 +127,7 @@ class Component extends YiiComponent implements AuthnInterface
 
     /**
      * Convert mock user array to AuthUser
-     * @return \Sil\IdpPw\Common\Auth\User
+     * @return \common\components\auth\User
      */
     private function toAuthUser($userArray)
     {

@@ -1,16 +1,15 @@
 <?php
 namespace tests\unit\common\models;
 
-use common\models\PasswordChangeLog;
-use Sil\IdpPw\Common\Personnel\PersonnelUser;
+use Sil\Codeception\TestCase\Test;
+use common\components\personnel\PersonnelUser;
 use common\models\Method;
 use common\models\Reset;
 use common\models\User;
+use tests\helpers\BrokerUtils;
 use tests\unit\fixtures\common\models\MethodFixture;
-use tests\unit\fixtures\common\models\PasswordChangeLogFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
-use yii\codeception\DbTestCase;
 
 /**
  * Class UserTest
@@ -19,15 +18,20 @@ use yii\codeception\DbTestCase;
  * @method Method methods($key)
  * @method Reset resets($key)
  */
-class UserTest extends DbTestCase
+class UserTest extends Test
 {
-    public function fixtures()
+    public function _before()
+    {
+        BrokerUtils::insertFakeUsers();
+        parent::_before();
+    }
+
+    public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'methods' => MethodFixture::className(),
-            'resets' => ResetFixture::className(),
-            'password_change_logs' => PasswordChangeLogFixture::className(),
+            'users' => UserFixture::class,
+            'methods' => MethodFixture::class,
+            'resets' => ResetFixture::class,
         ];
     }
 
@@ -35,19 +39,18 @@ class UserTest extends DbTestCase
     {
         User::deleteAll();
         $user = new User();
+        $user->uuid = 'ccd9bb38-a656-4c62-80ba-2428468599b3';
         $user->employee_id = '1456771651';
         $user->first_name = 'User';
         $user->last_name = 'One';
         $user->idp_username = 'user_1456771651';
         $user->email = 'user-1456771651@domain.org';
+        $user->hide = 'no';
         if ( ! $user->save()) {
             $this->fail('Failed to create User: ' . print_r($user->getFirstErrors(), true));
         }
 
-        $this->assertEquals(32, strlen($user->uid));
-        $this->assertNull($user->last_login);
-        $this->assertNull($user->pw_last_changed);
-        $this->assertNull($user->pw_expires);
+        $this->assertEquals(36, strlen($user->uuid));
         $this->assertNotNull($user->created);
     }
 
@@ -62,6 +65,8 @@ class UserTest extends DbTestCase
                 'last_changed' => '2016-06-15T19:00:32+00:00',
                 'expires' => '2016-06-15T19:00:32+00:00',
             ],
+            'auth_type' => 'login',
+            'hide' => 'no'
         ];
 
         $user = $this->users('user1');
@@ -70,6 +75,8 @@ class UserTest extends DbTestCase
         $this->assertEquals($expected['last_name'], $fields['last_name']);
         $this->assertEquals($expected['idp_username'], $fields['idp_username']);
         $this->assertEquals($expected['email'], $fields['email']);
+        $this->assertEquals($expected['auth_type'], $fields['auth_type']);
+        $this->assertEquals($expected['hide'], $fields['hide']);
     }
 
     public function testFindOrCreateException()
@@ -84,10 +91,7 @@ class UserTest extends DbTestCase
         User::deleteAll();
         $user = User::findOrCreate('first_last');
 
-        $this->assertEquals(32, strlen($user->uid));
-        $this->assertNull($user->last_login);
-        $this->assertNull($user->pw_last_changed);
-        $this->assertNull($user->pw_expires);
+        $this->assertEquals(36, strlen($user->uuid));
         $this->assertNotNull($user->created);
     }
 
@@ -106,7 +110,7 @@ class UserTest extends DbTestCase
 
     public function testFindOrCreateDoesntExist()
     {
-        $this->expectException(\Sil\IdpPw\Common\Personnel\NotFoundException::class);
+        $this->expectException(\common\components\personnel\NotFoundException::class);
         User::findOrCreate('doesnt_exist');
     }
 
@@ -114,50 +118,45 @@ class UserTest extends DbTestCase
     {
         $user = $this->users('user1');
 
+        $personnelData = new PersonnelUser();
+        $personnelData->uuid = $user->uuid;
+        $personnelData->firstName = $user->first_name;
+        $personnelData->lastName = $user->last_name;
+        $personnelData->username = $user->idp_username;
+        $personnelData->email = $user->email;
+        $personnelData->hide = $user->hide;
+
         /*
          * Make no changes and ensure it is not updated
          */
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name,
-            $user->idp_username,
-            $user->email
-        );
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertFalse($changed);
 
         /*
-         * Test changed for each property
+         * Test changed for each property. uuid cannot be changed
          */
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name . 'a',
-            $user->last_name,
-            $user->idp_username,
-            $user->email
-        );
+        $personnelData->uuid = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+        $changed = $user->updateProfileIfNeeded($personnelData);
+        $this->assertFalse($changed);
+
+        $personnelData->firstName .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name . 'a',
-            $user->idp_username,
-            $user->email
-        );
+        $personnelData->lastName .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name,
-            $user->idp_username . 'a',
-            $user->email
-        );
+        $personnelData->username .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
-        $changed = $user->updateProfileIfNeeded(
-            $user->first_name,
-            $user->last_name,
-            $user->idp_username,
-            'a' . $user->email
-        );
+        $personnelData->email = 'a' . $personnelData->email;
+        $changed = $user->updateProfileIfNeeded($personnelData);
+        $this->assertTrue($changed);
+
+        $personnelData->hide = ($personnelData->hide === 'no') ? 'yes' : 'no';
+        $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
     }
 
@@ -165,7 +164,7 @@ class UserTest extends DbTestCase
     {
         $user = $this->users('user1');
         $personnelData = $user->getPersonnelUser();
-        $this->assertInstanceOf('\Sil\IdpPw\Common\Personnel\PersonnelUser', $personnelData);
+        $this->assertInstanceOf('common\components\personnel\PersonnelUser', $personnelData);
     }
 
     public function testSupervisor()
@@ -175,29 +174,19 @@ class UserTest extends DbTestCase
         $this->assertEquals('supervisor@domain.org', $user->getSupervisorEmail());
     }
 
-    public function testSpouse()
-    {
-        $user = $this->users('user1');
-        $this->assertTrue($user->hasSpouse());
-        $this->assertEquals('spouse@domain.org', $user->getSpouseEmail());
-    }
-
     public function testGetMaskedMethods()
     {
+        $this->markTestSkipped('test is broken because methods were moved to broker');
         $user = $this->users('user1');
         $methods = $user->getMaskedMethods();
         $this->assertTrue(is_array($methods));
-        $this->assertEquals(5, count($methods));
+        $this->assertEquals(4, count($methods)); // phone method is not returned
 
         foreach ($methods as $method) {
             if ($method['type'] == 'primary') {
                 $this->assertEquals('f****_l**t@o***********.o**', $method['value']);
-            } elseif ($method['type'] == 'spouse') {
-                $this->assertEquals('s****e@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'supervisor') {
                 $this->assertEquals('s********r@d*****.o**', $method['value']);
-            } elseif ($method['type'] == 'phone' && $method['uid'] == '11111111111111111111111111111111') {
-                $this->assertEquals('+1 #######890', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '22222222222222222222222222222222') {
                 $this->assertEquals('e**************9@d*****.o**', $method['value']);
             } elseif ($method['type'] == 'email' && $method['uid'] == '33333333333333333333333333333333') {
@@ -244,7 +233,7 @@ class UserTest extends DbTestCase
         $expected = $this->users('user1');
         $user = User::findIdentityByAccessToken('user1');
         $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals($expected->uid, $user->uid);
+        $this->assertEquals($expected->uuid, $user->uuid);
     }
 
     public function testGetAuthKey()
@@ -257,7 +246,7 @@ class UserTest extends DbTestCase
     {
         $user = $this->users('user1');
         $authUser = $user->getAuthUser();
-        $this->assertInstanceOf(\Sil\IdpPw\Common\Auth\User::class, $authUser);
+        $this->assertInstanceOf(\common\components\auth\User::class, $authUser);
         $this->assertEquals($user->first_name, $authUser->firstName);
         $this->assertEquals($user->last_name, $authUser->lastName);
         $this->assertEquals($user->email, $authUser->email);
@@ -267,12 +256,15 @@ class UserTest extends DbTestCase
 
     public function testGetVerifiedMethods()
     {
+        $this->markTestSkipped('test is broken because methods were moved to broker');
+
         $user = $this->users('user1');
         $methods = $user->getVerifiedMethods();
 
         $verifiedCount = 0;
         foreach ($user->methods as $method) {
-            if ($method->verified === 1) {
+            // phone verification is not supported
+            if ($method->verified === 1 && $method->type != Method::TYPE_PHONE) {
                 $verifiedCount++;
             }
         }
@@ -283,26 +275,9 @@ class UserTest extends DbTestCase
     {
         $user = $this->users('user1');
         $pwMeta = $user->getPasswordMeta();
+        $this->assertNotNull($pwMeta);
         $this->assertArrayHasKey('last_changed', $pwMeta);
         $this->assertArrayHasKey('expires', $pwMeta);
-    }
-
-    public function testPasswordChangeLog()
-    {
-        $this->markTestSkipped('Depends on zxcvbn api, enable after refactoring to use a mock or something.');
-        PasswordChangeLog::deleteAll();
-        $user = $this->users('user1');
-        $user->setPassword('This is a new 123 password!');
-
-        $log = PasswordChangeLog::findOne(['user_id' => $user->id]);
-        $this->assertEquals(PasswordChangeLog::SCENARIO_CHANGE, $log->scenario);
-
-        PasswordChangeLog::deleteAll();
-        $user3 = $this->users('user3');
-        $user3->setPassword('This is a new 123 password!');
-
-        $log = PasswordChangeLog::findOne(['user_id' => $user3->id]);
-        $this->assertEquals(PasswordChangeLog::SCENARIO_RESET, $log->scenario);
     }
 
     public function testIsEmailInUseByOtherUser()

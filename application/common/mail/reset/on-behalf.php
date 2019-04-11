@@ -5,29 +5,30 @@ use yii\helpers\Html as yHtml;
  * @var string $name
  * @var string $idpDisplayName
  * @var string $expireTime
- * @var string $code
+ * @var string $resetUrl
  * @var string $helpCenterUrl
  * @var string $fromName
  */
 ?>
-Hi there,
+    Hi there,
 <p>
-    <?php echo yHtml::encode($name); ?> recently requested a password change for their
-    <?php echo yHtml::encode($idpDisplayName); ?> account and they have requested your assistance.
+    <?= yHtml::encode($name) ?> recently requested a password change for their
+    <?= yHtml::encode($idpDisplayName) ?> account. If this was you, please use the link below
+    to reset your password. If it's not you but you do know them, you may provide the link
+    for them to use, but please contact them directly to ensure that you are only providing the
+    link to them and not to someone else. This link is valid
+    until <?= yHtml::encode($expireTime) ?>.
 </p>
 <p>
-    Please contact them directly to ensure that you are only providing the following reset code to them
-    and not to someone else. This code is valid until <?php echo yHtml::encode($expireTime); ?>.
+    <?= yHtml::a(yHtml::encode($resetUrl), $resetUrl) ?>
 </p>
 <p>
-    Reset Code: <?php echo yHtml::encode($code); ?>
+    To maintain security, please don't forward this email to anyone.
+    See our Help Center at <?= yHtml::a(yHtml::encode($helpCenterUrl), $helpCenterUrl) ?> for more security tips.
 </p>
 <p>
-    To keep their account secure, please don't forward this email to anyone.
-    See our Help Center for <a href="<?php echo yHtml::encode($helpCenterUrl); ?>">more security tips</a>.
+    Thanks,
 </p>
 <p>
-    Thanks!
-    - <?php echo yHtml::encode($fromName); ?>
+    <i><?= yHtml::encode($fromName) ?></i>
 </p>
-    

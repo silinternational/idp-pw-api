@@ -1,3 +1,0 @@
-# m h dom mon dow user	command
-* * * * * root /data/yii cron/send-queued-email
-

@@ -1,12 +1,10 @@
 <?php
 namespace tests\unit\common\models;
 
+use Sil\Codeception\TestCase\Test;
 use common\models\EventLog;
 use common\models\User;
-use yii\codeception\DbTestCase;
-
 use tests\unit\fixtures\common\models\EventLogFixture;
-use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 
 /**
@@ -15,13 +13,13 @@ use tests\unit\fixtures\common\models\UserFixture;
  * @method User users($key)
  * @method EventLog eventLogs($key)
  */
-class EventLogTest extends DbTestCase
+class EventLogTest extends Test
 {
-    public function fixtures()
+    public function _fixtures()
     {
         return [
-            'users' => UserFixture::className(),
-            'event_logs' => EventLogFixture::className(),
+            'users' => UserFixture::class,
+            'event_logs' => EventLogFixture::class,
         ];
     }
 

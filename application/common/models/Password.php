@@ -1,12 +1,14 @@
 <?php
 namespace common\models;
 
-use common\helpers\Utils;
 use common\helpers\ZxcvbnPasswordValidator;
-use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
+use common\components\passwordStore\PasswordReuseException;
+use GuzzleHttp\Exception\GuzzleException;
+use Icawebdesign\Hibp\Password\PwnedPassword;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Model;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\ServerErrorHttpException;
 
 class Password extends Model
@@ -14,99 +16,78 @@ class Password extends Model
     /** @var string */
     public $password;
 
-    /** @var  string */
-    public $employeeId;
-
-    /** @var \Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface */
+    /** @var \common\components\passwordStore\PasswordStoreInterface */
     public $passwordStore;
 
     /** @var array */
     public $config;
 
-    /** @var common\models\User **/
+    /** @var User **/
     public $user;
 
     public function init()
     {
         $this->passwordStore = \Yii::$app->passwordStore;
-        $this->config = \Yii::$app->params['password'];
+        $this->config = \Yii::$app->params['passwordRules'];
     }
 
     public function rules()
     {
         return [
             [
-                'password', 'match', 'pattern' => $this->config['minLength']['phpRegex'],
+                'password', 'string', 'min' => $this->config['minLength'],
                 'skipOnError' => false,
-                'message' => \Yii::t(
+                'tooShort' => \Yii::t(
                     'app',
-                    'Your password does not meet the minimum length of {minLength} (code 100)',
-                    ['minLength' => $this->config['minLength']['value']]
+                    'Password.TooShort',
+                    ['minLength' => $this->config['minLength']]
                 ),
-                'when' => function() { return $this->config['minLength']['enabled']; }
             ],
             [
-                'password', 'match', 'pattern' => $this->config['maxLength']['phpRegex'],
+                'password', 'string', 'max' => $this->config['maxLength'],
                 'skipOnError' => false,
-                'message' => \Yii::t(
+                'tooLong' => \Yii::t(
                     'app',
-                    'Your password exceeds the maximum length of {maxLength} (code 110)',
-                    ['maxLength' => $this->config['maxLength']['value']]
+                    'Password.TooLong',
+                    ['maxLength' => $this->config['maxLength']]
                 ),
-                'when' => function() { return $this->config['maxLength']['enabled']; }
             ],
             [
-                'password', 'match', 'pattern' => $this->config['minNum']['phpRegex'],
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must contain at least {minNum} numbers (code 120)',
-                    ['minNum' => $this->config['minNum']['value']]
-                ),
-                'when' => function() { return $this->config['minNum']['enabled']; }
-            ],
-            [
-                'password', 'match', 'pattern' => $this->config['minUpper']['phpRegex'],
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must contain at least {minUpper} upper case letters (code 130)',
-                    ['minUpper' => $this->config['minUpper']['value']]
-                ),
-                'when' => function() { return $this->config['minUpper']['enabled']; }
-            ],
-            [
-                'password', 'match', 'pattern' => $this->config['minSpecial']['phpRegex'],
-                'skipOnError' => false,
-                'message' => \Yii::t(
-                    'app',
-                    'Your password must contain at least {minSpecial} special characters (code 140)',
-                    ['minSpecial' => $this->config['minSpecial']['value']]
-                ),
-                'when' => function() { return $this->config['minSpecial']['enabled']; }
-            ],
-            [
-                'password', ZxcvbnPasswordValidator::className(), 'minScore' => $this->config['zxcvbn']['minScore'],
+                'password', ZxcvbnPasswordValidator::class, 'minScore' => $this->config['minScore'],
                 'skipOnError' => true,
                 'message' => \Yii::t(
                     'app',
-                    'Your password does not meet the minimum strength of {minScore} (code 150)',
-                    ['minScore' => $this->config['zxcvbn']['minScore']]
+                    'Password.TooWeak',
+                    ['minScore' => $this->config['minScore']]
                 ),
-                'when' => function() { return $this->config['zxcvbn']['enabled']; }
             ],
             [
                 'password', 'validateNotUserAttributes',
                 'params'=>['first_name', 'last_name', 'idp_username', 'email'],
                 'skipOnError' => false,
             ],
+            [
+                'password', 'validateNotBeenPwned',
+                'skipOnError' => true,
+                'when' => function () {
+                    return $this->config['enableHIBP'];
+                },
+            ],
+            [
+                'password', 'validateNotPublicPassword',
+                'skipOnError' => false,
+            ],
+            [
+                'password', 'passwordStoreInterfaceAssess',
+                'skipOnError' => true,
+            ]
         ];
     }
 
-    public function validateNotUserAttributes($attribute, $params=null)
+    public function validateNotUserAttributes($attribute, $params = null)
     {
         /* Ensure the password instance has a user attribute */
-        if (!isset($this->user)) {
+        if ( ! isset($this->user)) {
 
             /* Log error */
             $log = [
@@ -120,7 +101,7 @@ class Password extends Model
             throw new ServerErrorHttpException(
                 \Yii::t(
                     'app',
-                    'Unable to update password. Please contact support.'
+                    'Password.UpdateError'
                 ),
                 1511195430
             );
@@ -134,9 +115,10 @@ class Password extends Model
         foreach ($params as $disallowedAttribute) {
             if (mb_strpos(mb_strtolower($this->{$attribute}),
                 mb_strtolower($this->user->$disallowedAttribute)) !== false) {
-                $this->addError($attribute, sprintf(
-                    'Your password may not contain any of these: %s (code 180)',
-                    join(', ', $labelList)
+                $this->addError($attribute, \Yii::t(
+                    'app',
+                    'Password.DisallowedContent',
+                    ['labelList' => join(', ', $labelList)]
                 ));
             }
         }
@@ -144,15 +126,15 @@ class Password extends Model
 
     /**
      * Shortcut method to initialize a Password object
-     * @param string $employeeId
+     * @param User $user
      * @param string $newPassword
      * @return Password
      */
-    public static function create($employeeId, $newPassword)
+    public static function create($user, $newPassword)
     {
         $password = new Password();
         $password->password = $newPassword;
-        $password->employeeId = $employeeId;
+        $password->user = $user;
 
         return $password;
     }
@@ -163,39 +145,27 @@ class Password extends Model
      */
     public function save()
     {
-
         if ( ! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
             \Yii::warning([
                 'action' => 'save password',
                 'status' => 'error',
-                'employee_id' => $this->employeeId,
+                'employee_id' => $this->user->employee_id,
                 'error' => $this->getErrors('password'),
             ]);
-            throw new BadRequestHttpException('New password validation failed: ' . $errors);
+            throw new BadRequestHttpException($errors);
         }
         
         $log = [
             'action' => 'save password',
-            'employee_id' => $this->employeeId,
+            'employee_id' => $this->user->employee_id,
         ];
-
-        /*
-         * If validation fails, return just the first error
-         */
-        if ( ! $this->validate()) {
-            $errors = $this->getFirstErrors();
-            $log['status'] = 'error';
-            $log['error'] = $errors;
-            \Yii::error($log);
-            throw new BadRequestHttpException($errors[0], 1463164336);
-        }
 
         /*
          * Update password
          */
         try {
-            $this->passwordStore->set($this->employeeId, $this->password);
+            $this->passwordStore->set($this->user->employee_id, $this->password);
             $log['status'] = 'success';
             \Yii::warning($log);
         } catch (\Exception $e) {
@@ -217,28 +187,81 @@ class Password extends Model
              */
             if ($e instanceof  PasswordReuseException) {
                 \Yii::warning($log);
-                throw new BadRequestHttpException(
-                    \Yii::t(
-                        'app',
-                        'Unable to update password. ' .
-                            'If this password has been used before please use something different.'
-                    ),
-                    1469194882
-                );
+                throw new ConflictHttpException(\Yii::t('app', 'Password.PasswordReuse'), 1469194882);
             } else {
                 \Yii::error($log);
                 throw new ServerErrorHttpException(
-                    \Yii::t(
-                        'app',
-                        'Unable to update password, please wait a minute and try again. If this problem ' .
-                            'persists, please contact support.'
-                    ), 
-                    1463165209
-                );
+                    \Yii::t('app', 'Password.UpdateFailure'), 1463165209);
             }
 
         }
     }
 
+    public function validateNotPublicPassword($attribute)
+    {
+        /*
+         * block passwords provided in https://youtu.be/WTMZYuoztoM?list=PLu5OsENIeX656zXJ96FCL169WNmvnPveo
+         */
+        $publicPasswords = [
+            'one4amzn',
+            'one4ggle',
+            'one4ebay',
+            '$$Ymh7Hp3dfgQr9L#!>s;',
+            '7startpenguins!snap',
+            'deserty.domes.slide2',
+            'about-slithers-quakely.',
+        ];
 
+        foreach ($publicPasswords as $publicPassword) {
+            if ($this->$attribute == $publicPassword) {
+                $this->addError($attribute, \Yii::t('app', 'Password.PublicPasswordUsed'));
+            }
+        }
+    }
+
+    /**
+     * @param string $attribute The name of the attribute being validated, typically
+     * 'password'.
+     */
+    public function validateNotBeenPwned($attribute)
+    {
+        $hash = sha1($this->$attribute);
+        $hashPrefix = substr($hash, 0, 5);
+
+        $pwnedPassword = new PwnedPassword();
+
+        try {
+            $count = $pwnedPassword->range($hashPrefix, $hash);
+        } catch (GuzzleException $e) {
+            \Yii::error('HaveIBeenPwned API error: ' . $e->getMessage());
+            return;
+        }
+
+        if ($count > 0) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Password.Breached'), 1554734183);
+        }
+    }
+
+    /**
+     * Request an assesment of the password from the PasswordStore Interface, to check against
+     * previously-used passwords, for instance.
+     *
+     * Called by Yii validation upon record save or explicit call to validate()
+     *
+     * @param string $attribute The name of the attribute being validated, typically
+     * 'password'.
+     * @throws ConflictHttpException
+     */
+    public function passwordStoreInterfaceAssess($attribute)
+    {
+        try {
+            $this->passwordStore->assess($this->user->employee_id, $this->$attribute);
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 409) {
+                throw new ConflictHttpException(\Yii::t('app', 'Password.PasswordReuse'));
+            } else {
+                throw new \Exception('Password.UnknownProblem');
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use tests\api\FixtureHelper;
+use tests\helpers\BrokerUtils;
 
 class BaseCest
 {

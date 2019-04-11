@@ -21,9 +21,15 @@ try {
     require(__DIR__ . '/common/config/bootstrap.php');
     require(__DIR__ . '/console/config/bootstrap.php');
 
+    if (is_file(__DIR__ . '/common/config/local.php')) {
+        $localConfig = require(__DIR__ . '/common/config/local.php');
+    } else {
+        $localConfig = [];
+    }
+
     $config = yii\helpers\ArrayHelper::merge(
         require(__DIR__ . '/common/config/main.php'),
-        require(__DIR__ . '/common/config/local.php'),
+        $localConfig,
         require(__DIR__ . '/console/config/main.php')
     );
 } catch (Sil\PhpEnv\EnvVarNotFoundException $e) {

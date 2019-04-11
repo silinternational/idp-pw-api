@@ -4,12 +4,14 @@
   "minimum-stability": "stable",
   "repositories": [
     {
-      "type": "vcs",
-      "url": "https://github.com/fillup/Adldap2.git"
+      "type": "git",
+      "url": "https://github.com/silinternational/idp-id-broker-php-client"
     }
   ],
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=7.2",
+    "ext-json": "*",
+    "ext-iconv": "*",
     "yiisoft/yii2": "~2.0.15",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
@@ -17,32 +19,37 @@
     "silinternational/php-env": "^2.1.1",
     "silinternational/yii2-json-log-targets": "^1.0.0",
     "silinternational/yii2-email-log-target": "^1.0.1",
-    "silinternational/idp-pw-api-common": "^1.0",
-    "silinternational/idp-pw-api-personnel-id-broker": "^2.0.0",
-    "silinternational/idp-pw-api-auth-saml": "^1.0.3",
-    "silinternational/idp-pw-api-passwordstore-ldap": "^2.2.2",
-    "silinternational/idp-pw-api-passwordstore-id-broker": "^3.2.1",
-    "silinternational/idp-pw-api-passwordstore-multiple": "^1.0.2",
-    "silinternational/idp-pw-api-phoneverification-nexmo": "^2.0",
+    "silinternational/idp-id-broker-php-client": "^3.1.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",
+    "simplesamlphp/saml2": "^3.1.5",
+    "google/apiclient": "^2.0",
     "google/recaptcha": "^1.1.2",
-    "adldap2/adldap2": "dev-master",
-    "fillup/fake-bower-assets": "2.0.9"
+    "adldap2/adldap2": "^9.0",
+    "fillup/fake-bower-assets": "2.0.9",
+    "icawebdesign/hibp-php": "3.1.0"
   },
   "require-dev": {
-    "yiisoft/yii2-codeception": "*",
     "yiisoft/yii2-debug": "*",
     "yiisoft/yii2-faker": "*",
     "roave/security-advisories": "dev-master",
-    "codeception/codeception": "^2.2",
+    "codeception/codeception": "~2.4.5",
     "codeception/specify": "0.*",
-    "codeception/verify": "0.*"
+    "codeception/verify": "0.*",
+    "behat/behat": "^3.3",
+    "phpunit/phpunit": "^6.0",
+    "silinternational/yii2-codeception": "dev-master"
   },
   "config": {
     "process-timeout": 1800,
     "fxp-asset.installer-paths": {
       "npm-asset-library": "vendor/npm",
       "bower-asset-library": "vendor/bower"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "tests\\features\\": "tests/features/",
+      "common\\components\\passwordStore\\": "common/components/passwordStore/"
     }
   }
 }

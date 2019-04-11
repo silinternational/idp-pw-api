@@ -5,13 +5,13 @@ require_once "BaseCest.php";
 class AuthCest extends BaseCest
 {
 
-//    public function test1(ApiTester $I)
-//    {
-//        $I->wantTo('check response when making a GET request for logging in with no client_id');
-//        $I->stopFollowingRedirects();
-//        $I->sendGET('/auth/login');
-//        $I->seeResponseCodeIs(400);
-//    }
+    public function test1(ApiTester $I)
+    {
+        $I->wantTo('check response when making a GET request for logging in with no client_id');
+        $I->stopFollowingRedirects();
+        $I->sendGET('/auth/login');
+        $I->seeResponseCodeIs(400);
+    }
 
     public function test2(ApiTester $I)
     {
@@ -112,5 +112,13 @@ class AuthCest extends BaseCest
         $I->haveHttpHeader('Authorization', 'Bearer user2');
         $I->sendOPTIONS('/auth/logout?access_token=user2');
         $I->seeResponseCodeIs(200);
+    }
+
+    public function test91(ApiTester $I)
+    {
+        $I->wantTo('check response for making a POST request for logging in with invite code and no access token');
+        $I->stopFollowingRedirects();
+        $I->sendGET('/auth/login?client_id=asdf&invite=abc123');
+        $I->seeResponseCodeIs(302);
     }
 }
