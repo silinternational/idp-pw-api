@@ -68,7 +68,6 @@ class UtilsTest extends Test
         $params = \Yii::$app->params;
         $config = Utils::getFrontendConfig();
         $this->assertEquals($params['idpDisplayName'], $config['idpName']);
-        $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
 
         $expectedPasswordRules = [
             'minLength' => 10,
