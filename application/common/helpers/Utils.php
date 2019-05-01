@@ -126,7 +126,7 @@ class Utils
          */
         $domainParts = explode('.', $domain);
 
-        $countParts = len($domainParts);
+        $countParts = count($domainParts);
 
         for ($i = 0; $i < $countParts - 1; $i++) {
             $nextPart = $domainParts[$i];
