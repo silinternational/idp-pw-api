@@ -125,9 +125,9 @@ class Utils
          * for the first character of each part and the .
          */
         $domainParts = explode('.', $domain);
-
         $countParts = count($domainParts);
 
+        // Leave the last part for later, to avoid adding a '.' after it.
         for ($i = 0; $i < $countParts - 1; $i++) {
             $nextPart = $domainParts[$i];
             $newEmail .= substr($nextPart, 0, 1);
@@ -135,7 +135,7 @@ class Utils
             $newEmail .= '.';
         }
 
-        $nextPart = $domainParts[-1];
+        $nextPart = $domainParts[$countParts-1];
         $newEmail .= substr($nextPart, 0, 1);
         $newEmail .= str_repeat('*', strlen($nextPart) - 1);
 
