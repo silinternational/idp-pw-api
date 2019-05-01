@@ -124,14 +124,21 @@ class Utils
          * Add an '*' for each of the characters of the domain, except
          * for the first character of each part and the .
          */
-        list($domainA, $domainB) = explode('.', $domain);
+        $domainParts = explode('.', $domain);
 
-        $newEmail .= substr($domainA, 0, 1);
-        $newEmail .= str_repeat('*', strlen($domainA) - 1);
-        $newEmail .= '.';
+        $countParts = len($domainParts);
 
-        $newEmail .= substr($domainB, 0, 1);
-        $newEmail .= str_repeat('*', strlen($domainB) - 1);
+        for ($i = 0; $i < $countParts - 1; $i++) {
+            $nextPart = $domainParts[$i];
+            $newEmail .= substr($nextPart, 0, 1);
+            $newEmail .= str_repeat('*', strlen($nextPart) - 1);
+            $newEmail .= '.';
+        }
+
+        $nextPart = $domainParts[-1];
+        $newEmail .= substr($nextPart, 0, 1);
+        $newEmail .= str_repeat('*', strlen($nextPart) - 1);
+
         return $newEmail;
     }
 
