@@ -16,7 +16,7 @@ $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
-$fromName = Env::get('FROM_NAME');
+$emailSignature = Env::get('EMAIL_SIGNATURE', Env::get('FROM_NAME'));
 $appEnv = Env::get('APP_ENV');
 $idpName = Env::get('IDP_NAME');
 $idpDisplayName = Env::get('IDP_DISPLAY_NAME', $idpName);
@@ -180,7 +180,7 @@ return [
     ],
     'params' => [
         'idpDisplayName' => $idpDisplayName,
-        'fromName' => $fromName,
+        'emailSignature' => $emailSignature,
         'helpCenterUrl' => $helpCenterUrl,
         'uiUrl' => $uiUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
