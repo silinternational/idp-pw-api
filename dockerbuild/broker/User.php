@@ -15,6 +15,8 @@ return [
         'review_profile_after' => '2000-01-01',
         'hide' => 'no',
         'manager_email' => 'manager@example.com',
+        'nag_for_mfa_after' => '2000-01-01',
+        'nag_for_method_after' => '2000-01-01',
     ],
     'user2' => [
         'id' => 2,
@@ -31,6 +33,8 @@ return [
         'review_profile_after' => '2000-01-01',
         'hide' => 'yes',
         'manager_email' => null,
+        'nag_for_mfa_after' => '2000-01-01',
+        'nag_for_method_after' => '2000-01-01',
     ],
     'user3' => [
         'id' => 3,
@@ -47,6 +51,8 @@ return [
         'review_profile_after' => '2000-01-01',
         'hide' => 'no',
         'manager_email' => null,
+        'nag_for_mfa_after' => '2000-01-01',
+        'nag_for_method_after' => '2000-01-01',
     ],
     'user4' => [
         'id' => 4,
@@ -63,6 +69,8 @@ return [
         'review_profile_after' => '2000-01-01',
         'hide' => 'no',
         'manager_email' => null,
+        'nag_for_mfa_after' => '2000-01-01',
+        'nag_for_method_after' => '2000-01-01',
     ],
     'user5' => [
         'id' => 5,
@@ -79,5 +87,7 @@ return [
         'review_profile_after' => '2000-01-01',
         'hide' => 'no',
         'manager_email' => null,
+        'nag_for_mfa_after' => '2000-01-01',
+        'nag_for_method_after' => '2000-01-01',
     ],
 ];

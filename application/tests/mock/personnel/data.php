@@ -3,6 +3,7 @@ return [
     [
         'firstName' => 'First',
         'lastName' => 'Last',
+        'displayName' => 'First Last',
         'email' => 'first_last@organization.org',
         'employeeId' => '111111',
         'username' => 'first_last',
@@ -11,6 +12,7 @@ return [
     [
         'firstName' => 'First2',
         'lastName' => 'Last2',
+        'displayName' => 'First2 Last2',
         'email' => 'first_last2@domain.com',
         'employeeId' => '222222',
         'username' => 'first2_last2',
@@ -19,6 +21,7 @@ return [
     [
         'firstName' => 'First3',
         'lastName' => 'Last3',
+        'displayName' => 'First3 Last3',
         'email' => 'first_last3@domain.com',
         'employeeId' => '333333',
         'username' => 'first3_last3',
