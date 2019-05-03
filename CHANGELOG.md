@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Mask subdomains in email addresses correctly
 ### Changed
 - Renamed `fromName` (`FROM_NAME`) to `emailSignature` (`EMAIL_SIGNATURE`)
+- Use `display_name` personnel property in email templates.
 ### Removed
 - Removed ReCAPTCHA from front-end config data
 
