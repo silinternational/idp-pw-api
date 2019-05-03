@@ -7,7 +7,7 @@ use yii\helpers\Html as yHtml;
  * @var string $expireTime
  * @var string $resetUrl
  * @var string $helpCenterUrl
- * @var string $fromName
+ * @var string $emailSignature
  * @var string $displayName
  */
 ?>
@@ -33,5 +33,5 @@ use yii\helpers\Html as yHtml;
     Thanks,
 </p>
 <p>
-    <i><?= yHtml::encode($fromName) ?></i>
+    <i><?= yHtml::encode($emailSignature) ?></i>
 </p>
