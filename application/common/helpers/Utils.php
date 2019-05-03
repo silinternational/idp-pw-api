@@ -135,7 +135,7 @@ class Utils
             $newEmail .= '.';
         }
 
-        $nextPart = $domainParts[$countParts-1];
+        $nextPart = $domainParts[$countParts - 1];
         $newEmail .= substr($nextPart, 0, 1);
         $newEmail .= str_repeat('*', strlen($nextPart) - 1);
 
