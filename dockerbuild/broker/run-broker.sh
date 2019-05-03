@@ -33,6 +33,9 @@ rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 # Try to run database migrations
 whenavail $MYSQL_HOST 3306 100 ./yii migrate --interactive=0
 
+# If that failed, exit.
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+
 # Redo test migration to ensure it's fresh
 ./yii migrate/redo 1 --interactive=0
 

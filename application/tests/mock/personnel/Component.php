@@ -66,6 +66,7 @@ class Component extends YiiComponent implements PersonnelInterface
         $user = new PersonnelUser();
         $user->firstName = $data['firstName'];
         $user->lastName = $data['lastName'];
+        $user->displayName = $data['displayName'];
         $user->email = $data['email'];
         $user->employeeId = $data['employeeId'];
         $user->username = $data['username'];

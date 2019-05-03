@@ -19,6 +19,7 @@ use Yii;
  * @property string $auth_type
  * @property string $hide
  * @property string $uuid
+ * @property string $display_name
  *
  * @property EventLog[] $eventLogs
  * @property Method[] $methods
@@ -44,7 +45,7 @@ class UserBase extends \yii\db\ActiveRecord
             [['created', 'access_token_expiration'], 'safe'],
             [['auth_type', 'hide'], 'string'],
             [['employee_id'], 'string', 'max' => 32],
-            [['first_name', 'last_name', 'idp_username', 'email'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'idp_username', 'email', 'display_name'], 'string', 'max' => 255],
             [['access_token', 'uuid'], 'string', 'max' => 64],
             [['employee_id'], 'unique'],
             [['email'], 'unique'],
@@ -70,6 +71,7 @@ class UserBase extends \yii\db\ActiveRecord
             'auth_type' => Yii::t('model', 'Auth Type'),
             'hide' => Yii::t('model', 'Hide'),
             'uuid' => Yii::t('model', 'Uuid'),
+            'display_name' => Yii::t('model', 'Display Name'),
         ];
     }
 
