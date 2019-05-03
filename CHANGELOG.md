@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Mask subdomains in email addresses correctly
+### Changed
+- Renamed `fromName` (`FROM_NAME`) to `emailSignature` (`EMAIL_SIGNATURE`)
+### Removed
+- Removed ReCAPTCHA from front-end config data
 
 ## [4.0.0] - 2019-04-11
 ### Added
