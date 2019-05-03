@@ -7,11 +7,14 @@ use yii\helpers\Html as yHtml;
  * @var string $resetUrl
  * @var string $helpCenterUrl
  * @var string $fromName
+ * @var string $displayName
  */
 ?>
-    Hi there,
 <p>
-    Someone recently requested a password change for your <?= yHtml::encode($idpDisplayName) . PHP_EOL ?>
+    Dear <?= yHtml::encode($displayName) ?>,
+</p>
+<p>
+    Someone recently requested a password change for your <?= yHtml::encode($idpDisplayName) ?> Identity
     account. If this was you, click the link below to set a new password.
     This link is valid until <?= yHtml::encode($expireTime) ?>.
 </p>
