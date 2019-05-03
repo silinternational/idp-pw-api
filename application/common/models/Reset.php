@@ -302,7 +302,10 @@ class Reset extends ResetBase
             self::TOPIC_RESET_EMAIL_SENT,
             'Password reset email for ' . $this->user->getDisplayName() .
             ' sent to ' . $toAddress,
-            ['resetUrl' => $resetUrl]
+            [
+                'resetUrl' => $resetUrl,
+                'displayName' => $this->user->getDisplayName(),
+            ]
         );
         
         \Yii::warning([

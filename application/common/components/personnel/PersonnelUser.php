@@ -25,6 +25,11 @@ class PersonnelUser
     /**
      * @var string
      */
+    public $displayName;
+
+    /**
+     * @var string
+     */
     public $email;
 
     /**

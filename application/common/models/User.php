@@ -67,6 +67,7 @@ class User extends UserBase implements IdentityInterface
             'uuid',
             'first_name',
             'last_name',
+            'display_name',
             'idp_username',
             'email',
             'auth_type',
@@ -161,6 +162,7 @@ class User extends UserBase implements IdentityInterface
             $user->employee_id = (string)$personnelUser->employeeId;
             $user->first_name = $personnelUser->firstName;
             $user->last_name = $personnelUser->lastName;
+            $user->display_name = $personnelUser->displayName;
             $user->idp_username = $personnelUser->username;
             $user->email = $personnelUser->email;
             $user->hide = $personnelUser->hide;
@@ -185,6 +187,7 @@ class User extends UserBase implements IdentityInterface
         $properties = [
             'first_name' => $personnelUser->firstName,
             'last_name' => $personnelUser->lastName,
+            'display_name' => $personnelUser->displayName,
             'idp_username' => $personnelUser->username,
             'email' => $personnelUser->email,
             'hide' => $personnelUser->hide,
@@ -252,6 +255,7 @@ class User extends UserBase implements IdentityInterface
             $personnelUser = new PersonnelUser();
             $personnelUser->firstName = $user->first_name;
             $personnelUser->lastName = $user->last_name;
+            $personnelUser->displayName = $user->display_name;
             $personnelUser->username = $user->idp_username;
             $personnelUser->email = sprintf('notfound-%s-%s', $user->email, time());
             $personnelUser->hide = $user->hide;
@@ -444,7 +448,11 @@ class User extends UserBase implements IdentityInterface
      */
     public function getDisplayName()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        if (empty($this->display_name)) {
+            return $this->first_name . ' ' . $this->last_name;
+        } else {
+            return $this->display_name;
+        }
     }
 
     /**
