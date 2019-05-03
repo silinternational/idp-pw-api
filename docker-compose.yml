@@ -25,7 +25,7 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         ports:
-            - "8081:80"
+            - "51151:80"
         environment:
             PMA_HOST: db
             PMA_USER: idpmgmt
@@ -36,7 +36,7 @@ services:
         volumes_from:
             - data
         ports:
-            - "8080:80"
+            - "51155:80"
         depends_on:
             - db
             - email
@@ -104,7 +104,7 @@ services:
             - ./email.common.env
             - ./email.local.env
         ports:
-            - "8082:80"
+            - "51153:80"
 
     emailcron:
         image: silintl/email-service:develop
@@ -125,7 +125,7 @@ services:
     emailpma:
         image: phpmyadmin/phpmyadmin:latest
         ports:
-            - "8086:80"
+            - "51152:80"
         environment:
             PMA_HOST: emaildb
             PMA_USER: email
@@ -145,7 +145,7 @@ services:
     brokerpma:
         image: phpmyadmin/phpmyadmin:latest
         ports:
-            - "8085:80"
+            - "51158:80"
         environment:
             PMA_HOST: brokerDb
             PMA_USER: broker
@@ -154,7 +154,7 @@ services:
     broker:
         image: silintl/idp-id-broker:develop
         ports:
-            - "8083:80"
+            - "51154:80"
         depends_on:
             - brokerDb
         volumes:

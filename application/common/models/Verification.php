@@ -49,7 +49,7 @@ class Verification extends Model
                 'expireTime' => $expireTime,
                 'toAddress' => $toAddress,
                 'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
-                'fromName' => \Yii::$app->params['fromName'],
+                'emailSignature' => \Yii::$app->params['emailSignature'],
             ],
             $additionalEmailParameters
         );

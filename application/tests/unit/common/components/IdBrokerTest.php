@@ -136,6 +136,7 @@ class IdBrokerTest extends TestCase
             'employeeId' => $mockReturnValue['employee_id'],
             'firstName' => $mockReturnValue['first_name'],
             'lastName' => $mockReturnValue['last_name'],
+            'displayName' => $mockReturnValue['display_name'],
             'username' => $mockReturnValue['username'],
             'email' => $mockReturnValue['email'],
             'supervisorEmail' => $mockReturnValue['manager_email'],
