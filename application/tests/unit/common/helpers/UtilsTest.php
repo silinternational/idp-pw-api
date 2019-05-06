@@ -25,6 +25,10 @@ class UtilsTest extends Test
         $email2 = 'first_last@myco.org';
         $expected2 = 'f****_l**t@m***.o**';
         $this->assertEquals($expected2, Utils::maskEmail($email2));
+
+        $email3 = 'first_last@myco.org.uk';
+        $expected3 = 'f****_l**t@m***.o**.u*';
+        $this->assertEquals($expected3, Utils::maskEmail($email3));
     }
 
     public function testGetRandomDigits()
@@ -68,7 +72,6 @@ class UtilsTest extends Test
         $params = \Yii::$app->params;
         $config = Utils::getFrontendConfig();
         $this->assertEquals($params['idpDisplayName'], $config['idpName']);
-        $this->assertEquals($params['recaptcha']['siteKey'], $config['recaptchaKey']);
 
         $expectedPasswordRules = [
             'minLength' => 10,

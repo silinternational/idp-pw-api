@@ -150,7 +150,7 @@ class MfaController extends BaseRestController
         try {
             $mfa = $this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value);
         } catch (ServiceException $e) {
-            \Yii::error([
+            \Yii::warning([
                 'status' => 'MFA verify error',
                 'error' => $e->getMessage(),
                 'httpStatusCode' => $e->httpStatusCode,

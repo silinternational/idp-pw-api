@@ -122,6 +122,7 @@ class UserTest extends Test
         $personnelData->uuid = $user->uuid;
         $personnelData->firstName = $user->first_name;
         $personnelData->lastName = $user->last_name;
+        $personnelData->displayName = $user->display_name;
         $personnelData->username = $user->idp_username;
         $personnelData->email = $user->email;
         $personnelData->hide = $user->hide;
@@ -144,6 +145,10 @@ class UserTest extends Test
         $this->assertTrue($changed);
 
         $personnelData->lastName .= 'a';
+        $changed = $user->updateProfileIfNeeded($personnelData);
+        $this->assertTrue($changed);
+
+        $personnelData->displayName .= 'a';
         $changed = $user->updateProfileIfNeeded($personnelData);
         $this->assertTrue($changed);
 
@@ -309,6 +314,4 @@ class UserTest extends Test
         $updated = User::findOne(['id' => $user3->id]);
         $this->assertNotEquals($user3->email, $updated->email);
     }
-
-
 }

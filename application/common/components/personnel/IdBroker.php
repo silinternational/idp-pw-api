@@ -121,6 +121,7 @@ class IdBroker extends Component implements PersonnelInterface
             $pUser->uuid = $response['uuid'];
             $pUser->firstName = $response['first_name'];
             $pUser->lastName = $response['last_name'];
+            $pUser->displayName = $response['display_name'];
             $pUser->email = $response['email'];
             $pUser->employeeId = $response['employee_id'];
             $pUser->username = $response['username'];

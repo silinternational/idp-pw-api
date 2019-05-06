@@ -7,13 +7,16 @@ use yii\helpers\Html as yHtml;
  * @var string $expireTime
  * @var string $resetUrl
  * @var string $helpCenterUrl
- * @var string $fromName
+ * @var string $emailSignature
+ * @var string $displayName
  */
 ?>
-    Hi there,
 <p>
-    <?= yHtml::encode($name) ?> recently requested a password change for their
-    <?= yHtml::encode($idpDisplayName) ?> account. If this was you, please use the link below
+    Hi there,
+</p>
+<p>
+    <?= yHtml::encode($displayName) ?> recently requested a password change for their
+    <?= yHtml::encode($idpDisplayName) ?> Identity account. If this was you, please use the link below
     to reset your password. If it's not you but you do know them, you may provide the link
     for them to use, but please contact them directly to ensure that you are only providing the
     link to them and not to someone else. This link is valid
@@ -30,5 +33,5 @@ use yii\helpers\Html as yHtml;
     Thanks,
 </p>
 <p>
-    <i><?= yHtml::encode($fromName) ?></i>
+    <i><?= yHtml::encode($emailSignature) ?></i>
 </p>

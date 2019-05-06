@@ -124,14 +124,21 @@ class Utils
          * Add an '*' for each of the characters of the domain, except
          * for the first character of each part and the .
          */
-        list($domainA, $domainB) = explode('.', $domain);
+        $domainParts = explode('.', $domain);
+        $countParts = count($domainParts);
 
-        $newEmail .= substr($domainA, 0, 1);
-        $newEmail .= str_repeat('*', strlen($domainA) - 1);
-        $newEmail .= '.';
+        // Leave the last part for later, to avoid adding a '.' after it.
+        for ($i = 0; $i < $countParts - 1; $i++) {
+            $nextPart = $domainParts[$i];
+            $newEmail .= substr($nextPart, 0, 1);
+            $newEmail .= str_repeat('*', strlen($nextPart) - 1);
+            $newEmail .= '.';
+        }
 
-        $newEmail .= substr($domainB, 0, 1);
-        $newEmail .= str_repeat('*', strlen($domainB) - 1);
+        $nextPart = $domainParts[$countParts - 1];
+        $newEmail .= substr($nextPart, 0, 1);
+        $newEmail .= str_repeat('*', strlen($nextPart) - 1);
+
         return $newEmail;
     }
 
@@ -146,7 +153,6 @@ class Utils
         $config = [];
 
         $config['idpName'] = $params['idpDisplayName'];
-        $config['recaptchaKey'] = $params['recaptcha']['siteKey'];
 
         $config['support'] = [];
         foreach ($params['support'] as $supportOption => $value) {
