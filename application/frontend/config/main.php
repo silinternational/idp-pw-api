@@ -8,10 +8,10 @@ $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
 $memcache1 = Env::getArrayFromPrefix('MEMCACHE_CONFIG1_');
 $memcache2 = Env::getArrayFromPrefix('MEMCACHE_CONFIG2_');
 $memcacheConfig = [];
-if ( is_array($memcache1) && ! empty($memcache1)) {
+if (is_array($memcache1) && ! empty($memcache1)) {
     $memcacheConfig[] = $memcache1;
 }
-if ( is_array($memcache2) && ! empty($memcache2)) {
+if (is_array($memcache2) && ! empty($memcache2)) {
     $memcacheConfig[] = $memcache2;
 }
 
