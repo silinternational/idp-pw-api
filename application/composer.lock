@@ -5177,6 +5177,9 @@
             "require": {
                 "php": "^5.5.9|>=7.0.8"
             },
+            "conflict": {
+                "symfony/dependency-injection": "<3.3"
+            },
             "require-dev": {
                 "symfony/finder": "~2.8|~3.0|~4.0",
                 "symfony/polyfill-apcu": "~1.1"

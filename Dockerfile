@@ -3,6 +3,10 @@ MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
 
 ENV REFRESHED_AT 2016-04-22
 
+RUN apt-get update -y && \
+    apt-get install -y php-memcache && \
+    apt-get clean
+
 COPY dockerbuild/vhost.conf /etc/apache2/sites-enabled/
 
 RUN mkdir -p /data
