@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [5.0.0] - 2019-05-10
 ### Added
 - Use memcache for session storage
 
@@ -94,10 +96,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...HEAD
+[5.0.0]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/silinternational/idp-pw-api/compare/3.0.0...4.0.0
-[3.0.0]: https://github.com/silinternational/idp-pw-api/compare/3.0.0...4.0.0
 [3.0.0]: https://github.com/silinternational/idp-pw-api/compare/2.2.0...3.0.0
 [2.2.0]: https://github.com/silinternational/idp-pw-api/compare/2.1.4...2.2.0
 [2.1.4]: https://github.com/silinternational/idp-pw-api/compare/2.1.3...2.1.4
