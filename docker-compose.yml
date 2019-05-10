@@ -40,6 +40,8 @@ services:
         depends_on:
             - db
             - email
+            - memcache1
+            - memcache2
         env_file:
             - ./common.env
             - ./local.env
@@ -71,6 +73,8 @@ services:
         depends_on:
             - testDb
             - zxcvbn
+            - memcache1
+            - memcache2
         env_file:
             - ./common.env
             - ./test.env
@@ -80,10 +84,16 @@ services:
             MYSQL_DATABASE: test
             APP_ENV: test
             ID_BROKER_baseUrl: http://broker
+            MEMCACHE_CONFIG1_host: memcache1
+            MEMCACHE_CONFIG1_port: 11211
+            MEMCACHE_CONFIG1_weight: 100
+            MEMCACHE_CONFIG2_host: memcache2
+            MEMCACHE_CONFIG2_port: 11211
+            MEMCACHE_CONFIG2_weight: 50
         command: ["/data/run-tests.sh"]
 
     cli:
-        image: silintl/php7:7.2
+        build: ./
         volumes_from:
             - data
         volumes:
@@ -198,6 +208,16 @@ services:
             - ./api.raml:/api.raml
             - ./api.html:/api.html
         command: -i api.raml -o api.html
+
+    memcache1:
+        image: memcached:1.4-alpine
+        ports:
+            - "11211"
+
+    memcache2:
+        image: memcached:1.4-alpine
+        ports:
+            - "11211"
 
 networks:
     default:
