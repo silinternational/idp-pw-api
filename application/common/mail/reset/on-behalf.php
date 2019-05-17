@@ -9,6 +9,8 @@ use yii\helpers\Html as yHtml;
  * @var string $helpCenterUrl
  * @var string $emailSignature
  * @var string $displayName
+ * @var string $supportName
+ * @var string $supportEmail
  */
 ?>
 <p>
@@ -27,7 +29,13 @@ use yii\helpers\Html as yHtml;
 </p>
 <p>
     To maintain security, please don't forward this email to anyone.
-    See our Help Center at <?= yHtml::a(yHtml::encode($helpCenterUrl), $helpCenterUrl) ?> for more security tips.
+    <?php if (empty($helpCenterUrl)) { ?>
+        If you have any questions, please contact <?= yHtml::encode($supportName) ?> at
+        <?= yHtml::encode($supportEmail) ?>.
+    <?php } else { ?>
+        See our Help Center at <?= yHtml::a(yHtml::encode($helpCenterUrl), $helpCenterUrl) ?> for more security
+        tips.
+    <?php } ?>
 </p>
 <p>
     Thanks,

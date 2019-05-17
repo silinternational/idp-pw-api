@@ -49,6 +49,8 @@ class Verification extends Model
                 'expireTime' => $expireTime,
                 'toAddress' => $toAddress,
                 'helpCenterUrl' => \Yii::$app->params['helpCenterUrl'],
+                'supportName' => \Yii::$app->params['supportName'],
+                'supportEmail' => \Yii::$app->params['supportEmail'],
                 'emailSignature' => \Yii::$app->params['emailSignature'],
             ],
             $additionalEmailParameters
