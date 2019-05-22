@@ -49,7 +49,7 @@ class MethodController extends BaseRestController
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['verify'],
+                        'actions' => ['verify', 'move'],
                         'roles' => ['?'],
                     ],
                     [
@@ -62,7 +62,7 @@ class MethodController extends BaseRestController
                 ]
             ],
             'authenticator' => [
-                'except' => ['verify'] // bypass authentication for /method/{id}/verify
+                'except' => ['verify', 'move'] // bypass authentication for /method/{id}/verify and /method/move
             ],
         ]);
     }

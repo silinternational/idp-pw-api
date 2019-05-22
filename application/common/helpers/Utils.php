@@ -325,7 +325,16 @@ class Utils
                 throw new \Exception('Missing client_id');
             }
         }
-        \Yii::$app->session->set('clientId', $clientId);
+        try {
+            \Yii::$app->session->set('clientId', $clientId);
+        } catch (\Exception $e) {
+            \Yii::error([
+                'action' => 'login - save clientId to session',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
 
         return $clientId;
     }

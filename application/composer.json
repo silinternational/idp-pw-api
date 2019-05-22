@@ -12,6 +12,7 @@
     "php": ">=7.2",
     "ext-json": "*",
     "ext-iconv": "*",
+    "ext-memcache": "*",
     "yiisoft/yii2": "~2.0.15",
     "yiisoft/yii2-swiftmailer": "*",
     "yiisoft/yii2-gii": "*",
