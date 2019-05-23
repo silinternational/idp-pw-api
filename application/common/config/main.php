@@ -27,8 +27,9 @@ $uiUrl = Env::get('UI_URL');
 $uiCorsOrigin = Env::get('UI_CORS_ORIGIN', $uiUrl);
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
-$supportPhone = Env::get('SUPPORT_PHONE');
 $supportEmail = Env::get('SUPPORT_EMAIL');
+$supportName = Env::get('SUPPORT_NAME', 'support');
+$supportPhone = Env::get('SUPPORT_PHONE');
 $supportUrl = Env::get('SUPPORT_URL');
 $supportFeedback = Env::get('SUPPORT_FEEDBACK');
 $accessTokenHashKey = Env::get('ACCESS_TOKEN_HASH_KEY');
@@ -201,6 +202,7 @@ return [
             'secretKey' => $recaptchaSecretKey,
         ],
         'support' => [
+            'name' => $supportName,
             'phone' => $supportPhone,
             'email' => $supportEmail,
             'url' => $supportUrl,
