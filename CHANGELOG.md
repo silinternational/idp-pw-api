@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.1.0] - 2019-05-29
+### Added
+- Use `supportName` and `supportEmail` if `helpCenterUrl` is not provided
+- Allow multi-line email signature
+
 ## [5.0.0] - 2019-05-10
 ### Added
 - Use memcache for session storage
@@ -96,7 +101,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/silinternational/idp-pw-api/compare/3.0.0...4.0.0
