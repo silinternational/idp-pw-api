@@ -165,7 +165,7 @@ class IdBrokerTest extends TestCase
             ->setMethods(['callIdBrokerGetUser', 'listUsers'])
             ->getMock();
 
-        if ($mockedMethod) {
+        if (is_string($mockedMethod)) {
             $brokerMock->expects($this->any())
                 ->method($mockedMethod)
                 ->willReturn($returnValue);
