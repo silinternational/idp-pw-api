@@ -8,7 +8,7 @@ use PHPUnit\Framework\Assert;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use tests\features\DummyPasswordStore;
-use common\components\passwordStore\NotAttemptedException;
+use common\components\passwordStore\PasswordStoreException;
 use common\components\passwordStore\Multiple;
 
 class MultipleContext implements Context
@@ -163,7 +163,7 @@ class MultipleContext implements Context
     public function theExceptionShouldIndicateThatItDidNotTryToSetThePasswordAnywhere()
     {
         Assert::assertInstanceOf(
-            NotAttemptedException::class,
+            PasswordStoreException::class,
             $this->exceptionThrown
         );
     }

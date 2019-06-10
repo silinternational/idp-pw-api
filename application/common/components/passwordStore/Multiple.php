@@ -8,7 +8,7 @@ use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\PasswordReuseException;
 use common\components\passwordStore\UserNotFoundException;
 use common\components\passwordStore\UserPasswordMeta;
-use common\components\passwordStore\NotAttemptedException;
+use common\components\passwordStore\PasswordStoreException;
 use yii\base\Component;
 
 class Multiple extends Component implements PasswordStoreInterface
@@ -26,7 +26,7 @@ class Multiple extends Component implements PasswordStoreInterface
      *     store is available.
      * @param string $taskDescription A short description of what is about to be
      *     attempted (e.g. 'set the password') if all backends are available.
-     * @throws NotAttemptedException
+     * @throws PasswordStoreException
      */
     protected function assertAllBackendsAreAvailable(
         $employeeId,
@@ -36,7 +36,7 @@ class Multiple extends Component implements PasswordStoreInterface
             try {
                 $passwordStore->getMeta($employeeId);
             } catch (Exception $e) {
-                throw new NotAttemptedException(sprintf(
+                throw new PasswordStoreException(sprintf(
                     'Did not attempt to %s because not all of the backends are '
                     . 'available. The %s password store gave this error when '
                     . 'asked for the specified user (%s): %s',
@@ -92,7 +92,7 @@ class Multiple extends Component implements PasswordStoreInterface
      * so set the user's password in all of the defined password stores. If any
      * of the password stores fail the "pre-check", this will not attempt to set
      * the user's password on any of them, instead throwing a
-     * NotAttemptedException.
+     * PasswordStoreException.
      *
      * NOTE: If successful, this will return the UserPasswordMeta returned by
      *       the first password store defined in its list.
@@ -100,7 +100,7 @@ class Multiple extends Component implements PasswordStoreInterface
      * @param string $employeeId The Employee ID of the user.
      * @param string $password The new password.
      * @return UserPasswordMeta
-     * @throws NotAttemptedException
+     * @throws PasswordStoreException
      * @throws Exception
      * @throws UserNotFoundException
      * @throws AccountLockedException
