@@ -41,6 +41,7 @@ class MultipleContext implements Context
             $this->passwordStoresConfig[] = [
                 'class' => DummyPasswordStore::class,
                 'uniqueDate' => gmdate(DATE_ISO8601, ($pwStoreNumber * 86400)),
+                'displayName' => 'PasswordStore ' . $pwStoreNumber,
             ];
         }
     }
@@ -137,7 +138,7 @@ class MultipleContext implements Context
         $errorMessage = $this->exceptionThrown->getMessage();
         $foundClassName = false;
         foreach ($this->passwordStoresConfig as $passwordStoreConfig) {
-            if (strpos($errorMessage, $passwordStoreConfig['class']) !== false) {
+            if (strpos($errorMessage, $passwordStoreConfig['displayName']) !== false) {
                 $foundClassName = true;
                 break;
             }

@@ -81,25 +81,51 @@ class Multiple extends Component implements PasswordStoreInterface
     public function set($employeeId, $password): UserPasswordMeta
     {
         $responses = [];
+        $successes = [];
+        $errors = [];
         foreach ($this->passwordStores as $passwordStore) {
             try {
                 $responses[] = $passwordStore->set($employeeId, $password);
-                $numSuccessfullySet++;
+                $successes[] = $passwordStore->getDisplayName();
             } catch (Exception $e) {
                 if ($e instanceof PasswordReuseException) {
                     // Be aware that this does not include information about how many backends the password
                     // was successfully changed in
                     throw $e;
                 }
-                throw new Exception(sprintf(
-                    'Failed to set the password using %s after successfully '
-                    . 'setting it in %s other password store(s). Error: %s',
-                    \get_class($passwordStore),
-                    $numSuccessfullySet,
-                    $e->getMessage()
-                ), 1498162884, $e);
+
+                \Yii::error([
+                    'action' => 'set password',
+                    'status' => 'error',
+                    'passwordStore' => $passwordStore->getDisplayName(),
+                    'message' => $e->getMessage(),
+                ]);
+                $errors[] = $passwordStore->getDisplayName();
             }
         }
+
+        if (count($errors) > 0) {
+            if (count($successes) > 0) {
+                $errorMessage = \Yii::t(
+                    'app',
+                    'Multiple.SetPartialSuccess {successes} {errors}',
+                    [
+                        'successes' => implode(', ', $successes),
+                        'errors' => implode(', ', $errors),
+                    ]
+                );
+            } else {
+                $errorMessage = \Yii::t(
+                    'app',
+                    'Multiple.SetFailed {errors}',
+                    [
+                        'errors' => implode(', ', $errors),
+                    ]
+                );
+            }
+            throw new PasswordStoreException($errorMessage, 1498162884);
+        }
+
         return $responses[0];
     }
 
