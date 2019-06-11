@@ -8,7 +8,6 @@ use PHPUnit\Framework\Assert;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use tests\features\DummyPasswordStore;
-use common\components\passwordStore\PasswordStoreException;
 use common\components\passwordStore\Multiple;
 
 class MultipleContext implements Context
@@ -156,16 +155,5 @@ class MultipleContext implements Context
     public function passwordStoreWillFailOurStatusPrecheck($pwStoreNumber)
     {
         $this->passwordStoresConfig[$pwStoreNumber]['isOnline'] = false;
-    }
-
-    /**
-     * @Then the exception should indicate that it did not try to set the password anywhere
-     */
-    public function theExceptionShouldIndicateThatItDidNotTryToSetThePasswordAnywhere()
-    {
-        Assert::assertInstanceOf(
-            PasswordStoreException::class,
-            $this->exceptionThrown
-        );
     }
 }
