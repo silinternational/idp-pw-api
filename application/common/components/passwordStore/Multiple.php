@@ -60,11 +60,9 @@ class Multiple extends Component implements PasswordStoreInterface
     }
     
     /**
-     * See if all of the password stores seem to be available/responding, and if
-     * so set the user's password in all of the defined password stores. If any
-     * of the password stores fail the "pre-check", this will not attempt to set
-     * the user's password on any of them, instead throwing a
-     * PasswordStoreException.
+     * Set the user's password in all of the defined password stores. If any
+     * of the password stores fail, a PasswordStoreException will be thrown
+     * with a message detailing which ones succeeded and which ones failed.
      *
      * NOTE: If successful, this will return the UserPasswordMeta returned by
      *       the first password store defined in its list.
