@@ -18,7 +18,9 @@ class Multiple extends Component implements PasswordStoreInterface
     
     /** @var PasswordStoreInterface[] */
     protected $passwordStores = [];
-    
+
+    public $displayName = 'Multiple';
+
     /**
      * See if all the password store backends are available.
      *
@@ -164,5 +166,13 @@ class Multiple extends Component implements PasswordStoreInterface
             }
         }
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }
