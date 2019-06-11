@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Attempt to set password in every passwordStore component even if one fails.
 
 ## [5.1.0] - 2019-05-29
 ### Added
