@@ -21,36 +21,6 @@ class Multiple extends Component implements PasswordStoreInterface
 
     public $displayName = 'Multiple';
 
-    /**
-     * See if all the password store backends are available.
-     *
-     * @param string $employeeId The Employee ID to use to see if each password
-     *     store is available.
-     * @param string $taskDescription A short description of what is about to be
-     *     attempted (e.g. 'set the password') if all backends are available.
-     * @throws PasswordStoreException
-     */
-    protected function assertAllBackendsAreAvailable(
-        $employeeId,
-        $taskDescription
-    ) {
-        foreach ($this->passwordStores as $passwordStore) {
-            try {
-                $passwordStore->getMeta($employeeId);
-            } catch (Exception $e) {
-                throw new PasswordStoreException(sprintf(
-                    'Did not attempt to %s because not all of the backends are '
-                    . 'available. The %s password store gave this error when '
-                    . 'asked for the specified user (%s): %s',
-                    $taskDescription,
-                    \get_class($passwordStore),
-                    var_export($employeeId, true),
-                    $e->getMessage()
-                ), 1498163919, $e);
-            }
-        }
-    }
-    
     public function init()
     {
         parent::init();
@@ -110,8 +80,6 @@ class Multiple extends Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password): UserPasswordMeta
     {
-        $this->assertAllBackendsAreAvailable($employeeId, 'set the password');
-        $numSuccessfullySet = 0;
         $responses = [];
         foreach ($this->passwordStores as $passwordStore) {
             try {
