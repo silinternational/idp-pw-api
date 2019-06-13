@@ -8,7 +8,7 @@ use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\PasswordReuseException;
 use common\components\passwordStore\UserNotFoundException;
 use common\components\passwordStore\UserPasswordMeta;
-use common\components\passwordStore\NotAttemptedException;
+use common\components\passwordStore\PasswordStoreException;
 use yii\base\Component;
 
 class Multiple extends Component implements PasswordStoreInterface
@@ -18,37 +18,9 @@ class Multiple extends Component implements PasswordStoreInterface
     
     /** @var PasswordStoreInterface[] */
     protected $passwordStores = [];
-    
-    /**
-     * See if all the password store backends are available.
-     *
-     * @param string $employeeId The Employee ID to use to see if each password
-     *     store is available.
-     * @param string $taskDescription A short description of what is about to be
-     *     attempted (e.g. 'set the password') if all backends are available.
-     * @throws NotAttemptedException
-     */
-    protected function assertAllBackendsAreAvailable(
-        $employeeId,
-        $taskDescription
-    ) {
-        foreach ($this->passwordStores as $passwordStore) {
-            try {
-                $passwordStore->getMeta($employeeId);
-            } catch (Exception $e) {
-                throw new NotAttemptedException(sprintf(
-                    'Did not attempt to %s because not all of the backends are '
-                    . 'available. The %s password store gave this error when '
-                    . 'asked for the specified user (%s): %s',
-                    $taskDescription,
-                    \get_class($passwordStore),
-                    var_export($employeeId, true),
-                    $e->getMessage()
-                ), 1498163919, $e);
-            }
-        }
-    }
-    
+
+    public $displayName = 'Multiple';
+
     public function init()
     {
         parent::init();
@@ -88,11 +60,9 @@ class Multiple extends Component implements PasswordStoreInterface
     }
     
     /**
-     * See if all of the password stores seem to be available/responding, and if
-     * so set the user's password in all of the defined password stores. If any
-     * of the password stores fail the "pre-check", this will not attempt to set
-     * the user's password on any of them, instead throwing a
-     * NotAttemptedException.
+     * Set the user's password in all of the defined password stores. If any
+     * of the password stores fail, a PasswordStoreException will be thrown
+     * with a message detailing which ones succeeded and which ones failed.
      *
      * NOTE: If successful, this will return the UserPasswordMeta returned by
      *       the first password store defined in its list.
@@ -100,7 +70,7 @@ class Multiple extends Component implements PasswordStoreInterface
      * @param string $employeeId The Employee ID of the user.
      * @param string $password The new password.
      * @return UserPasswordMeta
-     * @throws NotAttemptedException
+     * @throws PasswordStoreException
      * @throws Exception
      * @throws UserNotFoundException
      * @throws AccountLockedException
@@ -108,28 +78,52 @@ class Multiple extends Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password): UserPasswordMeta
     {
-        $this->assertAllBackendsAreAvailable($employeeId, 'set the password');
-        $numSuccessfullySet = 0;
         $responses = [];
+        $successes = [];
+        $errors = [];
         foreach ($this->passwordStores as $passwordStore) {
             try {
                 $responses[] = $passwordStore->set($employeeId, $password);
-                $numSuccessfullySet++;
+                $successes[] = $passwordStore->getDisplayName();
             } catch (Exception $e) {
                 if ($e instanceof PasswordReuseException) {
                     // Be aware that this does not include information about how many backends the password
                     // was successfully changed in
                     throw $e;
                 }
-                throw new Exception(sprintf(
-                    'Failed to set the password using %s after successfully '
-                    . 'setting it in %s other password store(s). Error: %s',
-                    \get_class($passwordStore),
-                    $numSuccessfullySet,
-                    $e->getMessage()
-                ), 1498162884, $e);
+
+                \Yii::error([
+                    'action' => 'set password',
+                    'status' => 'error',
+                    'passwordStore' => $passwordStore->getDisplayName(),
+                    'message' => $e->getMessage(),
+                ]);
+                $errors[] = $passwordStore->getDisplayName();
             }
         }
+
+        if (count($errors) > 0) {
+            if (count($successes) > 0) {
+                $errorMessage = \Yii::t(
+                    'app',
+                    'Multiple.SetPartialSuccess {successes} {errors}',
+                    [
+                        'successes' => implode(', ', $successes),
+                        'errors' => implode(', ', $errors),
+                    ]
+                );
+            } else {
+                $errorMessage = \Yii::t(
+                    'app',
+                    'Multiple.SetFailed {errors}',
+                    [
+                        'errors' => implode(', ', $errors),
+                    ]
+                );
+            }
+            throw new PasswordStoreException($errorMessage, 1498162884);
+        }
+
         return $responses[0];
     }
 
@@ -164,5 +158,13 @@ class Multiple extends Component implements PasswordStoreInterface
             }
         }
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }

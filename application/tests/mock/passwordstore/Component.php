@@ -9,6 +9,8 @@ use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
 class Component implements PasswordStoreInterface
 {
+    public $displayName = 'Mock PasswordStore';
+
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
@@ -68,5 +70,13 @@ class Component implements PasswordStoreInterface
     public function assess($employeeId, $password): bool
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }
