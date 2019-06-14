@@ -11,6 +11,16 @@ zxcvbn:
     ports:
         - "3000"
 
+memcache1:
+    image: memcached:1.4-alpine
+    ports:
+        - "11211"
+
+memcache2:
+    image: memcached:1.4-alpine
+    ports:
+        - "11211"
+
 api:
     build:
         image: silintl/idp-pw-api
@@ -18,6 +28,8 @@ api:
     cached: true
     depends_on:
         - db
+        - memcache1
+        - memcache2
         - zxcvbn
         - broker
         - ldapload
@@ -28,6 +40,12 @@ api:
         MYSQL_PASSWORD: idpmgmt
         ALERTS_EMAIL_ENABLED: false
         ALERTS_EMAIL: alerts@nowhere.com
+        MEMCACHE_CONFIG1_host: memcache1
+        MEMCACHE_CONFIG1_port: 11211
+        MEMCACHE_CONFIG1_weight: 100
+        MEMCACHE_CONFIG2_host: memcache2
+        MEMCACHE_CONFIG2_port: 11211
+        MEMCACHE_CONFIG2_weight: 50
         ID_BROKER_baseUrl: http://broker
         ID_BROKER_accessToken: abc123
         ID_BROKER_assertValidBrokerIp: false

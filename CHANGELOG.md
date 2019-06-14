@@ -5,6 +5,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Attempt to set password in every passwordStore component even if one fails.
+
+## [5.1.0] - 2019-05-29
+### Added
+- Use `supportName` and `supportEmail` if `helpCenterUrl` is not provided
+- Allow multi-line email signature
+
+## [5.0.0] - 2019-05-10
+### Added
+- Use memcache for session storage
+
+## [4.1.0] - 2019-05-06
+### Fixed
+- Mask subdomains in email addresses correctly
+### Changed
+- Renamed `fromName` (`FROM_NAME`) to `emailSignature` (`EMAIL_SIGNATURE`)
+- Use `display_name` personnel property in email templates.
+### Removed
+- Removed ReCAPTCHA from front-end config data
 
 ## [4.0.0] - 2019-04-11
 ### Added
@@ -83,8 +103,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...HEAD
-[3.0.0]: https://github.com/silinternational/idp-pw-api/compare/3.0.0...4.0.0
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...5.1.0
+[5.0.0]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...5.0.0
+[4.1.0]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/silinternational/idp-pw-api/compare/3.0.0...4.0.0
 [3.0.0]: https://github.com/silinternational/idp-pw-api/compare/2.2.0...3.0.0
 [2.2.0]: https://github.com/silinternational/idp-pw-api/compare/2.1.4...2.2.0
 [2.1.4]: https://github.com/silinternational/idp-pw-api/compare/2.1.3...2.1.4

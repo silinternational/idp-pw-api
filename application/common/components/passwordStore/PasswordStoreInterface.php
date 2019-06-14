@@ -43,4 +43,10 @@ interface PasswordStoreInterface
      * @throws \common\components\passwordStore\UserNotFoundException
      */
     public function isLocked(string $employeeId): bool;
+
+    /**
+     * Get name of passwordStore suitable for display in the user interface.
+     * @return string
+     */
+    public function getDisplayName(): string;
 }

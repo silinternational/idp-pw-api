@@ -54,6 +54,8 @@ class Google extends Component implements PasswordStoreInterface
 
     private $googleClient = null;
 
+    public $displayName = 'Google';
+
     public function init()
     {
         if ( ! empty($this->jsonAuthConfigBase64)) {
@@ -246,5 +248,13 @@ class Google extends Component implements PasswordStoreInterface
     public function assess($employeeId, $password)
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }

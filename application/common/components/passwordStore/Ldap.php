@@ -74,6 +74,8 @@ class Ldap extends Component implements PasswordStoreInterface
     /** @var \Adldap\Adldap LDAP client*/
     public $ldapClient;
 
+    public $displayName = 'LDAP';
+
     /**
      * Connect and bind to ldap server
      */
@@ -413,5 +415,13 @@ class Ldap extends Component implements PasswordStoreInterface
     public function assess($employeeId, $password)
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }

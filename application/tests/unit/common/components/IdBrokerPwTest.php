@@ -6,6 +6,7 @@ use common\components\passwordStore\AccountLockedException;
 use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\UserNotFoundException;
 use common\components\passwordStore\UserPasswordMeta;
+use Sil\Idp\IdBroker\Client\ServiceException;
 
 class IdBrokerPwTest extends TestCase
 {
@@ -133,5 +134,49 @@ class IdBrokerPwTest extends TestCase
         $this->expectException(AccountLockedException::class);
 
         $idbroker->set('10161', 'newPassword');
+    }
+
+    public function testIsLocked()
+    {
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'yes',
+                'password' => [
+                    'created_utc' => time(),
+                    'expires_on' => time(),
+                ],
+            ],
+            '10162' => [
+                'locked' => 'no',
+                'password' => [
+                    'created_utc' => time(),
+                    'expires_on' => time(),
+                ],
+            ],
+        ]);
+
+        $this->assertTrue($idbroker->isLocked('10161'));
+        $this->assertFalse($idbroker->isLocked('10162'));
+    }
+
+    public function testAssessPassword()
+    {
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'no',
+                'password' => [
+                    'created_utc' => time(),
+                    'expires_on' => time(),
+                ],
+            ],
+        ]);
+
+        $password = '>7=a?"}W[pt4Br9';
+        $idbroker->set('10161', $password);
+
+        $this->assertTrue($idbroker->assess('10161', 'differentPassword'));
+
+        $this->expectException(ServiceException::class);
+        $idbroker->assess('10161', $password);
     }
 }

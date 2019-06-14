@@ -107,7 +107,7 @@ The personnel component is used to look up informaton about users from your comp
 7. Set up a delegated admin account in Google Apps, authorized to make changes
    to users. You will use that email address as the value for an env. var.
 8. See the `local.env.dist` file to know what environment variables to provide
-   when using this library.
+   when using this component.
 
 #### Example Configuration
 
@@ -126,10 +126,11 @@ The personnel component is used to look up informaton about users from your comp
         'emailFieldName' => 'email',
         'employeeIdFieldName' => 'employee_id',
         'userActiveRecordClass' => '\common\models\User',
+        'displayName' => 'G Suite',
     ]);
 
 For details about what each of those fields is used for, see the documenting
-comments in the `/src/Google.php` file.
+comments in the `/application/common/components/passwordStore/Google.php` file.
 
 #### Testing the Google PasswordStore component
 

@@ -26,3 +26,5 @@ phpunit.phar
 
 
 tests/_output/*
+
+google-auth.json
