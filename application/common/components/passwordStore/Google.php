@@ -88,7 +88,7 @@ class Google extends Component implements PasswordStoreInterface
             'userActiveRecordClass',
         ];
         foreach ($requiredProperties as $requiredProperty) {
-            if (empty($requiredProperty)) {
+            if (empty($this->$requiredProperty)) {
                 throw new InvalidArgumentException(sprintf(
                     'You must provide a value for %s (found %s).',
                     $requiredProperty,
