@@ -69,7 +69,9 @@ class GoogleContext implements Context
      */
     public function anExceptionShouldNotHaveBeenThrown()
     {
-        Assert::assertNull($this->exceptionThrown);
+        if ($this->exceptionThrown !== null) {
+            throw $this->exceptionThrown;
+        }
     }
 
     /**
