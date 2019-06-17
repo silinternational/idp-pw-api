@@ -137,8 +137,9 @@ comments in the `/application/common/components/passwordStore/Google.php` file.
 Credentials are stored in the encrypted file: `codeship.env.encrypted`. Either
 provide the correct `codeship.aes` (if you're part of the SIL AppsDev team)
 in the root directory of this repo or provide your own `codeship.env` containing
-`TEST_GOOGLE_USER_EMAIL`, `TEST_GOOGLE_PWSTORE_CONFIG_jsonAuthConfigBase64`, 
-and `TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail`. See above for instructions 
+`TEST_GOOGLE_USER_EMAIL`, `TEST_GOOGLE_EMPLOYEE_ID`, 
+`TEST_GOOGLE_PWSTORE_CONFIG_jsonAuthConfigBase64`, and 
+`TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail`. See above for instructions 
 on obtaining this information.
 
 ## API Documentation
