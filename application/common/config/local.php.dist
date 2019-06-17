@@ -1,7 +1,10 @@
 <?php
 
 use Sil\PhpEnv\Env;
+use common\components\passwordStore\IdBroker;
 use common\components\passwordStore\Google;
+use common\components\passwordStore\Ldap;
+use common\components\passwordStore\Multiple;
 
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
 
@@ -27,13 +30,13 @@ return [
             ],
         ],
         'passwordStore' => [
-            'class' => 'common\components\passwordStore\Multiple',
+            'class' => Multiple::class,
             'passwordStoresConfig' => [
                 [
-                    'class' => 'common\components\passwordStore\IdBroker'
+                    'class' => IdBroker::class,
                 ],
                 [
-                    'class' => 'common\components\passwordStore\Ldap',
+                    'class' => Ldap::class,
                     'host' => 'example.org',
                     'port' => 636,
                     'baseDn' => 'dc=example,dc=org',
