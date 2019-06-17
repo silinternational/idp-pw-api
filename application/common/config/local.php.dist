@@ -34,9 +34,11 @@ return [
             'passwordStoresConfig' => [
                 [
                     'class' => IdBroker::class,
+                    'displayName' => 'Acme ID Broker',
                 ],
                 [
                     'class' => Ldap::class,
+                    'displayName' => 'Acme Active Directory',
                     'host' => 'example.org',
                     'port' => 636,
                     'baseDn' => 'dc=example,dc=org',
