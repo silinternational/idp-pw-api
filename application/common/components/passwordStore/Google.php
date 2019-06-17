@@ -56,6 +56,19 @@ class Google extends Component implements PasswordStoreInterface
 
     public $displayName = 'Google';
 
+    /**
+     * @var bool $lookupGoogleEmail If `true`, when retrieving a user by employee_id,
+     * a call will be made to Google to retrieve the user's email address by a match
+     * to the Google user property `externalId`
+     */
+    public $lookupGoogleEmail = false;
+
+    /**
+     * @var string $searchDomain Domain name in which to search for a matching user
+     * when `lookupGoogleEmail` is `true`.
+     */
+    public $searchDomain = '';
+
     public function init()
     {
         if ( ! empty($this->jsonAuthConfigBase64)) {
@@ -128,24 +141,11 @@ class Google extends Component implements PasswordStoreInterface
      */
     protected function getEmailForEmployeeId($employeeId)
     {
-        $userActiveRecord = $this->userActiveRecordClass::findOne([
-            $this->employeeIdFieldName => $employeeId,
-        ]);
-
-        if ($userActiveRecord === null) {
-            throw new UserNotFoundException();
+        if ($this->lookupGoogleEmail === true) {
+            return $this->getEmailFromGoogle($employeeId);
+        } else {
+            return $this->getEmailFromLocalStore($employeeId);
         }
-
-        $emailFieldName = $this->emailFieldName;
-        if (empty($userActiveRecord->$emailFieldName)) {
-            throw new Exception(sprintf(
-                'No email address found for user %s, and without that we '
-                . 'cannot retrieve the user\'s record from Google.',
-                var_export($employeeId, true)
-            ), 1497980234);
-        }
-
-        return $userActiveRecord->$emailFieldName;
     }
 
     /**
@@ -256,5 +256,57 @@ class Google extends Component implements PasswordStoreInterface
     public function getDisplayName(): string
     {
         return $this->displayName;
+    }
+
+    /**
+     * @param string $employeeId
+     * @return string
+     * @throws UserNotFoundException
+     */
+    protected function getEmailFromLocalStore($employeeId)
+    {
+        $userActiveRecord = $this->userActiveRecordClass::findOne([
+            $this->employeeIdFieldName => $employeeId,
+        ]);
+
+        if ($userActiveRecord === null) {
+            throw new UserNotFoundException();
+        }
+
+        $emailFieldName = $this->emailFieldName;
+        if (empty($userActiveRecord->$emailFieldName)) {
+            throw new Exception(sprintf(
+                'No email address found for user %s, and without that we '
+                . 'cannot retrieve the user\'s record from Google.',
+                var_export($employeeId, true)
+            ), 1497980234);
+        }
+
+        return $userActiveRecord->$emailFieldName;
+    }
+
+    /**
+     * @param string $employeeId
+     * @return string
+     * @throws UserNotFoundException
+     */
+    protected function getEmailFromGoogle($employeeId)
+    {
+        $usersResource = $this->getUsersResource();
+        $response = $usersResource->listUsers([
+                'domain' => $this->searchDomain,
+                'maxResults' => 1,
+                'query' => 'externalId=' . $employeeId,
+        ]);
+        if ($response === null || count($response['users']) === 0) {
+            \Yii::warning([
+                'action' => 'getEmailFromGoogle',
+                'status' => 'not found',
+                'employee_id' => $employeeId,
+            ]);
+            throw new UserNotFoundException('employee id not found', 1560370495);
+        }
+
+        return $response['users'][0]['primaryEmail'];
     }
 }

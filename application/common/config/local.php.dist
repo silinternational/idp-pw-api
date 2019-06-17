@@ -1,6 +1,7 @@
 <?php
 
 use Sil\PhpEnv\Env;
+use common\components\passwordStore\Google;
 
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
 
@@ -54,6 +55,15 @@ return [
                     'userAccountDisabledAttribute' => 'pwdaccountlockedtime',
                     'userAccountDisabledValue' => '000001010000Z',
                 ],
+                [
+                    'class' => Google::class,
+                    'displayName' => 'Acme G Suite',
+                    'applicationName' => 'Acme IdP',
+                    'jsonAuthFilePath' => '/data/google.json',
+                    'delegatedAdminEmail' => 'admin@example.org',
+                    'searchDomain' => 'example.org',
+                    'lookupGoogleEmail' => true,
+                ]
             ],
         ],
     ],
