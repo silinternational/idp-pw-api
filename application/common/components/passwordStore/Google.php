@@ -155,7 +155,7 @@ class Google extends Component implements PasswordStoreInterface
     {
         $this->getUser($employeeId);
 
-        /* Note: Google doesn't tell use when the user's password expires, so
+        /* Note: Google doesn't tell us when the user's password expires, so
          * simply return an "empty" UserPasswordMeta object.  */
         return UserPasswordMeta::create('', '');
     }
