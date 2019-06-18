@@ -132,9 +132,12 @@ class Google extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param string $employeeId
-     * @return string
+     * Look up the email address for the user that has the given Employee ID.
+     *
+     * @param string $employeeId The Employee ID of the desired user.
+     * @return string The email address for that user.
      * @throws UserNotFoundException
+     * @throws Exception
      */
     protected function getEmailFromLocalStore($employeeId)
     {
