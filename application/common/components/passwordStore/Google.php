@@ -58,8 +58,8 @@ class Google extends Component implements PasswordStoreInterface
 
     /**
      * @var bool $findByExternalId If `true`, when retrieving a user by employee_id,
-     * a call will be made to Google to retrieve the user's email address by a match
-     * to the Google user property `externalId`
+     * a call will be made to `Users: list` to retrieve the user by the Google user
+     * property `externalId`.
      */
     public $findByExternalId = false;
 
