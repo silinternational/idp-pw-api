@@ -49,6 +49,7 @@ return [
     'Password.UnknownProblem' => 'Il y a eu une erreur dans la recherche de sous-titres, veuillez réessayer. Si le problème persiste, veuillez contacter le support technique.',
     'Password.UpdateError' => 'Impossible de mettre à jour le mot de passe, attendez une minute, puis réessayez. Si ce problème persiste, veuillez contacter le support.',
     'Password.UpdateFailure' => 'Impossible de mettre à jour le mot de passe. S\'il vous plaît contacter le support.',
+    'Reset.AccountLocked' => 'Password reset is not possible. Account is locked.',
     'Reset.CannotEnable' => 'Impossible d\'activer la réinitialisation.',
     'Reset.CreateFailure' => 'Impossible de créer une nouvelle réinitialisation',
     'Reset.IncrementAttemptsError' => 'Impossible d\'incrémenter les tentatives comptent.',
