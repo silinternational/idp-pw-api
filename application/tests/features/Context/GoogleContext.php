@@ -79,7 +79,7 @@ class GoogleContext implements Context
      */
     public function iTryToSetASpecificUsersPassword()
     {
-        $this->googlePasswordStore->lookupGoogleEmail = false;
+        $this->googlePasswordStore->findByExternalId = false;
 
         $this->setUsersPassword();
     }
@@ -89,7 +89,7 @@ class GoogleContext implements Context
      */
     public function iTryToSetASpecificUsersPasswordByGoogleLookup()
     {
-        $this->googlePasswordStore->lookupGoogleEmail = true;
+        $this->googlePasswordStore->findByExternalId = true;
 
         $this->setUsersPassword();
     }

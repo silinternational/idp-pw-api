@@ -67,7 +67,7 @@ return [
                     'jsonAuthFilePath' => '/data/google.json',
                     'delegatedAdminEmail' => 'admin@example.org',
                     'searchDomain' => 'example.org',
-                    'lookupGoogleEmail' => true,
+                    'findByExternalId' => true,
                 ]
             ],
         ],

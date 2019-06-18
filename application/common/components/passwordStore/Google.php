@@ -57,15 +57,15 @@ class Google extends Component implements PasswordStoreInterface
     public $displayName = 'Google';
 
     /**
-     * @var bool $lookupGoogleEmail If `true`, when retrieving a user by employee_id,
+     * @var bool $findByExternalId If `true`, when retrieving a user by employee_id,
      * a call will be made to Google to retrieve the user's email address by a match
      * to the Google user property `externalId`
      */
-    public $lookupGoogleEmail = false;
+    public $findByExternalId = false;
 
     /**
      * @var string $searchDomain Domain name in which to search for a matching user
-     * when `lookupGoogleEmail` is `true`.
+     * when `findByExternalId` is `true`.
      */
     public $searchDomain = '';
 
@@ -141,7 +141,7 @@ class Google extends Component implements PasswordStoreInterface
      */
     protected function getEmailForEmployeeId($employeeId)
     {
-        if ($this->lookupGoogleEmail === true) {
+        if ($this->findByExternalId === true) {
             return $this->getEmailFromGoogle($employeeId);
         } else {
             return $this->getEmailFromLocalStore($employeeId);
