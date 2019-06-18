@@ -49,6 +49,7 @@ return [
     'Password.UnknownProblem' => 'Se ha producido un error al buscar subtítulos. Inténtalo de nuevo. Si el problema persiste, ponte en contacto con el servicio de asistencia.',
     'Password.UpdateError' => 'No se puede actualizar la contraseña, espere un minuto y vuelva a intentarlo. Si este problema persiste, póngase en contacto con el servicio de asistencia.',
     'Password.UpdateFailure' => 'No se puede actualizar la contraseña. Por favor, póngase en contacto con el soporte.',
+    'Reset.AccountLocked' => 'Password reset is not possible. Account is locked.',
     'Reset.CannotEnable' => 'Incapaz de activar el proceso.',
     'Reset.CreateFailure' => 'No se puede crear el nuevo usuario',
     'Reset.IncrementAttemptsError' => 'No se pueden incrementar los intentos de conteo.',
