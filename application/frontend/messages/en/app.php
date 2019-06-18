@@ -49,6 +49,7 @@ return [
     'Password.UnknownProblem' => 'There was a problem with your password. Please try again. If this problem persists, please contact support.',
     'Password.UpdateError' => 'Unable to update password, please wait a minute and try again. If this problem persists, please contact support.',
     'Password.UpdateFailure' => 'Unable to update password. Please contact support.',
+    'Reset.AccountLocked' => 'Password reset is not possible. Account is locked.',
     'Reset.CannotEnable' => 'Unable to enable reset.',
     'Reset.CreateFailure' => 'Unable to create new reset',
     'Reset.IncrementAttemptsError' => 'Unable to increment attempts count.',
