@@ -132,6 +132,33 @@ class Google extends Component implements PasswordStoreInterface
     }
 
     /**
+     * @param string $employeeId
+     * @return string
+     * @throws UserNotFoundException
+     */
+    protected function getEmailFromLocalStore($employeeId)
+    {
+        $userActiveRecord = $this->userActiveRecordClass::findOne([
+            $this->employeeIdFieldName => $employeeId,
+        ]);
+
+        if ($userActiveRecord === null) {
+            throw new UserNotFoundException();
+        }
+
+        $emailFieldName = $this->emailFieldName;
+        if (empty($userActiveRecord->$emailFieldName)) {
+            throw new Exception(sprintf(
+                'No email address found for user %s, and without that we '
+                . 'cannot retrieve the user\'s record from Google.',
+                var_export($employeeId, true)
+            ), 1497980234);
+        }
+
+        return $userActiveRecord->$emailFieldName;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMeta($employeeId): UserPasswordMeta
@@ -243,33 +270,6 @@ class Google extends Component implements PasswordStoreInterface
     public function getDisplayName(): string
     {
         return $this->displayName;
-    }
-
-    /**
-     * @param string $employeeId
-     * @return string
-     * @throws UserNotFoundException
-     */
-    protected function getEmailFromLocalStore($employeeId)
-    {
-        $userActiveRecord = $this->userActiveRecordClass::findOne([
-            $this->employeeIdFieldName => $employeeId,
-        ]);
-
-        if ($userActiveRecord === null) {
-            throw new UserNotFoundException();
-        }
-
-        $emailFieldName = $this->emailFieldName;
-        if (empty($userActiveRecord->$emailFieldName)) {
-            throw new Exception(sprintf(
-                'No email address found for user %s, and without that we '
-                . 'cannot retrieve the user\'s record from Google.',
-                var_export($employeeId, true)
-            ), 1497980234);
-        }
-
-        return $userActiveRecord->$emailFieldName;
     }
 
     /**
