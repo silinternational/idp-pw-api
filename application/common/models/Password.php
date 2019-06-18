@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\components\passwordStore\PasswordStoreException;
 use common\helpers\ZxcvbnPasswordValidator;
 use common\components\passwordStore\PasswordReuseException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -185,9 +186,12 @@ class Password extends Model
             /*
              * Throw exception based on exception type
              */
-            if ($e instanceof  PasswordReuseException) {
+            if ($e instanceof PasswordReuseException) {
                 \Yii::warning($log);
                 throw new ConflictHttpException(\Yii::t('app', 'Password.PasswordReuse'), 1469194882);
+            } elseif ($e instanceof PasswordStoreException) {
+                \Yii::warning($log);
+                throw new BadRequestHttpException($e->getMessage());
             } else {
                 \Yii::error($log);
                 throw new ServerErrorHttpException(
