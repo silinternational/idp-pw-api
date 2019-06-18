@@ -132,23 +132,6 @@ class Google extends Component implements PasswordStoreInterface
     }
 
     /**
-     * Look up the email address for the user that has the given Employee ID.
-     *
-     * @param string $employeeId The Employee ID of the desired user.
-     * @return string The email address for that user.
-     * @throws UserNotFoundException
-     * @throws Exception
-     */
-    protected function getEmailForEmployeeId($employeeId)
-    {
-        if ($this->findByExternalId === true) {
-            return $this->getEmailFromGoogle($employeeId);
-        } else {
-            return $this->getEmailFromLocalStore($employeeId);
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getMeta($employeeId): UserPasswordMeta
@@ -169,8 +152,12 @@ class Google extends Component implements PasswordStoreInterface
      */
     protected function getUser($employeeId)
     {
-        $email = $this->getEmailForEmployeeId($employeeId);
-        return $this->getUserFromGoogle($email);
+        if ($this->findByExternalId === true) {
+            return $this->getUserByEmployeeId($employeeId);
+        } else {
+            $email = $this->getEmailFromLocalStore($employeeId);
+            return $this->getUserByEmail($email);
+        }
     }
 
     /**
@@ -181,7 +168,7 @@ class Google extends Component implements PasswordStoreInterface
      * @throws UserNotFoundException
      * @throws Exception
      */
-    protected function getUserFromGoogle($email)
+    protected function getUserByEmail($email)
     {
         try {
             $usersResource = $this->getUsersResource();
@@ -287,10 +274,10 @@ class Google extends Component implements PasswordStoreInterface
 
     /**
      * @param string $employeeId
-     * @return string
+     * @return Google_Service_Directory_User The user record from Google.
      * @throws UserNotFoundException
      */
-    protected function getEmailFromGoogle($employeeId)
+    protected function getUserByEmployeeId($employeeId)
     {
         $usersResource = $this->getUsersResource();
         $response = $usersResource->listUsers([
@@ -319,6 +306,6 @@ class Google extends Component implements PasswordStoreInterface
             throw new \Exception(\Yii::t('app', 'Google.MultipleEmailsFound'), 1560875143);
         }
 
-        return $response['users'][0]['primaryEmail'];
+        return $response['users'][0];
     }
 }
