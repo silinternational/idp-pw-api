@@ -49,6 +49,7 @@ return [
     'Password.UnknownProblem' => '자막을 검색하는 동안 오류가 발생했습니다. 다시 시도하십시오. 문제가 지속되면 지원팀에 문의하시기 바랍니다.',
     'Password.UpdateError' => '비밀번호를 업데이트 할 수 없습니다. 잠시 후 다시 시도하십시오. 문제가 계속되면 지원팀에 문의하십시오.',
     'Password.UpdateFailure' => '비밀번호를 업데이트 할 수 없습니다. 지원부에 문의하십시오.',
+    'Reset.AccountLocked' => 'Password reset is not possible. Account is locked.',
     'Reset.CannotEnable' => '재설정을 활성화 할 수 없습니다.',
     'Reset.CreateFailure' => '새로운 lua state를 생성할 수 없습니다.',
     'Reset.IncrementAttemptsError' => '시도 횟수를 늘릴 수 없습니다.',
