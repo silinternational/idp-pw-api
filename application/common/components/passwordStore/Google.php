@@ -295,16 +295,28 @@ class Google extends Component implements PasswordStoreInterface
         $usersResource = $this->getUsersResource();
         $response = $usersResource->listUsers([
                 'domain' => $this->searchDomain,
-                'maxResults' => 1,
+                'maxResults' => 2,
                 'query' => 'externalId=' . $employeeId,
         ]);
+
         if ($response === null || count($response['users']) === 0) {
             \Yii::warning([
                 'action' => 'getEmailFromGoogle',
                 'status' => 'not found',
                 'employee_id' => $employeeId,
             ]);
-            throw new UserNotFoundException('employee id not found', 1560370495);
+            throw new UserNotFoundException(\Yii::t('app', 'Google.EmployeeIdNotFound'), 1560370495);
+        }
+
+        if (count($response['users']) > 1) {
+            \Yii::warning([
+                'action' => 'getEmailFromGoogle',
+                'status' => 'too many results',
+                'employee_id' => $employeeId,
+                'email1' => $response['users'][0]['primaryEmail'],
+                'email2' => $response['users'][1]['primaryEmail'],
+            ]);
+            throw new \Exception(\Yii::t('app', 'Google.MultipleEmailsFound'), 1560875143);
         }
 
         return $response['users'][0]['primaryEmail'];
