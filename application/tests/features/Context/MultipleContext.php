@@ -2,7 +2,6 @@
 
 namespace tests\features\Context;
 
-use Behat\Behat\Context\Context;
 use Exception;
 use PHPUnit\Framework\Assert;
 use common\components\passwordStore\PasswordStoreInterface;
