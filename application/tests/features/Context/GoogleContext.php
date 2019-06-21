@@ -15,7 +15,7 @@ class GoogleContext implements Context
     /** @var Exception|null */
     protected $exceptionThrown = null;
 
-    /** @var PasswordStoreInterface */
+    /** @var GooglePasswordStore */
     protected $googlePasswordStore;
 
     /** @var UserPasswordMeta */
@@ -69,7 +69,9 @@ class GoogleContext implements Context
      */
     public function anExceptionShouldNotHaveBeenThrown()
     {
-        Assert::assertNull($this->exceptionThrown);
+        if ($this->exceptionThrown !== null) {
+            throw $this->exceptionThrown;
+        }
     }
 
     /**
@@ -77,13 +79,30 @@ class GoogleContext implements Context
      */
     public function iTryToSetASpecificUsersPassword()
     {
+        $this->googlePasswordStore->findByExternalId = false;
+
+        $this->setUsersPassword();
+    }
+
+    /**
+     * @When I try to set a specific user's password by Google lookup
+     */
+    public function iTryToSetASpecificUsersPasswordByGoogleLookup()
+    {
+        $this->googlePasswordStore->findByExternalId = true;
+
+        $this->setUsersPassword();
+    }
+
+    protected function setUsersPassword(): void
+    {
         try {
             $newPassword = Env::get('TEST_GOOGLE_USER_NEW_PASSWORD');
             if (empty($newPassword)) {
                 $newPassword = $this->generateSecurePassword();
             }
             $this->userPasswordMeta = $this->googlePasswordStore->set(
-                12345,
+                Env::get('TEST_GOOGLE_USER_EMPLOYEE_ID'),
                 $newPassword
             );
         } catch (Exception $e) {
