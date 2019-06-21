@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => 'and',
     'Auth.MissingClientID' => 'Client ID is missing',
     'Google.EmployeeIdNotFound' => 'Employee ID not found in G Suite',
     'Google.MultipleEmailsFound' => 'Multiple email addresses found in G Suite. Cannot resolve.',
@@ -38,8 +39,8 @@ return [
     'Mfa.TypeMissing' => 'Type is required',
     'Mfa.UpdateFailure' => 'MFA update failure',
     'Mfa.VerifyFailure' => 'MFA verify failure',
-    'Multiple.SetPartialSuccess {successes} {errors}' => 'Successfully set the password in {successes}, but failed to set the password in {errors}',
-    'Multiple.SetFailed {errors}' => 'Failed to set the password in {errors}',
+    'Multiple.SetPartialSuccess' => 'Successfully set the password in {successes}, but failed to set the password in {errors}. Contact {supportName} at {supportEmail} for assistance.',
+    'Multiple.SetFailed' => 'Failed to set the password in {errors}. Contact {supportName} at {supportEmail} for assistance.',
     'Password.Breached' => 'The password you entered was previously discovered in a data breach of a different website. It may or may not have been your own account that was compromised. Please use a different password here and then visit <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">this help page</a> to learn more.',
     'Password.DisallowedContent' => 'Your password may not contain any of these: {labelList} (code 180)',
     'Password.MissingPassword' => 'Password is required',

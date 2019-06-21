@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => 'et',
     'Auth.MissingClientID' => 'Client ID est manquant',
     'Method.AlreadyExists' => 'La méthode de récupération existe déjà',
     'Method.CodeExpired' => 'Code de vérification invalide',
@@ -36,8 +37,8 @@ return [
     'Mfa.TypeMissing' => '\'Type\' est requis',
     'Mfa.UpdateFailure' => 'Echec de la mise à jour MFA',
     'Mfa.VerifyFailure' => 'MFA vérifier l\'échec',
-    'Multiple.SetPartialSuccess {successes} {errors}' => 'Définissez avec succès le mot de passe sur {successes}, mais échouez dans le mot de passe {errors}',
-    'Multiple.SetFailed {errors}' => 'Impossible de définir le mot de passe en {errors}',
+    'Multiple.SetPartialSuccess' => 'Définissez avec succès le mot de passe sur {successes}, mais échouez dans le mot de passe {errors}',
+    'Multiple.SetFailed' => 'Impossible de définir le mot de passe en {errors}',
     'Password.Breached' => 'Le mot de passe que vous avez entré a déjà été découvert dans une violation de données d\'un site Web différent. Votre compte a peut-être été compromis ou non. Veuillez utiliser un mot de passe différent ici, puis visitez <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">cette page d’aide</a> pour en savoir plus.',
     'Password.DisallowedContent' => 'Votre mot de passe ne peut contenir aucun de ceux-ci: {labelList} (code 180)',
     'Password.MissingPassword' => 'Mot de passe requis',

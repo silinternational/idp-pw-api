@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => '과',
     'Auth.MissingClientID' => '클라이언트 ID가 없습니다.',
     'Method.AlreadyExists' => '복구 방법이 이미 있습니다.',
     'Method.CodeExpired' => '만료 된 인증 코드',
@@ -36,8 +37,8 @@ return [
     'Mfa.TypeMissing' => '종류를 입력하십시오',
     'Mfa.UpdateFailure' => '업데이트 실패',
     'Mfa.VerifyFailure' => 'MFA 확인 실패',
-    'Multiple.SetPartialSuccess {successes} {errors}' => '{successes} 에서 비밀번호를 설정했지만 {errors} 에서 비밀번호를 설정하지 못했습니다.',
-    'Multiple.SetFailed {errors}' => '비밀번호를 {errors} 으로 설정하지 못했습니다.',
+    'Multiple.SetPartialSuccess' => '{successes} 에서 비밀번호를 설정했지만 {errors} 에서 비밀번호를 설정하지 못했습니다.',
+    'Multiple.SetFailed' => '비밀번호를 {errors} 으로 설정하지 못했습니다.',
     'Password.Breached' => '입력 한 비밀번호는 이전에 다른 웹 사이트의 데이터 유출로 발견되었습니다. 귀하의 계좌가 손상되었을 수도 있고 아닐 수도 있습니다. 여기에 다른 암호를 사용하고 방문하시기 바랍니다 <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">이 도움말 페이지</a> 자세한 내용은.',
     'Password.DisallowedContent' => '귀하의 비밀번호는 다음을 포함하지 않을 수 있습니다 : {labelList} (코드 180)',
     'Password.MissingPassword' => '비밀번호가 필요합니다.',
