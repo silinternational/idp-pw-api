@@ -18,8 +18,8 @@
  */
 return [
     'Auth.MissingClientID' => 'Client ID est manquant',
-    'Google.EmployeeIdNotFound' => 'Employee ID not found in G Suite',
-    'Google.MultipleEmailsFound' => 'Multiple email addresses found in G Suite. Cannot resolve.',
+    'Google.EmployeeIdNotFound' => 'ID de l\'employé non trouvé dans la G Suite',
+    'Google.MultipleEmailsFound' => 'Plusieurs adresses email trouvées dans la G Suite. Impossible de résoudre.',
     'Method.AlreadyExists' => 'La méthode de récupération existe déjà',
     'Method.CodeExpired' => 'Code de vérification invalide',
     'Method.CodeMissing' => 'Code est requis',
