@@ -22,7 +22,7 @@ return [
     'Attempts' => 'Intentos',
     'Auth Type' => 'Tipo de autorización',
     'Code' => 'Código',
-    'Created' => 'Created',
+    'Created' => 'Creado',
     'Deleted At' => 'Eliminado',
     'Details' => 'Detalles',
     'Disable Until' => 'Visible hasta',
