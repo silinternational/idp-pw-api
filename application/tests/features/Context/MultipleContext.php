@@ -10,7 +10,7 @@ use common\components\passwordStore\UserPasswordMeta;
 use tests\features\DummyPasswordStore;
 use common\components\passwordStore\Multiple;
 
-class MultipleContext implements Context
+class MultipleContext extends YiiContext
 {
     /** @var Exception|null */
     protected $exceptionThrown = null;
