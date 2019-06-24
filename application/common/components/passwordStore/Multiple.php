@@ -21,6 +21,37 @@ class Multiple extends Component implements PasswordStoreInterface
 
     public $displayName = 'Multiple';
 
+
+    /**
+     * See if all the password store backends are available.
+     *
+     * @param string $employeeId The Employee ID to use to see if each password
+     *     store is available.
+     * @param string $taskDescription A short description of what is about to be
+     *     attempted (e.g. 'set the password') if all backends are available.
+     * @throws NotAttemptedException
+     */
+    protected function assertAllBackendsAreAvailable(
+        $employeeId,
+        $taskDescription
+    ) {
+        foreach ($this->passwordStores as $passwordStore) {
+            try {
+                $passwordStore->getMeta($employeeId);
+            } catch (Exception $e) {
+                throw new PasswordStoreException(sprintf(
+                    'Did not attempt to %s because not all of the backends are '
+                    . 'available. The %s password store gave this error when '
+                    . 'asked for the specified user (%s): %s',
+                    $taskDescription,
+                    \get_class($passwordStore),
+                    var_export($employeeId, true),
+                    $e->getMessage()
+                ), 1498163919, $e);
+            }
+        }
+    }
+
     public function init()
     {
         parent::init();
@@ -60,9 +91,13 @@ class Multiple extends Component implements PasswordStoreInterface
     }
     
     /**
-     * Set the user's password in all of the defined password stores. If any
-     * of the password stores fail, a PasswordStoreException will be thrown
-     * with a message detailing which ones succeeded and which ones failed.
+     * See if all of the password stores seem to be available/responding, and if
+     * so set the user's password in all of the defined password stores. If any
+     * of the password stores fail the "pre-check", this will not attempt to set
+     * the user's password on any of them, instead throwing a PasswordStoreException
+     * Thereafter, if any of the password stores fail, a PasswordStoreException will
+     * be thrown with a message detailing which ones succeeded and which ones
+     * failed.
      *
      * NOTE: If successful, this will return the UserPasswordMeta returned by
      *       the first password store defined in its list.
@@ -78,6 +113,8 @@ class Multiple extends Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password): UserPasswordMeta
     {
+        $this->assertAllBackendsAreAvailable($employeeId, 'set the password');
+
         $responses = [];
         $successes = [];
         $errors = [];
