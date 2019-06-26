@@ -22,3 +22,10 @@ Feature: Multiple backends
     Given 0 password stores are configured
     When I get metadata about a user
     Then an exception SHOULD have been thrown
+
+  Scenario: Not trying because a password store is down
+    Given 3 password stores are configured
+    But password store 2 will fail our status precheck
+    When I set a user's password
+    Then an exception SHOULD have been thrown
+    And the exception should indicate that it did not try to set the password anywhere
