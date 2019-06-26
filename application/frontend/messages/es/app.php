@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => 'and',
     'Auth.MissingClientID' => 'Falta el ID del cliente',
     'Google.EmployeeIdNotFound' => 'ID de empleado no encontrado en la G Suite',
     'Google.MultipleEmailsFound' => 'Se encuentran varias direcciones de correo electrónico en G Suite. No se puede resolver.',
@@ -38,8 +39,8 @@ return [
     'Mfa.TypeMissing' => 'Se requiere el tipo',
     'Mfa.UpdateFailure' => 'Fallo al actualizar',
     'Mfa.VerifyFailure' => 'MFA verificar fallo',
-    'Multiple.SetPartialSuccess {successes} {errors}' => 'Establecer correctamente la contraseña en {successes}, pero no se pudo establecer la contraseña en {errors}',
-    'Multiple.SetFailed {errors}' => 'Error al establecer la contraseña en {errors}',
+    'Multiple.SetPartialSuccess' => 'Successfully set the password in {successes}, but failed to set the password in {errors}. Contact {supportName} at {supportEmail} for assistance.',
+    'Multiple.SetFailed' => 'Failed to set the password in {errors}. Contact {supportName} at {supportEmail} for assistance.',
     'Password.Breached' => 'La contraseña que ingresó fue descubierta previamente en una violación de datos de un sitio web diferente. Puede o no haber sido su propia cuenta la que se vio comprometida. Utilice una contraseña diferente aquí y luego visite <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">esta página de ayuda</a> para obtener más información.',
     'Password.DisallowedContent' => 'Su contraseña no puede contener ninguno de estos: {labelList} (código 180)',
     'Password.MissingPassword' => 'Se requiere contraseña',
