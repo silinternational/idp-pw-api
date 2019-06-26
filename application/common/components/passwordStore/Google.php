@@ -243,7 +243,8 @@ class Google extends Component implements PasswordStoreInterface
     public function set($employeeId, $password): UserPasswordMeta
     {
         $googleUser = $this->getUser($employeeId);
-        $googleUser->setPassword($password);
+        $googleUser->password = sha1($password);
+        $googleUser->hashFunction = 'SHA-1';
         $this->saveChangesTo($googleUser);
 
         /* Note: Google doesn't tell use when the user's password expires, so

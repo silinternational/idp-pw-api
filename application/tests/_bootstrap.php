@@ -4,7 +4,6 @@
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 require_once(__DIR__ . '/../common/config/bootstrap.php');
-require_once(__DIR__ . '/../frontend/config/bootstrap.php');
 
 $_SERVER['SERVER_NAME'] = 'localhost';
 $_SERVER['SERVER_PORT'] = '80';
