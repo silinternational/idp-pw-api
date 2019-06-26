@@ -103,24 +103,17 @@ class Multiple extends Component implements PasswordStoreInterface
         }
 
         if (count($errors) > 0) {
-            if (count($successes) > 0) {
-                $errorMessage = \Yii::t(
-                    'app',
-                    'Multiple.SetPartialSuccess {successes} {errors}',
-                    [
-                        'successes' => implode(', ', $successes),
-                        'errors' => implode(', ', $errors),
-                    ]
-                );
-            } else {
-                $errorMessage = \Yii::t(
-                    'app',
-                    'Multiple.SetFailed {errors}',
-                    [
-                        'errors' => implode(', ', $errors),
-                    ]
-                );
-            }
+            $conjunction = ' ' . \Yii::t('app', 'and') . ' ';
+            $errorMessage = \Yii::t(
+                'app',
+                count($successes) > 0 ? 'Multiple.SetPartialSuccess' : 'Multiple.SetFailed',
+                [
+                        'successes' => implode($conjunction, $successes),
+                        'errors' => implode($conjunction, $errors),
+                        'supportName' => \Yii::$app->params['support']['name'],
+                        'supportEmail' => \Yii::$app->params['support']['email'],
+                ]
+            );
             throw new PasswordStoreException($errorMessage, 1498162884);
         }
 
