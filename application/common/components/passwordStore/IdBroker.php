@@ -13,6 +13,8 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     private $client;
 
+    public $displayName = 'ID Broker';
+
     /**
      * Initializes the object.
      * This method is invoked at the end of the constructor after the object is initialized with the
@@ -143,5 +145,13 @@ class IdBroker extends Component implements PasswordStoreInterface
     public function assess($employeeId, $password)
     {
         return $this->getClient()->assessPassword($employeeId, $password);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }

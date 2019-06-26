@@ -24,6 +24,8 @@ class DummyPasswordStore extends Component implements PasswordStoreInterface
      */
     public $willFailToSetPassword = false;
 
+    public $displayName = 'dummy';
+
     /**
      * {@inheritdoc}
      */
@@ -60,5 +62,10 @@ class DummyPasswordStore extends Component implements PasswordStoreInterface
             throw new \Exception('Failed to assess password for ' . $employeeId);
         }
         return true;
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
     }
 }

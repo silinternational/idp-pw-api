@@ -129,7 +129,24 @@ class ResetController extends BaseRestController
         }
 
         if ($user->isLocked()) {
-            throw new NotFoundHttpException();
+            \Yii::warning([
+                'action' => 'create reset',
+                'username' => $username,
+                'status' => 'error',
+                'error' => 'personnel account is locked',
+            ]);
+
+            if ($user->hide === 'yes') {
+                throw new NotFoundHttpException(
+                    \Yii::t('app', 'Reset.UserNotFound'),
+                    1560272556
+                );
+            }
+
+            throw new NotFoundHttpException(
+                \Yii::t('app', 'Reset.AccountLocked'),
+                1560272557
+            );
         }
 
         /*

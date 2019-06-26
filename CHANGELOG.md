@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.2.0]
+### Changed
+- Attempt to set password in every passwordStore component even if one fails.
+### Added
+- Add configurable option in Google passwordStore to look up user by employee id
+
 ## [5.1.0] - 2019-05-29
 ### Added
 - Use `supportName` and `supportEmail` if `helpCenterUrl` is not provided
@@ -101,7 +107,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.2.0...HEAD
+[5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...4.1.0

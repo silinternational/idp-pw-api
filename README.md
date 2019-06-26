@@ -107,7 +107,7 @@ The personnel component is used to look up informaton about users from your comp
 7. Set up a delegated admin account in Google Apps, authorized to make changes
    to users. You will use that email address as the value for an env. var.
 8. See the `local.env.dist` file to know what environment variables to provide
-   when using this library.
+   when using this component.
 
 #### Example Configuration
 
@@ -126,26 +126,32 @@ The personnel component is used to look up informaton about users from your comp
         'emailFieldName' => 'email',
         'employeeIdFieldName' => 'employee_id',
         'userActiveRecordClass' => '\common\models\User',
+        'displayName' => 'G Suite',
     ]);
 
 For details about what each of those fields is used for, see the documenting
-comments in the `/src/Google.php` file.
+comments in the `/application/common/components/passwordStore/Google.php` file.
 
 #### Testing the Google PasswordStore component
 
 Credentials are stored in the encrypted file: `codeship.env.encrypted`. Either
 provide the correct `codeship.aes` (if you're part of the SIL AppsDev team)
-in the root directory of this repo or provide your own `codeship.env` containing
-`TEST_GOOGLE_USER_EMAIL`, `TEST_GOOGLE_PWSTORE_CONFIG_jsonAuthConfigBase64`, 
-and `TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail`. See above for instructions 
-on obtaining this information.
+in the root directory of this repo or provide your own `codeship.env`. See
+above for instructions on obtaining this information.
+
+Template `codeship.env` file:
+```
+TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail=
+TEST_GOOGLE_PWSTORE_CONFIG_jsonAuthConfigBase64=
+# This test user must exist in the Google instance
+TEST_GOOGLE_USER_EMAIL=
+# This employee ID must match the 'externalId' for the test user
+TEST_GOOGLE_USER_EMPLOYEE_ID=
+```
 
 ## API Documentation
 The API is described by [api.raml](api.raml), and an auto-generated [api.html](api.html) created by
-`raml2html`. To regenerate the HTML file, run `make raml2html`. To view the
-rendered HTML file on Github, prepend the Github URL with 
-`https://htmlpreview.github.com/?`.
-[Example](https://htmlpreview.github.com/?https://github.com/silinternational/idp-pw-api/blob/master/api.html)
+`raml2html`. To regenerate the HTML file, run `make raml2html`.
 
 ### Quick start for manually interacting with API
 To quickly get up and running to verify basic operation of the API, these are a 

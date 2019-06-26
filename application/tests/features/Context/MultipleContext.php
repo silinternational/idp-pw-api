@@ -2,16 +2,15 @@
 
 namespace tests\features\Context;
 
-use Behat\Behat\Context\Context;
+use common\components\passwordStore\PasswordStoreException;
 use Exception;
 use PHPUnit\Framework\Assert;
 use common\components\passwordStore\PasswordStoreInterface;
 use common\components\passwordStore\UserPasswordMeta;
 use tests\features\DummyPasswordStore;
-use common\components\passwordStore\NotAttemptedException;
 use common\components\passwordStore\Multiple;
 
-class MultipleContext implements Context
+class MultipleContext extends YiiContext
 {
     /** @var Exception|null */
     protected $exceptionThrown = null;
@@ -41,6 +40,7 @@ class MultipleContext implements Context
             $this->passwordStoresConfig[] = [
                 'class' => DummyPasswordStore::class,
                 'uniqueDate' => gmdate(DATE_ISO8601, ($pwStoreNumber * 86400)),
+                'displayName' => 'PasswordStore ' . $pwStoreNumber,
             ];
         }
     }
@@ -137,7 +137,7 @@ class MultipleContext implements Context
         $errorMessage = $this->exceptionThrown->getMessage();
         $foundClassName = false;
         foreach ($this->passwordStoresConfig as $passwordStoreConfig) {
-            if (strpos($errorMessage, $passwordStoreConfig['class']) !== false) {
+            if (strpos($errorMessage, $passwordStoreConfig['displayName']) !== false) {
                 $foundClassName = true;
                 break;
             }
@@ -162,9 +162,6 @@ class MultipleContext implements Context
      */
     public function theExceptionShouldIndicateThatItDidNotTryToSetThePasswordAnywhere()
     {
-        Assert::assertInstanceOf(
-            NotAttemptedException::class,
-            $this->exceptionThrown
-        );
+        Assert::assertContains('Did not attempt', $this->exceptionThrown->getMessage());
     }
 }

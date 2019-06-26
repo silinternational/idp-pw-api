@@ -1,6 +1,10 @@
 <?php
 
 use Sil\PhpEnv\Env;
+use common\components\passwordStore\IdBroker;
+use common\components\passwordStore\Google;
+use common\components\passwordStore\Ldap;
+use common\components\passwordStore\Multiple;
 
 $zxcvbnApiBaseUrl = Env::get('ZXCVBN_API_BASEURL', 'http://zxcvbn:3000');
 
@@ -26,13 +30,15 @@ return [
             ],
         ],
         'passwordStore' => [
-            'class' => 'common\components\passwordStore\Multiple',
+            'class' => Multiple::class,
             'passwordStoresConfig' => [
                 [
-                    'class' => 'common\components\passwordStore\IdBroker'
+                    'class' => IdBroker::class,
+                    'displayName' => 'Acme Identity',
                 ],
                 [
-                    'class' => 'common\components\passwordStore\Ldap',
+                    'class' => Ldap::class,
+                    'displayName' => 'Acme Active Directory',
                     'host' => 'example.org',
                     'port' => 636,
                     'baseDn' => 'dc=example,dc=org',
@@ -54,6 +60,15 @@ return [
                     'userAccountDisabledAttribute' => 'pwdaccountlockedtime',
                     'userAccountDisabledValue' => '000001010000Z',
                 ],
+                [
+                    'class' => Google::class,
+                    'displayName' => 'Acme G Suite',
+                    'applicationName' => 'Acme IdP',
+                    'jsonAuthFilePath' => '/data/google.json',
+                    'delegatedAdminEmail' => 'admin@example.org',
+                    'searchDomain' => 'example.org',
+                    'findByExternalId' => true,
+                ]
             ],
         ],
     ],

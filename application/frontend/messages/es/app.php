@@ -17,7 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => 'y',
     'Auth.MissingClientID' => 'Falta el ID del cliente',
+    'Google.EmployeeIdNotFound' => 'ID de empleado no encontrado en la G Suite',
+    'Google.MultipleEmailsFound' => 'Se encuentran varias direcciones de correo electrónico en G Suite. No se puede resolver.',
     'Method.AlreadyExists' => 'El método de pago ya existe',
     'Method.CodeExpired' => 'Código de verificación vencido',
     'Method.CodeMissing' => 'Es necesario un código',
@@ -36,6 +39,8 @@ return [
     'Mfa.TypeMissing' => 'Se requiere el tipo',
     'Mfa.UpdateFailure' => 'Fallo al actualizar',
     'Mfa.VerifyFailure' => 'MFA verificar fallo',
+    'Multiple.SetPartialSuccess' => 'Estableció correctamente la contraseña en {successes}, pero no pudo establecer la contraseña en {errors}. Póngase en contacto con {supportName} en {supportEmail} para obtener ayuda.',
+    'Multiple.SetFailed' => 'Error al establecer la contraseña en {errors}. Póngase en contacto con {supportName} en {supportEmail} para obtener ayuda.',
     'Password.Breached' => 'La contraseña que ingresó fue descubierta previamente en una violación de datos de un sitio web diferente. Puede o no haber sido su propia cuenta la que se vio comprometida. Utilice una contraseña diferente aquí y luego visite <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">esta página de ayuda</a> para obtener más información.',
     'Password.DisallowedContent' => 'Su contraseña no puede contener ninguno de estos: {labelList} (código 180)',
     'Password.MissingPassword' => 'Se requiere contraseña',
@@ -47,6 +52,7 @@ return [
     'Password.UnknownProblem' => 'Se ha producido un error al buscar subtítulos. Inténtalo de nuevo. Si el problema persiste, ponte en contacto con el servicio de asistencia.',
     'Password.UpdateError' => 'No se puede actualizar la contraseña, espere un minuto y vuelva a intentarlo. Si este problema persiste, póngase en contacto con el servicio de asistencia.',
     'Password.UpdateFailure' => 'No se puede actualizar la contraseña. Por favor, póngase en contacto con el soporte.',
+    'Reset.AccountLocked' => 'El restablecimiento de contraseña no es posible. La cuenta está bloqueada.',
     'Reset.CannotEnable' => 'Incapaz de activar el proceso.',
     'Reset.CreateFailure' => 'No se puede crear el nuevo usuario',
     'Reset.IncrementAttemptsError' => 'No se pueden incrementar los intentos de conteo.',

@@ -17,7 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => 'et',
     'Auth.MissingClientID' => 'Client ID est manquant',
+    'Google.EmployeeIdNotFound' => 'ID de l\'employé non trouvé dans la G Suite',
+    'Google.MultipleEmailsFound' => 'Plusieurs adresses email trouvées dans la G Suite. Impossible de résoudre.',
     'Method.AlreadyExists' => 'La méthode de récupération existe déjà',
     'Method.CodeExpired' => 'Code de vérification invalide',
     'Method.CodeMissing' => 'Code est requis',
@@ -36,6 +39,8 @@ return [
     'Mfa.TypeMissing' => '\'Type\' est requis',
     'Mfa.UpdateFailure' => 'Echec de la mise à jour MFA',
     'Mfa.VerifyFailure' => 'MFA vérifier l\'échec',
+    'Multiple.SetPartialSuccess' => 'Définissez avec succès le mot de passe sur {successes}, mais échouez dans {errors}. Contactez {supportName} à {supportEmail} pour obtenir de l\'aide.',
+    'Multiple.SetFailed' => 'Impossible de définir le mot de passe en {errors}. Contactez {supportName} à {supportEmail} pour obtenir de l\'aide.',
     'Password.Breached' => 'Le mot de passe que vous avez entré a déjà été découvert dans une violation de données d\'un site Web différent. Votre compte a peut-être été compromis ou non. Veuillez utiliser un mot de passe différent ici, puis visitez <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">cette page d’aide</a> pour en savoir plus.',
     'Password.DisallowedContent' => 'Votre mot de passe ne peut contenir aucun de ceux-ci: {labelList} (code 180)',
     'Password.MissingPassword' => 'Mot de passe requis',
@@ -47,6 +52,7 @@ return [
     'Password.UnknownProblem' => 'Il y a eu une erreur dans la recherche de sous-titres, veuillez réessayer. Si le problème persiste, veuillez contacter le support technique.',
     'Password.UpdateError' => 'Impossible de mettre à jour le mot de passe, attendez une minute, puis réessayez. Si ce problème persiste, veuillez contacter le support.',
     'Password.UpdateFailure' => 'Impossible de mettre à jour le mot de passe. S\'il vous plaît contacter le support.',
+    'Reset.AccountLocked' => 'La réinitialisation du mot de passe n\'est pas possible. Le compte est verrouillé.',
     'Reset.CannotEnable' => 'Impossible d\'activer la réinitialisation.',
     'Reset.CreateFailure' => 'Impossible de créer une nouvelle réinitialisation',
     'Reset.IncrementAttemptsError' => 'Impossible d\'incrémenter les tentatives comptent.',

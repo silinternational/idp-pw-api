@@ -17,7 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'and' => '및',
     'Auth.MissingClientID' => '클라이언트 ID가 없습니다.',
+    'Google.EmployeeIdNotFound' => 'G Suite 에 직원 ID가 없습니다.',
+    'Google.MultipleEmailsFound' => 'G Suite 에 여러 이메일 주소가 있습니다. 해결할 수 없습니다.',
     'Method.AlreadyExists' => '복구 방법이 이미 있습니다.',
     'Method.CodeExpired' => '만료 된 인증 코드',
     'Method.CodeMissing' => '코드가 필요합니다.',
@@ -36,6 +39,8 @@ return [
     'Mfa.TypeMissing' => '종류를 입력하십시오',
     'Mfa.UpdateFailure' => '업데이트 실패',
     'Mfa.VerifyFailure' => 'MFA 확인 실패',
+    'Multiple.SetPartialSuccess' => '{successes} 에서 비밀번호를 설정했지만 {errors} 에서 비밀번호를 설정하지 못했습니다. 도움이 필요하면 {supportName} 시 {supportEmail} 에 문의하십시오.',
+    'Multiple.SetFailed' => '비밀번호를 {errors} 으로 설정하지 못했습니다. 도움을 청하기 위해 {supportName} 의 {supportEmail} 로 문의하십시오.',
     'Password.Breached' => '입력 한 비밀번호는 이전에 다른 웹 사이트의 데이터 유출로 발견되었습니다. 귀하의 계좌가 손상되었을 수도 있고 아닐 수도 있습니다. 여기에 다른 암호를 사용하고 방문하시기 바랍니다 <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">이 도움말 페이지</a> 자세한 내용은.',
     'Password.DisallowedContent' => '귀하의 비밀번호는 다음을 포함하지 않을 수 있습니다 : {labelList} (코드 180)',
     'Password.MissingPassword' => '비밀번호가 필요합니다.',
@@ -47,6 +52,7 @@ return [
     'Password.UnknownProblem' => '자막을 검색하는 동안 오류가 발생했습니다. 다시 시도하십시오. 문제가 지속되면 지원팀에 문의하시기 바랍니다.',
     'Password.UpdateError' => '비밀번호를 업데이트 할 수 없습니다. 잠시 후 다시 시도하십시오. 문제가 계속되면 지원팀에 문의하십시오.',
     'Password.UpdateFailure' => '비밀번호를 업데이트 할 수 없습니다. 지원부에 문의하십시오.',
+    'Reset.AccountLocked' => '비밀번호 재설정이 불가능합니다. 계정이 잠겼습니다.',
     'Reset.CannotEnable' => '재설정을 활성화 할 수 없습니다.',
     'Reset.CreateFailure' => '새로운 lua state를 생성할 수 없습니다.',
     'Reset.IncrementAttemptsError' => '시도 횟수를 늘릴 수 없습니다.',

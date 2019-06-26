@@ -54,6 +54,21 @@ class Google extends Component implements PasswordStoreInterface
 
     private $googleClient = null;
 
+    public $displayName = 'Google';
+
+    /**
+     * @var bool $findByExternalId If `true`, when retrieving a user by employee_id,
+     * a call will be made to `Users: list` to retrieve the user by the Google user
+     * property `externalId`.
+     */
+    public $findByExternalId = false;
+
+    /**
+     * @var string $searchDomain Domain name in which to search for a matching user
+     * when `findByExternalId` is `true`.
+     */
+    public $searchDomain = '';
+
     public function init()
     {
         if ( ! empty($this->jsonAuthConfigBase64)) {
@@ -86,7 +101,7 @@ class Google extends Component implements PasswordStoreInterface
             'userActiveRecordClass',
         ];
         foreach ($requiredProperties as $requiredProperty) {
-            if (empty($requiredProperty)) {
+            if (empty($this->$requiredProperty)) {
                 throw new InvalidArgumentException(sprintf(
                     'You must provide a value for %s (found %s).',
                     $requiredProperty,
@@ -124,7 +139,7 @@ class Google extends Component implements PasswordStoreInterface
      * @throws UserNotFoundException
      * @throws Exception
      */
-    protected function getEmailForEmployeeId($employeeId)
+    protected function getEmailFromLocalStore($employeeId)
     {
         $userActiveRecord = $this->userActiveRecordClass::findOne([
             $this->employeeIdFieldName => $employeeId,
@@ -153,7 +168,7 @@ class Google extends Component implements PasswordStoreInterface
     {
         $this->getUser($employeeId);
 
-        /* Note: Google doesn't tell use when the user's password expires, so
+        /* Note: Google doesn't tell us when the user's password expires, so
          * simply return an "empty" UserPasswordMeta object.  */
         return UserPasswordMeta::create('', '');
     }
@@ -167,8 +182,12 @@ class Google extends Component implements PasswordStoreInterface
      */
     protected function getUser($employeeId)
     {
-        $email = $this->getEmailForEmployeeId($employeeId);
-        return $this->getUserFromGoogle($email);
+        if ($this->findByExternalId === true) {
+            return $this->getUserByEmployeeId($employeeId);
+        } else {
+            $email = $this->getEmailFromLocalStore($employeeId);
+            return $this->getUserByEmail($email);
+        }
     }
 
     /**
@@ -179,7 +198,7 @@ class Google extends Component implements PasswordStoreInterface
      * @throws UserNotFoundException
      * @throws Exception
      */
-    protected function getUserFromGoogle($email)
+    protected function getUserByEmail($email)
     {
         try {
             $usersResource = $this->getUsersResource();
@@ -224,7 +243,8 @@ class Google extends Component implements PasswordStoreInterface
     public function set($employeeId, $password): UserPasswordMeta
     {
         $googleUser = $this->getUser($employeeId);
-        $googleUser->setPassword($password);
+        $googleUser->password = sha1($password);
+        $googleUser->hashFunction = 'SHA-1';
         $this->saveChangesTo($googleUser);
 
         /* Note: Google doesn't tell use when the user's password expires, so
@@ -246,5 +266,50 @@ class Google extends Component implements PasswordStoreInterface
     public function assess($employeeId, $password)
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName(): string
+    {
+        return $this->displayName;
+    }
+
+    /**
+     * @param string $employeeId
+     * @return Google_Service_Directory_User The user record from Google.
+     * @throws UserNotFoundException
+     */
+    protected function getUserByEmployeeId($employeeId)
+    {
+        $usersResource = $this->getUsersResource();
+        $response = $usersResource->listUsers([
+                'domain' => $this->searchDomain,
+                'maxResults' => 2,
+                'query' => 'externalId=' . $employeeId,
+        ]);
+
+        if ($response === null || count($response['users']) === 0) {
+            \Yii::warning([
+                'action' => 'getUserByEmployeeId',
+                'status' => 'not found',
+                'employee_id' => $employeeId,
+            ]);
+            throw new UserNotFoundException(\Yii::t('app', 'Google.EmployeeIdNotFound'), 1560370495);
+        }
+
+        if (count($response['users']) > 1) {
+            \Yii::error([
+                'action' => 'getUserByEmployeeId',
+                'status' => 'too many results',
+                'employee_id' => $employeeId,
+                'email1' => $response['users'][0]['primaryEmail'],
+                'email2' => $response['users'][1]['primaryEmail'],
+            ]);
+            throw new \Exception(\Yii::t('app', 'Google.MultipleEmailsFound'), 1560875143);
+        }
+
+        return $response['users'][0];
     }
 }
