@@ -3,7 +3,6 @@ namespace tests\unit\common\models;
 
 use Sil\Codeception\TestCase\Test;
 use common\components\personnel\PersonnelUser;
-use common\models\Method;
 use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
@@ -265,8 +264,7 @@ class UserTest extends Test
 
         $verifiedCount = 0;
         foreach ($user->methods as $method) {
-            // phone verification is not supported
-            if ($method->verified === 1 && $method->type != Method::TYPE_PHONE) {
+            if ($method['verified'] === 1) {
                 $verifiedCount++;
             }
         }

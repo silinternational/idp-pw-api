@@ -67,7 +67,7 @@ class MethodController extends BaseRestController
 
     /**
      * Return list of available reset methods for user.
-     * @return array<Method|array>
+     * @return array<array>
      */
     public function actionIndex()
     {
