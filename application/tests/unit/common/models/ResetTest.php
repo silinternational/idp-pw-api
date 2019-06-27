@@ -186,8 +186,6 @@ class ResetTest extends Test
 
     public function testSendUserWithHideFlag()
     {
-        $this->markTestSkipped('test is broken because fake methods are not accessible in this context');
-
         $reset = $this->resets('reset4');
         $attempts = $reset->attempts;
 
@@ -216,17 +214,13 @@ class ResetTest extends Test
 
     public function testSetType()
     {
-        $this->markTestSkipped('test is broken because methods were moved to broker');
-
         $reset = $this->resets('reset1');
         $this->assertEquals(Reset::TYPE_PRIMARY, $reset->type);
 
         $reset->setType(Reset::TYPE_SUPERVISOR);
         $this->assertEquals(Reset::TYPE_SUPERVISOR, $reset->type);
 
-//        $method = $this->methods('method1');
-
-        $reset->setType(Reset::TYPE_METHOD, $method->uid);
+        $reset->setType(Reset::TYPE_METHOD, '22222222222222222222222222222222');
         $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
 
         $reset->setType(Reset::TYPE_PRIMARY);
@@ -258,16 +252,13 @@ class ResetTest extends Test
 
     public function testGetMaskedValue()
     {
-        $this->markTestSkipped('test is broken because methods were moved to broker');
-
         $reset = $this->resets('reset1');
         $this->assertEquals('f****_l**t@o***********.o**', $reset->getMaskedValue());
 
         $reset->setType(Reset::TYPE_SUPERVISOR);
         $this->assertEquals('s********r@d*****.o**', $reset->getMaskedValue());
 
-//        $method2 = $this->methods('method2');
-        $reset->setType(Reset::TYPE_METHOD, $method2->uid);
+        $reset->setType(Reset::TYPE_METHOD, '22222222222222222222222222222222');
 
         $reset = Reset::findOne(['id' => $reset->id]);
 
