@@ -8,9 +8,7 @@ use yii\web\ServerErrorHttpException;
 
 class Method
 {
-
     const TYPE_EMAIL = 'email';
-    const TYPE_PHONE = 'phone';
 
     protected static function getIdBrokerClient()
     {
