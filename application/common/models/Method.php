@@ -3,16 +3,15 @@ namespace common\models;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
-use common\helpers\Utils;
+use yii\base\Model;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
  * Class Method
  * @package common\models
- * @method Method self::findOne([])
  */
-class Method extends MethodBase
+class Method extends Model
 {
 
     const TYPE_EMAIL = 'email';
@@ -35,34 +34,6 @@ class Method extends MethodBase
                 IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG   => $config['assertValidBrokerIp']   ?? true,
             ]
         );
-    }
-
-    /**
-     * Delete all method records that are not verified and verification_expires date is in the past
-     * @throws \Exception
-     * @throws \Throwable
-     */
-    public static function deleteExpiredUnverifiedMethods()
-    {
-        $methods = self::find()->where(['verified' => 0])
-                                ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
-                                ->all();
-
-        foreach ($methods as $method) {
-            try {
-                $deleted = $method->delete();
-                if ($deleted === 0 || $deleted === false) {
-                    throw new \Exception('Expired method delete call failed', 1470324506);
-                }
-            } catch (\Exception $e) {
-                \Yii::error([
-                    'action' => 'delete expired unverified methods',
-                    'status' => 'failed',
-                    'error' => $e->getMessage(),
-                    'method_id' => $method->id,
-                ]);
-            }
-        }
     }
 
     /**

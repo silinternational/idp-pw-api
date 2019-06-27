@@ -7,7 +7,6 @@ use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
 use tests\helpers\EmailUtils;
-use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 use yii\web\TooManyRequestsHttpException;
@@ -16,7 +15,6 @@ use yii\web\TooManyRequestsHttpException;
  * Class ResetTest
  * @package tests\unit\common\models
  * @method User users($key)
- * @method Method methods($key)
  * @method Reset resets($key)
  * @property \Codeception\Module\Yii2 tester
  */
@@ -32,7 +30,6 @@ class ResetTest extends Test
     {
         return [
             'users' => UserFixture::class,
-            'methods' => MethodFixture::class,
             'resets' => ResetFixture::class,
         ];
     }
@@ -228,7 +225,7 @@ class ResetTest extends Test
         $reset->setType(Reset::TYPE_SUPERVISOR);
         $this->assertEquals(Reset::TYPE_SUPERVISOR, $reset->type);
 
-        $method = $this->methods('method1');
+//        $method = $this->methods('method1');
 
         $reset->setType(Reset::TYPE_METHOD, $method->uid);
         $this->assertEquals(Reset::TYPE_METHOD, $reset->type);
@@ -270,7 +267,7 @@ class ResetTest extends Test
         $reset->setType(Reset::TYPE_SUPERVISOR);
         $this->assertEquals('s********r@d*****.o**', $reset->getMaskedValue());
 
-        $method2 = $this->methods('method2');
+//        $method2 = $this->methods('method2');
         $reset->setType(Reset::TYPE_METHOD, $method2->uid);
 
         $reset = Reset::findOne(['id' => $reset->id]);

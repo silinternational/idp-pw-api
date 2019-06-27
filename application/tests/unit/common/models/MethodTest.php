@@ -4,7 +4,6 @@ namespace tests\unit\common\models;
 use Sil\Codeception\TestCase\Test;
 use common\models\Method;
 use common\models\User;
-use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 
 /**
@@ -20,20 +19,6 @@ class MethodTest extends Test
     {
         return [
             'users' => UserFixture::class,
-            'methods' => MethodFixture::class,
         ];
-    }
-
-    public function testDeleteExpiredUnverifiedMethods()
-    {
-        $method = $this->methods('method3');
-
-        $method1 = Method::findOne(['uid' => $method->uid]);
-        $this->assertNotNull($method1);
-
-        Method::deleteExpiredUnverifiedMethods();
-
-        $method2 = Method::findOne(['uid' => $method->uid]);
-        $this->assertNull($method2);
     }
 }
