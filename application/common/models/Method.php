@@ -3,30 +3,19 @@ namespace common\models;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
-use yii\base\Model;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
-/**
- * Class Method
- * @package common\models
- */
-class Method extends Model
+class Method
 {
 
     const TYPE_EMAIL = 'email';
     const TYPE_PHONE = 'phone';
 
-    /**
-     * @var IdBrokerClient
-     */
-    public $idBrokerClient;
-
-    public function init()
+    protected static function getIdBrokerClient()
     {
-        parent::init();
         $config = \Yii::$app->params['idBrokerConfig'];
-        $this->idBrokerClient = new IdBrokerClient(
+        return new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],
             [
@@ -45,10 +34,8 @@ class Method extends Model
      */
     public static function getMethods($employeeId)
     {
-        $method = new Method;
-
         try {
-            return $method->idBrokerClient->listMethod($employeeId);
+            return self::getIdBrokerClient()->listMethod($employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 400) {
                 throw new ServerErrorHttpException(\Yii::t('app', 'Method.PersonnelError'), 1542752270);
@@ -92,9 +79,8 @@ class Method extends Model
      */
     public static function getOneVerifiedMethod($uid, $employeeId)
     {
-        $method = new Method;
         try {
-            return $method->idBrokerClient->getMethod($uid, $employeeId);
+            return self::getIdBrokerClient()->getMethod($uid, $employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 404) {
                 throw new NotFoundHttpException(
