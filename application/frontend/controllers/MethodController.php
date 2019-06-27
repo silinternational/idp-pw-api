@@ -1,7 +1,6 @@
 <?php
 namespace frontend\controllers;
 
-use common\helpers\Utils;
 use common\models\Method;
 use common\models\User;
 use frontend\components\BaseRestController;
@@ -13,7 +12,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\ConflictHttpException;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\TooManyRequestsHttpException;
 
 class MethodController extends BaseRestController
 {

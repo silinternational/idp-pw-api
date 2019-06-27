@@ -2,7 +2,6 @@
 namespace tests\unit\common\models;
 
 use Sil\Codeception\TestCase\Test;
-use common\models\Method;
 use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
