@@ -2,9 +2,7 @@
 
 declare -A models
 models["user"]="UserBase"
-models["method"]="MethodBase"
 models["reset"]="ResetBase"
-
 models["event_log"]="EventLogBase"
 
 for i in "${!models[@]}"; do

@@ -34,7 +34,7 @@ return [
             'passwordStoresConfig' => [
                 [
                     'class' => IdBroker::class,
-                    'displayName' => 'Acme ID Broker',
+                    'displayName' => 'Acme Identity',
                 ],
                 [
                     'class' => Ldap::class,

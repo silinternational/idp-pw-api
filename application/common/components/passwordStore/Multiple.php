@@ -39,12 +39,12 @@ class Multiple extends Component implements PasswordStoreInterface
             try {
                 $passwordStore->getMeta($employeeId);
             } catch (Exception $e) {
-                throw new PasswordStoreException(sprintf(
+                throw new \Exception(sprintf(
                     'Did not attempt to %s because not all of the backends are '
                     . 'available. The %s password store gave this error when '
                     . 'asked for the specified user (%s): %s',
                     $taskDescription,
-                    \get_class($passwordStore),
+                    $passwordStore->getDisplayName(),
                     var_export($employeeId, true),
                     $e->getMessage()
                 ), 1498163919, $e);

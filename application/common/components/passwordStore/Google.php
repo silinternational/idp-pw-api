@@ -292,7 +292,7 @@ class Google extends Component implements PasswordStoreInterface
 
         if ($response === null || count($response['users']) === 0) {
             \Yii::warning([
-                'action' => 'getEmailFromGoogle',
+                'action' => 'getUserByEmployeeId',
                 'status' => 'not found',
                 'employee_id' => $employeeId,
             ]);
@@ -301,7 +301,7 @@ class Google extends Component implements PasswordStoreInterface
 
         if (count($response['users']) > 1) {
             \Yii::error([
-                'action' => 'getEmailFromGoogle',
+                'action' => 'getUserByEmployeeId',
                 'status' => 'too many results',
                 'employee_id' => $employeeId,
                 'email1' => $response['users'][0]['primaryEmail'],
