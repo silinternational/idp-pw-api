@@ -3,11 +3,9 @@ namespace tests\unit\common\models;
 
 use Sil\Codeception\TestCase\Test;
 use common\components\personnel\PersonnelUser;
-use common\models\Method;
 use common\models\Reset;
 use common\models\User;
 use tests\helpers\BrokerUtils;
-use tests\unit\fixtures\common\models\MethodFixture;
 use tests\unit\fixtures\common\models\ResetFixture;
 use tests\unit\fixtures\common\models\UserFixture;
 
@@ -15,7 +13,6 @@ use tests\unit\fixtures\common\models\UserFixture;
  * Class UserTest
  * @package tests\unit\common\models
  * @method User users($key)
- * @method Method methods($key)
  * @method Reset resets($key)
  */
 class UserTest extends Test
@@ -30,7 +27,6 @@ class UserTest extends Test
     {
         return [
             'users' => UserFixture::class,
-            'methods' => MethodFixture::class,
             'resets' => ResetFixture::class,
         ];
     }
@@ -268,8 +264,7 @@ class UserTest extends Test
 
         $verifiedCount = 0;
         foreach ($user->methods as $method) {
-            // phone verification is not supported
-            if ($method->verified === 1 && $method->type != Method::TYPE_PHONE) {
+            if ($method['verified'] === 1) {
                 $verifiedCount++;
             }
         }
