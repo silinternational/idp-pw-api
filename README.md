@@ -26,7 +26,8 @@ Backend API for Identity Provider Password Management
    to ```email.local.env``` and update values in each as appropriate.
 3. Setup environment variable for ```DOCKER_UIDGID``` in the format of ```"uid:gid"```.
    This will run some of the containers as you so that they can write to your host filesystem
-   and the file permissions will be owned by you.
+   and the file permissions will be owned by you. On Mac (and possibly other *nix-based
+   systems), this can be done by running this: `export DOCKER_UIDGID="$(id -u):$(id -g)"`
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```.
    This will allow the composer container to use your github auth token when pulling dependencies.
