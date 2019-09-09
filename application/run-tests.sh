@@ -17,13 +17,9 @@ whenavail broker 80 100 echo "broker ready, running unit tests..."
 runny ./vendor/bin/codecept run unit --coverage --coverage-xml
 TESTRESULTS_UNIT=$?
 
-# Run behat tests
-if [ -z "$TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail" ]; then
-    echo -e "\e[31mGoogle passwordstore tests skipped\e[0m"
-else
-    runny ./vendor/bin/behat --config=tests/features/behat.yml --strict
-    TESTRESULTS_BEHAT=$?
-fi
+# Run local behat tests
+runny ./vendor/bin/behat --config=tests/features/behat.yml --strict --profile=local
+TESTRESULTS_BEHAT=$?
 
 ## The ocular.php script sometimes works and sometimes hangs with no error message
 

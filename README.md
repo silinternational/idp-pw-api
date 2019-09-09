@@ -26,7 +26,8 @@ Backend API for Identity Provider Password Management
    to ```email.local.env``` and update values in each as appropriate.
 3. Setup environment variable for ```DOCKER_UIDGID``` in the format of ```"uid:gid"```.
    This will run some of the containers as you so that they can write to your host filesystem
-   and the file permissions will be owned by you.
+   and the file permissions will be owned by you. On Mac (and possibly other *nix-based
+   systems), this can be done by running this: `export DOCKER_UIDGID="$(id -u):$(id -g)"`
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```.
    This will allow the composer container to use your github auth token when pulling dependencies.
@@ -54,10 +55,14 @@ Backend API for Identity Provider Password Management
 To simplify common tasks there is a Makefile in place. The most common tasks will likely be:
 
 - ```make start``` - Does what is needed to get API server online
-- ```make test``` - Does cleanup and restart of test instances and runs unit tests
+- ```make test``` - Does cleanup and restart of test instances and runs local (unit and api) and integration tests
+- ```make testlocal``` - Does cleanup and restart of test instances and runs just the local tests
+- ```make testintegration``` - Runs just the integration tests
 - ```make clean``` - Remove all containers
 - ```make composerupdate``` - ```make start``` will run a ```composer install```, but to update composer
     you need to run ```make composerupdate```
+
+**Note:** The CI/CD process only runs the local tests now.
 
 ## Component Architecture
 With the goal of being reusable, this application is developed with a component based architecture that allows swapping out specific components to suit your needs. All components must implement common interfaces to support this and new components can be developed to implement the interface as needed.
@@ -134,20 +139,10 @@ comments in the `/application/common/components/passwordStore/Google.php` file.
 
 #### Testing the Google PasswordStore component
 
-Credentials are stored in the encrypted file: `codeship.env.encrypted`. Either
-provide the correct `codeship.aes` (if you're part of the SIL AppsDev team)
-in the root directory of this repo or provide your own `codeship.env`. See
-above for instructions on obtaining this information.
-
-Template `codeship.env` file:
-```
-TEST_GOOGLE_PWSTORE_CONFIG_delegatedAdminEmail=
-TEST_GOOGLE_PWSTORE_CONFIG_jsonAuthConfigBase64=
-# This test user must exist in the Google instance
-TEST_GOOGLE_USER_EMAIL=
-# This employee ID must match the 'externalId' for the test user
-TEST_GOOGLE_USER_EMPLOYEE_ID=
-```
+If running the Google PasswordStore tests (which are integration tests), you 
+will need to provide credentials in the `local.env file` in the
+`TEST_GOOGLE_...` variables for the values described above. See the
+`local.env.dist` file for the variable names.
 
 ## API Documentation
 The API is described by [api.raml](api.raml), and an auto-generated [api.html](api.html) created by

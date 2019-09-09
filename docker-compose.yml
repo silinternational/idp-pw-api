@@ -78,7 +78,6 @@ services:
         env_file:
             - ./common.env
             - ./test.env
-            - ./codeship.env
         environment:
             MYSQL_HOST: testDb
             MYSQL_DATABASE: test
@@ -91,6 +90,34 @@ services:
             MEMCACHE_CONFIG2_port: 11211
             MEMCACHE_CONFIG2_weight: 50
         command: ["/data/run-tests.sh"]
+
+    integrationtest:
+        build: ./
+        volumes_from:
+            - data
+        volumes:
+            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+        depends_on:
+            - testDb
+            - zxcvbn
+            - memcache1
+            - memcache2
+        env_file:
+            - ./common.env
+            - ./test.env
+            - ./local.env
+        environment:
+            MYSQL_HOST: testDb
+            MYSQL_DATABASE: test
+            APP_ENV: test
+            ID_BROKER_baseUrl: http://broker
+            MEMCACHE_CONFIG1_host: memcache1
+            MEMCACHE_CONFIG1_port: 11211
+            MEMCACHE_CONFIG1_weight: 100
+            MEMCACHE_CONFIG2_host: memcache2
+            MEMCACHE_CONFIG2_port: 11211
+            MEMCACHE_CONFIG2_weight: 50
+        command: ["/data/run-tests-integration.sh"]
 
     cli:
         build: ./

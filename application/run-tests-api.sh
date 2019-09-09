@@ -16,5 +16,10 @@ runny apache2ctl start
 # Run codeception tests
 whenavail broker 80 100 echo "broker ready"
 /data/vendor/bin/codecept run api -d
+TESTRESULTS_API=$?
 
 echo "Note: If there are unexpected errors, try 'make clean' or manually redo id-broker test migration."
+
+if [[ "TESTRESULTS_API" -ne 0 ]]; then
+    exit TESTRESULTS_API
+fi

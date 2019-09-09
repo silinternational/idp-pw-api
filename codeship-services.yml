@@ -63,7 +63,6 @@ api:
         PASSWORD_RULE_minLength: 10
         PASSWORD_RULE_maxLength: 255
         PASSWORD_RULE_minScore: 2
-    encrypted_env_file: codeship.env.encrypted
     working_dir: /data
     command: /data/run-tests.sh
 
