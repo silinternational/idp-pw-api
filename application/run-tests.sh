@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Install composer dev dependencies
 cd /data
-runny composer install --prefer-dist --no-interaction --optimize-autoloader
+composer install --prefer-dist --no-interaction --optimize-autoloader
 
 mkdir -p /data/runtime/mail
 
@@ -14,18 +16,7 @@ apt-get install -y php-xdebug
 
 # Run codeception tests
 whenavail broker 80 100 echo "broker ready, running unit tests..."
-runny ./vendor/bin/codecept run unit --coverage --coverage-xml
-TESTRESULTS_UNIT=$?
+./vendor/bin/codecept run unit --coverage --coverage-xml
 
 # Run local behat tests
-runny ./vendor/bin/behat --config=tests/features/behat.yml --strict --profile=local
-TESTRESULTS_BEHAT=$?
-
-# If unit tests fail, make sure to exit with error status
-if [[ "$TESTRESULTS_UNIT" -ne 0 ]]; then
-    exit $TESTRESULTS_UNIT
-fi
-
-if [[ "$TESTRESULTS_BEHAT" -ne 0 ]]; then
-    exit $TESTRESULTS_BEHAT
-fi
+./vendor/bin/behat --config=tests/features/behat.yml --strict --profile=local
