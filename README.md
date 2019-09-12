@@ -12,7 +12,7 @@ Backend API for Identity Provider Password Management
 2. Docker Compose >= 1.5
 
 ### Mac
-1. Docker for Mac Beta
+1. Docker for Mac
 
 ### Windows
 1. VirtualBox
@@ -28,6 +28,7 @@ Backend API for Identity Provider Password Management
    This will run some of the containers as you so that they can write to your host filesystem
    and the file permissions will be owned by you. On Mac (and possibly other *nix-based
    systems), this can be done by running this: `export DOCKER_UIDGID="$(id -u):$(id -g)"`
+   (even in your `.bash_profile` file).
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```.
    This will allow the composer container to use your github auth token when pulling dependencies.
