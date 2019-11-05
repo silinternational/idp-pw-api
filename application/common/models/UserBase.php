@@ -22,7 +22,6 @@ use Yii;
  * @property string $display_name
  *
  * @property EventLog[] $eventLogs
- * @property Method[] $methods
  * @property Reset $reset
  */
 class UserBase extends \yii\db\ActiveRecord
@@ -81,14 +80,6 @@ class UserBase extends \yii\db\ActiveRecord
     public function getEventLogs()
     {
         return $this->hasMany(EventLog::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMethods()
-    {
-        return $this->hasMany(Method::className(), ['user_id' => 'id']);
     }
 
     /**

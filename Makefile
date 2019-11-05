@@ -1,17 +1,19 @@
 start: api
 
-test: testunit testapi
+test: testlocal testintegration
 
-testunit: codeship.env composer rmTestDb upTestDb broker ldapload yiimigratetestDb
-	# create folder as user before test creates it as root
-	mkdir -p application/tests/_output
+testlocal: testunit testapi
+
+testunit: composer rmTestDb upTestDb broker ldapload yiimigratetestDb
 	docker-compose run --rm unittest
-	sed -i "s|/data/|`pwd`/application/|" application/tests/_output/coverage.xml
 
 testapi: upTestDb yiimigratetestDb
 	docker-compose kill broker
 	docker-compose up -d broker
 	docker-compose run --rm apitest
+
+testintegration:
+	docker-compose run --rm integrationtest
 
 api: upDb broker composer yiimigrate
 	docker-compose up -d api zxcvbn phpmyadmin brokerpma emailpma
@@ -79,6 +81,3 @@ raml2html: api.html
 
 api.html: api.raml
 	docker-compose run --rm raml2html
-
-codeship.env: codeship.aes codeship.env.encrypted
-	jet decrypt codeship.env.encrypted codeship.env

@@ -122,7 +122,6 @@ return [
                 'OPTIONS /method/' . UID_ROUTE_PATTERN             => 'method/options',
                 'OPTIONS /method/' . UID_ROUTE_PATTERN . '/verify' => 'method/options',
                 'OPTIONS /method/' . UID_ROUTE_PATTERN . '/resend' => 'method/options',
-                'GET /method/move'                                 => 'method/move',
 
                 /*
                  * Password routes

@@ -3,31 +3,17 @@ namespace common\models;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
-use common\helpers\Utils;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
-/**
- * Class Method
- * @package common\models
- * @method Method self::findOne([])
- */
-class Method extends MethodBase
+class Method
 {
-
     const TYPE_EMAIL = 'email';
-    const TYPE_PHONE = 'phone';
 
-    /**
-     * @var IdBrokerClient
-     */
-    public $idBrokerClient;
-
-    public function init()
+    protected static function getIdBrokerClient()
     {
-        parent::init();
         $config = \Yii::$app->params['idBrokerConfig'];
-        $this->idBrokerClient = new IdBrokerClient(
+        return new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],
             [
@@ -35,34 +21,6 @@ class Method extends MethodBase
                 IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG   => $config['assertValidBrokerIp']   ?? true,
             ]
         );
-    }
-
-    /**
-     * Delete all method records that are not verified and verification_expires date is in the past
-     * @throws \Exception
-     * @throws \Throwable
-     */
-    public static function deleteExpiredUnverifiedMethods()
-    {
-        $methods = self::find()->where(['verified' => 0])
-                                ->andWhere(['<', 'verification_expires', Utils::getDatetime()])
-                                ->all();
-
-        foreach ($methods as $method) {
-            try {
-                $deleted = $method->delete();
-                if ($deleted === 0 || $deleted === false) {
-                    throw new \Exception('Expired method delete call failed', 1470324506);
-                }
-            } catch (\Exception $e) {
-                \Yii::error([
-                    'action' => 'delete expired unverified methods',
-                    'status' => 'failed',
-                    'error' => $e->getMessage(),
-                    'method_id' => $method->id,
-                ]);
-            }
-        }
     }
 
     /**
@@ -74,10 +32,8 @@ class Method extends MethodBase
      */
     public static function getMethods($employeeId)
     {
-        $method = new Method;
-
         try {
-            return $method->idBrokerClient->listMethod($employeeId);
+            return self::getIdBrokerClient()->listMethod($employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 400) {
                 throw new ServerErrorHttpException(\Yii::t('app', 'Method.PersonnelError'), 1542752270);
@@ -121,9 +77,8 @@ class Method extends MethodBase
      */
     public static function getOneVerifiedMethod($uid, $employeeId)
     {
-        $method = new Method;
         try {
-            return $method->idBrokerClient->getMethod($uid, $employeeId);
+            return self::getIdBrokerClient()->getMethod($uid, $employeeId);
         } catch (ServiceException $e) {
             if ($e->httpStatusCode === 404) {
                 throw new NotFoundHttpException(

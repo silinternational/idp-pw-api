@@ -9,6 +9,5 @@ class ResetFixture extends ActiveFixture
     public $dataFile = 'tests/api/fixtures/data/Reset.php';
     public $depends = [
         'tests\api\fixtures\UserFixture',
-        'tests\api\fixtures\MethodFixture',
     ];
 }
