@@ -16,7 +16,7 @@ apt-get install -y php-xdebug
 
 # Run codeception tests
 whenavail broker 80 100 echo "broker ready, running unit tests..."
-./vendor/bin/codecept run unit --coverage --coverage-xml
+./vendor/bin/codecept run unit
 
 # Run local behat tests
 ./vendor/bin/behat --config=tests/features/behat.yml --strict --profile=local
