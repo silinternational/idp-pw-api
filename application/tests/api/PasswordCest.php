@@ -24,6 +24,38 @@ class PasswordCest extends BaseCest
 
     public function test3(ApiTester $I)
     {
+        $I->wantTo('check response when making authenticated POST request to /password');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPOST('/password');
+        $I->seeResponseCodeIs(405);
+    }
+
+    public function test4(ApiTester $I)
+    {
+        $I->wantTo('check response when making unauthenticated POST request to /password');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
+        $I->sendPOST('/password');
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function test5(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated PUT request to update the password');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendPUT('/password',['password' => Utils::generateRandomString() . '!12']);
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function test6(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated DELETE request to /password');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->sendDELETE('/password');
+        $I->seeResponseCodeIs(405);
+    }
+
+    public function test7(ApiTester $I)
+    {
         $I->wantTo('check response when making GET request with correct token for obtaining info about password');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendGET('/password');
@@ -32,38 +64,6 @@ class PasswordCest extends BaseCest
             'last_changed' => 'string:date',
             'expires' => 'string:date'
         ]);
-    }
-
-    public function test4(ApiTester $I)
-    {
-        $I->wantTo('check response when making authenticated POST request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/password');
-        $I->seeResponseCodeIs(405);
-    }
-
-    public function test5(ApiTester $I)
-    {
-        $I->wantTo('check response when making unauthenticated POST request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
-        $I->sendPOST('/password');
-        $I->seeResponseCodeIs(401);
-    }
-
-    public function test6(ApiTester $I)
-    {
-        $I->wantTo('check response when making authenticated PUT request to update the password');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => Utils::generateRandomString() . '!12']);
-        $I->seeResponseCodeIs(200);
-    }
-
-    public function test7(ApiTester $I)
-    {
-        $I->wantTo('check response when making authenticated DELETE request to /password');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendDELETE('/password');
-        $I->seeResponseCodeIs(405);
     }
 
     public function test8(ApiTester $I)
