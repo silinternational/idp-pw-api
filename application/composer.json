@@ -22,7 +22,7 @@
     "silinternational/yii2-email-log-target": "^1.0.1",
     "silinternational/idp-id-broker-php-client": "^3.1.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",
-    "simplesamlphp/saml2": "^3.1.5",
+    "simplesamlphp/saml2": "^3.4.2",
     "google/apiclient": "^2.0",
     "google/recaptcha": "^1.1.2",
     "adldap2/adldap2": "^9.0",
