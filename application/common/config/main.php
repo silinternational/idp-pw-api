@@ -1,9 +1,9 @@
 <?php
 
-use common\components\Emailer;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
+use common\components\Emailer;
 use yii\helpers\ArrayHelper;
 
 /*
