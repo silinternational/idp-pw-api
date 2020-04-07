@@ -28,7 +28,7 @@ rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 # If they failed, exit.
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
-apache2ctl start
+apache2ctl -k start -D FOREGROUND
 
 # endless loop with a wait is needed for the trap to work
 while true
