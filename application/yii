@@ -34,11 +34,7 @@ try {
     );
 } catch (Sil\PhpEnv\EnvVarNotFoundException $e) {
     fwrite(STDERR, $e->getMessage() . PHP_EOL);
-    
-    openlog('pw-api', LOG_NDELAY | LOG_PERROR, LOG_USER);
-    syslog(LOG_CRIT, $e->getMessage());
-    closelog();
-    
+
     exit(1);
 }
 
