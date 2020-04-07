@@ -5,6 +5,7 @@ use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
 use common\components\Emailer;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /*
  * Get config settings from ENV vars or set defaults
