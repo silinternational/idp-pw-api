@@ -1,5 +1,5 @@
 {
-  "name": "IdP Password Manager API",
+  "name": "silinternational/idp-pw-api",
   "description": "Backend API for Identity Provider Password Management",
   "minimum-stability": "stable",
   "repositories": [
