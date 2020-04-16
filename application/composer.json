@@ -1,5 +1,5 @@
 {
-  "name": "IdP Password Manager API",
+  "name": "silinternational/idp-pw-api",
   "description": "Backend API for Identity Provider Password Management",
   "minimum-stability": "stable",
   "repositories": [
@@ -18,7 +18,7 @@
     "yiisoft/yii2-gii": "*",
     "silinternational/email-service-php-client": "^2.0.1",
     "silinternational/php-env": "^2.1.1",
-    "silinternational/yii2-json-log-targets": "^1.0.0",
+    "silinternational/yii2-json-log-targets": "^1.1.0",
     "silinternational/yii2-email-log-target": "^1.0.1",
     "silinternational/idp-id-broker-php-client": "^3.1.0",
     "silinternational/zxcvbn-api-client-php": "^2.0",

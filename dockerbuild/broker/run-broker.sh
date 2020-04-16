@@ -9,20 +9,6 @@ term_handler() {
 }
 trap 'kill ${!}; term_handler' SIGTERM
 
-if [[ "x" == "x$LOGENTRIES_KEY" ]]; then
-    echo "Missing LOGENTRIES_KEY environment variable";
-else
-    echo "Found LOGENTRIES_KEY environment variable";
-
-    # Set logentries key based on environment variable
-    sed -i /etc/rsyslog.conf -e "s/LOGENTRIESKEY/${LOGENTRIES_KEY}/"
-    # Start syslog
-    rsyslogd
-
-    # Give syslog time to fully start up.
-    sleep 3
-fi
-
 # Try to install composer dev dependencies
 cd /data
 composer install --no-interaction --no-scripts
@@ -42,7 +28,7 @@ rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 # If they failed, exit.
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
-apache2ctl start
+apache2ctl -k start -D FOREGROUND
 
 # endless loop with a wait is needed for the trap to work
 while true

@@ -38,9 +38,6 @@ class EventLog extends EventLogBase
         $eventLog->topic = $topic;
         $eventLog->details = is_array($details) ? Json::encode($details) : $details;
 
-        /*
-         * Save event to LogEntries
-         */
         try {
             $user = User::findOne(['id' => $userId]);
             if ($user !== null) {

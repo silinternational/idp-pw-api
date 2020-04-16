@@ -1,10 +1,11 @@
 <?php
 
-use common\components\Emailer;
 use Sil\JsonLog\target\EmailServiceTarget;
-use Sil\JsonLog\target\JsonSyslogTarget;
+use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
+use common\components\Emailer;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /*
  * Get config settings from ENV vars or set defaults
@@ -58,6 +59,24 @@ $passwordRules = [
     'enableHIBP' => $passwordRulesEnv['enableHIBP'] ?? true,
 ];
 
+$logPrefix = function () {
+    $request = Yii::$app->request;
+    $prefixData = [
+        'env' => YII_ENV,
+    ];
+    if ($request instanceof \yii\web\Request) {
+        // Assumes format: Bearer consumer-module-name-32randomcharacters
+        $prefixData['id'] = substr($request->headers['Authorization'], 7, 16) ?: 'unknown';
+        $prefixData['ip'] = $request->getUserIP();
+        $prefixData['method'] = $request->getMethod();
+        $prefixData['url'] = $request->getUrl();
+    } elseif ($request instanceof \yii\console\Request) {
+        $prefixData['id'] = '(console)';
+    }
+
+    return Json::encode($prefixData);
+};
+
 return [
     'id' => 'app-common',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
@@ -76,29 +95,23 @@ return [
             'traceLevel' => 0,
             'targets' => [
                 [
-                    'class' => JsonSyslogTarget::class,
+                    'class' => JsonStreamTarget::class,
+                    'url' => 'php://stdout',
+                    'levels' => ['info'],
+                    'logVars' => [],
+                    'categories' => ['application'],
+                    'prefix' => $logPrefix,
+                ],
+                [
+                    'class' => JsonStreamTarget::class,
+                    'url' => 'php://stderr',
                     'levels' => ['error', 'warning'],
                     'except' => [
                         'yii\web\HttpException:401',
                         'yii\web\HttpException:404',
                     ],
-                    'logVars' => [], // Disable logging of _SERVER, _POST, etc.
-                    'prefix' => function($message) use ($appEnv) {
-                        $prefixData = [
-                            'env' => $appEnv,
-                        ];
-
-                        // There is no user when a console command is run
-                        try {
-                            $appUser = \Yii::$app->user;
-                        } catch (\Exception $e) {
-                            $appUser = null;
-                        }
-                        if ($appUser && ! \Yii::$app->user->isGuest) {
-                            $prefixData['user'] = \Yii::$app->user->identity->email;
-                        }
-                        return \yii\helpers\Json::encode($prefixData);
-                    },
+                    'logVars' => [],
+                    'prefix' => $logPrefix,
                 ],
                 [
                     'class' => EmailServiceTarget::class,
