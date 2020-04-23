@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.3.0]
+### Changed
+- Changed logging from syslog to stdout/stderr
+
+## [5.2.2]
+### Changed
+- SAML2 security update
+
+## [5.2.1]
+### Changed
+- Updated dependencies
+- Removed obsolete code related to recovery methods
+
 ## [5.2.0]
 ### Changed
 - Attempt to set password in every passwordStore component even if one fails.
@@ -107,8 +120,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.2.0...HEAD
-[5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...5.2.0
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.3.0...HEAD
+[5.3.0]: https://github.com/silinternational/idp-pw-api/compare/5.2.2...5.3.0
+[5.2.2]: https://github.com/silinternational/idp-pw-api/compare/5.2.1...5.2.2
+[5.2.1]: https://github.com/silinternational/idp-pw-api/compare/5.2.0...5.2.1
+[5.2.0]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...4.1.0
