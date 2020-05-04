@@ -101,6 +101,7 @@ return [
                     'logVars' => [],
                     'categories' => ['application'],
                     'prefix' => $logPrefix,
+                    'exportInterval' => 1,
                 ],
                 [
                     'class' => JsonStreamTarget::class,
@@ -112,6 +113,7 @@ return [
                     ],
                     'logVars' => [],
                     'prefix' => $logPrefix,
+                    'exportInterval' => 1,
                 ],
                 [
                     'class' => EmailServiceTarget::class,
@@ -162,6 +164,7 @@ return [
 
                         return $prefixData;
                     },
+                    'exportInterval' => 1,
                 ],
             ],
         ],
