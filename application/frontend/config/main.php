@@ -91,6 +91,7 @@ return [
             ]
         ],
         'urlManager' => [
+            'cache' => null,
             'enablePrettyUrl' => true,
             'enableStrictParsing' => true,
             'showScriptName' => false,
