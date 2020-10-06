@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.3.1]
+### Changed
+- No caching of log messages. Helps to ensure messages are sent to log in the event
+  of a crash, e.g. out of memory situation.
+
 ## [5.3.0]
 ### Changed
 - Changed logging from syslog to stdout/stderr
@@ -120,7 +125,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.3.0...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.3.1...HEAD
+[5.3.1]: https://github.com/silinternational/idp-pw-api/compare/5.3.0..5.3.1
 [5.3.0]: https://github.com/silinternational/idp-pw-api/compare/5.2.2...5.3.0
 [5.2.2]: https://github.com/silinternational/idp-pw-api/compare/5.2.1...5.2.2
 [5.2.1]: https://github.com/silinternational/idp-pw-api/compare/5.2.0...5.2.1

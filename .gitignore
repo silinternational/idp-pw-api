@@ -21,3 +21,5 @@ phpinfo.php
 # generated files
 application/tests/_support/_generated/
 api.html
+
+dockercfg
