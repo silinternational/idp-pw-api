@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- No caching of log messages. Helps to ensure messages are sent to log in the event
+  of a crash, e.g. out of memory situation.
 
 ## [5.3.0]
 ### Changed
