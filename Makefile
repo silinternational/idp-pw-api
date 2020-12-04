@@ -22,7 +22,7 @@ composer:
 	docker-compose run --rm cli composer install
 
 composerupdate:
-	docker-compose run --rm cli composer update
+	docker-compose run --rm cli bash -c "composer update && composer show -D > versions.json"
 
 email:
 	docker-compose up -d email
