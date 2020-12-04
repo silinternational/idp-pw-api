@@ -3,7 +3,7 @@ set -x
 
 # Install composer dev dependencies
 cd /data
-runny composer install --prefer-dist --no-interaction --optimize-autoloader
+runny composer install --prefer-dist --no-interaction --optimize-autoloader --no-progress
 
 mkdir -p /data/runtime/mail
 

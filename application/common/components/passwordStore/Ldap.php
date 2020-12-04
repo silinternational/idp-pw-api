@@ -2,6 +2,7 @@
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
+use Adldap\Auth\BindException;
 use Adldap\Schemas\OpenLDAP;
 use yii\base\Component;
 
@@ -78,6 +79,7 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * Connect and bind to ldap server
+     * @throws \Exception
      */
     public function connect()
     {
@@ -101,7 +103,11 @@ class Ldap extends Component implements PasswordStoreInterface
             'schema' => OpenLDAP::class,
         ]);
 
-        $this->ldapProvider = $this->ldapClient->connect();
+        try {
+            $this->ldapProvider = $this->ldapClient->connect();
+        } catch (BindException $e) {
+            throw new \Exception($e->getDetailedError());
+        }
     }
 
     /**
@@ -239,7 +245,7 @@ class Ldap extends Component implements PasswordStoreInterface
         }
         return $encodedPassword;
     }
-    
+
     /**
      * @param \Adldap\Models\Entry $user
      * @param string $password
