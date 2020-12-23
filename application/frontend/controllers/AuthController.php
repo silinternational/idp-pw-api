@@ -46,8 +46,9 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
+        $afterLogin = $this->getAfterLoginUrl($this->getReturnTo());
+
         if ( ! \Yii::$app->user->isGuest) {
-            $afterLogin = $this->getAfterLoginUrl($this->getReturnTo());
             return $this->redirect($afterLogin);
         }
 
@@ -63,7 +64,12 @@ class AuthController extends BaseRestController
             try {
                 $clientId = Utils::getClientIdOrFail();
             } catch (\Exception $e) {
-                throw new BadRequestHttpException(\Yii::t('app', 'Auth.MissingClientID'), 1545316879);
+                \Yii::warning(\Yii::t('app', 'Auth.MissingClientID'));
+
+                // This condition happens if a user sits on the IDP login prompt long
+                // enough for the session to expire. As a workaround, redirect back to
+                // a profile UI page, which should restart the login process
+                return $this->redirect($afterLogin);
             }
 
             /*
