@@ -10,7 +10,7 @@ class AuthCest extends BaseCest
         $I->wantTo('check response when making a GET request for logging in with no client_id');
         $I->stopFollowingRedirects();
         $I->sendGET('/auth/login');
-        $I->seeResponseCodeIs(400);
+        $I->seeResponseCodeIs(302);
     }
 
     public function test2(ApiTester $I)
