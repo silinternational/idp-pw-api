@@ -46,10 +46,8 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
-        $afterLogin = $this->getAfterLoginUrl($this->getReturnTo());
-
         if ( ! \Yii::$app->user->isGuest) {
-            return $this->redirect($afterLogin);
+            return $this->redirect($this->getAfterLoginUrl($this->getReturnTo()));
         }
 
         /*
@@ -68,8 +66,8 @@ class AuthController extends BaseRestController
 
                 // This condition happens if a user sits on the IDP login prompt long
                 // enough for the session to expire. As a workaround, redirect back to
-                // a profile UI page, which should restart the login process
-                return $this->redirect($afterLogin);
+                // the profile UI home page, which should restart the login process.
+                return $this->redirect(\Yii::$app->params['uiUrl']);
             }
 
             /*
