@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [5.3.3]
+## [5.3.4]
 ### Fixed
 - Improved handling of expired session on login
+
+## [5.3.3]
+### Fixed
+- Updated dependencies
+- Rotated credentials for CI/CD
 
 ## [5.3.2]
 ### Fixed
@@ -133,7 +138,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.3.3...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.3.4...HEAD
+[5.3.4]: https://github.com/silinternational/idp-pw-api/compare/5.3.3..5.3.4
 [5.3.3]: https://github.com/silinternational/idp-pw-api/compare/5.3.2..5.3.3
 [5.3.2]: https://github.com/silinternational/idp-pw-api/compare/5.3.1..5.3.2
 [5.3.1]: https://github.com/silinternational/idp-pw-api/compare/5.3.0..5.3.1
