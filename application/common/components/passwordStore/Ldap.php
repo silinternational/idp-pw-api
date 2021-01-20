@@ -130,7 +130,7 @@ class Ldap extends Component implements PasswordStoreInterface
             'use_ssl' => $this->useSsl,
             'use_tls' => $this->useTls,
             'schema' => OpenLDAP::class,
-            'timeout' => 3,
+            'timeout' => 3, // set connection timeout to 3 seconds, default is 5 seconds
         ]);
 
         try {
