@@ -100,7 +100,7 @@ class Ldap extends Component implements PasswordStoreInterface
         foreach ($this->host as $host) {
             $client = $this->connectHost($host);
             if ($client !== null) {
-                $this->ldapClient = new Adldap();
+                $this->ldapClient = $client;
                 return;
             }
         }
