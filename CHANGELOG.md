@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.4.0]
+### Added
+- Allow LDAP host name to be a list of hostname strings as well as a single string for backward compatibility
+
 ## [5.3.4]
 ### Fixed
 - Improved handling of expired session on login
@@ -138,7 +142,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.3.4...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.4.0..HEAD
+[5.4.0]: https://github.com/silinternational/idp-pw-api/compare/5.3.4..5.4.0
 [5.3.4]: https://github.com/silinternational/idp-pw-api/compare/5.3.3..5.3.4
 [5.3.3]: https://github.com/silinternational/idp-pw-api/compare/5.3.2..5.3.3
 [5.3.2]: https://github.com/silinternational/idp-pw-api/compare/5.3.1..5.3.2
