@@ -41,7 +41,7 @@ return [
     'Mfa.VerifyFailure' => 'MFA vérifier l\'échec',
     'Multiple.SetPartialSuccess' => 'Le mot de passe a été bien défini sur {successes}, mais pas sur {errors}. Contactez {supportName} à {supportEmail} pour obtenir de l\'aide.',
     'Multiple.SetFailed' => 'Impossible de définir le mot de passe sur {errors}. Contactez {supportName} à {supportEmail} pour obtenir de l\'aide.',
-    'Password.Breached' => 'Le mot de passe que vous avez entré a déjà été découvert dans une violation de données d\'un site Web différent. Votre compte a peut-être été compromis ou non. Veuillez utiliser un mot de passe différent ici, puis visitez <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">cette page d’aide</a> pour en savoir plus.',
+    'Password.Breached' => 'The password you entered was previously discovered in a data breach of a different website. It may or may not have been your own account that was compromised. Please use a different password here and then visit <a href="https://sites.google.com/sil.org/identityaccounts/logging-in/password-recommendations" target="_blank">this help page</a> to learn more.',
     'Password.DisallowedContent' => 'Votre mot de passe ne peut contenir aucun de ceux-ci: {labelList} (code 180)',
     'Password.MissingPassword' => 'Mot de passe requis',
     'Password.PasswordReuse' => 'Impossible de mettre à jour le mot de passe. Si ce mot de passe a déjà été utilisé, veuillez utiliser quelque chose de différent.',
