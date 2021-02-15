@@ -41,7 +41,7 @@ return [
     'Mfa.VerifyFailure' => 'MFA verificar fallo',
     'Multiple.SetPartialSuccess' => 'Estableció correctamente la contraseña en {successes}, pero no pudo establecer la contraseña en {errors}. Póngase en contacto con {supportName} en {supportEmail} para obtener ayuda.',
     'Multiple.SetFailed' => 'Error al establecer la contraseña en {errors}. Póngase en contacto con {supportName} en {supportEmail} para obtener ayuda.',
-    'Password.Breached' => 'La contraseña que ingresó fue descubierta previamente en una violación de datos de un sitio web diferente. Puede o no haber sido su propia cuenta la que se vio comprometida. Utilice una contraseña diferente aquí y luego visite <a href="https://idphelp.sil.org/logging-in/password/password-recommendations#h.p_LOkQcA18P0qs" target="_blank">esta página de ayuda</a> para obtener más información.',
+    'Password.Breached' => 'The password you entered was previously discovered in a data breach of a different website. It may or may not have been your own account that was compromised. Please use a different password here and then visit <a href="https://sites.google.com/sil.org/identityaccounts/logging-in/password-recommendations" target="_blank">this help page</a> to learn more.',
     'Password.DisallowedContent' => 'Su contraseña no puede contener ninguno de estos: {labelList} (código 180)',
     'Password.MissingPassword' => 'Se requiere contraseña',
     'Password.PasswordReuse' => 'No se puede actualizar la contraseña. Si esta contraseña ha sido usada antes, use algo diferente.',
