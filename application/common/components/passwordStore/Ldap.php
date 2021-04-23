@@ -2,6 +2,7 @@
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
+use Adldap\Auth\BindException;
 use Adldap\Schemas\OpenLDAP;
 use yii\base\Component;
 
@@ -10,7 +11,7 @@ class Ldap extends Component implements PasswordStoreInterface
     /** @var string */
     public $baseDn;
 
-    /** @var string */
+    /** @var string|string[] */
     public $host;
 
     /** @var integer default=636 */
@@ -78,30 +79,75 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * Connect and bind to ldap server
+     * @throws \Exception
      */
     public function connect()
     {
+        // Connection has already been established
+        if ($this->ldapClient !== null) {
+            return;
+        }
+
         if ($this->useSsl && $this->useTls) {
             // Prefer TLS over SSL
             $this->useSsl = false;
         }
 
-        /*
-         * Initialize provider with configuration
-         */
-        $this->ldapClient = new Adldap();
-        $this->ldapClient->addProvider([
+        // ensure the `host` property is an array
+        $this->host = is_array($this->host) ? $this->host : [$this->host];
+
+        // iterate over the list of hosts to find the first one that is good
+        foreach ($this->host as $host) {
+            $client = $this->connectHost($host);
+            if ($client !== null) {
+                $this->ldapClient = $client;
+                return;
+            }
+        }
+
+        // Wasn't able to connect to any of the provided LDAP hosts
+        if ($this->ldapClient === null) {
+            throw new \Exception(
+                "failed to connect to " . $this->displayName . " host",
+                1611157472
+            );
+        }
+    }
+
+    /**
+     * @param string $host
+     * @return Adldap|null
+     */
+    private function connectHost(string $host)
+    {
+        $client = new Adldap();
+        $client->addProvider([
             'base_dn' => $this->baseDn,
-            'hosts' => [$this->host],
+            'hosts' => [$host],
             'port' => $this->port,
             'username' => $this->adminUsername,
             'password' => $this->adminPassword,
             'use_ssl' => $this->useSsl,
             'use_tls' => $this->useTls,
             'schema' => OpenLDAP::class,
+            'timeout' => 3, // set connection timeout to 3 seconds, default is 5 seconds
         ]);
 
-        $this->ldapProvider = $this->ldapClient->connect();
+        try {
+            $this->ldapProvider = $client->connect();
+        } catch (BindException $e) {
+            $err = $e->getDetailedError();
+            \Yii::warning([
+                'action' => 'ldap connect host',
+                'status' => 'warning',
+                'host' => $host,
+                'ldap_code' => $err->getErrorCode(),
+                'diagnostic' => $err->getDiagnosticMessage(),
+                'message' => $err->getErrorMessage(),
+            ]);
+            return null;
+        }
+        return $client;
     }
 
     /**
@@ -239,7 +285,7 @@ class Ldap extends Component implements PasswordStoreInterface
         }
         return $encodedPassword;
     }
-    
+
     /**
      * @param \Adldap\Models\Entry $user
      * @param string $password

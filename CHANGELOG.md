@@ -6,6 +6,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.4.0]
+### Added
+- Allow LDAP host name to be a list of hostname strings as well as a single string for backward compatibility
+
+## [5.3.4]
+### Fixed
+- Improved handling of expired session on login
+
+## [5.3.3]
+### Fixed
+- Updated dependencies
+- Rotated credentials for CI/CD
+
+## [5.3.2]
+### Fixed
+- Changed Docker credentials
+
+## [5.3.1]
+### Changed
+- No caching of log messages. Helps to ensure messages are sent to log in the event
+  of a crash, e.g. out of memory situation.
+
+## [5.3.0]
+### Changed
+- Changed logging from syslog to stdout/stderr
+
+## [5.2.2]
+### Changed
+- SAML2 security update
+
+## [5.2.1]
+### Changed
+- Updated dependencies
+- Removed obsolete code related to recovery methods
+
 ## [5.2.0]
 ### Changed
 - Attempt to set password in every passwordStore component even if one fails.
@@ -107,8 +142,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.2.0...HEAD
-[5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...5.2.0
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.4.0..HEAD
+[5.4.0]: https://github.com/silinternational/idp-pw-api/compare/5.3.4..5.4.0
+[5.3.4]: https://github.com/silinternational/idp-pw-api/compare/5.3.3..5.3.4
+[5.3.3]: https://github.com/silinternational/idp-pw-api/compare/5.3.2..5.3.3
+[5.3.2]: https://github.com/silinternational/idp-pw-api/compare/5.3.1..5.3.2
+[5.3.1]: https://github.com/silinternational/idp-pw-api/compare/5.3.0..5.3.1
+[5.3.0]: https://github.com/silinternational/idp-pw-api/compare/5.2.2...5.3.0
+[5.2.2]: https://github.com/silinternational/idp-pw-api/compare/5.2.1...5.2.2
+[5.2.1]: https://github.com/silinternational/idp-pw-api/compare/5.2.0...5.2.1
+[5.2.0]: https://github.com/silinternational/idp-pw-api/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/silinternational/idp-pw-api/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/silinternational/idp-pw-api/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/silinternational/idp-pw-api/compare/4.0.0...4.1.0
