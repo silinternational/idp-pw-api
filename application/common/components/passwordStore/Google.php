@@ -170,7 +170,7 @@ class Google extends Component implements PasswordStoreInterface
      * Employee ID.
      *
      * @param string $employeeId The Employee ID of the desired user.
-     * @return Google_Service_Directory_User The user record from Google.
+     * @return Google_Service_Directory_User|null The user record from Google.
      * @throws UserNotFoundException if email not defined or user not found in Google
      */
     protected function getUser(string $employeeId): ?Google_Service_Directory_User
@@ -182,7 +182,7 @@ class Google extends Component implements PasswordStoreInterface
             return $this->getUserByEmployeeId($employeeId);
         }
 
-        if (! self::verifyEmployeeId($user, $employeeId)) {
+        if (! self::hasCorrectEmployeeId($user, $employeeId)) {
             return null;
         }
 
@@ -196,7 +196,7 @@ class Google extends Component implements PasswordStoreInterface
      * @param string $employeeId The employee ID.
      * @return bool
      */
-    protected static function verifyEmployeeId(Google_Service_Directory_User $user, string $employeeId): bool
+    protected static function hasCorrectEmployeeId(Google_Service_Directory_User $user, string $employeeId): bool
     {
         foreach($user['externalIds'] as $externalId) {
             if ($externalId['value'] === $employeeId && $externalId['type'] === 'organization') {
