@@ -57,15 +57,7 @@ class Google extends Component implements PasswordStoreInterface
     public $displayName = 'Google';
 
     /**
-     * @var bool $findByExternalId If `true`, when retrieving a user by employee_id,
-     * a call will be made to `Users: list` to retrieve the user by the Google user
-     * property `externalId`.
-     */
-    public $findByExternalId = false;
-
-    /**
      * @var string $searchDomain Domain name in which to search for a matching user
-     * when `findByExternalId` is `true`.
      */
     public $searchDomain = '';
 
@@ -179,16 +171,41 @@ class Google extends Component implements PasswordStoreInterface
      *
      * @param string $employeeId The Employee ID of the desired user.
      * @return Google_Service_Directory_User The user record from Google.
+     * @throws UserNotFoundException if email not defined or user not found in Google
      */
-    protected function getUser($employeeId)
+    protected function getUser(string $employeeId): ?Google_Service_Directory_User
     {
-        if ($this->findByExternalId === true) {
+        $email = $this->getEmailFromLocalStore($employeeId);
+        $user = $this->getUserByEmail($email);
+
+        if ($user === null) {
             return $this->getUserByEmployeeId($employeeId);
-        } else {
-            $email = $this->getEmailFromLocalStore($employeeId);
-            return $this->getUserByEmail($email);
         }
+
+        if (! self::verifyEmployeeId($user, $employeeId)) {
+            return null;
+        }
+
+        return $user;
     }
+
+    /**
+     * Verify that the user's employee ID matches what we think it should
+     *
+     * @param string $email The email address.
+     * @param string $employeeId The employee ID.
+     * @return bool
+     */
+    protected static function verifyEmployeeId($user, $employeeId)
+    {
+        foreach($user['externalIds'] as $externalId) {
+            if ($externalId['value'] === $employeeId && $externalId['type'] === 'organization') {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Get the user record from Google that has the given email address.
