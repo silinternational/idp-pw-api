@@ -192,11 +192,11 @@ class Google extends Component implements PasswordStoreInterface
     /**
      * Verify that the user's employee ID matches what we think it should
      *
-     * @param string $email The email address.
+     * @param Google_Service_Directory_User $user The Google user to verify
      * @param string $employeeId The employee ID.
      * @return bool
      */
-    protected static function verifyEmployeeId($user, $employeeId)
+    protected static function verifyEmployeeId(Google_Service_Directory_User $user, string $employeeId): bool
     {
         foreach($user['externalIds'] as $externalId) {
             if ($externalId['value'] === $employeeId && $externalId['type'] === 'organization') {
@@ -205,7 +205,6 @@ class Google extends Component implements PasswordStoreInterface
         }
         return false;
     }
-
 
     /**
      * Get the user record from Google that has the given email address.
