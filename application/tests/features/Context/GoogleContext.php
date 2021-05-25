@@ -82,14 +82,6 @@ class GoogleContext implements Context
         $this->setUsersPassword();
     }
 
-    /**
-     * @When I try to set a specific user's password by Google lookup
-     */
-    public function iTryToSetASpecificUsersPasswordByGoogleLookup()
-    {
-        $this->setUsersPassword();
-    }
-
     protected function setUsersPassword(): void
     {
         try {
