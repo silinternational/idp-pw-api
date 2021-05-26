@@ -12,7 +12,9 @@ mkdir -p /data/runtime/mail
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
 
 # Install and enable xdebug for code coverage
-apt-get install -y php-xdebug
+apt-get update && apt-get install -y build-essential
+pecl install xdebug
+docker-php-ext-enable xdebug
 
 # Run codeception tests
 whenavail broker 80 100 echo "broker ready, running unit tests..."
