@@ -2,12 +2,6 @@
   "name": "silinternational/idp-pw-api",
   "description": "Backend API for Identity Provider Password Management",
   "minimum-stability": "stable",
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/silinternational/idp-id-broker-php-client"
-    }
-  ],
   "require": {
     "php": ">=7.2",
     "ext-json": "*",

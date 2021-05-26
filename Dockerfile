@@ -3,7 +3,6 @@ LABEL maintainer="Phillip Shipley <phillip_shipley@sil.org>"
 
 RUN apt-get update -y && \
     apt-get install -y \
-        git \
 # Needed to install s3cmd
         python-pip \
 # Needed to build php extensions

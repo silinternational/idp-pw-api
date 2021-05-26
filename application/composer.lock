@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8b5c1011fdf24bc89a6465eb53f42a6",
+    "content-hash": "8221fc76f407b3787e4a593dc2767db8",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1848,12 +1848,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "9d9641b43426b6614603313428170f3b2e7d61fa"
+                "reference": "80f32ef3cff7c3b5b650d8aa823437b43d5c5056"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9d9641b43426b6614603313428170f3b2e7d61fa",
-                "reference": "9d9641b43426b6614603313428170f3b2e7d61fa",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/80f32ef3cff7c3b5b650d8aa823437b43d5c5056",
+                "reference": "80f32ef3cff7c3b5b650d8aa823437b43d5c5056",
                 "shasum": ""
             },
             "conflict": {
@@ -1957,6 +1957,7 @@
                 "jsmitty12/phpwhois": "<5.1",
                 "kazist/phpwhois": "<=4.2.6",
                 "kitodo/presentation": "<3.1.2",
+                "klaviyo/magento2-extension": ">=1,<3",
                 "kreait/firebase-php": ">=3.2,<3.8.1",
                 "la-haute-societe/tcpdf": "<6.2.22",
                 "laravel/framework": "<6.20.26|>=7,<8.40",
@@ -2195,7 +2196,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-24T17:46:12+00:00"
+            "time": "2021-05-26T16:24:26+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -2294,8 +2295,14 @@
             "version": "3.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/silinternational/idp-id-broker-php-client",
+                "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
                 "reference": "60b58316687e821fec02c7991f288226cbbc2432"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/60b58316687e821fec02c7991f288226cbbc2432",
+                "reference": "60b58316687e821fec02c7991f288226cbbc2432",
+                "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle-services": "^1.1",
