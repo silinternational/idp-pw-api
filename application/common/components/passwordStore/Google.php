@@ -170,20 +170,20 @@ class Google extends Component implements PasswordStoreInterface
      * Employee ID.
      *
      * @param string $employeeId The Employee ID of the desired user.
-     * @return Google_Service_Directory_User|null The user record from Google.
+     * @return Google_Service_Directory_User The user record from Google.
      * @throws UserNotFoundException if email not defined or user not found in Google
      */
-    protected function getUser(string $employeeId): ?Google_Service_Directory_User
+    protected function getUser(string $employeeId): Google_Service_Directory_User
     {
-        $email = $this->getEmailFromLocalStore($employeeId);
-        $user = $this->getUserByEmail($email);
+        try {
+            $user = $this->getUserByEmployeeId($employeeId);
+        } catch (UserNotFoundException $e) {
+            $email = $this->getEmailFromLocalStore($employeeId);
 
-        if ($user === null) {
-            return $this->getUserByEmployeeId($employeeId);
-        }
-
-        if (! self::hasCorrectEmployeeId($user, $employeeId)) {
-            return null;
+            $user = $this->getUserByEmail($email);
+            if (! self::hasCorrectEmployeeId($user, $employeeId)) {
+                throw new UserNotFoundException();
+            }
         }
 
         return $user;
