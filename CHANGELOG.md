@@ -6,9 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.5.1]
+### Changed
+- Reverse the order of searching for a Google user, now use ID first
+- Downgraded PHP back to 7.2
+
 ## [5.5.0]
 ### Added
 - In Google adapter, search by email as well as by external ID
+### Changed
+- Upgraded PHP to 7.4
 
 ## [5.4.0]
 ### Added
@@ -146,7 +153,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.5.0...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.5.1...HEAD
+[5.5.1]: https://github.com/silinternational/idp-pw-api/compare/5.5.0...5.5.1
 [5.5.0]: https://github.com/silinternational/idp-pw-api/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/silinternational/idp-pw-api/compare/5.3.4...5.4.0
 [5.3.4]: https://github.com/silinternational/idp-pw-api/compare/5.3.3...5.3.4
