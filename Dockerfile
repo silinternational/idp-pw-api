@@ -1,4 +1,4 @@
-FROM silintl/php7:7.2
+FROM silintl/php7:7.4
 MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
 
 ENV REFRESHED_AT 2020-04-07
