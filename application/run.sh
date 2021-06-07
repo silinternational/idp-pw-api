@@ -13,7 +13,7 @@ runny /data/yii migrate --interactive=0
 
 if [[ $APP_ENV == "dev" ]]; then
     export XDEBUG_CONFIG="remote_enable=1 remote_host="$REMOTE_DEBUG_IP
-    apt-get install php-xdebug
+    apt-get update && apt-get install php-xdebug
 fi
 
 apache2ctl -k start -D FOREGROUND
