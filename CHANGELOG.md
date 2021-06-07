@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Upgraded PHP to 7.4 again (but stayed with Ubuntu base O/S)
+- Upgraded Ubuntu to 21.04
+- Stopped including syslog and Logentries-related files
+### Fixed
+- Upgraded Composer to 2
+- Switched from fxp's composer-asset-plugin to asset-packagist
 
 ## [5.5.1]
 ### Changed
