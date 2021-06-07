@@ -5,7 +5,8 @@ ENV REFRESHED_AT 2020-04-07
 
 RUN apt-get update -y && \
     apt-get install -y php-memcache && \
-    apt-get clean
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /data
 
