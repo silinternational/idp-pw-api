@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Stop including syslog and Logentries-related files
+- Stop installing/using runny (since we don't log to syslog anymore)
+### Fixed
+- Upgrade PHP to 7.4 again (but stay with Ubuntu base O/S)
+- Upgrade Ubuntu to 20.04
+- Upgrade Composer to 2
+- Switch from fxp's composer-asset-plugin to asset-packagist
 
 ## [5.5.1]
 ### Changed

@@ -1,25 +1,129 @@
-adldap2/adldap2                           v10.3.2            A PHP LDAP Package for humans.
-behat/behat                               v3.8.1             Scenario-oriented BDD framework for PHP
-codeception/codeception                   2.4.5              BDD-style testing framework
-codeception/specify                       0.4.6              BDD code blocks for PHPUnit and Codeception
-codeception/verify                        0.4.0              BDD assertion library for PHPUnit
-codemix/yii2-streamlog                    1.3.1              A Yii 2 log target for streams in URL format
-fillup/fake-bower-assets                  2.0.9              Use Composer "replace" to fake out installing bower-asset dependencies ...
-google/apiclient                          v2.9.1             Client library for Google APIs
-google/recaptcha                          1.2.4              Client library for reCAPTCHA, a free service that protects websites fro...
-icawebdesign/hibp-php                     3.1.0              PHP library for accessing the Have I Been Pwned API.
-phpunit/phpunit                           6.5.14             The PHP Unit Testing framework.
-roave/security-advisories                 dev-master 9d9641b Prevents installation of composer packages with known security vulnerab...
-silinternational/email-service-php-client 2.2.0              PHP client to interact with our Email Service API: https://github.com/s...
-silinternational/idp-id-broker-php-client 3.1.0              PHP client to interact with our IdP ID Broker's API: https://github.com...
-silinternational/php-env                  2.1.1              Simple PHP library for getting (or requiring) environment variables, de...
-silinternational/yii2-codeception         dev-master 3fc6968 Patches to implement nice features of yii2-codeception since it was aba...
-silinternational/yii2-email-log-target    1.0.1              Yii2 log target for sending data to email without trace information
-silinternational/yii2-json-log-targets    2.0.0              A collection of Yii2 log targets that format the log message as a JSON ...
-silinternational/zxcvbn-api-client-php    2.0                PHP client library for interacting with Zxcvbn API. See https://github....
-simplesamlphp/saml2                       v3.4.5             SAML2 PHP library from SimpleSAMLphp
-yiisoft/yii2                              2.0.42.1           Yii PHP Framework Version 2
-yiisoft/yii2-debug                        2.1.17             The debugger extension for the Yii framework
-yiisoft/yii2-faker                        2.0.5              Fixture generator. The Faker integration for the Yii framework.
-yiisoft/yii2-gii                          2.2.2              The Gii extension for the Yii framework
-yiisoft/yii2-swiftmailer                  2.1.2              The SwiftMailer integration for the Yii framework
+{
+    "installed": [
+        {
+            "name": "adldap2/adldap2",
+            "version": "v10.3.2",
+            "description": "A PHP LDAP Package for humans."
+        },
+        {
+            "name": "behat/behat",
+            "version": "v3.8.1",
+            "description": "Scenario-oriented BDD framework for PHP"
+        },
+        {
+            "name": "codeception/codeception",
+            "version": "2.4.5",
+            "description": "BDD-style testing framework"
+        },
+        {
+            "name": "codeception/specify",
+            "version": "0.4.6",
+            "description": "BDD code blocks for PHPUnit and Codeception"
+        },
+        {
+            "name": "codeception/verify",
+            "version": "0.4.0",
+            "description": "BDD assertion library for PHPUnit"
+        },
+        {
+            "name": "codemix/yii2-streamlog",
+            "version": "1.3.1",
+            "description": "A Yii 2 log target for streams in URL format"
+        },
+        {
+            "name": "fillup/fake-bower-assets",
+            "version": "2.0.9",
+            "description": "Use Composer \"replace\" to fake out installing bower-asset dependencies that aren't really needed"
+        },
+        {
+            "name": "google/apiclient",
+            "version": "v2.9.1",
+            "description": "Client library for Google APIs"
+        },
+        {
+            "name": "google/recaptcha",
+            "version": "1.2.4",
+            "description": "Client library for reCAPTCHA, a free service that protects websites from spam and abuse."
+        },
+        {
+            "name": "icawebdesign/hibp-php",
+            "version": "3.1.0",
+            "description": "PHP library for accessing the Have I Been Pwned API."
+        },
+        {
+            "name": "phpunit/phpunit",
+            "version": "6.5.14",
+            "description": "The PHP Unit Testing framework."
+        },
+        {
+            "name": "roave/security-advisories",
+            "version": "dev-master 14f52bf",
+            "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it"
+        },
+        {
+            "name": "silinternational/email-service-php-client",
+            "version": "2.2.0",
+            "description": "PHP client to interact with our Email Service API: https://github.com/silinternational/email-service"
+        },
+        {
+            "name": "silinternational/idp-id-broker-php-client",
+            "version": "3.1.0",
+            "description": "PHP client to interact with our IdP ID Broker's API: https://github.com/silinternational/idp-id-broker"
+        },
+        {
+            "name": "silinternational/php-env",
+            "version": "2.1.1",
+            "description": "Simple PHP library for getting (or requiring) environment variables, designed to handle true, false, and null more intelligently. If desired, an environment variable's value can be split into an array automatically."
+        },
+        {
+            "name": "silinternational/yii2-codeception",
+            "version": "dev-master 3fc6968",
+            "description": "Patches to implement nice features of yii2-codeception since it was abandoned"
+        },
+        {
+            "name": "silinternational/yii2-email-log-target",
+            "version": "1.0.1",
+            "description": "Yii2 log target for sending data to email without trace information"
+        },
+        {
+            "name": "silinternational/yii2-json-log-targets",
+            "version": "2.0.0",
+            "description": "A collection of Yii2 log targets that format the log message as a JSON string."
+        },
+        {
+            "name": "silinternational/zxcvbn-api-client-php",
+            "version": "2.0",
+            "description": "PHP client library for interacting with Zxcvbn API. See https://github.com/wcjr/zxcvbn-api"
+        },
+        {
+            "name": "simplesamlphp/saml2",
+            "version": "v3.4.5",
+            "description": "SAML2 PHP library from SimpleSAMLphp"
+        },
+        {
+            "name": "yiisoft/yii2",
+            "version": "2.0.42.1",
+            "description": "Yii PHP Framework Version 2"
+        },
+        {
+            "name": "yiisoft/yii2-debug",
+            "version": "2.1.17",
+            "description": "The debugger extension for the Yii framework"
+        },
+        {
+            "name": "yiisoft/yii2-faker",
+            "version": "2.0.5",
+            "description": "Fixture generator. The Faker integration for the Yii framework."
+        },
+        {
+            "name": "yiisoft/yii2-gii",
+            "version": "2.2.2",
+            "description": "The Gii extension for the Yii framework"
+        },
+        {
+            "name": "yiisoft/yii2-swiftmailer",
+            "version": "2.1.2",
+            "description": "The SwiftMailer integration for the Yii framework"
+        }
+    ]
+}

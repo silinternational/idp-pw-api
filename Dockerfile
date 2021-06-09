@@ -1,11 +1,12 @@
-FROM silintl/php7:7.2
+FROM silintl/php7:7.4
 MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
 
-ENV REFRESHED_AT 2020-04-07
+ENV REFRESHED_AT 2020-06-09
 
 RUN apt-get update -y && \
     apt-get install -y php-memcache && \
-    apt-get clean
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /data
 
