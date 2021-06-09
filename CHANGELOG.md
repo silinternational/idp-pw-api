@@ -6,12 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
-- Upgraded PHP to 7.4 again (but stayed with Ubuntu base O/S)
-- Upgraded Ubuntu to 21.04
-- Stopped including syslog and Logentries-related files
+- Stop including syslog and Logentries-related files
+- Stop installing/using runny (since we don't log to syslog anymore)
 ### Fixed
-- Upgraded Composer to 2
-- Switched from fxp's composer-asset-plugin to asset-packagist
+- Upgrade PHP to 7.4 again (but stay with Ubuntu base O/S)
+- Upgrade Ubuntu to 20.04
+- Upgrade Composer to 2
+- Switch from fxp's composer-asset-plugin to asset-packagist
 
 ## [5.5.1]
 ### Changed
