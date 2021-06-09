@@ -9,7 +9,7 @@ term_handler() {
 trap 'kill ${!}; term_handler' SIGTERM
 
 # Run database migrations
-runny /data/yii migrate --interactive=0
+/data/yii migrate --interactive=0
 
 if [[ $APP_ENV == "dev" ]]; then
     export XDEBUG_CONFIG="remote_enable=1 remote_host="$REMOTE_DEBUG_IP
