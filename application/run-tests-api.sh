@@ -3,7 +3,7 @@ set -x
 
 # Install composer dev dependencies
 cd /data
-runny composer install --prefer-dist --no-interaction --optimize-autoloader --no-progress
+composer install --prefer-dist --no-interaction --optimize-autoloader --no-progress
 
 mkdir -p /data/runtime/mail
 
@@ -11,7 +11,7 @@ mkdir -p /data/runtime/mail
 whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
 
 # Start apache
-runny apache2ctl start
+apache2ctl start
 
 # Run codeception tests
 whenavail broker 80 100 echo "broker ready"
