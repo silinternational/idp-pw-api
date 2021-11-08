@@ -6,7 +6,7 @@ use yii\db\Migration;
  * Handles lengthening employee_id on table `user`.
  */
 
-class m191000_142702_lengthen_employee_id_on_user_table extends Migration
+class m211108_111300_lengthen_employee_id_on_user_table extends Migration
 {
     /**
      * {@inheritdoc}
