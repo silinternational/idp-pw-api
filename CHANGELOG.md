@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.5.3]
+### Added
+- Migration to increase length of user.employee_id to 255 
+
 ## [5.5.2]
 ### Fixed
 - Upgrade PHP to 7.4 again (but stay with Ubuntu base O/S)
