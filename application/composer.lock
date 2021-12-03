@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7508e143c528ecdf56804551a4afdd1",
+    "content-hash": "0a2af7c57213548016850cc16ff30bfb",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1137,6 +1137,77 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2021-06-01T14:53:38+00:00"
+        },
+        {
+            "name": "mlocati/ip-lib",
+            "version": "1.17.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mlocati/ip-lib.git",
+                "reference": "28763c87f9a3e24ff4df9258ec4e8375d8fa6523"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mlocati/ip-lib/zipball/28763c87f9a3e24ff4df9258ec4e8375d8fa6523",
+                "reference": "28763c87f9a3e24ff4df9258ec4e8375d8fa6523",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "ext-pdo_sqlite": "*",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5 || ^8.5 || ^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "IPLib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michele Locati",
+                    "email": "mlocati@gmail.com",
+                    "homepage": "https://github.com/mlocati",
+                    "role": "Author"
+                }
+            ],
+            "description": "Handle IPv4, IPv6 addresses and ranges",
+            "homepage": "https://github.com/mlocati/ip-lib",
+            "keywords": [
+                "IP",
+                "address",
+                "addresses",
+                "ipv4",
+                "ipv6",
+                "manage",
+                "managing",
+                "matching",
+                "network",
+                "networking",
+                "range",
+                "subnet"
+            ],
+            "support": {
+                "issues": "https://github.com/mlocati/ip-lib/issues",
+                "source": "https://github.com/mlocati/ip-lib/tree/1.17.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/mlocati",
+                    "type": "github"
+                },
+                {
+                    "url": "https://paypal.me/mlocati",
+                    "type": "other"
+                }
+            ],
+            "time": "2021-11-10T15:24:32+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2401,22 +2472,22 @@
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
-            "version": "3.1.0",
+            "version": "dev-feature/webauthn",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "60b58316687e821fec02c7991f288226cbbc2432"
+                "reference": "ae0094739fb86ea75a19e70c0398e3fa4a804607"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/60b58316687e821fec02c7991f288226cbbc2432",
-                "reference": "60b58316687e821fec02c7991f288226cbbc2432",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/ae0094739fb86ea75a19e70c0398e3fa4a804607",
+                "reference": "ae0094739fb86ea75a19e70c0398e3fa4a804607",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle-services": "^1.1",
-                "php": ">=7.0",
-                "rlanvin/php-ip": "^1.0",
+                "mlocati/ip-lib": "^1.14",
+                "php": ">=7.4",
                 "roave/security-advisories": "dev-master"
             },
             "require-dev": {
@@ -2454,9 +2525,9 @@
             ],
             "support": {
                 "issues": "https://github.com/silinternational/idp-id-broker-php-client/issues",
-                "source": "https://github.com/silinternational/idp-id-broker-php-client/tree/master"
+                "source": "https://github.com/silinternational/idp-id-broker-php-client/tree/feature/webauthn"
             },
-            "time": "2019-04-10T13:47:54+00:00"
+            "time": "2021-12-03T17:12:22+00:00"
         },
         {
             "name": "silinternational/php-env",
@@ -7689,13 +7760,14 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "silinternational/idp-id-broker-php-client": 20,
         "roave/security-advisories": 20,
         "silinternational/yii2-codeception": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-iconv": "*",
         "ext-memcache": "*"
