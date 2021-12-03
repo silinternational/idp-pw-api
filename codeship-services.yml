@@ -1,5 +1,5 @@
 db:
-    image: silintl/mariadb:latest
+    image: mariadb:latest
     environment:
         MYSQL_ROOT_PASSWORD: r00tp@ss!
         MYSQL_DATABASE: test

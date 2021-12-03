@@ -2476,12 +2476,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "ae0094739fb86ea75a19e70c0398e3fa4a804607"
+                "reference": "554d8700abdec9e8d7b2803e19f3d87ada33ade4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/ae0094739fb86ea75a19e70c0398e3fa4a804607",
-                "reference": "ae0094739fb86ea75a19e70c0398e3fa4a804607",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/554d8700abdec9e8d7b2803e19f3d87ada33ade4",
+                "reference": "554d8700abdec9e8d7b2803e19f3d87ada33ade4",
                 "shasum": ""
             },
             "require": {
@@ -2527,7 +2527,7 @@
                 "issues": "https://github.com/silinternational/idp-id-broker-php-client/issues",
                 "source": "https://github.com/silinternational/idp-id-broker-php-client/tree/feature/webauthn"
             },
-            "time": "2021-12-03T17:12:22+00:00"
+            "time": "2021-12-03T21:58:07+00:00"
         },
         {
             "name": "silinternational/php-env",
