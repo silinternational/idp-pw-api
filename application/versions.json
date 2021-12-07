@@ -67,7 +67,7 @@
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
-            "version": "dev-feature/webauthn 554d870",
+            "version": "dev-feature/webauthn 30b89c8",
             "description": "PHP client to interact with our IdP ID Broker's API: https://github.com/silinternational/idp-id-broker"
         },
         {
