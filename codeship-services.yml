@@ -26,6 +26,7 @@ api:
         image: silintl/idp-pw-api
         dockerfile: ./Dockerfile
     cached: true
+    default_cache_branch: develop
     depends_on:
         - db
         - memcache1
