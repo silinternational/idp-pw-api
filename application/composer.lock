@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a2af7c57213548016850cc16ff30bfb",
+    "content-hash": "f0488972e121029f5472f8be857ca62b",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -2472,16 +2472,16 @@
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
-            "version": "dev-feature/webauthn",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "30b89c84513817ca108cca31f653cfc36eb1fe91"
+                "reference": "8080ab07a521d34b37bc3f51f4282b1a38c0bfd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/30b89c84513817ca108cca31f653cfc36eb1fe91",
-                "reference": "30b89c84513817ca108cca31f653cfc36eb1fe91",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/8080ab07a521d34b37bc3f51f4282b1a38c0bfd7",
+                "reference": "8080ab07a521d34b37bc3f51f4282b1a38c0bfd7",
                 "shasum": ""
             },
             "require": {
@@ -2525,9 +2525,9 @@
             ],
             "support": {
                 "issues": "https://github.com/silinternational/idp-id-broker-php-client/issues",
-                "source": "https://github.com/silinternational/idp-id-broker-php-client/tree/feature/webauthn"
+                "source": "https://github.com/silinternational/idp-id-broker-php-client/tree/4.0.0"
             },
-            "time": "2021-12-05T02:05:07+00:00"
+            "time": "2021-12-14T21:18:39+00:00"
         },
         {
             "name": "silinternational/php-env",
@@ -7760,7 +7760,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silinternational/idp-id-broker-php-client": 20,
         "roave/security-advisories": 20,
         "silinternational/yii2-codeception": 20
     },
