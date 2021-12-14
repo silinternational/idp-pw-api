@@ -1,18 +1,9 @@
 FROM silintl/php7:7.4
-MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
-
-ENV REFRESHED_AT 2020-06-09
 
 RUN apt-get update -y && \
     apt-get install -y php-memcache && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /data
-
-# get s3-expand
-RUN curl https://raw.githubusercontent.com/silinternational/s3-expand/1.5/s3-expand -o /usr/local/bin/s3-expand
-RUN chmod a+x /usr/local/bin/s3-expand
 
 WORKDIR /data
 
@@ -38,5 +29,4 @@ RUN sed -i -E 's@ErrorLog .*@ErrorLog /proc/self/fd/2@i' /etc/apache2/apache2.co
 RUN touch /etc/default/locale
 
 EXPOSE 80
-ENTRYPOINT ["/usr/local/bin/s3-expand"]
 CMD ["/data/run.sh"]

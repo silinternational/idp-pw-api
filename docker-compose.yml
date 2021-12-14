@@ -7,7 +7,7 @@ services:
         user: "${DOCKER_UIDGID}"
 
     db:
-        image: silintl/mariadb:latest
+        image: mariadb:latest
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
             MYSQL_DATABASE: pwmgr
@@ -15,7 +15,7 @@ services:
             MYSQL_PASSWORD: idpmgmt
 
     testDb:
-       image: silintl/mariadb:latest
+       image: mariadb:latest
        environment:
            MYSQL_ROOT_PASSWORD: r00tp@ss!
            MYSQL_DATABASE: test
@@ -172,7 +172,7 @@ services:
         image: wcjr/zxcvbn-api:1.1.0
 
     brokerDb:
-        image: silintl/mariadb:latest
+        image: mariadb:latest
         environment:
             MYSQL_ROOT_PASSWORD: r00tp@ss!
             MYSQL_DATABASE: broker

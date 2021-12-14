@@ -82,7 +82,7 @@ types:
     properties:
       id?: integer
       type:
-        enum: [ backupcode, totp, u2f ]
+        enum: [ backupcode, totp, webauthn ]
       label?: string
       created_utc?: string
       last_used_utc?: string
@@ -339,7 +339,7 @@ types:
       409:
         description: >
           An MFA of the requested type already exists. Note that this would only
-          be returned for 'totp' or 'u2f'. The code types ('backupcode' and
+          be returned for 'totp' or 'webauthn'. The code types ('backupcode' and
           'manager') reuse the existing MFA and create new codes.
         body:
           type: Error
