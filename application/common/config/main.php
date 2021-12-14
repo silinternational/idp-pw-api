@@ -26,6 +26,7 @@ $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
 $uiCorsOrigin = Env::get('UI_CORS_ORIGIN', $uiUrl);
+$rpOrigin = Env::get('WEBAUTHN_RP_ORIGIN', $uiCorsOrigin);
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
 $supportEmail = Env::get('SUPPORT_EMAIL');
@@ -201,6 +202,7 @@ return [
         'helpCenterUrl' => $helpCenterUrl,
         'uiUrl' => $uiUrl,
         'uiCorsOrigin' => $uiCorsOrigin,
+        'rpOrigin' => $rpOrigin,
         'reset' => [
             'lifetimeSeconds' => 3600,  // 1 hour
             'gracePeriod' => '-1 week', // time between expiration and deletion, relative to now (time of execution)

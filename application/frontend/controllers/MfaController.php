@@ -61,9 +61,12 @@ class MfaController extends BaseRestController
      * @return array
      * @throws ServiceException
      */
-    public function actionIndex()
+    public function actionIndex(): array
     {
-        return $this->idBrokerClient->mfaList(\Yii::$app->user->identity->employee_id);
+        return $this->idBrokerClient->mfaList(
+            \Yii::$app->user->identity->employee_id,
+            \Yii::$app->params['rpOrigin']
+        );
     }
 
     /**
@@ -71,7 +74,7 @@ class MfaController extends BaseRestController
      * @throws BadRequestHttpException
      * @throws HttpException
      */
-    public function actionCreate()
+    public function actionCreate(): ?array
     {
         $messages = [
             409 => \Yii::t('app', 'Mfa.AlreadyExists'),
@@ -85,7 +88,12 @@ class MfaController extends BaseRestController
         $label = \Yii::$app->request->getBodyParam('label');
 
         try {
-            $mfa = $this->idBrokerClient->mfaCreate(\Yii::$app->user->identity->employee_id, $type, $label);
+            $mfa = $this->idBrokerClient->mfaCreate(
+                \Yii::$app->user->identity->employee_id,
+                $type,
+                $label,
+                \Yii::$app->params['rpOrigin']
+            );
         } catch (ServiceException $e) {
             \Yii::error([
                 'status' => 'MFA create error',
@@ -148,7 +156,12 @@ class MfaController extends BaseRestController
         }
 
         try {
-            $mfa = $this->idBrokerClient->mfaVerify($mfaId, \Yii::$app->user->identity->employee_id, $value);
+            $mfa = $this->idBrokerClient->mfaVerify(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $value,
+                \Yii::$app->params['rpOrigin']
+            );
         } catch (ServiceException $e) {
             \Yii::warning([
                 'status' => 'MFA verify error',
