@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
-- Don't send email alerts for system/status errors that are likely transient
+- Don't send email alerts for /site/system-status errors that are likely transient
 
 ## [5.5.3]
 ### Added
