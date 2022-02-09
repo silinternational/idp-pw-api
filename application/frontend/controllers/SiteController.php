@@ -4,12 +4,10 @@ namespace frontend\controllers;
 use common\components\Emailer;
 use Exception;
 use frontend\components\BaseRestController;
-use Sil\EmailService\Client\EmailServiceClient;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\HttpException;
 use yii\web\MethodNotAllowedHttpException;
-use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 
 /**
