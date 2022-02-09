@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [6.0.1]
 ### Fixed
 - Don't send email alerts for /site/system-status errors that are likely transient
+
+## [6.0.0]
+### Changed
+- Updated integrations with id-broker to support WebAuthn interactions rather than legacy U2F
 
 ## [5.5.3]
 ### Added
@@ -168,7 +174,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/5.5.3...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/6.0.1...HEAD
+[6.0.1]: https://github.com/silinternational/idp-pw-api/compare/6.0.0...6.0.1
+[6.0.0]: https://github.com/silinternational/idp-pw-api/compare/5.5.3...6.0.0
 [5.5.3]: https://github.com/silinternational/idp-pw-api/compare/5.5.2...5.5.3
 [5.5.2]: https://github.com/silinternational/idp-pw-api/compare/5.5.1...5.5.2
 [5.5.1]: https://github.com/silinternational/idp-pw-api/compare/5.5.0...5.5.1
