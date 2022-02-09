@@ -4,11 +4,10 @@ namespace frontend\controllers;
 use common\components\Emailer;
 use Exception;
 use frontend\components\BaseRestController;
-use Sil\EmailService\Client\EmailServiceClient;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\web\HttpException;
 use yii\web\MethodNotAllowedHttpException;
-use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -16,6 +15,7 @@ use yii\web\UnauthorizedHttpException;
  */
 class SiteController extends BaseRestController
 {
+    const HttpExceptionBadGateway = 502;
 
     public $layout = false;
 
@@ -67,6 +67,9 @@ class SiteController extends BaseRestController
         throw new MethodNotAllowedHttpException();
     }
 
+    /**
+     * @throws HttpException
+     */
     public function actionSystemStatus()
     {
         /**
@@ -75,12 +78,12 @@ class SiteController extends BaseRestController
         try {
             \Yii::$app->db->open();
         } catch (Exception $e) {
-            throw new ServerErrorHttpException(
+            throw new HttpException(self::HttpExceptionBadGateway,
                 'Unable to connect to db, error code ' . $e->getCode(),
                 $e->getCode()
             );
         }
-        
+
         try {
             /**
              * @var $emailer Emailer
@@ -89,7 +92,10 @@ class SiteController extends BaseRestController
             $emailer->getSiteStatus();
         } catch (\Exception $e) {
             \Yii::error($e->getMessage());
-            throw new ServerErrorHttpException('Problem with email service.');
+            throw new HttpException(self::HttpExceptionBadGateway,
+                'Problem with email service.',
+                $e->getCode()
+            );
         }
     }
 }
