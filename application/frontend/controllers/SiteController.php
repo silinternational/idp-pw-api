@@ -92,7 +92,7 @@ class SiteController extends BaseRestController
             $emailer->getSiteStatus();
         } catch (\Exception $e) {
             throw new HttpException(self::HttpExceptionBadGateway,
-                'Problem with email service.',
+                'Problem with email service: ' . $e->getMessage(),
                 $e->getCode()
             );
         }
