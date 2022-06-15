@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use frontend\components\BaseRestController;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\Idp\IdBroker\Client\ServiceException;
+use stdClass;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -153,6 +154,11 @@ class MfaController extends BaseRestController
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
+        }
+
+        if (isset($value['clientExtensionResults']) && empty($value['clientExtensionResults'])) {
+            // Force JSON-encoding to treat this as an empty object, not an empty array.
+            $value['clientExtensionResults'] = new stdClass();
         }
 
         try {
