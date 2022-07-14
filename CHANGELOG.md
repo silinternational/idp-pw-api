@@ -182,7 +182,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of Password Manager Backend.
 
-[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/6.0.2...HEAD
+[Unreleased]: https://github.com/silinternational/idp-pw-api/compare/6.0.3...HEAD
 [6.0.3]: https://github.com/silinternational/idp-pw-api/compare/6.0.2...6.0.3
 [6.0.2]: https://github.com/silinternational/idp-pw-api/compare/6.0.1...6.0.2
 [6.0.1]: https://github.com/silinternational/idp-pw-api/compare/6.0.0...6.0.1
