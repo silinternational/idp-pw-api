@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [6.0.3]
+### Fixed
+- Ensure clientExtensionResults is encoded as an object, even if empty
+
 ## [6.0.2]
 ### Fixed
 - Remove redundant error log entry in /site/system-status
@@ -179,6 +183,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version of Password Manager Backend.
 
 [Unreleased]: https://github.com/silinternational/idp-pw-api/compare/6.0.2...HEAD
+[6.0.3]: https://github.com/silinternational/idp-pw-api/compare/6.0.2...6.0.3
 [6.0.2]: https://github.com/silinternational/idp-pw-api/compare/6.0.1...6.0.2
 [6.0.1]: https://github.com/silinternational/idp-pw-api/compare/6.0.0...6.0.1
 [6.0.0]: https://github.com/silinternational/idp-pw-api/compare/5.5.3...6.0.0
