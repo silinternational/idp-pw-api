@@ -24,7 +24,9 @@ use yii\helpers\Html as yHtml;
     If this was you, please use the link below to reset your password. 
 </p>
 <p>
-    If it's not you but you do know them, you may have been sent this link because they requested it sent to you - their recovery contact. You may provide the link for them to use, but <i>please contact them directly</i> to ensure that you are only providing the link to them and not to someone else. 
+    If it's not you but you do know them, you may have been sent this link because they requested it sent to 
+    you - their recovery contact. You may provide the link for them to use, but <i>please contact them directly</i> 
+    to ensure that you are only providing the link to them and not to someone else. 
 </p>
 <p>
     <?= yHtml::a(yHtml::encode($resetUrl), $resetUrl) ?>
