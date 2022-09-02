@@ -18,17 +18,24 @@ use yii\helpers\Html as yHtml;
 </p>
 <p>
     <?= yHtml::encode($displayName) ?> recently requested a password change for their
-    <?= yHtml::encode($idpDisplayName) ?> Identity account. If this was you, please use the link below
-    to reset your password. If it's not you but you do know them, you may provide the link
-    for them to use, but please contact them directly to ensure that you are only providing the
-    link to them and not to someone else. This link is valid
-    until <?= yHtml::encode($expireTime) ?>.
+    <?= yHtml::encode($idpDisplayName) ?> Identity account. 
+</p>
+<p>
+    If this was you, please use the link below to reset your password. 
+</p>
+<p>
+    If it's not you but you do know them, you may have been sent this link because they requested it sent to you - their recovery contact. You may provide the link for them to use, but <i>please contact them directly</i> to ensure that you are only providing the link to them and not to someone else. 
 </p>
 <p>
     <?= yHtml::a(yHtml::encode($resetUrl), $resetUrl) ?>
 </p>
+<p>This link is valid
+    until <?= yHtml::encode($expireTime) ?>.
+</p>
 <p>
     To maintain security, please don't forward this email to anyone.
+</p>
+<p>
     <?php if (empty($helpCenterUrl)) { ?>
         If you have any questions, please contact <?= yHtml::encode($supportName) ?> at
         <?= yHtml::encode($supportEmail) ?>.
