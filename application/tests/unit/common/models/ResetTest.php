@@ -61,7 +61,7 @@ class ResetTest extends Test
 
         $expireTimestamp = strtotime($reset->calculateExpireTime());
 
-        $this->assertEquals($time + 100, $expireTimestamp, null, 2);
+        $this->assertEqualsWithDelta($time + 100, $expireTimestamp, 2);
     }
 
     public function testCannotCreateSecondResetForUser()
@@ -209,7 +209,7 @@ class ResetTest extends Test
         $expireDate = time() + \Yii::$app->params['reset']['disableDuration'];
         $reset->disable();
         $this->assertTrue($reset->isDisabled());
-        $this->assertEquals($expireDate, strtotime($reset->disable_until), '', 2);
+        $this->assertEqualsWithDelta($expireDate, strtotime($reset->disable_until), 2, '');
     }
 
     public function testSetType()
