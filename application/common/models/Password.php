@@ -6,6 +6,7 @@ use common\helpers\ZxcvbnPasswordValidator;
 use common\components\passwordStore\PasswordReuseException;
 use GuzzleHttp\Exception\GuzzleException;
 use Icawebdesign\Hibp\Password\PwnedPassword;
+use Icawebdesign\Hibp\HibpHttp;
 use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -230,12 +231,11 @@ class Password extends Model
     public function validateNotBeenPwned($attribute)
     {
         $hash = sha1($this->$attribute);
-        $hashPrefix = substr($hash, 0, 5);
 
-        $pwnedPassword = new PwnedPassword();
+        $pwnedPassword = new PwnedPassword(new HibpHttp());
 
         try {
-            $count = $pwnedPassword->range($hashPrefix, $hash);
+            $count = $pwnedPassword->rangeFromHash($hash);
         } catch (GuzzleException $e) {
             \Yii::error('HaveIBeenPwned API error: ' . $e->getMessage());
             return;
