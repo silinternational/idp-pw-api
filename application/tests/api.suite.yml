@@ -1,4 +1,4 @@
-class_name: ApiTester
+actor: ApiTester
 paths:
     output: _output
 modules:
