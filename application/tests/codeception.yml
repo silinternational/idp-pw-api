@@ -4,7 +4,7 @@ include:
   - codeception/frontend
 
 paths:
-  log: codeception/_output
+  output: codeception/_output
 
 settings:
   colors: true
