@@ -54,6 +54,8 @@ services:
             - testDb
             - zxcvbn
             - broker
+            - memcache1
+            - memcache2
         env_file:
             - ./common.env
             - ./test.env

@@ -162,6 +162,6 @@ class MultipleContext extends YiiContext
      */
     public function theExceptionShouldIndicateThatItDidNotTryToSetThePasswordAnywhere()
     {
-        Assert::assertContains('Did not attempt', $this->exceptionThrown->getMessage());
+        Assert::assertStringContainsString('Did not attempt', $this->exceptionThrown->getMessage());
     }
 }

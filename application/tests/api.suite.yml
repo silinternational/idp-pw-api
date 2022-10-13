@@ -1,6 +1,6 @@
-class_name: ApiTester
+actor: ApiTester
 paths:
-    log: _output
+    output: _output
 modules:
     enabled:
         - ApiHelper

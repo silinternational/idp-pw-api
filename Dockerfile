@@ -1,4 +1,4 @@
-FROM silintl/php7:7.4
+FROM silintl/php8:8.1
 
 RUN apt-get update -y && \
     apt-get install -y php-memcache && \
