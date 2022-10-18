@@ -221,7 +221,12 @@ class Utils
     public static function isRecaptchaResponseValid($verificationToken, $ipAddress)
     {
         $recaptcha = new ReCaptcha(\Yii::$app->params['recaptcha']['secretKey'], new ReCaptchaCurlPost());
-        $response = $recaptcha->verify($verificationToken, $ipAddress);
+
+        try {
+            $response = $recaptcha->verify($verificationToken, $ipAddress);
+        } catch (\Exception $e) {
+            throw new \Exception('Error attempting to verify recaptcha token: ' . $e->getMessage(), 1666090198);
+        }
 
         if ($response->isSuccess()) {
             return true;
