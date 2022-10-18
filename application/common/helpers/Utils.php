@@ -1,6 +1,8 @@
 <?php
 namespace common\helpers;
 
+use ReCaptcha\ReCaptcha;
+use ReCaptcha\RequestMethod\CurlPost as ReCaptchaCurlPost;
 use yii\base\Security;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -218,7 +220,7 @@ class Utils
      */
     public static function isRecaptchaResponseValid($verificationToken, $ipAddress)
     {
-        $recaptcha = new \ReCaptcha\ReCaptcha(\Yii::$app->params['recaptcha']['secretKey']);
+        $recaptcha = new ReCaptcha(\Yii::$app->params['recaptcha']['secretKey'], new ReCaptchaCurlPost());
         $response = $recaptcha->verify($verificationToken, $ipAddress);
 
         if ($response->isSuccess()) {
