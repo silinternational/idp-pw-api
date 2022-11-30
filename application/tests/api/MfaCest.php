@@ -97,5 +97,14 @@ class MfaCest extends BaseCest
         $I->seeResponseCodeIs(403);
     }
 
+    public function test52(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to mfa/{id}/verify/registration for a user'
+            . ' with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendPUT('/mfa/5/verify/registration');
+        $I->seeResponseCodeIs(403);
+    }
+
     // TODO: Add test(s) for authorized access to PUT /mfa/{id}/verify
 }

@@ -139,6 +139,24 @@ class MfaController extends BaseRestController
     }
 
     /**
+     * @return array
+     * @throws HttpException
+     */
+    private static function getVerifyValue() {
+        $value = \Yii::$app->request->getBodyParam('value');
+        if ($value === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
+        }
+
+        if (isset($value['clientExtensionResults']) && empty($value['clientExtensionResults'])) {
+            // Force JSON-encoding to treat this as an empty object, not an empty array.
+            $value['clientExtensionResults'] = new stdClass();
+        }
+
+        return $value;
+    }
+
+    /**
      * @param $mfaId
      * @return array|bool
      * @throws HttpException
@@ -151,15 +169,7 @@ class MfaController extends BaseRestController
             429 => \Yii::t('app', 'Mfa.RateLimitFailure'),
         ];
 
-        $value = \Yii::$app->request->getBodyParam('value');
-        if ($value === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
-        }
-
-        if (isset($value['clientExtensionResults']) && empty($value['clientExtensionResults'])) {
-            // Force JSON-encoding to treat this as an empty object, not an empty array.
-            $value['clientExtensionResults'] = new stdClass();
-        }
+        $value = self::getVerifyValue();
 
         try {
             $mfa = $this->idBrokerClient->mfaVerify(
@@ -179,6 +189,46 @@ class MfaController extends BaseRestController
                 $e->httpStatusCode,
                 $messages[$e->httpStatusCode] ?? '',
                 1551109134
+            );
+        }
+
+        return $mfa;
+    }
+
+    /**
+     * @param $mfaId
+     * @return array|bool
+     * @throws HttpException
+     */
+    public function actionVerifyregistration($mfaId)
+    {
+        $messages = [
+            400 => \Yii::t('app', 'Mfa.InvalidCode'),
+            404 => \Yii::t('app', 'Mfa.VerifyFailure'),
+            429 => \Yii::t('app', 'Mfa.RateLimitFailure'),
+        ];
+
+        $value = self::getVerifyValue();
+
+        try {
+            $mfa = $this->idBrokerClient->mfaVerify(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $value,
+                \Yii::$app->params['rpOrigin'],
+                'registration',
+            );
+        } catch (ServiceException $e) {
+            \Yii::warning([
+                'status' => 'MFA verify registration error',
+                'error' => $e->getMessage(),
+                'httpStatusCode' => $e->httpStatusCode,
+            ], __METHOD__);
+
+            throw new HttpException(
+                $e->httpStatusCode,
+                $messages[$e->httpStatusCode] ?? '',
+                1669805221
             );
         }
 
