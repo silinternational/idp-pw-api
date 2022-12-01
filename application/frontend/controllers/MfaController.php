@@ -139,6 +139,37 @@ class MfaController extends BaseRestController
     }
 
     /**
+     * @param $mfaId
+     * @param $webauthnId
+     * @return null
+     * @throws ServiceException
+     * @throws NotFoundHttpException
+     */
+    public function actionDeletewebauthn($mfaId, $webauthnId)
+    {
+        try {
+            return $this->idBrokerClient->mfaDeleteWebauthn(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $webauthnId
+            );
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA delete webauthn error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.RecordNotFound'));
+            }
+
+            /*
+             * Other status codes will result in a 500 response
+             */
+            throw $e;
+        }
+    }
+
+    /**
      * @return array
      * @throws HttpException
      */
@@ -253,6 +284,43 @@ class MfaController extends BaseRestController
         } catch (ServiceException $e) {
             \Yii::error([
                 'status' => 'MFA update error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.UpdateFailure'), $e->getCode());
+            }
+
+            /*
+             * Other status codes will result in a 500 response
+             */
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $mfaId
+     * @param $webauthnId
+     * @throws NotFoundHttpException
+     * @throws ServiceException
+     */
+    public function actionUpdatewebauthn($mfaId, $webauthnId)
+    {
+        $label = \Yii::$app->request->getBodyParam('label');
+        if ($label === null) {
+            \Yii::$app->response->statusCode = 204;
+            return;
+        }
+
+        try {
+            return $this->idBrokerClient->mfaUpdateWebauthn(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $label,
+                $webauthnId
+            );
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA update webauthn error',
                 'message' => $e->getMessage(),
             ], __METHOD__);
             if ($e->httpStatusCode == 404) {

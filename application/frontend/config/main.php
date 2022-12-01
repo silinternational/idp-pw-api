@@ -156,16 +156,19 @@ return [
                 /*
                  * MFA routes
                  */
-                'GET /mfa'                                       => 'mfa/index',
-                'POST /mfa'                                      => 'mfa/create',
-                'PUT /mfa/<mfaId:(\d+)>'                         => 'mfa/update',
-                'DELETE /mfa/<mfaId:(\d+)>'                      => 'mfa/delete',
-                'PUT /mfa/<mfaId:(\d+)>/verify'                  => 'mfa/verify',
-                'PUT /mfa/<mfaId:(\d+)>/verify/registration'     => 'mfa/verifyregistration',
-                'OPTIONS /mfa'                                   => 'mfa/options',
-                'OPTIONS /mfa/<mfaId:(\d+)>'                     => 'mfa/options',
-                'OPTIONS /mfa/<mfaId:(\d+)>/verify'              => 'mfa/options',
-                'OPTIONS /mfa/<mfaId:(\d+)>/verify/registration' => 'mfa/options',
+                'GET /mfa'                                               => 'mfa/index',
+                'POST /mfa'                                              => 'mfa/create',
+                'PUT /mfa/<mfaId:(\d+)>'                                 => 'mfa/update',
+                'PUT /mfa/<mfaId:(\d+)>/webauthn/<webauthnId:(\d+)>'     => 'mfa/updatewebauthn',
+                'DELETE /mfa/<mfaId:(\d+)>'                              => 'mfa/delete',
+                'DELETE /mfa/<mfaId:(\d+)>/webauthn/<webauthnId:(\d+)>'  => 'mfa/deletewebauthn',
+                'PUT /mfa/<mfaId:(\d+)>/verify'                          => 'mfa/verify',
+                'PUT /mfa/<mfaId:(\d+)>/verify/registration'             => 'mfa/verifyregistration',
+                'OPTIONS /mfa'                                           => 'mfa/options',
+                'OPTIONS /mfa/<mfaId:(\d+)>'                             => 'mfa/options',
+                'OPTIONS /mfa/<mfaId:(\d+)>/webauthn/<webauthnId:(\d+)>' => 'mfa/options',
+                'OPTIONS /mfa/<mfaId:(\d+)>/verify'                      => 'mfa/options',
+                'OPTIONS /mfa/<mfaId:(\d+)>/verify/registration'         => 'mfa/options',
 
                 /*
                  * Status route

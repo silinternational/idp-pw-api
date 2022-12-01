@@ -59,6 +59,23 @@ class MfaCest extends BaseCest
         $I->seeResponseCodeIs(403);
     }
 
+    public function test33(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to mfa/{id}/webauthn/{webauthn_id} with incorrect token');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
+        $I->sendPUT('/mfa/5/webauthn/6');
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function test34(ApiTester $I)
+    {
+        $I->wantTo('check response when making PUT request to mfa/{id}/webauthn/{webauthn_id} for a user'
+            . ' with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendPUT('/mfa/5/webauthn/6');
+        $I->seeResponseCodeIs(403);
+    }
+
     // TODO: Add test(s) for authorized access to PUT /mfa/{id}
 
     public function test40(ApiTester $I)
@@ -75,6 +92,23 @@ class MfaCest extends BaseCest
             . ' with auth_type=reset');
         $I->haveHttpHeader('Authorization', 'Bearer user5');
         $I->sendDELETE('/mfa/5');
+        $I->seeResponseCodeIs(403);
+    }
+
+    public function test42(ApiTester $I)
+    {
+        $I->wantTo('check response when making DELETE request to mfa/{id}/webauthn/{webauthn_id} with incorrect token');
+        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
+        $I->sendDELETE('/mfa/5/webauthn/6');
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function test43(ApiTester $I)
+    {
+        $I->wantTo('check response when making DELETE request to mfa/{id}/webauthn/{webauthn_id} for a user'
+            . ' with auth_type=reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->sendDELETE('/mfa/5/webauthn/6');
         $I->seeResponseCodeIs(403);
     }
 
