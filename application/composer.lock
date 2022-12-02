@@ -5505,12 +5505,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "ebe1eb5ba0cafabadcd4a28865bcc1e3a4576fe4"
+                "reference": "26bb2fc8e0d3f1956775270c5f84fc1d83700107"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/ebe1eb5ba0cafabadcd4a28865bcc1e3a4576fe4",
-                "reference": "ebe1eb5ba0cafabadcd4a28865bcc1e3a4576fe4",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/26bb2fc8e0d3f1956775270c5f84fc1d83700107",
+                "reference": "26bb2fc8e0d3f1956775270c5f84fc1d83700107",
                 "shasum": ""
             },
             "require": {
@@ -5557,7 +5557,7 @@
                 "issues": "https://github.com/silinternational/idp-id-broker-php-client/issues",
                 "source": "https://github.com/silinternational/idp-id-broker-php-client/tree/develop"
             },
-            "time": "2022-12-01T11:19:19+00:00"
+            "time": "2022-12-02T08:12:46+00:00"
         },
         {
             "name": "silinternational/php-env",
