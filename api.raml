@@ -98,6 +98,51 @@ types:
            "count": 9
         ]
       }
+  MfaWebauthn:
+    type: object
+    properties:
+      id?: integer
+      type: string
+      label?: string
+      created_utc?: string
+      last_used_utc?: string
+      data?: array
+    example:
+      {
+        "id": 1,
+        "type": "webauthn",
+        "label": "",
+        "created_utc": "2018-09-07T17:46:37Z",
+        "last_used_utc": "2018-09-07T17:47:06Z",
+        "data": [
+           {
+             "id": 11,
+             "mfa_id": 1,
+             "key_handle_hash": "ABC123",
+             "label": "Security Key-1",
+             "created_utc": "2018-09-07T17:46:37Z",
+             "last_used_utc": "2018-09-07T17:47:06Z"
+           }
+        ]
+      }
+  Webauthn:
+    type: object
+    properties:
+      id: integer
+      mfa_id: integer
+      key_handle_hash: string
+      label: string
+      created_utc: string
+      last_used_utc?: string
+    example:
+      {
+        "id": 11,
+        "mfa_id": 1,
+        "key_handle_hash": "ABC123",
+        "label": "My First Security Key",
+        "created_utc": "2018-09-07T17:46:37Z",
+        "last_used_utc": "2018-09-07T17:47:06Z"
+      }
   PasswordMeta:
     type: object
     properties:
@@ -386,6 +431,96 @@ types:
             description: Property `value` was omitted or incorrect.
           429:
             description: Too many verify requests have been attempted.
+      /registration:
+        put:
+          description: Verify the registration of a new mfa webauthn credential.
+          body:
+            properties:
+              value: array
+            example: |
+              {
+                "value": {
+                  "id":"abc123",
+                  "rawId":"abc123",
+                  "response":  {
+                    "attestationObject":"abc123",
+                    "clientDataJSON":"abc123"
+                  },
+                  "type":"public-key",
+                  "clientExtensionResults":{},
+                  "transports":["usb"]
+                }
+             }
+          responses:
+            200:
+              description: Value provided passed verification
+              body:
+                type: MfaWebauthn
+            400:
+              description: >
+                Value provided failed verification or was unacceptable for some
+                other reason (such as current user's `employee_id` was not accepted).
+              body:
+                type: Error
+            404:
+              description: No MFA record found with that `id` and `employee_id`.
+              body:
+                type: Error
+    /webauthn:
+      /{webauthnId}:
+        put:
+          description: Update the label of a MFA webauthn credential.
+          body:
+            properties:
+              label: string
+            example: |
+              {
+                "label": "My First Security Key"
+              }
+          responses:
+            200:
+              description: Webauthn label successfully updated
+              body:
+                type: Webauthn
+            400:
+              description: Missing or blank label value or invalid employee_id
+              body:
+                type: Error
+            404:
+              description: >
+                No MFA record found with that `mfa_id` or no webauthn
+                record found with that `id` and that `mfa_id`.
+              body:
+                type: Error
+            500:
+              description: Internal server error
+              body:
+                type: Error
+        delete:
+          description: >
+            Delete a webauthn credential from an MFA. If it is the last credential,
+            the whole MFA will be deleted.
+          responses:
+            204:
+              description: Successful deletion of record
+            400:
+              description: current user's employee_id was not accepted
+              body:
+                type: Error
+            403:
+              description: The MFA record was not of type webauthn
+              body:
+                type: Error
+            404:
+              description: >
+                No MFA record found with that `mfa_id` or no webauthn
+                record found with that `id` and that `mfa_id`.
+              body:
+                type: Error
+            500:
+              description: Unable to delete the webauthn credential or the MFA record
+              body:
+                type: Error
 /password:
   put:
     description: Set a new password.
