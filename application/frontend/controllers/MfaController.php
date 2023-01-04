@@ -145,7 +145,7 @@ class MfaController extends BaseRestController
      * @throws ServiceException
      * @throws NotFoundHttpException
      */
-    public function actionDeletewebauthn($mfaId, $webauthnId)
+    public function actionDeleteWebauthn($mfaId, $webauthnId)
     {
         try {
             return $this->idBrokerClient->mfaDeleteWebauthn(
@@ -170,13 +170,12 @@ class MfaController extends BaseRestController
     }
 
     /**
-     * @return array
-     * @throws HttpException
+     * @return array|null
      */
     private static function getVerifyValue() {
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
+            return null;
         }
 
         if (isset($value['clientExtensionResults']) && empty($value['clientExtensionResults'])) {
@@ -201,6 +200,9 @@ class MfaController extends BaseRestController
         ];
 
         $value = self::getVerifyValue();
+        if ($value === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
+        }
 
         try {
             $mfa = $this->idBrokerClient->mfaVerify(
@@ -231,7 +233,7 @@ class MfaController extends BaseRestController
      * @return array|bool
      * @throws HttpException
      */
-    public function actionVerifyregistration($mfaId)
+    public function actionVerifyRegistration($mfaId)
     {
         $messages = [
             400 => \Yii::t('app', 'Mfa.InvalidCode'),
@@ -240,6 +242,9 @@ class MfaController extends BaseRestController
         ];
 
         $value = self::getVerifyValue();
+        if ($value === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
+        }
 
         try {
             $mfa = $this->idBrokerClient->mfaVerify(
@@ -303,7 +308,7 @@ class MfaController extends BaseRestController
      * @throws NotFoundHttpException
      * @throws ServiceException
      */
-    public function actionUpdatewebauthn($mfaId, $webauthnId)
+    public function actionUpdateWebauthn($mfaId, $webauthnId)
     {
         $label = \Yii::$app->request->getBodyParam('label');
         if ($label === null) {

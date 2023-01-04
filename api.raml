@@ -486,6 +486,10 @@ types:
               description: Missing or blank label value or invalid employee_id
               body:
                 type: Error
+            403:
+              description: Forbidden for user with auth_type not 'login'.
+              body:
+                type: Error
             404:
               description: >
                 No MFA record found with that `mfa_id` or no webauthn
