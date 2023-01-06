@@ -274,14 +274,14 @@ class MfaController extends BaseRestController
     /**
      * @param $mfaId
      * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
      * @throws ServiceException
      */
     public function actionUpdate($mfaId)
     {
         $label = \Yii::$app->request->getBodyParam('label');
-        if ($label === null) {
-            \Yii::$app->response->statusCode = 204;
-            return;
+        if (!$label) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingLabel'));
         }
 
         try {

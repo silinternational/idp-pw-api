@@ -403,6 +403,10 @@ types:
           description: Object updated
           body:
             type: Mfa
+        400:
+          description: Property `label` was blank or omitted.
+          body:
+            type: Error
         404:
           description: Object not found
           body:
