@@ -311,9 +311,8 @@ class MfaController extends BaseRestController
     public function actionUpdateWebauthn($mfaId, $webauthnId)
     {
         $label = \Yii::$app->request->getBodyParam('label');
-        if ($label === null) {
-            \Yii::$app->response->statusCode = 400;
-            return;
+        if (!$label) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingLabel'));
         }
 
         try {
