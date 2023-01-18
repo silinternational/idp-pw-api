@@ -140,6 +140,54 @@ class MfaController extends BaseRestController
 
     /**
      * @param $mfaId
+     * @param $webauthnId
+     * @return null
+     * @throws ServiceException
+     * @throws NotFoundHttpException
+     */
+    public function actionDeleteWebauthn($mfaId, $webauthnId)
+    {
+        try {
+            return $this->idBrokerClient->mfaDeleteWebauthn(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $webauthnId
+            );
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA delete webauthn error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.RecordNotFound'));
+            }
+
+            /*
+             * Other status codes will result in a 500 response
+             */
+            throw $e;
+        }
+    }
+
+    /**
+     * @return array|null
+     */
+    private static function getVerifyValue() {
+        $value = \Yii::$app->request->getBodyParam('value');
+        if ($value === null) {
+            return null;
+        }
+
+        if (isset($value['clientExtensionResults']) && empty($value['clientExtensionResults'])) {
+            // Force JSON-encoding to treat this as an empty object, not an empty array.
+            $value['clientExtensionResults'] = new stdClass();
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param $mfaId
      * @return array|bool
      * @throws HttpException
      */
@@ -151,14 +199,9 @@ class MfaController extends BaseRestController
             429 => \Yii::t('app', 'Mfa.RateLimitFailure'),
         ];
 
-        $value = \Yii::$app->request->getBodyParam('value');
+        $value = self::getVerifyValue();
         if ($value === null) {
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
-        }
-
-        if (isset($value['clientExtensionResults']) && empty($value['clientExtensionResults'])) {
-            // Force JSON-encoding to treat this as an empty object, not an empty array.
-            $value['clientExtensionResults'] = new stdClass();
         }
 
         try {
@@ -187,15 +230,58 @@ class MfaController extends BaseRestController
 
     /**
      * @param $mfaId
+     * @return array|bool
+     * @throws HttpException
+     */
+    public function actionVerifyRegistration($mfaId)
+    {
+        $messages = [
+            400 => \Yii::t('app', 'Mfa.InvalidCode'),
+            404 => \Yii::t('app', 'Mfa.VerifyFailure'),
+            429 => \Yii::t('app', 'Mfa.RateLimitFailure'),
+        ];
+
+        $value = self::getVerifyValue();
+        if ($value === null) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
+        }
+
+        try {
+            $mfa = $this->idBrokerClient->mfaVerify(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $value,
+                \Yii::$app->params['rpOrigin'],
+                'registration',
+            );
+        } catch (ServiceException $e) {
+            \Yii::warning([
+                'status' => 'MFA verify registration error',
+                'error' => $e->getMessage(),
+                'httpStatusCode' => $e->httpStatusCode,
+            ], __METHOD__);
+
+            throw new HttpException(
+                $e->httpStatusCode,
+                $messages[$e->httpStatusCode] ?? '',
+                1669805221
+            );
+        }
+
+        return $mfa;
+    }
+
+    /**
+     * @param $mfaId
      * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
      * @throws ServiceException
      */
     public function actionUpdate($mfaId)
     {
         $label = \Yii::$app->request->getBodyParam('label');
-        if ($label === null) {
-            \Yii::$app->response->statusCode = 204;
-            return;
+        if (!$label) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingLabel'));
         }
 
         try {
@@ -203,6 +289,42 @@ class MfaController extends BaseRestController
         } catch (ServiceException $e) {
             \Yii::error([
                 'status' => 'MFA update error',
+                'message' => $e->getMessage(),
+            ], __METHOD__);
+            if ($e->httpStatusCode == 404) {
+                throw new NotFoundHttpException(\Yii::t('app', 'Mfa.UpdateFailure'), $e->getCode());
+            }
+
+            /*
+             * Other status codes will result in a 500 response
+             */
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $mfaId
+     * @param $webauthnId
+     * @throws NotFoundHttpException
+     * @throws ServiceException
+     */
+    public function actionUpdateWebauthn($mfaId, $webauthnId)
+    {
+        $label = \Yii::$app->request->getBodyParam('label');
+        if (!$label) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingLabel'));
+        }
+
+        try {
+            return $this->idBrokerClient->mfaUpdateWebauthn(
+                $mfaId,
+                \Yii::$app->user->identity->employee_id,
+                $label,
+                $webauthnId
+            );
+        } catch (ServiceException $e) {
+            \Yii::error([
+                'status' => 'MFA update webauthn error',
                 'message' => $e->getMessage(),
             ], __METHOD__);
             if ($e->httpStatusCode == 404) {
