@@ -79,9 +79,9 @@ class AuthController extends BaseRestController
                 $user = $this->authenticateUser();
             } catch (ServiceException $e) {
                 if ($e->httpStatusCode == 410) {
-                    $log['status'] = 'error';
+                    $log['status'] = 'info';
                     $log['error'] = 'invite code expired';
-                    \Yii::error($log, 'application');
+                    \Yii::info($log, 'application');
 
                     return $this->redirect($this->getReturnToOnError());
                 } else {
