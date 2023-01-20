@@ -110,6 +110,7 @@ return [
                     'levels' => ['error', 'warning'],
                     'except' => [
                         'yii\web\HttpException:401',
+                        'yii\web\HttpException:403',
                         'yii\web\HttpException:404',
                     ],
                     'logVars' => [],
@@ -122,6 +123,7 @@ return [
                     'except' => [
                         'yii\web\HttpException:400',
                         'yii\web\HttpException:401',
+                        'yii\web\HttpException:403',
                         'yii\web\HttpException:404',
                         'yii\web\HttpException:409',
                         'yii\web\HttpException:410',
