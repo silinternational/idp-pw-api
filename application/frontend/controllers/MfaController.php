@@ -247,7 +247,7 @@ class MfaController extends BaseRestController
         }
 
         $label = \Yii::$app->request->getBodyParam('label');
-        $label = (!empty($label))?:'';
+        $label = $label ?: '';
 
         try {
             $mfa = $this->idBrokerClient->mfaVerify(
