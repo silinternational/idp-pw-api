@@ -246,6 +246,9 @@ class MfaController extends BaseRestController
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
         }
 
+        $label = \Yii::$app->request->getBodyParam('label');
+        $label = (!empty($label))?:'';
+
         try {
             $mfa = $this->idBrokerClient->mfaVerify(
                 $mfaId,
@@ -253,6 +256,7 @@ class MfaController extends BaseRestController
                 $value,
                 \Yii::$app->params['rpOrigin'],
                 'registration',
+                $label,
             );
         } catch (ServiceException $e) {
             \Yii::warning([
