@@ -213,4 +213,20 @@ class PasswordCest extends BaseCest
         $I->sendPUT('/password', ['password' => 'a_password']);
         $I->seeResponseCodeIs(401);
     }
+
+    public function test24(ApiTester $I)
+    {
+        $I->wantTo('check response when changing the password (PUT request) to something that contains a short first_name');
+        $I->haveHttpHeader('Authorization', 'Bearer user6');
+        $I->sendPUT('/password', ['password' => 'aUsz56789!']);
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function test25(ApiTester $I)
+    {
+        $I->wantTo('check response when changing the password (PUT request) to something that contains a short last_name');
+        $I->haveHttpHeader('Authorization', 'Bearer user6');
+        $I->sendPUT('/password', ['password' => 'aSxz56789!']);
+        $I->seeResponseCodeIs(200);
+    }
 }
