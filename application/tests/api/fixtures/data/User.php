@@ -69,4 +69,18 @@ return [
         'auth_type' => 'reset',
         'hide' => 'no',
     ],
+    'user6' => [
+        'id' => 6,
+        'uuid' => '66ba13fe-d4ec-40be-baaa-ee07ce1d9438',
+        'employee_id' => '6',
+        'first_name' => 'Us',
+        'last_name' => 'Sx',
+        'idp_username' => 'us_sx',
+        'email' => 'us_sx@organization.org',
+        'created' => '2016-03-29 11:58:00',
+        'access_token' => Utils::getAccessTokenHash('user6'),
+        'access_token_expiration' => Utils::getDatetime(time() + 1800),
+        'auth_type' => 'reset',
+        'hide' => 'no',
+    ],
 ];
