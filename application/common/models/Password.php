@@ -115,6 +115,10 @@ class Password extends Model
         }
 
         foreach ($params as $disallowedAttribute) {
+            // Don't apply this check to attributes with a very short value
+            if (strlen($this->user->$disallowedAttribute) < 3) {
+                continue;
+            }
             if (mb_strpos(mb_strtolower($this->{$attribute}),
                 mb_strtolower($this->user->$disallowedAttribute)) !== false) {
                 $this->addError($attribute, \Yii::t(
