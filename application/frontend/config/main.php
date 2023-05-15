@@ -40,15 +40,15 @@ return [
         ],
         'session' => [
             'class' => 'yii\web\DbSession',
-             'db' => [
-                 'class' => 'yii\db\Connection',
-                 'dsn' => sprintf('mysql:host=%s;dbname=%s', $mysqlHost, $mysqlDatabase),
-                 'username' => $mysqlUser,
-                 'password' => $mysqlPassword,
-                 'charset' => 'utf8',
-                 'emulatePrepare' => false,
-                 'tablePrefix' => '',
-             ],
+            'db' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => sprintf('mysql:host=%s;dbname=%s', $mysqlHost, $mysqlDatabase),
+                'username' => $mysqlUser,
+                'password' => $mysqlPassword,
+                'charset' => 'utf8',
+                'emulatePrepare' => false,
+                'tablePrefix' => '',
+            ],
             // 'sessionTable' => 'session',  // defaults to 'session'
         ],
         'response' => [
