@@ -13,9 +13,9 @@ class m230515_162100_create_session_table extends Migration
         $this->createTable(
             '{{session}}',
             [
-                'id' => 'char(40) primary key not null',
+                'id' => 'char(64) primary key not null',
                 'expire' => 'int(11) null',
-                'data' => 'binary not null',
+                'data' => 'blob not null',
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
