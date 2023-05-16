@@ -1,7 +1,6 @@
 FROM silintl/php8:8.1
 
 RUN apt-get update -y && \
-    apt-get install -y php-memcache && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
