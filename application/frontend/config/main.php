@@ -2,22 +2,13 @@
 
 use Sil\PhpEnv\Env;
 
+$mysqlHost = Env::get('MYSQL_HOST');
+$mysqlDatabase = Env::get('MYSQL_DATABASE');
+$mysqlUser = Env::get('MYSQL_USER');
+$mysqlPassword = Env::get('MYSQL_PASSWORD');
+
 /* Get frontend-specific config settings from ENV vars or set defaults. */
 $frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
-// default to match docker-compose.yml settings
-$memcache1 = Env::getArrayFromPrefix('MEMCACHE_CONFIG1_');
-$memcache2 = Env::getArrayFromPrefix('MEMCACHE_CONFIG2_');
-$memcacheConfig = [];
-if (is_array($memcache1) && ! empty($memcache1)) {
-    $memcache1['weight'] = $memcache1['weight'] ?? 100;
-    $memcache1['port'] = $memcache1['port'] ?? 11211;
-    $memcacheConfig[] = $memcache1;
-}
-if (is_array($memcache2) && ! empty($memcache2)) {
-    $memcache2['weight'] = $memcache2['weight'] ?? 50;
-    $memcache2['port'] = $memcache2['port'] ?? 11211;
-    $memcacheConfig[] = $memcache2;
-}
 
 $sessionLifetime = 1800; // 30 minutes
 
@@ -47,20 +38,18 @@ return [
             'enableSession' => false,
             'loginUrl' => null,
         ],
-        'sessionCache' => [
-            'class' => 'yii\caching\MemCache',
-            'servers' => $memcacheConfig,
-        ],
         'session' => [
-            'class' => 'yii\web\CacheSession',
-            'cache' => 'sessionCache',
-            'cookieParams' => [// http://us2.php.net/manual/en/function.session-set-cookie-params.php
-                'lifetime' => $sessionLifetime,
-                'path' => '/',
-                'httponly' => true,
-                'secure' => $frontCookieSecure,
+            'class' => 'yii\web\DbSession',
+            'db' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => sprintf('mysql:host=%s;dbname=%s', $mysqlHost, $mysqlDatabase),
+                'username' => $mysqlUser,
+                'password' => $mysqlPassword,
+                'charset' => 'utf8',
+                'emulatePrepare' => false,
+                'tablePrefix' => '',
             ],
-
+            // 'sessionTable' => 'session',  // defaults to 'session'
         ],
         'response' => [
             'class' => 'yii\web\Response',
