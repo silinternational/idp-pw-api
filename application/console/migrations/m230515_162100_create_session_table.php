@@ -8,7 +8,7 @@ class m230515_162100_create_session_table extends Migration
     public function safeUp()
     {
         /*
-         * UserTable
+         * SessionTable
          */
         $this->createTable(
             '{{session}}',
