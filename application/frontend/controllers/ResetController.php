@@ -52,6 +52,9 @@ class ResetController extends BaseRestController
             throw new NotFoundHttpException();
         }
 
+        // Ensure user still exists (is active)
+        $this->assertUserExists($reset);
+
         return $reset;
     }
 
@@ -191,6 +194,9 @@ class ResetController extends BaseRestController
             );
         }
 
+        // Ensure user still exists (is active)
+        $this->assertUserExists($reset);
+
         $type = \Yii::$app->request->getBodyParam('type', null);
         $methodId = \Yii::$app->request->getBodyParam('id', null);
 
@@ -227,6 +233,9 @@ class ResetController extends BaseRestController
             throw new NotFoundHttpException();
         }
 
+        // Ensure user still exists (is active)
+        $this->assertUserExists($reset);
+
         /*
          * Resend verification
          */
@@ -252,6 +261,9 @@ class ResetController extends BaseRestController
         if ($reset === null) {
             throw new NotFoundHttpException();
         }
+
+        // Ensure user still exists (is active)
+        $this->assertUserExists($reset);
 
         try {
             $clientId = Utils::getClientIdOrFail();
@@ -349,5 +361,21 @@ class ResetController extends BaseRestController
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingCode'), 1462989866);
         }
         return $code;
+    }
+
+    /**
+     * Gets the user with the specified email
+     * @param string $email
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     */
+    protected function assertUserExists(Reset $reset)
+    {
+        try {
+            $user = $reset->getUser();
+            $user->getPersonnelUser();
+        } catch (\Exception) {
+            throw new NotFoundHttpException();
+        }
     }
 }
