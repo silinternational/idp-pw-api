@@ -32,12 +32,14 @@ Backend API for Identity Provider Password Management
 4. Setup environment variable for ```COMPOSER_CONFIG_FILE``` with the full system path
    to your composer config.json file, for example: ```/home/my/.composer/config.json```.
    This will allow the composer container to use your github auth token when pulling dependencies.
-5. (OPTIONAL) Copy ```application/common/config/local.php.dist``` to ```application/common/config/local.php```
+5. Setup environment variable for ```COMPOSER_CACHE_DIR``` with the system path
+   to your composer cache directory, for example: ```export COMPOSER_CACHE_DIR="~/.cache"```.
+6. (OPTIONAL) Copy ```application/common/config/local.php.dist``` to ```application/common/config/local.php```
    and update with appropriate settings
-6. Follow operating system specific steps below
-7. You should be able to access the API using a REST client or your browser
+7. Follow operating system specific steps below
+8. You should be able to access the API using a REST client or your browser
    at http://idp-pw-api.local:8080.
-8. You'll probably also want the web interface for this application which you can
+9. You'll probably also want the web interface for this application which you can
    clone at <https://github.com/silinternational/idp-profile-ui>
 
 ### Additional setup for Linux & Mac
