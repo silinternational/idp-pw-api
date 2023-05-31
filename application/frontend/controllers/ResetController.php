@@ -364,7 +364,7 @@ class ResetController extends BaseRestController
     }
 
     /**
-     * Gets the user with the specified email
+     * Assert the reset's user exists in the password store
      * @param string $email
      * @throws NotFoundHttpException
      * @throws \Exception
