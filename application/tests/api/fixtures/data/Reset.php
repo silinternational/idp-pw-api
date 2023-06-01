@@ -1,4 +1,5 @@
 <?php
+use common\helpers\Utils;
 return [
     'reset1' => [
         'id' => 1,
@@ -45,6 +46,18 @@ return [
         'code' => 444,
         'attempts' => 0,
         'expires' => '2016-03-01 12:00:00',
+        'disable_until' => null,
+        'created' => '2016-02-29 13:33:00',
+    ],
+    'reset7' => [// email
+        'id' => 7,
+        'uid' => '77777777777777777777777777777777',
+        'user_id' => 7,
+        'type' => 'method',
+        'email' => 'email-1456769679@domain.org',
+        'code' => 777,
+        'attempts' => 0,
+        'expires' => Utils::getDatetime(time() + 1800),
         'disable_until' => null,
         'created' => '2016-02-29 13:33:00',
     ],

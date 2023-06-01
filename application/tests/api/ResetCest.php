@@ -210,4 +210,43 @@ class ResetCest extends BaseCest
         $I->sendPOST('/reset', ['username' => 'user_two']);
         $I->seeResponseCodeIs(404);
     }
+
+    public function test100(ApiTester $I)
+    {
+        $I->wantTo('check response when making a POST request to create a reset for an inactive user');
+        $I->sendPOST('/reset', ['username' => 'user_eight']);
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test101(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated GET request for obtaining reset object for an inactive user');
+        $I->haveHttpHeader('Authorization', 'Bearer user7');
+        $I->sendGET('/reset/77777777777777777777777777777777');
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test102(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated PUT request to update the verification for an inactive user');
+        $I->haveHttpHeader('Authorization', 'Bearer user7');
+        $I->sendPUT('/reset/77777777777777777777777777777777', ['method' => 'supervisor']);
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test103(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated PUT request to resend the verification for an inactive user');
+        $I->haveHttpHeader('Authorization', 'Bearer user7');
+        $I->sendPUT('/reset/77777777777777777777777777777777/resend');
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function test104(ApiTester $I)
+    {
+        $I->wantTo('check response when making authenticated PUT request to validate a reset code for an inactive user');
+        $I->haveHttpHeader('Authorization', 'Bearer user7');
+        $I->sendPUT('/reset/77777777777777777777777777777777/validate', ['code' => '777', 'client_id' => 'abc123']);
+        $I->seeResponseCodeIs(404);
+    }
 }
