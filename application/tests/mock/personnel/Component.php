@@ -71,6 +71,7 @@ class Component extends YiiComponent implements PersonnelInterface
         $user->employeeId = $data['employeeId'];
         $user->username = $data['username'];
         $user->supervisorEmail = $data['supervisorEmail'];
+        $user->hide = empty($data['hide']) ? 'no' : $data['hide'];
 
         return $user;
     }
@@ -88,6 +89,7 @@ class Component extends YiiComponent implements PersonnelInterface
 
     public function findByInvite($invite)
     {
-        throw new \Exception(__METHOD__ . ' has not been implemented in this class.');
+        // The tests choke on a normal exception, but the code in the User model looks out for a NotFoundException
+        throw new NotFoundException(__METHOD__ . ' has not been implemented in this class.');
     }
 }
