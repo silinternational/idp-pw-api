@@ -68,7 +68,7 @@
 }
 {
   "name": "firebase/php-jwt",
-  "version": "v6.7.0"
+  "version": "v6.8.0"
 }
 {
   "name": "google/apiclient",
@@ -76,7 +76,7 @@
 }
 {
   "name": "google/apiclient-services",
-  "version": "v0.304.0"
+  "version": "v0.306.0"
 }
 {
   "name": "google/auth",
@@ -116,19 +116,19 @@
 }
 {
   "name": "illuminate/collections",
-  "version": "v9.52.9"
+  "version": "v9.52.10"
 }
 {
   "name": "illuminate/conditionable",
-  "version": "v9.52.9"
+  "version": "v9.52.10"
 }
 {
   "name": "illuminate/contracts",
-  "version": "v9.52.9"
+  "version": "v9.52.10"
 }
 {
   "name": "illuminate/macroable",
-  "version": "v9.52.9"
+  "version": "v9.52.10"
 }
 {
   "name": "masterminds/html5",
@@ -152,7 +152,7 @@
 }
 {
   "name": "nikic/php-parser",
-  "version": "v4.15.5"
+  "version": "v4.16.0"
 }
 {
   "name": "paragonie/constant_time_encoding",
@@ -244,7 +244,7 @@
 }
 {
   "name": "roave/security-advisories",
-  "version": "dev-master f928c49"
+  "version": "dev-master 9920192"
 }
 {
   "name": "robrichards/xmlseclibs",
@@ -316,11 +316,11 @@
 }
 {
   "name": "silinternational/email-service-php-client",
-  "version": "2.4.0"
+  "version": "2.4.1"
 }
 {
   "name": "silinternational/idp-id-broker-php-client",
-  "version": "4.3.0"
+  "version": "4.3.1"
 }
 {
   "name": "silinternational/php-env",
@@ -364,7 +364,7 @@
 }
 {
   "name": "symfony/dom-crawler",
-  "version": "v6.3.0"
+  "version": "v6.3.1"
 }
 {
   "name": "symfony/event-dispatcher",
@@ -428,7 +428,7 @@
 }
 {
   "name": "symfony/var-dumper",
-  "version": "v6.3.0"
+  "version": "v6.3.1"
 }
 {
   "name": "symfony/yaml",
