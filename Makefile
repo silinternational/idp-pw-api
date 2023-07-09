@@ -21,8 +21,12 @@ api: upDb broker composer yiimigrate
 composer:
 	docker-compose run --rm cli composer install
 
+composershow:
+	docker-compose run --rm cli bash -c 'composer show --format=json --no-dev --no-ansi --locked | jq ".locked[] | { \"name\": .name, \"version\": .version }" > dependencies.json'
+
 composerupdate:
-	docker-compose run --rm cli bash -c "composer update && composer show -D -vv > versions.txt"
+	docker-compose run --rm cli bash -c "composer update"
+	make composershow
 
 email:
 	docker-compose up -d email

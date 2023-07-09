@@ -83,18 +83,5 @@ class SiteController extends BaseRestController
                 $e->getCode()
             );
         }
-
-        try {
-            /**
-             * @var $emailer Emailer
-             */
-            $emailer = \Yii::$app->emailer;
-            $emailer->getSiteStatus();
-        } catch (\Exception $e) {
-            throw new HttpException(self::HttpExceptionBadGateway,
-                'Problem with email service: ' . $e->getMessage(),
-                $e->getCode()
-            );
-        }
     }
 }
