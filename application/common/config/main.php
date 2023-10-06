@@ -1,5 +1,7 @@
 <?php
 
+use notamedia\sentry\SentryTarget;
+use Sentry\Event;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
@@ -168,6 +170,24 @@ return [
                         return $prefixData;
                     },
                     'exportInterval' => 1,
+                ],
+                [
+                    'class' => SentryTarget::class,
+                    'enabled' => true,
+                    'dsn' => Env::get('SENTRY_DSN'),
+                    'levels' => ['error'],
+                    'context' => true,
+                    // Additional options for `Sentry\init`
+                    // https://docs.sentry.io/platforms/php/configuration/options
+                    'clientOptions' => [
+                        'attach_stacktrace' => false, // stack trace identifies the logger call stack, not helpful
+                        'environment' => $appEnv,
+                        'release' => 'idp-pw-api@6.6.0-pre',
+                        'before_send' => function (Event $event) use ($idpName): ?Event {
+                            $event->setExtra(['idp' => $idpName]);
+                            return $event;
+                        },
+                    ],
                 ],
             ],
         ],
