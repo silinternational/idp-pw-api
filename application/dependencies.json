@@ -15,6 +15,10 @@
   "version": "1.2.1"
 }
 {
+  "name": "clue/stream-filter",
+  "version": "v1.6.0"
+}
+{
   "name": "codeception/codeception",
   "version": "5.0.10"
 }
@@ -111,6 +115,10 @@
   "version": "v1.0.1"
 }
 {
+  "name": "http-interop/http-factory-guzzle",
+  "version": "1.2.0"
+}
+{
   "name": "icawebdesign/hibp-php",
   "version": "5.1.1"
 }
@@ -129,6 +137,10 @@
 {
   "name": "illuminate/macroable",
   "version": "v9.52.10"
+}
+{
+  "name": "jean85/pretty-package-versions",
+  "version": "2.0.5"
 }
 {
   "name": "masterminds/html5",
@@ -155,6 +167,10 @@
   "version": "v4.16.0"
 }
 {
+  "name": "notamedia/yii2-sentry",
+  "version": "1.7.0"
+}
+{
   "name": "paragonie/constant_time_encoding",
   "version": "v2.6.3"
 }
@@ -169,6 +185,30 @@
 {
   "name": "phar-io/version",
   "version": "3.2.1"
+}
+{
+  "name": "php-http/client-common",
+  "version": "2.7.0"
+}
+{
+  "name": "php-http/discovery",
+  "version": "1.19.1"
+}
+{
+  "name": "php-http/httplug",
+  "version": "2.4.0"
+}
+{
+  "name": "php-http/message",
+  "version": "1.16.0"
+}
+{
+  "name": "php-http/message-factory",
+  "version": "1.1.0"
+}
+{
+  "name": "php-http/promise",
+  "version": "1.1.0"
 }
 {
   "name": "phpseclib/phpseclib",
@@ -315,6 +355,14 @@
   "version": "3.0.2"
 }
 {
+  "name": "sentry/sdk",
+  "version": "3.5.0"
+}
+{
+  "name": "sentry/sentry",
+  "version": "3.21.0"
+}
+{
   "name": "silinternational/email-service-php-client",
   "version": "2.4.1"
 }
@@ -376,6 +424,18 @@
 }
 {
   "name": "symfony/finder",
+  "version": "v6.3.0"
+}
+{
+  "name": "symfony/http-client",
+  "version": "v6.3.5"
+}
+{
+  "name": "symfony/http-client-contracts",
+  "version": "v3.3.0"
+}
+{
+  "name": "symfony/options-resolver",
   "version": "v6.3.0"
 }
 {
