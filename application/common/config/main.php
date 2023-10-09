@@ -142,7 +142,7 @@ return [
                     'assertValidIp' => $emailServiceConfig['assertValidIp'],
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
                     'enabled' => $alertsEmailEnabled,
-                    'prefix' => function($message) use (YII_ENV) {
+                    'prefix' => function($message) {
                         $prefixData = [
                             'env' => YII_ENV,
                         ];
