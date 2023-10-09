@@ -172,7 +172,7 @@ return [
                 ],
                 [
                     'class' => SentryTarget::class,
-                    'enabled' => true,
+                    'enabled' => !empty(Env::get('SENTRY_DSN')),
                     'dsn' => Env::get('SENTRY_DSN'),
                     'levels' => ['error'],
                     'context' => true,
