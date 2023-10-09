@@ -20,7 +20,6 @@ $mysqlPassword = Env::get('MYSQL_PASSWORD');
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
 $emailSignature = Env::get('EMAIL_SIGNATURE', Env::get('FROM_NAME'));
-$appEnv = Env::get('APP_ENV');
 $idpName = Env::get('IDP_NAME');
 $idpDisplayName = Env::get('IDP_DISPLAY_NAME', $idpName);
 $recaptchaRequired = Env::get('RECAPTCHA_REQUIRED', true);
@@ -136,16 +135,16 @@ return [
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
                     'message' => [
                         'to' => $alertsEmail ?? '(disabled)',
-                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
+                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . YII_ENV . ']',
                     ],
                     'baseUrl' => $emailServiceConfig['baseUrl'],
                     'accessToken' => $emailServiceConfig['accessToken'],
                     'assertValidIp' => $emailServiceConfig['assertValidIp'],
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
                     'enabled' => $alertsEmailEnabled,
-                    'prefix' => function($message) use ($appEnv) {
+                    'prefix' => function($message) use (YII_ENV) {
                         $prefixData = [
-                            'env' => $appEnv,
+                            'env' => YII_ENV,
                         ];
 
                         // There is no user when a console command is run
