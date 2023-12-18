@@ -135,7 +135,7 @@ services:
         command: /data/run-cron.sh
 
     emaildb:
-        image: silintl/mariadb:latest
+        image: mariadb:10
         env_file:
             - ./email.common.env
         environment:
