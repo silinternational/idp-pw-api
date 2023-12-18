@@ -50,7 +50,7 @@ api:
     command: /data/run-tests.sh
 
 brokerDb:
-    image: silintl/mariadb:latest
+    image: mariadb:10
     ports:
         - "3306"
     environment:
