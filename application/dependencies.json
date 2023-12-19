@@ -12,7 +12,7 @@
 }
 {
   "name": "carbonphp/carbon-doctrine-types",
-  "version": "3.0.0"
+  "version": "3.1.0"
 }
 {
   "name": "cebe/markdown",
@@ -40,7 +40,7 @@
 }
 {
   "name": "codeception/module-phpbrowser",
-  "version": "3.0.0"
+  "version": "3.0.1"
 }
 {
   "name": "codeception/stub",
@@ -84,7 +84,7 @@
 }
 {
   "name": "google/apiclient-services",
-  "version": "v0.326.1"
+  "version": "v0.328.0"
 }
 {
   "name": "google/auth",
@@ -164,11 +164,11 @@
 }
 {
   "name": "nesbot/carbon",
-  "version": "2.72.0"
+  "version": "2.72.1"
 }
 {
   "name": "nikic/php-parser",
-  "version": "v4.17.1"
+  "version": "v4.18.0"
 }
 {
   "name": "notamedia/yii2-sentry",
@@ -292,7 +292,7 @@
 }
 {
   "name": "roave/security-advisories",
-  "version": "dev-master c7332a3"
+  "version": "dev-master 98ceed7"
 }
 {
   "name": "robrichards/xmlseclibs",
