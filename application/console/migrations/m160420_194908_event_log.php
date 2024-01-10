@@ -19,8 +19,15 @@ class m160420_194908_event_log extends Migration
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
-        $this->addForeignKey('fk_event_log_user_id', '{{event_log}}', 'user_id',
-            '{{user}}','id','CASCADE','NO ACTION');
+        $this->addForeignKey(
+            'fk_event_log_user_id',
+            '{{event_log}}',
+            'user_id',
+            '{{user}}',
+            'id',
+            'CASCADE',
+            'NO ACTION'
+        );
     }
 
     public function safeDown()

@@ -1,4 +1,5 @@
 <?php
+
 namespace common\helpers;
 
 use ReCaptcha\ReCaptcha;
@@ -13,11 +14,10 @@ use yii\web\ServerErrorHttpException;
 
 class Utils
 {
-
-    const DT_FORMAT = 'Y-m-d H:i:s';
-    const FRIENDLY_DT_FORMAT = 'l F j, Y g:iA T';
-    const DT_ISO8601 = 'Y-m-d\TH:i:s\Z';
-    const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
+    public const DT_FORMAT = 'Y-m-d H:i:s';
+    public const FRIENDLY_DT_FORMAT = 'l F j, Y g:iA T';
+    public const DT_ISO8601 = 'Y-m-d\TH:i:s\Z';
+    public const UID_REGEX = '[a-zA-Z0-9_\-]{32}';
 
     /**
      * @param integer|string|null $time time as unix timestamp or mysql datetime. If omitted,
@@ -87,7 +87,7 @@ class Utils
     public static function maskEmail($email)
     {
         $validator = new EmailValidator();
-        if ( ! $validator->validate($email)) {
+        if (! $validator->validate($email)) {
             \Yii::warning([
                 'action' => 'mask email',
                 'status' => 'error',
@@ -109,7 +109,7 @@ class Utils
             if ($useRealChar) {
                 $newEmail .= $nextChar;
                 $useRealChar = false;
-            } else if ($nextChar === '_') {
+            } elseif ($nextChar === '_') {
                 $newEmail .= $nextChar;
                 $useRealChar = true;
             } else {
@@ -158,7 +158,7 @@ class Utils
 
         $config['support'] = [];
         foreach ($params['support'] as $supportOption => $value) {
-            if ( ! empty($value)) {
+            if (! empty($value)) {
                 $config['support'][$supportOption] = $value;
             }
         }
@@ -196,7 +196,7 @@ class Utils
             $randomString = openssl_random_pseudo_bytes(16, $cryptoStrong);
             if ($cryptoStrong !== true) {
                 throw new \Exception('Unable to generate cryptographically strong number', 1460385230);
-            } else if ( ! $randomString) {
+            } elseif (! $randomString) {
                 throw new \Exception('Unable to generate random number', 1460385231);
             }
 

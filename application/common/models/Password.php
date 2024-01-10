@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use common\components\passwordStore\PasswordStoreException;
@@ -65,7 +66,7 @@ class Password extends Model
             ],
             [
                 'password', 'validateNotUserAttributes',
-                'params'=>['first_name', 'last_name', 'idp_username', 'email'],
+                'params' => ['first_name', 'last_name', 'idp_username', 'email'],
                 'skipOnError' => false,
             ],
             [
@@ -89,7 +90,7 @@ class Password extends Model
     public function validateNotUserAttributes($attribute, $params = null)
     {
         /* Ensure the password instance has a user attribute */
-        if ( ! isset($this->user)) {
+        if (! isset($this->user)) {
 
             /* Log error */
             $log = [
@@ -119,8 +120,10 @@ class Password extends Model
             if (strlen($this->user->$disallowedAttribute) < 3) {
                 continue;
             }
-            if (mb_strpos(mb_strtolower($this->{$attribute}),
-                mb_strtolower($this->user->$disallowedAttribute)) !== false) {
+            if (mb_strpos(
+                mb_strtolower($this->{$attribute}),
+                mb_strtolower($this->user->$disallowedAttribute)
+            ) !== false) {
                 $this->addError($attribute, \Yii::t(
                     'app',
                     'Password.DisallowedContent',
@@ -151,7 +154,7 @@ class Password extends Model
      */
     public function save()
     {
-        if ( ! $this->validate()) {
+        if (! $this->validate()) {
             $errors = join(', ', $this->getErrors('password'));
             \Yii::warning([
                 'action' => 'save password',
@@ -161,7 +164,7 @@ class Password extends Model
             ]);
             throw new BadRequestHttpException($errors);
         }
-        
+
         $log = [
             'action' => 'save password',
             'employee_id' => $this->user->employee_id,
@@ -200,7 +203,9 @@ class Password extends Model
             } else {
                 \Yii::error($log);
                 throw new ServerErrorHttpException(
-                    \Yii::t('app', 'Password.UpdateFailure'), 1463165209);
+                    \Yii::t('app', 'Password.UpdateFailure'),
+                    1463165209
+                );
             }
 
         }

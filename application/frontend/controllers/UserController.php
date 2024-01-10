@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\models\User;
@@ -8,7 +9,6 @@ use yii\helpers\ArrayHelper;
 
 class UserController extends BaseRestController
 {
-
     /**
      * Access Control Filter
      * NEEDS TO BE UPDATED FOR EVERY ACTION

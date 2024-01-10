@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
@@ -8,7 +9,7 @@ use yii\web\ServerErrorHttpException;
 
 class Method
 {
-    const TYPE_EMAIL = 'email';
+    public const TYPE_EMAIL = 'email';
 
     protected static function getIdBrokerClient()
     {

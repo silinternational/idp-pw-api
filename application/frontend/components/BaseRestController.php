@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\components;
 
 use yii\filters\AccessControl;
@@ -11,7 +12,6 @@ use yii\web\UnauthorizedHttpException;
 
 class BaseRestController extends Controller
 {
-
     /**
      * Enable CORS support
      * @return array
@@ -34,7 +34,7 @@ class BaseRestController extends Controller
                         'actions' => ['options']
                     ],
                 ],
-                'denyCallback' => function($rule, $action) {
+                'denyCallback' => function ($rule, $action) {
                     if (\Yii::$app->user->isGuest) {
                         throw new UnauthorizedHttpException();
                     } else {

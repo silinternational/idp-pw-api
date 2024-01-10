@@ -13,7 +13,6 @@ use yii\test\FixtureTrait;
  */
 class FixtureHelper extends Module
 {
-
     /**
      * Redeclare visibility because codeception includes all public methods that not starts from "_"
      * and not excluded by module settings, in actor class.
