@@ -1,6 +1,10 @@
+- name: check_psr2
+  service: app
+  command: /data/check-psr2.sh
+
 - type: serial
   steps:
-  
+
   - type: parallel
     steps:
     - type: serial
