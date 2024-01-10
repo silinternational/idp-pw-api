@@ -11,7 +11,7 @@ zxcvbn:
     ports:
         - "3000"
 
-api:
+app:
     build:
         image: silintl/idp-pw-api
         dockerfile: ./Dockerfile
