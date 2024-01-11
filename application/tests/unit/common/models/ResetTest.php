@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\models;
 
 use Sil\Codeception\TestCase\Test;
@@ -39,7 +40,7 @@ class ResetTest extends Test
         $user1 = $this->users('user1');
         $reset = new Reset();
         $reset->user_id = $user1->id;
-        if ( ! $reset->save()) {
+        if (! $reset->save()) {
             $this->fail('Failed to create Reset: ' . print_r($reset->getFirstErrors(), true));
         }
 
@@ -93,7 +94,7 @@ class ResetTest extends Test
     {
         $existing = $this->resets('reset1');
         $new = Reset::findOrCreate($existing->user);
-        
+
         $this->assertEquals($existing->id, $new->id);
     }
 

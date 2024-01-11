@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\auth;
 
 /**
@@ -7,5 +8,4 @@ namespace common\components\auth;
  */
 class InvalidLoginException extends \Exception
 {
-
 }

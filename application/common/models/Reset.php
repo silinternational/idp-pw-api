@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use common\helpers\Utils;
@@ -15,13 +16,12 @@ use yii\web\TooManyRequestsHttpException;
  */
 class Reset extends ResetBase
 {
+    public const TYPE_PRIMARY = 'primary'; // Used for primary email address
+    public const TYPE_METHOD = 'method';
+    public const TYPE_SUPERVISOR = 'supervisor';
 
-    const TYPE_PRIMARY = 'primary'; // Used for primary email address
-    const TYPE_METHOD = 'method';
-    const TYPE_SUPERVISOR = 'supervisor';
-
-    const TOPIC_RESET_EMAIL_SENT = 'Reset Email Sent';
-    const TOPIC_RESET_PHONE_SENT = 'Reset Phone Sent';
+    public const TOPIC_RESET_EMAIL_SENT = 'Reset Email Sent';
+    public const TOPIC_RESET_PHONE_SENT = 'Reset Phone Sent';
 
     /**
      * @return array
@@ -307,7 +307,7 @@ class Reset extends ResetBase
                 'displayName' => $this->user->getDisplayName(),
             ]
         );
-        
+
         \Yii::warning([
             'action' => 'reset send email',
             'user' => $this->user->email,
@@ -368,10 +368,10 @@ class Reset extends ResetBase
      * @return string
      * @throws ServerErrorHttpException
      */
-    public static function calculateExpireTime():string
+    public static function calculateExpireTime(): string
     {
         $params = \Yii::$app->params;
-        if ( ! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
+        if (! isset($params['reset']) || ! isset($params['reset']['lifetimeSeconds']) ||
             ! is_integer($params['reset']['lifetimeSeconds'])) {
             throw new ServerErrorHttpException('Application configuration for reset lifetime is not set', 1458676224);
         }
@@ -465,7 +465,7 @@ class Reset extends ResetBase
             'action' => 'enable reset',
             'reset_id' => $this->id,
             'status' => 'success',
-            'user' => $this->user->email,            
+            'user' => $this->user->email,
         ]);
     }
 
@@ -585,7 +585,7 @@ class Reset extends ResetBase
                 'attempts' => $this->attempts,
                 'status' => 'error',
                 'error' => 'Reset is currently disabled until ' . $this->disable_until,
-                'user' => $this->user->email,                
+                'user' => $this->user->email,
             ]);
             throw new TooManyRequestsHttpException();
         }
@@ -599,7 +599,7 @@ class Reset extends ResetBase
      */
     public function saveOrError($action, $errorPrefix = '')
     {
-        if ( ! $this->save()) {
+        if (! $this->save()) {
             \Yii::error([
                 'action' => $action,
                 'reset_id' => $this->id,
@@ -607,7 +607,7 @@ class Reset extends ResetBase
                 'type' => $this->type,
                 'status' => 'error',
                 'error' => $errorPrefix . ' Error: ' . Json::encode($this->getFirstErrors()),
-                'user' => $this->user->email,                
+                'user' => $this->user->email,
             ]);
             throw new ServerErrorHttpException($errorPrefix);
         }

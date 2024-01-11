@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\models;
 
 use Sil\Codeception\TestCase\Test;

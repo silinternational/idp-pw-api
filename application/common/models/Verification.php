@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use common\components\Emailer;
@@ -9,8 +10,8 @@ use yii\web\ServerErrorHttpException;
 
 class Verification extends Model
 {
-    const TYPE_EMAIL = 'email';
-    const TYPE_PHONE = 'phone';
+    public const TYPE_EMAIL = 'email';
+    public const TYPE_PHONE = 'phone';
 
     /**
      * Send email for verification

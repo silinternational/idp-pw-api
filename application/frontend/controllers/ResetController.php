@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\components\passwordStore\AccountLockedException;
@@ -67,7 +68,7 @@ class ResetController extends BaseRestController
         $username = \Yii::$app->request->post('username');
         $verificationToken = \Yii::$app->request->post('verification_token');
 
-        if ( ! $username) {
+        if (! $username) {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingUsername'));
         }
 
@@ -77,12 +78,12 @@ class ResetController extends BaseRestController
          * be double sure an exception is thrown.
          */
         if (\Yii::$app->params['recaptcha']['required']) {
-            if ( ! $verificationToken) {
+            if (! $verificationToken) {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingRecaptchaCode'));
             }
-            
+
             $clientIp = Utils::getClientIp(\Yii::$app->request);
-            if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            if (! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.RecaptchaFailedVerification'));
             }
         }

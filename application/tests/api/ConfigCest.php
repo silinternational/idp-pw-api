@@ -4,7 +4,6 @@ require_once "BaseCest.php";
 
 class ConfigCest extends BaseCest
 {
-
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated GET request to config');
@@ -12,7 +11,7 @@ class ConfigCest extends BaseCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $body = json_decode($I->grabResponse(), true);
-        if ( ! array_key_exists('idpName', $body) || ! array_key_exists('support', $body)) {
+        if (! array_key_exists('idpName', $body) || ! array_key_exists('support', $body)) {
             throw new \Exception('Config response does not include keys expected', 1466799197);
         }
     }
@@ -25,7 +24,7 @@ class ConfigCest extends BaseCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $body = json_decode($I->grabResponse(), true);
-        if ( ! array_key_exists('idpName', $body) || ! array_key_exists('support', $body)) {
+        if (! array_key_exists('idpName', $body) || ! array_key_exists('support', $body)) {
             throw new \Exception('Config response does not include keys expected', 1466799198);
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\passwordStore;
 
 use Exception;
@@ -63,10 +64,10 @@ class Google extends Component implements PasswordStoreInterface
 
     public function init()
     {
-        if ( ! empty($this->jsonAuthConfigBase64)) {
+        if (! empty($this->jsonAuthConfigBase64)) {
             $jsonAuthConfig = \base64_decode($this->jsonAuthConfigBase64);
-        } elseif ( ! empty($this->jsonAuthFilePath)) {
-            if ( ! file_exists($this->jsonAuthFilePath)) {
+        } elseif (! empty($this->jsonAuthFilePath)) {
+            if (! file_exists($this->jsonAuthFilePath)) {
                 throw new InvalidArgumentException(sprintf(
                     'JSON auth file path of %s provided, but no such file exists.',
                     var_export($this->jsonAuthFilePath, true)

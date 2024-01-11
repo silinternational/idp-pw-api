@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\features;
 
 use Sil\PhpEnv\Env;

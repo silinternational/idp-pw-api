@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\models;
 
 use Sil\Codeception\TestCase\Test;
@@ -9,7 +10,6 @@ use tests\unit\fixtures\common\models\UserFixture;
 
 class PasswordTest extends Test
 {
-
     public function _fixtures()
     {
         return [
@@ -24,7 +24,8 @@ class PasswordTest extends Test
         foreach ($testData as $testCase) {
             $strength = Utils::getZxcvbnScore($testCase['password']);
             $this->assertEquals(
-                $testCase['zxcvbnScore'], $strength['score'],
+                $testCase['zxcvbnScore'],
+                $strength['score'],
                 'Zxcvbn score mismatch for password ' . $testCase['password']
             );
         }

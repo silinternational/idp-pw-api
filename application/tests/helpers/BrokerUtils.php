@@ -1,11 +1,11 @@
 <?php
+
 namespace tests\helpers;
 
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 
 class BrokerUtils
 {
-
     public static function insertFakeUsers()
     {
         $data = include __DIR__ . '/BrokerFakeData.php';

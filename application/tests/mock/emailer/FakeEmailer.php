@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\mock\emailer;
 
 use common\components\Emailer;

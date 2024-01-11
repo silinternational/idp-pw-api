@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\mock\emailer;
 
 use Sil\EmailService\Client\EmailServiceClient;

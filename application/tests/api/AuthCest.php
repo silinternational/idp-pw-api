@@ -4,7 +4,6 @@ require_once "BaseCest.php";
 
 class AuthCest extends BaseCest
 {
-
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making a GET request for logging in with no client_id');

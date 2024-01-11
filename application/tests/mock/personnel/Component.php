@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\mock\personnel;
 
 use common\components\personnel\PersonnelInterface;

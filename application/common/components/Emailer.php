@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components;
 
 use Sil\EmailService\Client\EmailServiceClient;

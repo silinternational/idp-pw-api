@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\passwordStore;
 
 class UserPasswordMeta
