@@ -14,7 +14,6 @@ use yii\web\NotFoundHttpException;
 
 class MfaController extends BaseRestController
 {
-
     /**
      * @var IdBrokerClient
      */
@@ -172,7 +171,8 @@ class MfaController extends BaseRestController
     /**
      * @return array|null
      */
-    private static function getVerifyValue() {
+    private static function getVerifyValue()
+    {
         $value = \Yii::$app->request->getBodyParam('value');
         if ($value === null) {
             return null;

@@ -4,7 +4,6 @@ require_once "BaseCest.php";
 
 class UserCest extends BaseCest
 {
-
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making GET request to /user/me with correct token');

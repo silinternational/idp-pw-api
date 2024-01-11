@@ -142,7 +142,7 @@ return [
                     'assertValidIp' => $emailServiceConfig['assertValidIp'],
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
                     'enabled' => $alertsEmailEnabled,
-                    'prefix' => function($message) {
+                    'prefix' => function ($message) {
                         $prefixData = [
                             'env' => YII_ENV,
                         ];
@@ -181,7 +181,7 @@ return [
                     'clientOptions' => [
                         'attach_stacktrace' => false, // stack trace identifies the logger call stack, not helpful
                         'environment' => YII_ENV,
-                        'release' => 'idp-pw-api@6.6.1',
+                        'release' => 'idp-pw-api@6.6.2',
                         'before_send' => function (Event $event) use ($idpName): ?Event {
                             $event->setExtra(['idp' => $idpName]);
                             return $event;

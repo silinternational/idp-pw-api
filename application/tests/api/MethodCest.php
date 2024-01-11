@@ -4,7 +4,6 @@ require_once "BaseCest.php";
 
 class MethodCest extends BaseCest
 {
-
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated DELETE request to method');
@@ -80,7 +79,7 @@ class MethodCest extends BaseCest
     public function test7(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated POST request for creating a new method');
-        $I->sendPOST('/method', ['type'=>'email','value'=>'user@domain.com']);
+        $I->sendPOST('/method', ['type' => 'email','value' => 'user@domain.com']);
         $I->seeResponseCodeIs(401);
     }
 
@@ -88,7 +87,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated POST request for creating a new method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/method', ['type'=>'email','value'=>'user@domain.com']);
+        $I->sendPOST('/method', ['type' => 'email','value' => 'user@domain.com']);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'type' => "email",
@@ -101,7 +100,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response when making authenticated POST request for creating an'
             . ' already existing method');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/method', ['type'=>'email','value'=>'email-1456769679@domain.org']);
+        $I->sendPOST('/method', ['type' => 'email','value' => 'email-1456769679@domain.org']);
 
         $I->seeResponseCodeIs(200);
     }
@@ -111,7 +110,7 @@ class MethodCest extends BaseCest
         $I->wantTo('check response for authenticated POST request to method for a user with'
             . ' auth_type=reset');
         $I->haveHttpHeader('Authorization', 'Bearer user5');
-        $I->sendPOST('/method', ['type'=>'email','value'=>'email@example.com']);
+        $I->sendPOST('/method', ['type' => 'email','value' => 'email@example.com']);
         $I->seeResponseCodeIs(403);
     }
 
@@ -179,7 +178,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making a PUT /method/{uid}/verify with invalid code and'
             . ' expired verification time');
-        $I->sendPUT('/method/33333333333333333333333333333333/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333333/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
     }
 
@@ -187,7 +186,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making a PUT /method/{uid}/verify with valid code and'
             . ' expired verification time');
-        $I->sendPUT('/method/33333333333333333333333333333333/verify', ['code'=>'123456']);
+        $I->sendPUT('/method/33333333333333333333333333333333/verify', ['code' => '123456']);
         $I->seeResponseCodeIs(410);
     }
 
@@ -200,7 +199,7 @@ class MethodCest extends BaseCest
 
         $I->wantTo('check response when making a PUT /method/{uid}/verify with valid code to an'
             . ' unvalidated method');
-        $I->sendPUT('/method/44444444444444444444444444444444/verify', ['code'=>'444444']);
+        $I->sendPUT('/method/44444444444444444444444444444444/verify', ['code' => '444444']);
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -219,28 +218,28 @@ class MethodCest extends BaseCest
 
         $I->wantTo('check response when making multiple unauthenticated PUT requests with invalid'
             . ' code and unexpired verification time');
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
 
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code'=>'13245']);
+        $I->sendPUT('/method/33333333333333333333333333333335/verify', ['code' => '13245']);
         $I->seeResponseCodeIs(429);
     }
 

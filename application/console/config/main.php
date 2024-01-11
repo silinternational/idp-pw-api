@@ -1,4 +1,5 @@
 <?php
+
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),

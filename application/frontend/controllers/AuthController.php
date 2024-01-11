@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\components\auth\RedirectException;
@@ -46,7 +47,7 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
-        if ( ! \Yii::$app->user->isGuest) {
+        if (! \Yii::$app->user->isGuest) {
             return $this->redirect($this->getAfterLoginUrl($this->getReturnTo()));
         }
 

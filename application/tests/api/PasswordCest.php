@@ -6,7 +6,6 @@ use common\helpers\Utils;
 
 class PasswordCest extends BaseCest
 {
-
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making GET request with no token for obtaining info about password');
@@ -42,7 +41,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated PUT request to update the password');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/password',['password' => Utils::generateRandomString() . '!12']);
+        $I->sendPUT('/password', ['password' => Utils::generateRandomString() . '!12']);
         $I->seeResponseCodeIs(200);
     }
 

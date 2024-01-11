@@ -4,7 +4,6 @@ require_once "BaseCest.php";
 
 class ResetCest extends BaseCest
 {
-
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request to /reset');

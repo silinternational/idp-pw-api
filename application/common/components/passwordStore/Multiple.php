@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\passwordStore;
 
 use Exception;
@@ -15,7 +16,7 @@ class Multiple extends Component implements PasswordStoreInterface
 {
     /** @var array */
     public $passwordStoresConfig;
-    
+
     /** @var PasswordStoreInterface[] */
     protected $passwordStores = [];
 
@@ -55,24 +56,24 @@ class Multiple extends Component implements PasswordStoreInterface
     public function init()
     {
         parent::init();
-        
+
         if (empty($this->passwordStoresConfig)) {
             throw new InvalidArgumentException(
                 'You must provide config for at least one password store.',
                 1498162679
             );
         }
-        
+
         foreach ($this->passwordStoresConfig as $passwordStoreConfig) {
             $className = $passwordStoreConfig['class'];
-            
+
             $configForClass = $passwordStoreConfig;
             unset($configForClass['class']);
-            
+
             $this->passwordStores[] = new $className($configForClass);
         }
     }
-    
+
     /**
      * Get metadata about user's password, including its expiration date and
      * when it was last changed.
@@ -89,7 +90,7 @@ class Multiple extends Component implements PasswordStoreInterface
     {
         return $this->passwordStores[0]->getMeta($employeeId);
     }
-    
+
     /**
      * See if all of the password stores seem to be available/responding, and if
      * so set the user's password in all of the defined password stores. If any

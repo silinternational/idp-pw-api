@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
@@ -201,7 +202,7 @@ class Ldap extends Component implements PasswordStoreInterface
          * check that user has given attribute and value matches. If not, return now
          * and consider change successful
          */
-        if ( ! $this->matchesRequiredAttributes($user)) {
+        if (! $this->matchesRequiredAttributes($user)) {
             try {
                 \Yii::warning(
                     [
@@ -241,7 +242,7 @@ class Ldap extends Component implements PasswordStoreInterface
          * Save changes
          */
         try {
-            if ( ! $user->save()) {
+            if (! $user->save()) {
                 throw new \Exception('Unable to change password.', 1464018238);
             }
         } catch (\Exception $e) {
@@ -343,7 +344,7 @@ class Ldap extends Component implements PasswordStoreInterface
     public function matchesRequiredAttributes($user)
     {
         // If not defined, just return true to continue processing as normal
-        if ( ! is_array($this->updatePasswordIfAttributeAndValue)) {
+        if (! is_array($this->updatePasswordIfAttributeAndValue)) {
             return true;
         }
 
@@ -393,7 +394,7 @@ class Ldap extends Component implements PasswordStoreInterface
             $this->passwordLastChangeDateAttribute,
             'mail',
         ];
-        if ( ! empty($this->userAccountDisabledAttribute)) {
+        if (! empty($this->userAccountDisabledAttribute)) {
             $criteria[] = $this->userAccountDisabledAttribute;
         }
         if (is_array($this->updateAttributesOnSetPassword)) {

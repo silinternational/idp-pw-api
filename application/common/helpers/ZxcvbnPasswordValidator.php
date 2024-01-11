@@ -1,4 +1,5 @@
 <?php
+
 namespace common\helpers;
 
 use common\helpers\Utils;
@@ -29,7 +30,7 @@ class ZxcvbnPasswordValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if ( ! in_array($this->minScore, [1, 2, 3, 4])) {
+        if (! in_array($this->minScore, [1, 2, 3, 4])) {
             throw new InvalidConfigException('The "minScore" property must be in range 1-4.');
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\auth;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -13,9 +14,8 @@ use yii\web\Request;
 
 class Saml extends Component implements AuthnInterface
 {
-
-    const TYPE_PUBLIC = 'public';
-    const TYPE_PRIVATE = 'private';
+    public const TYPE_PUBLIC = 'public';
+    public const TYPE_PRIVATE = 'private';
 
     /**
      * Whether or not to sign request
@@ -191,7 +191,7 @@ class Saml extends Component implements AuthnInterface
                     ['type' => 'public']
                 );
                 $idpKey->loadKey($this->idpCertificate, false, true);
-                if ( ! $response->validate($idpKey)) {
+                if (! $response->validate($idpKey)) {
                     throw new \Exception(
                         'SAML response was not signed properly',
                         1459884735
@@ -211,7 +211,7 @@ class Saml extends Component implements AuthnInterface
                 );
                 $decryptKey->loadKey($this->spPrivateKey, false, false);
 
-                if ( ! $assertions[0] instanceof EncryptedAssertion) {
+                if (! $assertions[0] instanceof EncryptedAssertion) {
                     throw new \Exception(
                         'Response assertion is required to be encrypted but was not',
                         1459884392
@@ -303,7 +303,7 @@ class Saml extends Component implements AuthnInterface
     {
         $username = isset($attributes['idp_username']) ? $attributes['idp_username'] : 'missing username';
         foreach ($map as $key => $value) {
-            if ( ! array_key_exists($key, $attributes)) {
+            if (! array_key_exists($key, $attributes)) {
                 throw new \Exception(
                     'SAML attributes missing attribute: ' . $key . ' for user ' . $username,
                     1454436522

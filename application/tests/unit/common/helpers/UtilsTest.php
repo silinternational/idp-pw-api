@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\helpers;
 
 use Sil\Codeception\TestCase\Test;
@@ -39,7 +40,7 @@ class UtilsTest extends Test
             $this->assertRegExp($regex, $value);
         }
     }
-    
+
     public function testIsValidIpAddress()
     {
         $this->assertTrue(Utils::isValidIpAddress('127.0.0.1'));
