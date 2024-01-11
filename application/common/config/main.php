@@ -18,6 +18,7 @@ $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
 $alertsEmail = Env::get('ALERTS_EMAIL');
+$alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
 $emailSignature = Env::get('EMAIL_SIGNATURE', Env::get('FROM_NAME'));
 $idpName = Env::get('IDP_NAME');
 $idpDisplayName = Env::get('IDP_DISPLAY_NAME', $idpName);
@@ -140,7 +141,7 @@ return [
                     'accessToken' => $emailServiceConfig['accessToken'],
                     'assertValidIp' => $emailServiceConfig['assertValidIp'],
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
-                    'enabled' => !empty($alertsEmail),
+                    'enabled' => $alertsEmailEnabled,
                     'prefix' => function ($message) {
                         $prefixData = [
                             'env' => YII_ENV,
