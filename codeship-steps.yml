@@ -1,21 +1,25 @@
+- name: check_psr2
+  service: app
+  command: /data/check-psr2.sh
+
 - type: serial
   steps:
-  
+
   - type: parallel
     steps:
     - type: serial
       steps:
         - name: unit test
-          service: api
+          service: app
           command: whenavail db 3306 100 /data/run-tests.sh
     - type: serial
       steps:
         - name: api test
-          service: api
+          service: app
           command: whenavail db 3306 100 /data/run-tests-api.sh
 
   - name: push
-    service: api
+    service: app
     type: push
     image_name: silintl/idp-pw-api
     image_tag: "{{.Branch}}"
@@ -24,7 +28,7 @@
     encrypted_dockercfg_path: dockercfg.encrypted
 
   - name: push_latest
-    service: api
+    service: app
     type: push
     image_name: silintl/idp-pw-api
     image_tag: "latest"
