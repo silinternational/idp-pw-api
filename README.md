@@ -1,10 +1,6 @@
 # idp-pw-api
 Backend API for Identity Provider Password Management
 
-## Build Status
-[![Codeship Status for silinternational/idp-pw-api](https://codeship.com/projects/6e239250-bed3-0133-700c-329cf2fde74f/status?branch=develop)](https://codeship.com/projects/137021)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silinternational/idp-pw-api/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/silinternational/idp-pw-api/?branch=develop)
-
 ## Dev Requirements
 
 ### Linux
@@ -180,33 +176,33 @@ creating a new user. The `access_token` can be found in the `Location` response 
 Tests are configured in multiple places, using different test frameworks.
 The chart below summarizes the test configuration.
 
-| Suite | Framework   |  config   | Local, Docker        | Codeship              |
-|-------|-------------|-----------|----------------------|-----------------------|
-| Unit  | PHPUnit     | container | unittest             | api                   |
-|       |             | script    | run-tests.sh         | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
-|       |             | config    | tests/unit.suite.yml, tests/codeception/config/unit.php | (same) |
-|       |             | coverage  | IdBroker, IdBrokerPw, Ldap | (same)          |
-|-------|-------------|-----------|----------------------|-----------------------|
-| Unit  | Behat       | container | unittest             | api                   |
-|       |             | script    | run-tests.sh         | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | Composer             | (same)                |
-|       |             | config    | features/behat.yml   | (same)                |
-|       |             | coverage  | Multiple, Google     | (same)                |
-|-------|-------------|-----------|----------------------|-----------------------|
-| Unit  | Codeception | container | unittest             | api                   |
-|       |             | script    | run-tests.sh         | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
-|       |             | config    | tests/unit.suite.yml | (same)                |
-|       |             | coverage  | models, helpers      | (same)                |
-|-------|-------------|-----------|----------------------|-----------------------|
-| API   | Codeception | container | apitest              | api                   |
-|       |             | script    | run-tests-api.sh     | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
-|       |             | config    | tests/api.suite.yml  | (same)                |
-|       |             | coverage  | controllers          | (same)                |
-|-------|-------------|-----------|----------------------|-----------------------|
+| Suite | Framework   |  config   | Local, Docker        | GitHub Actions          |
+|-------|-------------|-----------|----------------------|-------------------------|
+| Unit  | PHPUnit     | container | unittest             | api                     |
+|       |             | script    | run-tests.sh         | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                  | 
+|       |             | config    | tests/unit.suite.yml, tests/codeception/config/unit.php | (same)                  |
+|       |             | coverage  | IdBroker, IdBrokerPw, Ldap | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+| Unit  | Behat       | container | unittest             | api                     |
+|       |             | script    | run-tests.sh         | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | Composer             | (same)                  |
+|       |             | config    | features/behat.yml   | (same)                  |
+|       |             | coverage  | Multiple, Google     | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+| Unit  | Codeception | container | unittest             | api                     |
+|       |             | script    | run-tests.sh         | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                  | 
+|       |             | config    | tests/unit.suite.yml | (same)                  |
+|       |             | coverage  | models, helpers      | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+| API   | Codeception | container | apitest              | api                     |
+|       |             | script    | run-tests-api.sh     | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                  | 
+|       |             | config    | tests/api.suite.yml  | (same)                  |
+|       |             | coverage  | controllers          | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
