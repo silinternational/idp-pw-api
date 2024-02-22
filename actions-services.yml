@@ -29,7 +29,7 @@ services:
             ALERTS_EMAIL: alerts@nowhere.com
             ID_BROKER_baseUrl: http://broker
             ID_BROKER_accessToken: abc123
-            ID_BROKER_assertValidBrokerIp: false
+            ID_BROKER_assertValidBrokerIp: "false"
             ID_BROKER_validIpRanges: 127.0.0.1/32,192.168.65.1/32
             TEST_GOOGLE_PWSTORE_CONFIG_applicationName: idpGooglePwStoreTestsByCI
             RECAPTCHA_REQUIRED: "false"
