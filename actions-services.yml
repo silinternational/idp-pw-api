@@ -58,7 +58,7 @@ services:
             MYSQL_PASSWORD: pass
 
     broker:
-        image: silintl/idp-id-broker:6.6.7
+        image: silintl/idp-id-broker:develop
         depends_on:
             - brokerDb
         volumes:
