@@ -33,7 +33,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ vars.IMAGE_NAME }}
+          images: ${{ vars.DOCKER_ORG }}/${{ github.event.repository.name }},
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
