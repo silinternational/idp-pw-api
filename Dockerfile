@@ -27,5 +27,8 @@ RUN sed -i -E 's@ErrorLog .*@ErrorLog /proc/self/fd/2@i' /etc/apache2/apache2.co
 
 RUN touch /etc/default/locale
 
+ADD https://github.com/silinternational/config-shim/releases/latest/download/config-shim.gz config-shim.gz
+RUN gzip -d config-shim.gz && chmod 755 config-shim && mv config-shim /usr/local/bin
+
 EXPOSE 80
 CMD ["/data/run.sh"]
