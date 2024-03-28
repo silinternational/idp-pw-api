@@ -36,6 +36,26 @@ Backend API for Identity Provider Password Management
 8. You'll probably also want the web interface for this application which you can
    clone at <https://github.com/silinternational/idp-profile-ui>
 
+## Configuration
+By default, configuration is read from environment variables. These are documented
+in the `local.env.dist` file. Optionally, you can define configuration in AWS AppConfig.
+To do this, set the following environment variables to point to the configuration in
+AWS:
+
+* `AWS_REGION` - the AWS region in use
+* `APP_ID` - the application ID or name
+* `CONFIG_ID` - the configuration profile ID or name
+* `ENV_ID` - the environment ID or name
+
+In addition, the AWS API requires authentication. It is best to use an access role
+such as an [ECS Task Role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html).
+If that is not an option, you can specify an access token using the `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY` variables.
+
+The content of the configuration profile takes the form of a typical .env file, using
+`#` for comments and `=` for variable assignment. Any variables read from AppConfig
+will overwrite variables set in the execution environment.
+
 ### Additional setup for Linux & Mac
 1. Add entry to ```/etc/hosts``` for ```127.0.0.1 idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
