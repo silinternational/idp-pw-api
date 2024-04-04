@@ -226,3 +226,13 @@ The chart below summarizes the test configuration.
 |       |             | config    | tests/api.suite.yml  | (same)                  |
 |       |             | coverage  | controllers          | (same)                  |
 |-------|-------------|-----------|----------------------| ----------------------- |
+
+### Running tests
+
+To run all tests, use `make test`.
+
+To run a single unit test:
+
+```
+docker compose run --rm unittest vendor/bin/codecept run tests/unit/common/models/PasswordTest.php:testBadBytes
+```

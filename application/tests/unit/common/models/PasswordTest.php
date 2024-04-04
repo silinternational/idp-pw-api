@@ -113,6 +113,19 @@ class PasswordTest extends Test
         }
     }
 
+    public function testBadBytes()
+    {
+        $employeeId = '111111';
+        $user = User::findOne(['employee_id' => $employeeId]);
+
+        $badPassword = "1" . "\0" . "23456";
+        $password = Password::create($user, $badPassword);
+        $password->validate();
+        $errors = join('|', array_values($password->getErrors('password')));
+        $msg = sprintf('Failed validating test for bad bytes in password. (Errors: "%s")', $errors);
+        $this->assertTrue(str_contains($errors, 'Password.ContainsBadByte'), $msg);
+    }
+
     private function getTestData()
     {
         return [
