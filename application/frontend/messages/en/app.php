@@ -42,6 +42,7 @@ return [
     'Multiple.SetPartialSuccess' => 'Successfully set the password in {successes}, but failed to set the password in {errors}. Contact {supportName} at {supportEmail} for assistance.',
     'Multiple.SetFailed' => 'Failed to set the password in {errors}. Contact {supportName} at {supportEmail} for assistance.',
     'Password.Breached' => 'The password you entered was previously discovered in a data breach of a different website. It may or may not have been your own account that was compromised. Please use a different password here and then visit <a href="https://sites.google.com/sil.org/identityaccounts/logging-in/password-recommendations" target="_blank">this help page</a> to learn more.',
+    'Password.ContainsBadByte' => 'Password contains a disallowed character',
     'Password.DisallowedContent' => 'Your password may not contain any of these: {labelList} (code 180)',
     'Password.MissingPassword' => 'Password is required',
     'Password.PasswordReuse' => 'Unable to update password. If this password has been used before please use something different.',
