@@ -83,6 +83,10 @@ class Password extends Model
             [
                 'password', 'passwordStoreInterfaceAssess',
                 'skipOnError' => true,
+            ],
+            [
+                'password', 'validateNoBadBytes',
+                'skipOnError' => false,
             ]
         ];
     }
@@ -275,6 +279,13 @@ class Password extends Model
             } else {
                 throw new \Exception('Password.UnknownProblem');
             }
+        }
+    }
+
+    public function validateNoBadBytes($attribute)
+    {
+        if (str_contains($this->$attribute, "\0")) {
+            $this->addError($attribute, \Yii::t('app', 'Password.ContainsBadByte'));
         }
     }
 }
