@@ -87,7 +87,14 @@ class Password extends Model
             [
                 'password', 'validateNoBadBytes',
                 'skipOnError' => false,
-            ]
+            ],
+            [
+                'password', 'validateAlphaAndNumeric',
+                'skipOnError' => false,
+                'when' => function () {
+                    return $this->config['requireAlphaAndNumeric'];
+                },
+            ],
         ];
     }
 
@@ -286,6 +293,20 @@ class Password extends Model
     {
         if (str_contains($this->$attribute, "\0")) {
             $this->addError($attribute, \Yii::t('app', 'Password.ContainsBadByte'));
+        }
+    }
+
+    public function validateAlphaAndNumeric($attribute)
+    {
+        $letter = preg_match('/\pL/', $this->$attribute);
+        $number = preg_match('/\pN/', $this->$attribute);
+
+        if ($letter === false || $number === false) {
+            throw new \Exception('Password.UnknownProblem');
+        }
+
+        if ($letter === 0 || $number === 0) {
+            $this->addError($attribute, \Yii::t('app', 'Password.AlphaAndNumericRequired'));
         }
     }
 }
