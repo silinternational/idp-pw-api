@@ -134,7 +134,7 @@ class PasswordTest extends Test
         $passwords = [
             "123456" => false,
             "abcdef" => false,
-            "üüơüāé" => false,
+            "éiéīơ" => false,
             "abc1234567" => true,
             "123abcdefh" => true,
             "1ü31232354" => true,
