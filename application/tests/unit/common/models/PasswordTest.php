@@ -141,17 +141,17 @@ class PasswordTest extends Test
             "12345¨" => true,
         ];
 
-        foreach ($passwords as $password => $good) {
-            $password = Password::create($user, $password);
+        foreach ($passwords as $pw => $good) {
+            $password = Password::create($user, $pw);
             $password->config['requireAlphaAndNumeric'] = true;
             $password->validate();
 
             $errors = join('|', array_values($password->getErrors('password')));
             if ($good) {
-                $msg = sprintf('failed validating password for requiring alpha and numeric with good password "%s". (Errors: "%s")', $password, $errors);
+                $msg = sprintf('failed validating password for requiring alpha and numeric with good password "%s". (Errors: "%s")', $pw, $errors);
                 $this->assertEmpty($errors, $msg);
             } else {
-                $msg = sprintf('Failed validating test for requiring alpha and numeric in password "%s". (Errors: "%s")', $password, $errors);
+                $msg = sprintf('Failed validating test for requiring alpha and numeric in password "%s". (Errors: "%s")', $pw, $errors);
                 $this->assertStringContainsString('Password.AlphaAndNumericRequired', $errors, $msg);
             }
         }
