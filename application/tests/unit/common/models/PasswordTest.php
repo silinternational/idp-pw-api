@@ -152,7 +152,7 @@ class PasswordTest extends Test
                 $this->assertEmpty($errors, $msg);
             } else {
                 $msg = sprintf('Failed validating test for requiring alpha and numeric in password. (Errors: "%s")', $errors);
-                $this->assertContains($errors, 'Password.AlphaAndNumericRequired', $msg);
+                $this->assertStringContainsString($errors, 'Password.AlphaAndNumericRequired', $msg);
             }
         }
     }
