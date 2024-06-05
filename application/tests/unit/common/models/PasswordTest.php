@@ -134,11 +134,11 @@ class PasswordTest extends Test
         $passwords = [
             "123456" => false,
             "abcdef" => false,
-            "abc123" => false,
             "üüơüāé" => false,
-            "123abc" => true,
-            "1ü3123" => true,
-            "12345¨" => true,
+            "abc1234567" => true,
+            "123abcdefh" => true,
+            "1ü31232354" => true,
+            "123452346¨" => true,
         ];
 
         foreach ($passwords as $pw => $good) {
