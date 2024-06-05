@@ -135,9 +135,9 @@ class PasswordTest extends Test
             "123456" => false,
             "abcdef" => false,
             "abc123" => false,
+            "üüơüāé" => false,
             "123abc" => true,
             "1ü3123" => true,
-            "üüơüāé" => false,
             "12345¨" => true,
         ];
 
@@ -148,10 +148,10 @@ class PasswordTest extends Test
 
             $errors = join('|', array_values($password->getErrors('password')));
             if ($good) {
-                $msg = sprintf('failed validating password with good password %s. (Errors: "%s")', $password, $errors);
+                $msg = sprintf('failed validating password for requiring alpha and numeric with good password "%s". (Errors: "%s")', $password, $errors);
                 $this->assertEmpty($errors, $msg);
             } else {
-                $msg = sprintf('Failed validating test for requiring alpha and numeric in password. (Errors: "%s")', $errors);
+                $msg = sprintf('Failed validating test for requiring alpha and numeric in password "%s". (Errors: "%s")', $errors);
                 $this->assertStringContainsString('Password.AlphaAndNumericRequired', $errors, $msg);
             }
         }
