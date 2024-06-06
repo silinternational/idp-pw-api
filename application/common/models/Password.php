@@ -296,7 +296,7 @@ class Password extends Model
         }
     }
 
-    public function validateAlphaAndNumeric($attribute)
+    public function validateAlphaAndNumeric(string $attribute): void
     {
         $letter = preg_match('/\pL/', $this->$attribute);
         $number = preg_match('/\pN/', $this->$attribute);
