@@ -108,7 +108,7 @@ services:
         volumes:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
-        user: "${DOCKER_UIDGID}"
+        user: "root"
         env_file:
             - ./common.env
             - ./local.env
@@ -232,4 +232,3 @@ networks:
             config:
             - subnet: 10.20.31.0/24
               gateway: 10.20.31.1
-

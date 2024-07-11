@@ -221,9 +221,6 @@ types:
     get:
       securedBy: null
       queryParameters:
-        client_id:
-          description: unique identifier provided by the UI client
-          type: string
         ReturnTo:
           description: URL to return to after login or invite
           type: string
@@ -657,19 +654,17 @@ types:
         body:
           properties:
             code: string
-            client_id: string
         responses:
           200:
             description: >
               Reset was validated. Response contains a 32-character access
-              token. Subsequent API calls should use `client_id` concatenated
-              with `access_token` in the Authorization header.
+              token. Subsequent API calls should use `access_token` in http only cookie.
             body:
               properties:
                 access_token: string
           400:
             description: >
-              The provided code was incorrect or `client_id` was missing.
+              The provided code was incorrect.
           410:
             description: >
               The code has expired.

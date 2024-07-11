@@ -4,55 +4,47 @@ require_once "BaseCest.php";
 
 class AuthCest extends BaseCest
 {
-    public function test1(ApiTester $I)
+    public function test2(ApiTester $I)
     {
-        $I->wantTo('check response when making a GET request for logging in with no client_id');
+        $I->wantTo('check response when making a GET request for logging in with no access_token');
         $I->stopFollowingRedirects();
         $I->sendGET('/auth/login');
         $I->seeResponseCodeIs(302);
     }
 
-    public function test2(ApiTester $I)
-    {
-        $I->wantTo('check response when making a GET request for logging in with client_id but no access_token');
-        $I->stopFollowingRedirects();
-        $I->sendGET('/auth/login?client_id=asdf');
-        $I->seeResponseCodeIs(302);
-    }
-
     public function test3(ApiTester $I)
     {
-        $I->wantTo('check response when making a POST request for logging in with client_id');
+        $I->wantTo('check response when making a POST request for logging in');
         $I->stopFollowingRedirects();
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPOST('/auth/login?client_id=asdf');
+        $I->sendPOST('/auth/login');
         $I->seeResponseCodeIs(302);
     }
 
     public function test33(ApiTester $I)
     {
-        $I->wantTo('check response when making a PUT request for logging in with client_id');
+        $I->wantTo('check response when making a PUT request for logging in');
         $I->stopFollowingRedirects();
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/auth/login?client_id=asdf');
+        $I->sendPUT('/auth/login');
         $I->seeResponseCodeIs(405);
     }
 
     public function test34(ApiTester $I)
     {
-        $I->wantTo('check response when making a DELETE request for logging in with client_id');
+        $I->wantTo('check response when making a DELETE request for logging in');
         $I->stopFollowingRedirects();
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendDELETE('/auth/login?client_id=asdf');
+        $I->sendDELETE('/auth/login');
         $I->seeResponseCodeIs(405);
     }
 
     public function test35(ApiTester $I)
     {
-        $I->wantTo('check response when making a OPTIONS request for logging in with client_id');
+        $I->wantTo('check response when making a OPTIONS request for logging in');
         $I->stopFollowingRedirects();
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendOPTIONS('/auth/login?client_id=asdf');
+        $I->sendOPTIONS('/auth/login');
         $I->seeResponseCodeIs(405);
     }
 
@@ -117,7 +109,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response for making a POST request for logging in with invite code and no access token');
         $I->stopFollowingRedirects();
-        $I->sendGET('/auth/login?client_id=asdf&invite=abc123');
+        $I->sendGET('/auth/login?invite=abc123');
         $I->seeResponseCodeIs(302);
     }
 }

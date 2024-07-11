@@ -58,20 +58,6 @@ class AuthController extends BaseRestController
 
         try {
             /*
-             * Grab client_id for use in token after successful login
-             */
-            try {
-                $clientId = Utils::getClientIdOrFail();
-            } catch (\Exception $e) {
-                \Yii::warning(\Yii::t('app', 'Auth.MissingClientID'));
-
-                // This condition happens if a user sits on the IDP login prompt long
-                // enough for the session to expire. As a workaround, redirect back to
-                // the profile UI home page, which should restart the login process.
-                return $this->redirect(\Yii::$app->params['uiUrl']);
-            }
-
-            /*
              * Grab state for use in response after successful login
              */
             $state = $this->getRequestState();
@@ -90,7 +76,16 @@ class AuthController extends BaseRestController
                 }
             }
 
-            $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
+            $accessToken = $user->createAccessToken(User::AUTH_TYPE_LOGIN);
+
+            // Store access token in session as HTTP-only
+            \Yii::$app->session->set('access_token', $accessToken);
+            \Yii::$app->session->set('access_token_expiration', $user->access_token_expiration);
+            \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+              'name' => 'access_token',
+              'value' => $accessToken,
+              'httpOnly' => true,
+            ]));
 
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 

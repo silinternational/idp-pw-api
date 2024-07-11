@@ -123,21 +123,21 @@ class ResetCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PUT request to validate a reset code');
-        $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(200);
     }
 
     public function test81(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PUT request to validate an expired reset code');
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '444', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '444']);
         $I->seeResponseCodeIs(410);
     }
 
     public function test812(ApiTester $I)
     {
         $I->wantTo('check response on unauthenticated PUT request to validate an expired, incorrect reset code');
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => 'xxx', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => 'xxx']);
         $I->seeResponseCodeIs(400);
     }
 
@@ -145,13 +145,13 @@ class ResetCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated PUT request to validate a reset code');
         $I->haveHttpHeader('Authorization', 'Bearer user1');
-        $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(200);
     }
 
     public function test84(ApiTester $I)
     {
-        $I->wantTo('check response when making PUT request to validate a reset code without client_id');
+        $I->wantTo('check response when making PUT request to validate a reset code');
         $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(400);
     }
@@ -167,25 +167,25 @@ class ResetCest extends BaseCest
     public function test9(ApiTester $I)
     {
         $I->wantTo('check response when making multiple authenticated PUT request to validate a reset code');
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(400);
-        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344', 'client_id' => 'abc123']);
+        $I->sendPUT('/reset/33333333333333333333333333333334/validate', ['code' => '344']);
         $I->seeResponseCodeIs(429);
     }
 

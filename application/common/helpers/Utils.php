@@ -305,48 +305,6 @@ class Utils
     }
 
     /**
-     * Get client_id from request or session and then store in session
-     * @return string
-     * @throws \Exception
-     */
-    public static function getClientIdOrFail()
-    {
-        $request = \Yii::$app->request;
-        if (\Yii::$app->request->isPut) {
-            $clientId = $request->getBodyParam('client_id');
-        } else {
-            $clientId = $request->get('client_id');
-        }
-
-        if ($clientId === null) {
-            $clientId = \Yii::$app->session->get('clientId');
-            if ($clientId === null) {
-                \Yii::warning([
-                    'action' => 'login - get client id or fail',
-                    'status' => 'error',
-                    'request_method' => $request->getMethod(),
-                    'request_url' => $request->getAbsoluteUrl(),
-                    'body_params' => $request->getBodyParams(),
-                    'user_agent' => $request->getUserAgent(),
-                ]);
-                throw new \Exception('Missing client_id');
-            }
-        }
-        try {
-            \Yii::$app->session->set('clientId', $clientId);
-        } catch (\Exception $e) {
-            \Yii::error([
-                'action' => 'login - save clientId to session',
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-            throw $e;
-        }
-
-        return $clientId;
-    }
-
-    /**
      * Return HMAC SHA256 of access token
      * @param string $accessToken
      * @return string
