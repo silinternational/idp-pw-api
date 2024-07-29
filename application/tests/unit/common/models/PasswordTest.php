@@ -108,7 +108,7 @@ class PasswordTest extends Test
             $this->assertTrue(
                 substr_count($validationErrorsString, 'Password.DisallowedContent') > 0,
                 'Failed validating test case: ' . $testPassword .
-                '. No error for matching a user attribute.'
+                    '. No error for matching a user attribute.'
             );
         }
     }
@@ -124,6 +124,37 @@ class PasswordTest extends Test
         $errors = join('|', array_values($password->getErrors('password')));
         $msg = sprintf('Failed validating test for bad bytes in password. (Errors: "%s")', $errors);
         $this->assertTrue(str_contains($errors, 'Password.ContainsBadByte'), $msg);
+    }
+
+    public function testAlphaAndNumeric()
+    {
+        $employeeId = '111111';
+        $user = User::findOne(['employee_id' => $employeeId]);
+
+        $passwords = [
+            "123456" => false,
+            "abcdef" => false,
+            "éiéīơẖ" => false,
+            "abc123" => true,
+            "123abc" => true,
+            "1ü3123" => true,
+            "12345¨" => true,
+        ];
+
+        foreach ($passwords as $pw => $good) {
+            $password = Password::create($user, $pw);
+            $password->config['requireAlphaAndNumeric'] = true;
+            $password->validate();
+
+            $errors = join('|', array_values($password->getErrors('password')));
+            if ($good) {
+                $msg = sprintf('failed validating password for requiring alpha and numeric with good password "%s". (Errors: "%s")', $pw, $errors);
+                $this->assertStringNotContainsString('Password.AlphaAndNumericRequired', $errors, $msg);
+            } else {
+                $msg = sprintf('Failed validating test for requiring alpha and numeric in password "%s". (Errors: "%s")', $pw, $errors);
+                $this->assertStringContainsString('Password.AlphaAndNumericRequired', $errors, $msg);
+            }
+        }
     }
 
     private function getTestData()
