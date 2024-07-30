@@ -59,6 +59,7 @@ $passwordRules = [
     'maxLength' => $passwordRulesEnv['maxLength'] ?? 255,
     'minScore' => $passwordRulesEnv['minScore'] ?? 3,
     'enableHIBP' => $passwordRulesEnv['enableHIBP'] ?? true,
+    'requireAlphaAndNumeric' => $passwordRulesEnv['requireAlphaAndNumeric'] ?? false,
 ];
 
 $logPrefix = function () {

@@ -7,9 +7,6 @@ $mysqlDatabase = Env::get('MYSQL_DATABASE');
 $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
-/* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
-
 $sessionLifetime = 1800; // 30 minutes
 
 const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
