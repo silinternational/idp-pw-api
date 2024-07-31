@@ -4,7 +4,7 @@ test: testlocal testintegration
 
 testlocal: testunit testapi
 
-testunit: composer rmTestDb upTestDb broker ldapload yiimigratetestDb
+testunit: composer rmTestDb upTestDb broker yiimigratetestDb
 	docker-compose run --rm unittest
 
 testapi: upTestDb yiimigratetestDb

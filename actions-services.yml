@@ -19,7 +19,7 @@ services:
             - db
             - zxcvbn
             - broker
-            - ldapload
+#            - ldapload
         environment:
             MYSQL_HOST: db
             MYSQL_DATABASE: test
