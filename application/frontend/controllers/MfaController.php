@@ -47,6 +47,9 @@ class MfaController extends BaseRestController
     {
         parent::init();
         $config = \Yii::$app->params['idBrokerConfig'];
+        if (empty($config['baseUrl']) || empty($config['accessToken'])) {
+            throw new \Exception('ID_BROKER_baseURL and ID_BROKER_accessToken are required', 1722423243);
+        }
         $this->idBrokerClient = new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],
