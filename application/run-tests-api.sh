@@ -21,5 +21,5 @@ TESTRESULTS_API=$?
 echo "Note: If there are unexpected errors, try 'make clean' or manually redo id-broker test migration."
 
 if [[ "TESTRESULTS_API" -ne 0 ]]; then
-    exit TESTRESULTS_API
+    exit $TESTRESULTS_API
 fi

@@ -226,6 +226,9 @@ class LdapTest extends TestCase
      */
     public function getClient()
     {
+        // FIXME (IDP-1156)
+        $this->markTestSkipped('ldap image is broken due to CentOS EOL');
+
         $ldap = new Ldap();
         $ldap->host = 'ldap';
         $ldap->port = 389;
