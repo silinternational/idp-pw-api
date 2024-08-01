@@ -10,12 +10,6 @@ Backend API for Identity Provider Password Management
 ### Mac
 1. Docker for Mac
 
-### Windows
-1. VirtualBox
-2. Vagrant
-3. Alternative to using vagrant you can install Docker Toolbox, but Docker Compose
-   still has issues with Windows and doesn't support interactive mode at this time.
-
 ## Setup
 1. Clone this repo
 2. Copy ```local.env.dist``` to ```local.env``` and ```email.local.env.dist```
@@ -56,17 +50,11 @@ The content of the configuration profile takes the form of a typical .env file, 
 `#` for comments and `=` for variable assignment. Any variables read from AppConfig
 will overwrite variables set in the execution environment.
 
-### Additional setup for Linux & Mac
+### Additional setup
+
 1. Add entry to ```/etc/hosts``` for ```127.0.0.1 idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
 3. Run ```make start```
-
-### Additional setup for Windows
-1. Add entry to ```c:\windows\system32\drivers\etc\hosts``` for
-   ```192.168.37.37 idp-pw-api.local```
-2. Run ```vagrant up```
-3. In order to run docker commands directly, SSH into the vagrant box ```vagrant ssh```
-   change to /vagrant folder ```cd /vagrant``` and run ```make start```
 
 ### Makefile script aliases
 To simplify common tasks there is a Makefile in place. The most common tasks will likely be:
