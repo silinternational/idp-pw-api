@@ -108,7 +108,7 @@ services:
         volumes:
             - ${COMPOSER_CACHE_DIR}:/composer
         working_dir: /data
-        user: "root"
+        user: "${DOCKER_UIDGID}"
         env_file:
             - ./common.env
             - ./local.env
