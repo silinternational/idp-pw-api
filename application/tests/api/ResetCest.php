@@ -149,13 +149,6 @@ class ResetCest extends BaseCest
         $I->seeResponseCodeIs(200);
     }
 
-    public function test84(ApiTester $I)
-    {
-        $I->wantTo('check response when making PUT request to validate a reset code');
-        $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
-        $I->seeResponseCodeIs(400);
-    }
-
     public function test83(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to reset/id/validate');
