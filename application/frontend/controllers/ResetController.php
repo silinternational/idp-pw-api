@@ -239,7 +239,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return array
+     * @return void
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -287,7 +287,10 @@ class ResetController extends BaseRestController
              */
             try {
                 $accessToken = $reset->user->createAccessToken(User::AUTH_TYPE_RESET);
-
+                // Store access token in session as HTTP-only
+                \Yii::$app->session->set('access_token', $accessToken);
+                \Yii::$app->session->set('access_token_expiration', $reset->user->access_token_expiration);
+                
                 $log['status'] = 'success';
                 \Yii::warning($log);
 
@@ -303,9 +306,6 @@ class ResetController extends BaseRestController
                     ]);
                 }
 
-                return [
-                    'access_token' => $accessToken,
-                ];
             } catch (\Exception $e) {
                 $log['status'] = 'error';
                 $log['error'] = 'Unable to log user in after successful reset verification';

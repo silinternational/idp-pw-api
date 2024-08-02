@@ -81,11 +81,6 @@ class AuthController extends BaseRestController
             // Store access token in session as HTTP-only
             \Yii::$app->session->set('access_token', $accessToken);
             \Yii::$app->session->set('access_token_expiration', $user->access_token_expiration);
-            \Yii::$app->response->cookies->add(new \yii\web\Cookie([
-              'name' => 'access_token',
-              'value' => $accessToken,
-              'httpOnly' => true,
-            ]));
 
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 
@@ -126,7 +121,7 @@ class AuthController extends BaseRestController
 
     public function actionLogout()
     {
-        $accessToken = \Yii::$app->request->get('access_token');
+        $accessToken = \Yii::$app->session->get('access_token');
         if ($accessToken !== null) {
             /*
              * Clear access_token
