@@ -127,6 +127,8 @@ class AuthController extends BaseRestController
              * Clear access_token
              */
             $accessTokenHash = Utils::getAccessTokenHash($accessToken);
+            \Yii::$app->session->remove('access_token');
+            \Yii::$app->session->remove('access_token_expiration');
             $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
                 $user->destroyAccessToken();

@@ -290,7 +290,7 @@ class ResetController extends BaseRestController
                 // Store access token in session as HTTP-only
                 \Yii::$app->session->set('access_token', $accessToken);
                 \Yii::$app->session->set('access_token_expiration', $reset->user->access_token_expiration);
-                
+
                 $log['status'] = 'success';
                 \Yii::warning($log);
 
