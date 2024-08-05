@@ -67,9 +67,9 @@ $logPrefix = function () {
     $prefixData = [
         'env' => YII_ENV,
     ];
+    $userId = Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->id;
     if ($request instanceof \yii\web\Request) {
-        // Assumes format: Bearer consumer-module-name-32randomcharacters
-        $prefixData['id'] = substr($request->headers['Authorization'], 7, 16) ?: 'unknown';
+        $prefixData['id'] = $userId;
         $prefixData['ip'] = $request->getUserIP();
         $prefixData['method'] = $request->getMethod();
         $prefixData['url'] = $request->getUrl();
