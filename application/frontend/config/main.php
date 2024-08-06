@@ -46,6 +46,11 @@ return [
                 'emulatePrepare' => false,
                 'tablePrefix' => '',
             ],
+            'cookieParams' => [
+              'httpOnly' => true,
+              'secure' => true, // Ensure cookies are sent over HTTPS
+              'sameSite' => \yii\web\Cookie::SAME_SITE_LAX, // Adjust based on your needs (Strict, Lax, None)
+          ],
             // 'sessionTable' => 'session',  // defaults to 'session'
         ],
         'response' => [
