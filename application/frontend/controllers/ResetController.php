@@ -287,9 +287,14 @@ class ResetController extends BaseRestController
              */
             try {
                 $accessToken = $reset->user->createAccessToken(User::AUTH_TYPE_RESET);
-                // Store access token in session as HTTP-only
-                \Yii::$app->session->set('access_token', $accessToken);
-                \Yii::$app->session->set('access_token_expiration', $reset->user->access_token_expiration);
+                \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                  'name' => 'access_token',
+                  'value' => $accessToken,
+                  'expire' => \Yii::$app->user->access_token_expiration,
+                  'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
+                  'secure' => true,   // Ensures the cookie is sent only over HTTPS
+                  'sameSite' => 'Lax', // Adjust as needed
+                ]));
 
                 $log['status'] = 'success';
                 \Yii::warning($log);

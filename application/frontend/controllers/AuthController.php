@@ -12,7 +12,6 @@ use frontend\components\BaseRestController;
 use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -78,10 +77,14 @@ class AuthController extends BaseRestController
 
             $accessToken = $user->createAccessToken(User::AUTH_TYPE_LOGIN);
 
-            // Store access token in session as HTTP-only
-            \Yii::$app->session->set('access_token', $accessToken);
-            \Yii::$app->session->set('access_token_expiration', $user->access_token_expiration);
-
+            \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+              'name' => 'access_token',
+              'value' => $accessToken,
+              'expire' => $user->access_token_expiration,
+              'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
+              'secure' => true,   // Ensures the cookie is sent only over HTTPS
+              'sameSite' => 'Lax', // Adjust as needed
+            ]));
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 
             $log['email'] = $user->email;
@@ -121,14 +124,14 @@ class AuthController extends BaseRestController
 
     public function actionLogout()
     {
-        $accessToken = \Yii::$app->session->get('access_token');
+        $cookies = \Yii::$app->response->cookies;
+        $accessToken = $cookies->get('access_token');
         if ($accessToken !== null) {
             /*
              * Clear access_token
              */
             $accessTokenHash = Utils::getAccessTokenHash($accessToken);
-            \Yii::$app->session->remove('access_token');
-            \Yii::$app->session->remove('access_token_expiration');
+            $cookies->remove('access_token');
             $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
                 $user->destroyAccessToken();
@@ -201,20 +204,8 @@ class AuthController extends BaseRestController
          * build url to redirect user to
          */
         $afterLogin = $this->getAfterLoginUrl($relayState);
-        if (strpos($afterLogin, '?')) {
-            $joinChar = '&';
-        } else {
-            $joinChar = '?';
-        }
-        $url = $afterLogin . sprintf(
-            '%sstate=%s&token_type=Bearer&expires_utc=%s&access_token=%s',
-            $joinChar,
-            Html::encode($state),
-            Utils::getIso8601($tokenExpiration),
-            $accessToken
-        );
 
-        return $url;
+        return $afterLogin;
     }
 
     /**
