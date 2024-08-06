@@ -7,6 +7,7 @@ class ResetCest extends BaseCest
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request to /reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendGET('/reset');
         $I->seeResponseCodeIs(405);
     }
@@ -21,6 +22,7 @@ class ResetCest extends BaseCest
     public function test12(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to /reset');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendDELETE('/reset');
         $I->seeResponseCodeIs(405);
     }
@@ -42,6 +44,7 @@ class ResetCest extends BaseCest
     public function test3(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request for obtaining reset object');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendGET('/reset/11111111111111111111111111111111');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -90,6 +93,7 @@ class ResetCest extends BaseCest
     public function test62(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to /reset/id');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendDELETE('/reset/11111111111111111111111111111111');
         $I->seeResponseCodeIs(405);
     }
@@ -111,6 +115,7 @@ class ResetCest extends BaseCest
     public function test72(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to resend the verification');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/reset/11111111111111111111111111111111/resend');
         $I->seeResponseCodeIs(200);
     }
@@ -139,6 +144,7 @@ class ResetCest extends BaseCest
     public function test82(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to validate a reset code');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(200);
     }
@@ -146,6 +152,7 @@ class ResetCest extends BaseCest
     public function test83(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to reset/id/validate');
+        $I->haveHttpHeader('Authorization', 'Bearer user1');
         $I->sendDELETE('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(405);
     }
