@@ -14,7 +14,10 @@ class MethodCest extends BaseCest
     public function test2(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendDELETE('/method');
         $I->seeResponseCodeIs(405);
     }
@@ -29,7 +32,10 @@ class MethodCest extends BaseCest
     public function test4(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PATCH request to method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPATCH('/method');
         $I->seeResponseCodeIs(405);
     }
@@ -51,7 +57,10 @@ class MethodCest extends BaseCest
 
         $I->wantTo('check response that verified AND unverified methods exist when making authenticated GET'
             . ' request for obtaining the methods of a user');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendGET('/method');
         $I->seeResponseCodeIs(200);
 
@@ -71,7 +80,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated GET request to method for a user'
             . ' with auth_type=reset');
-        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->setCookie('access_token', 'Bearer user5', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendGET('/method');
         $I->seeResponseCodeIs(403);
     }
@@ -86,7 +98,10 @@ class MethodCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated POST request for creating a new method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPOST('/method', ['type' => 'email','value' => 'user@domain.com']);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -99,7 +114,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated POST request for creating an'
             . ' already existing method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPOST('/method', ['type' => 'email','value' => 'email-1456769679@domain.org']);
 
         $I->seeResponseCodeIs(200);
@@ -109,7 +127,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated POST request to method for a user with'
             . ' auth_type=reset');
-        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->setCookie('access_token', 'Bearer user5', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPOST('/method', ['type' => 'email','value' => 'email@example.com']);
         $I->seeResponseCodeIs(403);
     }
@@ -124,7 +145,10 @@ class MethodCest extends BaseCest
     public function test10(ApiTester $I, $scenario)
     {
         $I->wantTo('check response when making authenticated GET request to obtain a method');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendGET('/method/22222222222222222222222222222222');
 
         $I->seeResponseCodeIs(200);
@@ -138,7 +162,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated GET request to method/{uid} for a user'
             . ' with auth_type=reset');
-        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->setCookie('access_token', 'Bearer user5', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendGET('/method/55555555555555555555555555555555');
         $I->seeResponseCodeIs(403);
     }
@@ -147,7 +174,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated GET request to obtain a method as'
             . ' a non-owner of the method');
-        $I->haveHttpHeader('Authorization', 'Bearer user2');
+        $I->setCookie('access_token', 'Bearer user2', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendGET('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(404);
     }
@@ -162,7 +192,10 @@ class MethodCest extends BaseCest
     public function test13(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated POST request method/id');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPOST('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(405);
     }
@@ -258,7 +291,10 @@ class MethodCest extends BaseCest
          */
 
         $I->wantTo('check response when making authenticated DELETE request to method/id');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendDELETE('/method/33333333333333333333333333333335');
 
         $I->seeResponseCodeIs(204);
@@ -270,7 +306,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated DELETE request as a non-owner of'
             . ' the method');
-        $I->haveHttpHeader('Authorization', 'Bearer user2');
+        $I->setCookie('access_token', 'Bearer user2', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
 
         $I->sendDELETE('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(404);
@@ -280,7 +319,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated DELETE request to method/{uid} for a user'
             . ' with auth_type=reset');
-        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->setCookie('access_token', 'Bearer user5', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendDELETE('/method/55555555555555555555555555555555');
         $I->seeResponseCodeIs(403);
     }
@@ -288,7 +330,10 @@ class MethodCest extends BaseCest
     public function test18(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PATCH request to method/id');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPATCH('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(405);
     }
@@ -296,7 +341,10 @@ class MethodCest extends BaseCest
     public function test19(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated OPTIONS request to method/id');
-        $I->haveHttpHeader('Authorization', 'Bearer user1');
+        $I->setCookie('access_token', 'Bearer user1', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendOPTIONS('/method/11111111111111111111111111111111');
         $I->seeResponseCodeIs(200);
     }
@@ -304,7 +352,10 @@ class MethodCest extends BaseCest
     public function test20(ApiTester $I)
     {
         $I->wantTo('check response when making PUT request to method/{uid}/resend with incorrect token');
-        $I->haveHttpHeader('Authorization', 'Bearer invalidToken');
+        $I->setCookie('access_token', 'Bearer invalidToken', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPUT('/method/11111111111111111111111111111111/resend');
         $I->seeResponseCodeIs(401);
     }
@@ -313,7 +364,10 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making PUT request to method/{uid}/resend for a user'
             . ' with auth_type=reset');
-        $I->haveHttpHeader('Authorization', 'Bearer user5');
+        $I->setCookie('access_token', 'Bearer user5', [
+          'expire' => time() + 3600,  // Cookie expires in 1 hour
+          'httpOnly' => true          // Cookie is not accessible via JavaScript
+        ]);
         $I->sendPUT('/method/55555555555555555555555555555555/resend');
         $I->seeResponseCodeIs(403);
     }
