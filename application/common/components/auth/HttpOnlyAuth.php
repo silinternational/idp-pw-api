@@ -18,14 +18,9 @@ class HttpOnlyAuth extends AuthMethod
      */
     public function authenticate($user, $request, $response)
     {
-        $accessToken = \Yii::$app->request->get('access_token');
-        $expirationTime = $accessToken->expire;
-        $currentTime = time();
+      $accessToken = $request->cookies->getValue('access_token');
 
         if ($accessToken === null) {
-            return null;
-        }
-        if ($expirationTime <= $currentTime) {
             return null;
         }
 
