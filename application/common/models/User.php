@@ -591,7 +591,7 @@ class User extends UserBase implements IdentityInterface
          */
         $accessToken = Utils::generateRandomString(32);
         /*
-         * Store accessToken for bearer auth
+         * Store accessToken for auth
          */
         $this->auth_type = $authType;
         $this->access_token = Utils::getAccessTokenHash($accessToken);

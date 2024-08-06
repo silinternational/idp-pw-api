@@ -4,14 +4,16 @@ version: 4
 protocols: [ HTTPS ]
 mediaType: application/json
 securitySchemes:
-  AuthzBearerToken:
-      type: x-{other}
+ AuthzHttpOnlyCookie:
+      type: x-cookie
       describedBy:
         headers:
-          Authorization:
+          Cookie:
+            description: |
+              The access token is stored in a secure, HttpOnly cookie
             type: string
-            example: Bearer gwgyxgf0vbuwYrI60sbbxLM3U1Jjw2lyvG53Kjjy9cq
-securedBy: [ AuthzBearerToken ]
+            example: access_token=your_secure_token_value
+securedBy: [ AuthzHttpOnlyCookie ]
 types:
   Config:
     type: object
@@ -233,18 +235,16 @@ types:
       responses:
         302:
           description: >
-            On successful login or invite, a redirection to `ReturnTo` with `state`, `token_type`,
-            `expires_utc` and `access_token` appended as query string parameters. If `invite`
-            was provided, but it has expired, this response will be a redirection to
-            `ReturnToOnError` with no query string parameters.
+            On successful login or invite, a redirection to `ReturnTo`. If `invite` was provided, but it has expired,
+            this response will be a redirection to `ReturnToOnError` with no query string parameters.
           headers:
             location:
               description: redirect URL
               type: string
               example:
-                https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+                https://idp-pw.org/profile/intro?state=&expires_utc=2018-12-20T18:41:52Z
           example:
-            https://idp-pw.org/profile/intro?state=&token_type=Bearer&expires_utc=2018-12-20T18:41:52Z&access_token=hgEzk1kceC40FHeJm6cyfr5FgE9Tc4UH
+            https://idp-pw.org/profile/intro?state=&expires_utc=2018-12-20T18:41:52Z
         400:
           description: Error or missing information in request.
     post:
@@ -257,10 +257,6 @@ types:
   /logout:
     get:
       securedBy: null
-      queryParameters:
-        access_token:
-          description: token provided at login
-          type: string
       responses:
         200:
 /config:
