@@ -290,7 +290,7 @@ class ResetController extends BaseRestController
                 \Yii::$app->response->cookies->add(new \yii\web\Cookie([
                   'name' => 'access_token',
                   'value' => $accessToken,
-                  'expire' => \Yii::$app->user->access_token_expiration,
+                  'expire' => time() + 3600, // 1 hour from now
                   'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
                   'secure' => true,   // Ensures the cookie is sent only over HTTPS
                   'sameSite' => 'Lax', // Adjust as needed
