@@ -653,7 +653,8 @@ types:
         responses:
           200:
             description: >
-              Reset was validated. Sets access token in session.
+              Reset was validated. Response contains a 32-character access
+              token. Subsequent API calls will use a http only cookie for the access token.
             body:
               properties:
                 access_token: string
