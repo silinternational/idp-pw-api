@@ -18,7 +18,7 @@ class HttpOnlyAuth extends AuthMethod
      */
     public function authenticate($user, $request, $response)
     {
-      $accessToken = $request->cookies->getValue('access_token');
+        $accessToken = $request->cookies->getValue('access_token');
 
         if ($accessToken === null) {
             return null;
