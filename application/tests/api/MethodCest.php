@@ -14,7 +14,7 @@ class MethodCest extends BaseCest
     public function test2(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to method');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -32,7 +32,7 @@ class MethodCest extends BaseCest
     public function test4(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PATCH request to method');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -57,7 +57,7 @@ class MethodCest extends BaseCest
 
         $I->wantTo('check response that verified AND unverified methods exist when making authenticated GET'
             . ' request for obtaining the methods of a user');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -80,7 +80,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated GET request to method for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'Bearer user5', [
+        $I->setCookie('access_token', 'user5', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -98,7 +98,7 @@ class MethodCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated POST request for creating a new method');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -114,7 +114,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated POST request for creating an'
             . ' already existing method');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -127,7 +127,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated POST request to method for a user with'
             . ' auth_type=reset');
-        $I->setCookie('access_token', 'Bearer user5', [
+        $I->setCookie('access_token', 'user5', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -145,7 +145,7 @@ class MethodCest extends BaseCest
     public function test10(ApiTester $I, $scenario)
     {
         $I->wantTo('check response when making authenticated GET request to obtain a method');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -162,7 +162,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated GET request to method/{uid} for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'Bearer user5', [
+        $I->setCookie('access_token', 'user5', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -174,7 +174,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated GET request to obtain a method as'
             . ' a non-owner of the method');
-        $I->setCookie('access_token', 'Bearer user2', [
+        $I->setCookie('access_token', 'user2', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -192,7 +192,7 @@ class MethodCest extends BaseCest
     public function test13(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated POST request method/id');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -291,7 +291,7 @@ class MethodCest extends BaseCest
          */
 
         $I->wantTo('check response when making authenticated DELETE request to method/id');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -306,7 +306,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making authenticated DELETE request as a non-owner of'
             . ' the method');
-        $I->setCookie('access_token', 'Bearer user2', [
+        $I->setCookie('access_token', 'user2', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -319,7 +319,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response for authenticated DELETE request to method/{uid} for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'Bearer user5', [
+        $I->setCookie('access_token', 'user5', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -330,7 +330,7 @@ class MethodCest extends BaseCest
     public function test18(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PATCH request to method/id');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -341,7 +341,7 @@ class MethodCest extends BaseCest
     public function test19(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated OPTIONS request to method/id');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -352,7 +352,7 @@ class MethodCest extends BaseCest
     public function test20(ApiTester $I)
     {
         $I->wantTo('check response when making PUT request to method/{uid}/resend with incorrect token');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -364,7 +364,7 @@ class MethodCest extends BaseCest
     {
         $I->wantTo('check response when making PUT request to method/{uid}/resend for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'Bearer user5', [
+        $I->setCookie('access_token', 'user5', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);

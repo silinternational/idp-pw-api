@@ -16,7 +16,7 @@ class PasswordCest extends BaseCest
     public function test2(ApiTester $I)
     {
         $I->wantTo('check response when making GET request with incorrect token for obtaining info about password');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -27,7 +27,7 @@ class PasswordCest extends BaseCest
     public function test3(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated POST request to /password');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -38,7 +38,7 @@ class PasswordCest extends BaseCest
     public function test4(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated POST request to /password');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -49,7 +49,7 @@ class PasswordCest extends BaseCest
     public function test5(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to update the password');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -60,7 +60,7 @@ class PasswordCest extends BaseCest
     public function test6(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to /password');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -71,7 +71,7 @@ class PasswordCest extends BaseCest
     public function test7(ApiTester $I)
     {
         $I->wantTo('check response when making GET request with correct token for obtaining info about password');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -86,7 +86,7 @@ class PasswordCest extends BaseCest
     public function test8(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated DELETE request to /password');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -97,7 +97,7 @@ class PasswordCest extends BaseCest
     public function test9(ApiTester $I)
     {
         $I->wantTo('check response when making unauthenticated PATCH request to /password');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -108,7 +108,7 @@ class PasswordCest extends BaseCest
     public function test10(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PATCH request to /password');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -119,7 +119,7 @@ class PasswordCest extends BaseCest
     public function test11(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated OPTIONS request to /password');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -131,7 +131,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when changing the password (PUT request) to something that '
             . 'does not meet minLength requirement');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -147,7 +147,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when changing the password (PUT request) to something that '
             . 'has zxcvbn score of 1');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -162,7 +162,7 @@ class PasswordCest extends BaseCest
     public function test16(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 2');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -173,7 +173,7 @@ class PasswordCest extends BaseCest
     public function test17(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that has zxcvbn score of 3');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -185,7 +185,7 @@ class PasswordCest extends BaseCest
     {
         $I->wantTo('check response when changing the password (PUT request) to something that '
             . 'does not meet maxLength requirement');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -205,7 +205,7 @@ class PasswordCest extends BaseCest
     public function test19(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that contains the first_name');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -220,7 +220,7 @@ class PasswordCest extends BaseCest
     public function test20(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that contains the last_name');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -235,7 +235,7 @@ class PasswordCest extends BaseCest
     public function test21(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that contains the idp_username');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -250,7 +250,7 @@ class PasswordCest extends BaseCest
     public function test22(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that contains the email address');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -265,7 +265,7 @@ class PasswordCest extends BaseCest
     public function test23(ApiTester $I)
     {
         $I->wantTo('check response when making PUT request with incorrect token');
-        $I->setCookie('access_token', 'Bearer invalidToken', [
+        $I->setCookie('access_token', 'invalidToken', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -276,7 +276,7 @@ class PasswordCest extends BaseCest
     public function test24(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that contains a short first_name');
-        $I->setCookie('access_token', 'Bearer user6', [
+        $I->setCookie('access_token', 'user6', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -287,7 +287,7 @@ class PasswordCest extends BaseCest
     public function test25(ApiTester $I)
     {
         $I->wantTo('check response when changing the password (PUT request) to something that contains a short last_name');
-        $I->setCookie('access_token', 'Bearer user6', [
+        $I->setCookie('access_token', 'user6', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);

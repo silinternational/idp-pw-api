@@ -19,7 +19,7 @@ class ConfigCest extends BaseCest
     public function test12(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request to config');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -42,7 +42,7 @@ class ConfigCest extends BaseCest
     public function test22(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated POST request to config');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -60,7 +60,7 @@ class ConfigCest extends BaseCest
     public function test32(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to config');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -78,7 +78,7 @@ class ConfigCest extends BaseCest
     public function test42(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to config');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -96,7 +96,7 @@ class ConfigCest extends BaseCest
     public function test52(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PATCH request to config');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -114,7 +114,7 @@ class ConfigCest extends BaseCest
     public function test7(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated OPTIONS request to config');
-        $I->setCookie('access_token', 'Bearer user1', [
+        $I->setCookie('access_token', 'user1', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
