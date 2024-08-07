@@ -296,7 +296,6 @@ class ResetController extends BaseRestController
                   'secure' => $secure,   // Ensures the cookie is sent only over HTTPS
                   'sameSite' => 'Lax', // Adjust as needed
                 ]));
-                // die(\Yii::$app->response->cookies->getValue('access_token'));
 
                 $log['status'] = 'success';
                 \Yii::warning($log);
