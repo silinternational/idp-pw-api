@@ -239,7 +239,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return array
+     * @return null
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -252,12 +252,6 @@ class ResetController extends BaseRestController
         $reset = Reset::findOne(['uid' => $uid]);
         if ($reset === null) {
             throw new NotFoundHttpException();
-        }
-
-        try {
-            $clientId = Utils::getClientIdOrFail();
-        } catch (\Exception $e) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingClientID'), 1483979025);
         }
 
         $log = [
@@ -292,7 +286,16 @@ class ResetController extends BaseRestController
              * Reset verified successfully, create access token for user
              */
             try {
-                $accessToken = $reset->user->createAccessToken($clientId, User::AUTH_TYPE_RESET);
+                $accessToken = $reset->user->createAccessToken(User::AUTH_TYPE_RESET);
+                $secure = (YII_ENV != 'dev' || YII_ENV != 'test') ? true : false;
+                \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                  'name' => 'access_token',
+                  'value' => $accessToken,
+                  'expire' => $reset->user->access_token_expiration,
+                  'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
+                  'secure' => $secure,   // Ensures the cookie is sent only over HTTPS
+                  'sameSite' => 'Lax', // Adjust as needed
+                ]));
 
                 $log['status'] = 'success';
                 \Yii::warning($log);
@@ -308,10 +311,8 @@ class ResetController extends BaseRestController
                         'error' => Json::encode($reset->getFirstErrors()),
                     ]);
                 }
+                return null;
 
-                return [
-                    'access_token' => $accessToken,
-                ];
             } catch (\Exception $e) {
                 $log['status'] = 'error';
                 $log['error'] = 'Unable to log user in after successful reset verification';

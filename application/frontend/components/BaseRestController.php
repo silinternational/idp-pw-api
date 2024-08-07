@@ -2,9 +2,9 @@
 
 namespace frontend\components;
 
+use common\components\auth\HttpOnlyAuth;
 use yii\filters\AccessControl;
 use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\web\ForbiddenHttpException;
@@ -22,7 +22,7 @@ class BaseRestController extends Controller
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
-                    HttpBearerAuth::class, // Use header ... Authorization: Bearer abc123
+                    HttpOnlyAuth::class, // custom authentication
                 ],
                 'except' => ['options'],
             ],
