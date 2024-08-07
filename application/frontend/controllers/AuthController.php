@@ -77,7 +77,7 @@ class AuthController extends BaseRestController
 
             $accessToken = $user->createAccessToken(User::AUTH_TYPE_LOGIN);
             $secure = YII_ENV != 'dev' || YII_ENV != 'test' ? true : false;
-            
+
             \Yii::$app->response->cookies->add(new \yii\web\Cookie([
               'name' => 'access_token',
               'value' => $accessToken,
