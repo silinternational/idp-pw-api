@@ -125,14 +125,15 @@ class AuthController extends BaseRestController
 
     public function actionLogout()
     {
-        $cookies = \Yii::$app->response->cookies;
-        $accessToken = $cookies->getValue('access_token');
+        $requestCookies = \Yii::$app->request->cookies;
+        $responseCookies = \Yii::$app->response->cookies;
+        $accessToken = $requestCookies->getValue('access_token');
         if ($accessToken !== null) {
             /*
              * Clear access_token
              */
             $accessTokenHash = Utils::getAccessTokenHash($accessToken);
-            $cookies->remove('access_token');
+            $responseCookies->remove('access_token', true);
             $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
                 $user->destroyAccessToken();
