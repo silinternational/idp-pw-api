@@ -653,11 +653,7 @@ types:
         responses:
           200:
             description: >
-              Reset was validated. Response contains a 32-character access
-              token. Subsequent API calls will use a http only cookie for the access token.
-            body:
-              properties:
-                access_token: string
+              Reset was validated. Subsequent API calls will use a http only cookie for the access token.
           400:
             description: >
               The provided code was incorrect.

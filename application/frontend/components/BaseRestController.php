@@ -22,7 +22,7 @@ class BaseRestController extends Controller
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
-                    HttpOnlyAuth::class, // custom session-based authentication
+                    HttpOnlyAuth::class, // custom authentication
                 ],
                 'except' => ['options'],
             ],
