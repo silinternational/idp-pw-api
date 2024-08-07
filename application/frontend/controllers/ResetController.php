@@ -239,7 +239,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return void
+     * @return null
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -290,7 +290,7 @@ class ResetController extends BaseRestController
                 \Yii::$app->response->cookies->add(new \yii\web\Cookie([
                   'name' => 'access_token',
                   'value' => $accessToken,
-                  'expire' => time() + 3600, // 1 hour from now
+                  'expire' => $reset->user->access_token_expiration,
                   'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
                   'secure' => true,   // Ensures the cookie is sent only over HTTPS
                   'sameSite' => 'Lax', // Adjust as needed
@@ -310,6 +310,7 @@ class ResetController extends BaseRestController
                         'error' => Json::encode($reset->getFirstErrors()),
                     ]);
                 }
+                return null;
 
             } catch (\Exception $e) {
                 $log['status'] = 'error';
