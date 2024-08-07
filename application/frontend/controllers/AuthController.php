@@ -125,7 +125,7 @@ class AuthController extends BaseRestController
     public function actionLogout()
     {
         $cookies = \Yii::$app->response->cookies;
-        $accessToken = $cookies->get('access_token');
+        $accessToken = $cookies->getValue('access_token');
         if ($accessToken !== null) {
             /*
              * Clear access_token
