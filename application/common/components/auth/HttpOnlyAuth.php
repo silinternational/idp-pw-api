@@ -9,7 +9,7 @@ use yii\web\UnauthorizedHttpException;
 class HttpOnlyAuth extends AuthMethod
 {
     /**
-     * Authenticates the user based on the access_token stored in the session.
+     * Authenticates the user based on the HttpOnly access_token.
      * @param \yii\web\User $user the user object
      * @param \yii\web\Request $request the request object
      * @param \yii\web\Response $response the response object
