@@ -74,7 +74,7 @@ class AuthCest extends BaseCest
         $I->seeResponseCodeIs(200);
         $I->sendGET('/auth/logout');
         $I->seeResponseCodeIs(302);
-        $I->setCookie('access_token', 'Bearer user2', [
+        $I->setCookie('access_token', 'user2', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
@@ -94,7 +94,7 @@ class AuthCest extends BaseCest
         $I->seeResponseCodeIs(401);
         $I->sendGET('/auth/logout');
         $I->seeResponseCodeIs(302);
-        $I->setCookie('access_token', 'Bearer user4', [
+        $I->setCookie('access_token', 'user4', [
           'expire' => time() + 3600,  // Cookie expires in 1 hour
           'httpOnly' => true          // Cookie is not accessible via JavaScript
         ]);
