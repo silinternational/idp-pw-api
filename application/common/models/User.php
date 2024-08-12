@@ -600,6 +600,15 @@ class User extends UserBase implements IdentityInterface
         );
         $this->saveOrError('Unable to create access token', 1465833228);
 
+        $secure = (YII_ENV != 'dev' || YII_ENV != 'test') ? true : false;
+        \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+          'name' => 'access_token',
+          'value' => $accessToken,
+          'expire' => $this->access_token_expiration,
+          'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
+          'secure' => $secure,   // Ensures the cookie is sent only over HTTPS
+          'sameSite' => 'Lax', // Adjust as needed
+        ]));
         return $accessToken;
     }
 

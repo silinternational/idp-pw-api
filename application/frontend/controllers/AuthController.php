@@ -76,16 +76,6 @@ class AuthController extends BaseRestController
             }
 
             $accessToken = $user->createAccessToken(User::AUTH_TYPE_LOGIN);
-            $secure = YII_ENV != 'dev' || YII_ENV != 'test' ? true : false;
-
-            \Yii::$app->response->cookies->add(new \yii\web\Cookie([
-              'name' => 'access_token',
-              'value' => $accessToken,
-              'expire' => $user->access_token_expiration,
-              'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
-              'secure' => $secure,   // Ensures the cookie is sent only over HTTPS
-              'sameSite' => 'Lax', // Adjust as needed
-            ]));
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 
             $log['email'] = $user->email;
@@ -126,13 +116,13 @@ class AuthController extends BaseRestController
     public function actionLogout()
     {
         $requestCookies = \Yii::$app->request->cookies;
-        $responseCookies = \Yii::$app->response->cookies;
         $accessToken = $requestCookies->getValue('access_token');
         if ($accessToken !== null) {
             /*
              * Clear access_token
              */
             $accessTokenHash = Utils::getAccessTokenHash($accessToken);
+            $responseCookies = \Yii::$app->response->cookies;
             $responseCookies->remove('access_token', true);
             $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
@@ -205,9 +195,7 @@ class AuthController extends BaseRestController
         /*
          * build url to redirect user to
          */
-        $afterLogin = $this->getAfterLoginUrl($relayState);
-
-        return $afterLogin;
+        return $this->getAfterLoginUrl($relayState);
     }
 
     /**
