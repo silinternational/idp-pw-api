@@ -4,7 +4,7 @@ version: 4
 protocols: [ HTTPS ]
 mediaType: application/json
 securitySchemes:
- AuthzHttpOnlyCookie:
+  AuthzHttpOnlyCookie:
       type: x-cookie
       describedBy:
         headers:
@@ -242,9 +242,7 @@ types:
               description: redirect URL
               type: string
               example:
-                https://idp-pw.org/profile/intro?state=&expires_utc=2018-12-20T18:41:52Z
-          example:
-            https://idp-pw.org/profile/intro?state=&expires_utc=2018-12-20T18:41:52Z
+                https://idp-pw.org/profile/#
         400:
           description: Error or missing information in request.
     post:
