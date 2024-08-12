@@ -16,10 +16,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response when making a POST request for logging in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendPOST('/auth/login');
         $I->seeResponseCodeIs(302);
     }
@@ -28,10 +25,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response when making a PUT request for logging in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendPUT('/auth/login');
         $I->seeResponseCodeIs(405);
     }
@@ -40,10 +34,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response when making a DELETE request for logging in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendDELETE('/auth/login');
         $I->seeResponseCodeIs(405);
     }
@@ -52,10 +43,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response when making a OPTIONS request for logging in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendOPTIONS('/auth/login');
         $I->seeResponseCodeIs(405);
     }
@@ -64,20 +52,14 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response for making a GET request for logging out when already logged in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user2', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user2', parent::getCookieConfig());
         $I->haveHttpHeader('X-Codeception-CodeCoverage', '');
         $I->haveHttpHeader('HTTP_X_CODECEPTION_CODECOVERAGE', '');
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(200);
         $I->sendGET('/auth/logout');
         $I->seeResponseCodeIs(302);
-        $I->setCookie('access_token', 'user2', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user2', parent::getCookieConfig());
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(401);
     }
@@ -86,18 +68,12 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response for making a GET request for logging out when already logged out');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user4', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user4', parent::getCookieConfig());
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(401);
         $I->sendGET('/auth/logout');
         $I->seeResponseCodeIs(302);
-        $I->setCookie('access_token', 'user4', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user4', parent::getCookieConfig());
         $I->sendGET('/user/me');
         $I->seeResponseCodeIs(401);
     }
@@ -106,10 +82,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response for making a POST request for logging out when already logged in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user2', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user2', parent::getCookieConfig());
         $I->sendPOST('/auth/logout');
         $I->seeResponseCodeIs(405);
     }
@@ -118,10 +91,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response for making a PUT request for logging out when already logged in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user2', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user2', parent::getCookieConfig());
         $I->sendPUT('/auth/logout');
         $I->seeResponseCodeIs(405);
     }
@@ -130,10 +100,7 @@ class AuthCest extends BaseCest
     {
         $I->wantTo('check response for making a OPTIONS request for logging out when already logged in');
         $I->stopFollowingRedirects();
-        $I->setCookie('access_token', 'user2', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user2', parent::getCookieConfig());
         $I->sendOPTIONS('/auth/logout');
         $I->seeResponseCodeIs(200);
     }

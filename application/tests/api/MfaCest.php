@@ -7,10 +7,7 @@ class MfaCest extends BaseCest
     public function test10(ApiTester $I)
     {
         $I->wantTo('check response when making GET request to /mfa with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendGET('/mfa');
         $I->seeResponseCodeIs(401);
     }
@@ -19,10 +16,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making GET request to /mfa for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendGET('/mfa');
         $I->seeResponseCodeIs(403);
     }
@@ -32,10 +26,7 @@ class MfaCest extends BaseCest
     public function test20(ApiTester $I)
     {
         $I->wantTo('check response when making POST request to /mfa with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendPOST('/mfa');
         $I->seeResponseCodeIs(401);
     }
@@ -44,10 +35,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making POST request to /mfa for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendPOST('/mfa');
         $I->seeResponseCodeIs(403);
     }
@@ -57,10 +45,7 @@ class MfaCest extends BaseCest
     public function test30(ApiTester $I)
     {
         $I->wantTo('check response when making PUT request to mfa/{id} with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendPUT('/mfa/1');
         $I->seeResponseCodeIs(401);
     }
@@ -69,10 +54,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making PUT request to mfa/{id} for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendPUT('/mfa/5');
         $I->seeResponseCodeIs(403);
     }
@@ -80,10 +62,7 @@ class MfaCest extends BaseCest
     public function test33(ApiTester $I)
     {
         $I->wantTo('check response when making PUT request to mfa/{id}/webauthn/{webauthn_id} with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendPUT('/mfa/5/webauthn/6');
         $I->seeResponseCodeIs(401);
     }
@@ -92,10 +71,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making PUT request to mfa/{id}/webauthn/{webauthn_id} for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendPUT('/mfa/5/webauthn/6');
         $I->seeResponseCodeIs(403);
     }
@@ -105,10 +81,7 @@ class MfaCest extends BaseCest
     public function test40(ApiTester $I)
     {
         $I->wantTo('check response when making DELETE request to mfa/{id} with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendDELETE('/mfa/1');
         $I->seeResponseCodeIs(401);
     }
@@ -117,10 +90,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making DELETE request to mfa/{id} for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendDELETE('/mfa/5');
         $I->seeResponseCodeIs(403);
     }
@@ -128,10 +98,7 @@ class MfaCest extends BaseCest
     public function test42(ApiTester $I)
     {
         $I->wantTo('check response when making DELETE request to mfa/{id}/webauthn/{webauthn_id} with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendDELETE('/mfa/5/webauthn/6');
         $I->seeResponseCodeIs(401);
     }
@@ -140,10 +107,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making DELETE request to mfa/{id}/webauthn/{webauthn_id} for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendDELETE('/mfa/5/webauthn/6');
         $I->seeResponseCodeIs(403);
     }
@@ -153,10 +117,7 @@ class MfaCest extends BaseCest
     public function test50(ApiTester $I)
     {
         $I->wantTo('check response when making PUT request to mfa/{id}/verify with incorrect token');
-        $I->setCookie('access_token', 'invalidToken', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'invalidToken', parent::getCookieConfig());
         $I->sendPUT('/mfa/1/verify');
         $I->seeResponseCodeIs(401);
     }
@@ -165,10 +126,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making PUT request to mfa/{id}/verify for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendPUT('/mfa/5/verify');
         $I->seeResponseCodeIs(403);
     }
@@ -177,10 +135,7 @@ class MfaCest extends BaseCest
     {
         $I->wantTo('check response when making PUT request to mfa/{id}/verify/registration for a user'
             . ' with auth_type=reset');
-        $I->setCookie('access_token', 'user5', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user5', parent::getCookieConfig());
         $I->sendPUT('/mfa/5/verify/registration');
         $I->seeResponseCodeIs(403);
     }

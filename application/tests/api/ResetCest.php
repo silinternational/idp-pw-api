@@ -7,10 +7,7 @@ class ResetCest extends BaseCest
     public function test1(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request to /reset');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendGET('/reset');
         $I->seeResponseCodeIs(405);
     }
@@ -25,10 +22,7 @@ class ResetCest extends BaseCest
     public function test12(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to /reset');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendDELETE('/reset');
         $I->seeResponseCodeIs(405);
     }
@@ -50,10 +44,7 @@ class ResetCest extends BaseCest
     public function test3(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated GET request for obtaining reset object');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendGET('/reset/11111111111111111111111111111111');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -102,10 +93,7 @@ class ResetCest extends BaseCest
     public function test62(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to /reset/id');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendDELETE('/reset/11111111111111111111111111111111');
         $I->seeResponseCodeIs(405);
     }
@@ -127,10 +115,7 @@ class ResetCest extends BaseCest
     public function test72(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to resend the verification');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendPUT('/reset/11111111111111111111111111111111/resend');
         $I->seeResponseCodeIs(200);
     }
@@ -159,10 +144,7 @@ class ResetCest extends BaseCest
     public function test82(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated PUT request to validate a reset code');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendPUT('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(200);
     }
@@ -170,10 +152,7 @@ class ResetCest extends BaseCest
     public function test83(ApiTester $I)
     {
         $I->wantTo('check response when making authenticated DELETE request to reset/id/validate');
-        $I->setCookie('access_token', 'user1', [
-          'expire' => time() + 3600,  // Cookie expires in 1 hour
-          'httpOnly' => true          // Cookie is not accessible via JavaScript
-        ]);
+        $I->setCookie('access_token', 'user1', parent::getCookieConfig());
         $I->sendDELETE('/reset/33333333333333333333333333333333/validate', ['code' => '333']);
         $I->seeResponseCodeIs(405);
     }
