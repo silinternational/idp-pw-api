@@ -239,7 +239,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return array
+     * @return null
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -252,12 +252,6 @@ class ResetController extends BaseRestController
         $reset = Reset::findOne(['uid' => $uid]);
         if ($reset === null) {
             throw new NotFoundHttpException();
-        }
-
-        try {
-            $clientId = Utils::getClientIdOrFail();
-        } catch (\Exception $e) {
-            throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingClientID'), 1483979025);
         }
 
         $log = [
@@ -292,7 +286,7 @@ class ResetController extends BaseRestController
              * Reset verified successfully, create access token for user
              */
             try {
-                $accessToken = $reset->user->createAccessToken($clientId, User::AUTH_TYPE_RESET);
+                $reset->user->createAccessToken(User::AUTH_TYPE_RESET);
 
                 $log['status'] = 'success';
                 \Yii::warning($log);
@@ -308,10 +302,8 @@ class ResetController extends BaseRestController
                         'error' => Json::encode($reset->getFirstErrors()),
                     ]);
                 }
+                return null;
 
-                return [
-                    'access_token' => $accessToken,
-                ];
             } catch (\Exception $e) {
                 $log['status'] = 'error';
                 $log['error'] = 'Unable to log user in after successful reset verification';

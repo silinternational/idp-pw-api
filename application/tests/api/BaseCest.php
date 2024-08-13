@@ -22,4 +22,13 @@ class BaseCest
     {
         $this->fixtureHelper->_afterSuite();
     }
+
+    public function getCookieConfig()
+    {
+        return
+        [
+            'expire' => time() + 3600,  // Cookie expires in 1 hour
+            'httpOnly' => true,         // Cookie is not accessible via JavaScript
+        ];
+    }
 }

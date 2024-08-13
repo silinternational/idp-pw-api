@@ -231,4 +231,3 @@ networks:
             config:
             - subnet: 10.20.31.0/24
               gateway: 10.20.31.1
-

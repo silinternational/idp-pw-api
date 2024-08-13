@@ -5,6 +5,8 @@ modules:
     enabled:
         - ApiHelper
         - tests\api\FixtureHelper
+        - PhpBrowser:
+            url: http://localhost/index-test.php
         - REST:
             url: http://localhost/index-test.php
             depends: PhpBrowser

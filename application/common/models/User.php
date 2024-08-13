@@ -580,26 +580,35 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @param string $clientId
+     * @param string $authType
      * @return string
      * @throws \Exception
      */
-    public function createAccessToken($clientId, $authType)
+    public function createAccessToken($authType)
     {
         /*
          * Create access_token and update user
          */
         $accessToken = Utils::generateRandomString(32);
         /*
-         * Store combination of clientId and accessToken for bearer auth
+         * Store accessToken for auth
          */
         $this->auth_type = $authType;
-        $this->access_token = Utils::getAccessTokenHash($clientId . $accessToken);
+        $this->access_token = Utils::getAccessTokenHash($accessToken);
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );
         $this->saveOrError('Unable to create access token', 1465833228);
 
+        $secure = !in_array(YII_ENV, ['dev', 'test']);
+        \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+          'name' => 'access_token',
+          'value' => $accessToken,
+          'expire' => $this->access_token_expiration,
+          'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
+          'secure' => $secure,   // Ensures the cookie is sent only over HTTPS
+          'sameSite' => 'Lax', // Adjust as needed
+        ]));
         return $accessToken;
     }
 
