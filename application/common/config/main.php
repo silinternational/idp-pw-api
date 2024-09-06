@@ -1,11 +1,11 @@
 <?php
 
+use common\components\Emailer;
 use notamedia\sentry\SentryTarget;
 use Sentry\Event;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
-use common\components\Emailer;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
@@ -154,7 +154,7 @@ return [
                         } catch (\Exception $e) {
                             $appUser = null;
                         }
-                        if ($appUser && ! \Yii::$app->user->isGuest) {
+                        if ($appUser && !\Yii::$app->user->isGuest) {
                             $prefixData['user'] = \Yii::$app->user->identity->email;
                         }
 
@@ -176,6 +176,11 @@ return [
                     'enabled' => !empty(Env::get('SENTRY_DSN')),
                     'dsn' => Env::get('SENTRY_DSN'),
                     'levels' => ['error'],
+                    'except' => [
+                        'yii\web\HttpException:401', // Unauthorized
+                        'yii\web\HttpException:404', // NotFound
+                        'yii\web\HttpException:409', // Conflict
+                    ],
                     'context' => true,
                     // Additional options for `Sentry\init`
                     // https://docs.sentry.io/platforms/php/configuration/options
@@ -208,10 +213,10 @@ return [
         'i18n' => [
             'translations' => [
                 '*' => [
-                    'class'          => 'yii\i18n\PhpMessageSource',
-                    'basePath'       => '@frontend/messages',
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@frontend/messages',
                     'sourceLanguage' => '00',
-                    'fileMap'        => [
+                    'fileMap' => [
                         'app' => 'app.php',
                         'model' => 'model.php',
                     ],
