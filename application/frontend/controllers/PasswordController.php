@@ -89,7 +89,7 @@ class PasswordController extends BaseRestController
 
         $testPassword = Password::create($user, $newPassword);
 
-        if (! $testPassword->validate('password')) {
+        if (!$testPassword->validate('password')) {
             $errors = join(', ', $testPassword->getErrors('password'));
             \Yii::warning([
                 'action' => 'password/assess',

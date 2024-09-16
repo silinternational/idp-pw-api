@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use common\components\passwordStore\AccountLockedException;
 use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\EventLog;
@@ -83,7 +82,7 @@ class ResetController extends BaseRestController
             }
 
             $clientIp = Utils::getClientIp(\Yii::$app->request);
-            if (! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            if (!Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.RecaptchaFailedVerification'));
             }
         }
@@ -294,7 +293,7 @@ class ResetController extends BaseRestController
                 /*
                  * Delete reset record, log errors, but let user proceed
                  */
-                if (! $reset->delete()) {
+                if (!$reset->delete()) {
                     \Yii::warning([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,
