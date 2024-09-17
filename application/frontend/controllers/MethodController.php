@@ -114,8 +114,8 @@ class MethodController extends BaseRestController
 
         $request = \Yii::$app->request;
 
-        $value = trim($request->post('value'));
-        if ($value === "") {
+        $value = trim($request->getBodyParam('value', ''));
+        if ($value === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Method.MissingValue'), 1542750428);
         }
 
@@ -157,8 +157,8 @@ class MethodController extends BaseRestController
             429 => \Yii::t('app', 'Method.TooManyFailures'),
         ];
 
-        $code = trim(\Yii::$app->request->getBodyParam('code'));
-        if ($code === "") {
+        $code = trim(\Yii::$app->request->getBodyParam('code', ''));
+        if ($code === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Method.CodeMissing'), 1542749426);
         }
 

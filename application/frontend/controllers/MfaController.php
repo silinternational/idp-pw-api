@@ -88,7 +88,7 @@ class MfaController extends BaseRestController
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.TypeMissing'));
         }
 
-        $label = trim(\Yii::$app->request->getBodyParam('label'));
+        $label = trim(\Yii::$app->request->getBodyParam('label', ''));
 
         try {
             $mfa = $this->idBrokerClient->mfaCreate(
@@ -249,7 +249,7 @@ class MfaController extends BaseRestController
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingValue'));
         }
 
-        $label = trim(\Yii::$app->request->getBodyParam('label'));
+        $label = trim(\Yii::$app->request->getBodyParam('label', ''));
 
         try {
             $mfa = $this->idBrokerClient->mfaVerify(
@@ -285,8 +285,8 @@ class MfaController extends BaseRestController
      */
     public function actionUpdate($mfaId)
     {
-        $label = trim(\Yii::$app->request->getBodyParam('label'));
-        if ($label === "") {
+        $label = trim(\Yii::$app->request->getBodyParam('label', ''));
+        if ($label === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingLabel'));
         }
 
@@ -316,8 +316,8 @@ class MfaController extends BaseRestController
      */
     public function actionUpdateWebauthn($mfaId, $webauthnId)
     {
-        $label = trim(\Yii::$app->request->getBodyParam('label'));
-        if ($label === "") {
+        $label = trim(\Yii::$app->request->getBodyParam('label', ''));
+        if ($label === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Mfa.MissingLabel'));
         }
 

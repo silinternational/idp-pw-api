@@ -64,10 +64,10 @@ class ResetController extends BaseRestController
      */
     public function actionCreate()
     {
-        $username = trim(\Yii::$app->request->post('username'));
-        $verificationToken = trim(\Yii::$app->request->post('verification_token'));
+        $username = trim(\Yii::$app->request->getBodyParam('username', ''));
+        $verificationToken = trim(\Yii::$app->request->getBodyParam('verification_token', ''));
 
-        if ($username === "") {
+        if ($username === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingUsername'));
         }
 
@@ -77,7 +77,7 @@ class ResetController extends BaseRestController
          * be double sure an exception is thrown.
          */
         if (\Yii::$app->params['recaptcha']['required']) {
-            if ($verificationToken === "") {
+            if ($verificationToken === '') {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingRecaptchaCode'));
             }
 
@@ -336,8 +336,8 @@ class ResetController extends BaseRestController
      */
     protected function getCodeFromRequestBody(): string
     {
-        $code = trim(\Yii::$app->request->getBodyParam('code', null));
-        if ($code === "") {
+        $code = trim(\Yii::$app->request->getBodyParam('code', ''));
+        if ($code === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingCode'), 1462989866);
         }
         return $code;
