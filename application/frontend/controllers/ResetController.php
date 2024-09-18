@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use common\components\passwordStore\AccountLockedException;
 use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\EventLog;
@@ -65,10 +64,10 @@ class ResetController extends BaseRestController
      */
     public function actionCreate()
     {
-        $username = \Yii::$app->request->post('username');
-        $verificationToken = \Yii::$app->request->post('verification_token');
+        $username = trim(\Yii::$app->request->getBodyParam('username', ''));
+        $verificationToken = trim(\Yii::$app->request->getBodyParam('verification_token', ''));
 
-        if (! $username) {
+        if ($username === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingUsername'));
         }
 
@@ -78,12 +77,12 @@ class ResetController extends BaseRestController
          * be double sure an exception is thrown.
          */
         if (\Yii::$app->params['recaptcha']['required']) {
-            if (! $verificationToken) {
+            if ($verificationToken === '') {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingRecaptchaCode'));
             }
 
             $clientIp = Utils::getClientIp(\Yii::$app->request);
-            if (! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            if (!Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.RecaptchaFailedVerification'));
             }
         }
@@ -294,7 +293,7 @@ class ResetController extends BaseRestController
                 /*
                  * Delete reset record, log errors, but let user proceed
                  */
-                if (! $reset->delete()) {
+                if (!$reset->delete()) {
                     \Yii::warning([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,
@@ -337,8 +336,8 @@ class ResetController extends BaseRestController
      */
     protected function getCodeFromRequestBody(): string
     {
-        $code = \Yii::$app->request->getBodyParam('code', null);
-        if ($code === null) {
+        $code = trim(\Yii::$app->request->getBodyParam('code', ''));
+        if ($code === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingCode'), 1462989866);
         }
         return $code;

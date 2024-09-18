@@ -89,7 +89,7 @@ class PasswordController extends BaseRestController
 
         $testPassword = Password::create($user, $newPassword);
 
-        if (! $testPassword->validate('password')) {
+        if (!$testPassword->validate('password')) {
             $errors = join(', ', $testPassword->getErrors('password'));
             \Yii::warning([
                 'action' => 'password/assess',
@@ -110,8 +110,8 @@ class PasswordController extends BaseRestController
      */
     protected function getPasswordFromRequestBody()
     {
-        $newPassword = \Yii::$app->request->getBodyParam('password');
-        if ($newPassword === null) {
+        $newPassword = trim(\Yii::$app->request->getBodyParam('password', ''));
+        if ($newPassword === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Password.MissingPassword'));
         }
         return $newPassword;
