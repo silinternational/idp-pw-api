@@ -2,6 +2,8 @@ name: Test and Publish
 
 on:
   push:
+    branches: [ 'main' ] #Trigger on Push event to 'main' branch 
+    tags: [ '[0-9]+.[0-9]+.[0-9]+'] # Trigger for the version tags '1.0.1'
 
 jobs:
   tests:
@@ -26,20 +28,32 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        # Step to log into the DockerHub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker
+        # Step to log into the GHCR
+      - name: Log in to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        # Step to Extract the meta for the image  
+      - name: Extract metadata (tags, labels) for Docker Images
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ vars.DOCKER_ORG }}/${{ github.event.repository.name }}
+          images: |
+           ${{ vars.DOCKER_ORG }}/${{ github.event.repository.name }}
+           ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
