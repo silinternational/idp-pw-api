@@ -1,3 +1,7 @@
+paste_backlog_issue_link_here
+
+---
+
 ### Added
 - 
 
@@ -18,7 +22,9 @@
 
 ---
 
-### Feature PR Checklist
+### PR Checklist
+
+- [ ] Put version number in PR title (e.g. `Release x.y.z - Summary of changes`)
 - [ ] Documentation (README, etc.)
 - [ ] Unit tests created or updated
 - [ ] Run `make composershow`
