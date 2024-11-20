@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb:latest
+    image: mariadb:10
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
       MYSQL_DATABASE: test
