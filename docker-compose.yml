@@ -1,12 +1,7 @@
 services:
-  data:
-    image: silintl/data-volume:latest
-    volumes:
-      - ./application:/data
-    user: "${DOCKER_UIDGID}"
 
   db:
-    image: mariadb:latest
+    image: mariadb:10
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
       MYSQL_DATABASE: pwmgr
@@ -14,7 +9,7 @@ services:
       MYSQL_PASSWORD: idpmgmt
 
   testDb:
-    image: mariadb:latest
+    image: mariadb:10
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
       MYSQL_DATABASE: test
@@ -32,8 +27,8 @@ services:
 
   api:
     build: ./
-    volumes_from:
-      - data
+    volumes:
+      - ./application:/data
     ports:
       - "51155:80"
     depends_on:
@@ -45,8 +40,8 @@ services:
 
   apitest:
     build: ./
-    volumes_from:
-      - data
+    volumes:
+      - ./application:/data
     depends_on:
       - testDb
       - zxcvbn
@@ -63,9 +58,8 @@ services:
 
   unittest:
     build: ./
-    volumes_from:
-      - data
     volumes:
+      - ./application:/data
       - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
       - testDb
@@ -82,9 +76,8 @@ services:
 
   integrationtest:
     build: ./
-    volumes_from:
-      - data
     volumes:
+      - ./application:/data
       - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
       - testDb
@@ -102,9 +95,8 @@ services:
 
   cli:
     build: ./
-    volumes_from:
-      - data
     volumes:
+      - ./application:/data
       - ${COMPOSER_CACHE_DIR}:/composer
     working_dir: /data
     user: "${DOCKER_UIDGID}"
@@ -153,7 +145,7 @@ services:
     image: wcjr/zxcvbn-api:1.1.0
 
   brokerDb:
-    image: mariadb:latest
+    image: mariadb:10
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
       MYSQL_DATABASE: broker
