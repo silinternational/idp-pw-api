@@ -1,3 +1,11 @@
+x-db_healthcheck: &db_healthcheck
+  healthcheck:
+    test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+    start_period: 10s
+    interval: 10s
+    timeout: 5s
+    retries: 3
+
 services:
   db:
     image: mariadb:10
@@ -6,6 +14,7 @@ services:
       MYSQL_DATABASE: test
       MYSQL_USER: idpmgmt
       MYSQL_PASSWORD: idpmgmt
+    <<: *db_healthcheck
 
   zxcvbn:
     image: wcjr/zxcvbn-api:1.1.0
@@ -15,10 +24,14 @@ services:
   app:
     build: .
     depends_on:
-      - db
-      - zxcvbn
-      - broker
-    #            - ldapload
+      db:
+        condition: service_healthy
+      zxcvbn:
+        condition: service_started
+      broker:
+        condition: service_healthy
+    #      ldapload:
+    #        condition: service_started
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: test
@@ -55,11 +68,13 @@ services:
       MYSQL_DATABASE: app
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
+    <<: *db_healthcheck
 
   broker:
     image: silintl/idp-id-broker:6
     depends_on:
-      - brokerDb
+      brokerDb:
+        condition: service_healthy
     volumes:
       - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
       - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
@@ -90,15 +105,28 @@ services:
       MFA_WEBAUTHN_apiKey: not_needed_here
       MFA_WEBAUTHN_apiSecret: not_needed_here
     command: ./run-broker.sh
+    healthcheck:
+      test: nc -vz localhost 80
+      start_period: 1s
+      interval: 5s
+      timeout: 1s
+      retries: 30
 
   ldap:
     build: ./dockerbuild/ldap
     environment:
       DEBUG_LEVEL: 320
+    healthcheck:
+      test: nc -vz localhost 389
+      start_period: 1s
+      interval: 5s
+      timeout: 1s
+      retries: 90
 
   ldapload:
     build: ./dockerbuild/ldap
     depends_on:
-      - ldap
+      ldap:
+        condition: service_healthy
     working_dir: /data
     command: ./load_ldap.sh

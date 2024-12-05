@@ -42,19 +42,19 @@ upDb:
 	docker compose up -d db
 
 yiimigrate:
-	docker compose run --rm cli whenavail db 3306 100 ./yii migrate --interactive=0
+	docker compose run --rm cli ./yii migrate --interactive=0
 
 yiimigratelocal:
-	docker compose run --rm cli whenavail db 3306 100 ./yii migrate --migrationPath=console/migrations-local/ --interactive=0
+	docker compose run --rm cli ./yii migrate --migrationPath=console/migrations-local/ --interactive=0
 
 basemodels:
-	docker compose run --rm cli whenavail db 3306 100 ./rebuildbasemodels.sh
+	docker compose run --rm cli ./rebuildbasemodels.sh
 
 yiimigratetestDb:
-	docker compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test whenavail testDb 3306 100 ./yii migrate --interactive=0'
+	docker compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./yii migrate --interactive=0'
 
 yiimigratetestDblocal:
-	docker compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test whenavail testDb 3306 100 ./yii migrate --migrationPath=console/migrations-test/ --interactive=0'
+	docker compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./yii migrate --migrationPath=console/migrations-test/ --interactive=0'
 
 rmTestDb:
 	docker compose kill testDb
