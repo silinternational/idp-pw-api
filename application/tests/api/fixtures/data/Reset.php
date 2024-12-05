@@ -1,5 +1,7 @@
 <?php
+
 use common\helpers\Utils;
+
 return [
     'reset1' => [
         'id' => 1,
