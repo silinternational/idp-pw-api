@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\mock\passwordstore;
 
 use common\helpers\Utils;

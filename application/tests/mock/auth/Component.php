@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\mock\auth;
 
 use common\components\auth\AuthnInterface;
@@ -103,7 +104,7 @@ class Component extends YiiComponent implements AuthnInterface
                 if ($user['password'] == $password) {
                     return $this->toAuthUser($user);
                 }
-                
+
                 break;
             }
         }

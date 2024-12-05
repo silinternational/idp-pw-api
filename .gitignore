@@ -6,12 +6,12 @@
 nbproject/
 
 # local config files
+*.env
+!email.common.env
+!common.env
+!test.env
 local.php
-local.env
-*.local.env
 *.aes
-tracking.env
-codeship.env
 
 # other files
 /application/ocular.phar

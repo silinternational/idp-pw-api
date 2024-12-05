@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\fixtures\common\models;
 
 use Sil\yii\test\ActiveFixture;

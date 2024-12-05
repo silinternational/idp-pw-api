@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use common\helpers\Utils;
@@ -53,8 +54,8 @@ class EventLog extends EventLogBase
              * ignore exception to continue execution in this function
              */
         }
-        
-        if ( ! $eventLog->save()) {
+
+        if (! $eventLog->save()) {
             throw new \Exception('Unable to save event log entry', 1461182172);
         }
     }

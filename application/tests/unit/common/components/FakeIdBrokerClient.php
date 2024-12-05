@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\components;
 
 use Sil\Idp\IdBroker\Client\ServiceException;

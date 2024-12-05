@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\auth;
 
 use SAML2\Compat\AbstractContainer;

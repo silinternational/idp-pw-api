@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\components;
 
 use common\components\passwordStore\AccountLockedException;
@@ -54,7 +55,8 @@ class LdapTest extends TestCase
         foreach ($ldap->removeAttributesOnSetPassword as $attrName) {
             $user->setAttribute($attrName, 'anything');
             $this->assertTrue(
-                $user->hasAttribute($attrName), 'Attribute "' . $attrName . '" not found.'
+                $user->hasAttribute($attrName),
+                'Attribute "' . $attrName . '" not found.'
             );
         }
 
@@ -224,6 +226,9 @@ class LdapTest extends TestCase
      */
     public function getClient()
     {
+        // FIXME (IDP-1156)
+        $this->markTestSkipped('ldap image is broken due to CentOS EOL');
+
         $ldap = new Ldap();
         $ldap->host = 'ldap';
         $ldap->port = 389;

@@ -1,0 +1,65 @@
+name: Test and Publish
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_JOB_TIMEOUT_MINUTES) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check PSR2
+        run: docker compose -f actions-services.yml run --rm app ./check-psr2.sh
+      - name: Run unit tests
+        run: docker compose -f actions-services.yml run --rm app ./run-tests.sh
+      - name: Run API tests
+        run: docker compose -f actions-services.yml run --rm app ./run-tests-api.sh
+
+  build-and-publish:
+    name: Build and Publish
+    needs: tests
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags')
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_JOB_TIMEOUT_MINUTES) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # Step to log into the DockerHub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        # Step to log into the GHCR
+      - name: Log in to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        # Step to Extract the meta for the image  
+      - name: Extract metadata (tags, labels) for Docker Images
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ vars.DOCKER_ORG }}/${{ github.event.repository.name }}
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            GITHUB_REF_NAME=${{ github.ref_name }}

@@ -29,9 +29,9 @@ class m160225_162828_create_initial_tables extends Migration
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
-        $this->createIndex('uq_user_uid','{{user}}','uid',true);
-        $this->createIndex('uq_user_employee_id','{{user}}','employee_id',true);
-        $this->createIndex('uq_user_email','{{user}}','email',true);
+        $this->createIndex('uq_user_uid', '{{user}}', 'uid', true);
+        $this->createIndex('uq_user_employee_id', '{{user}}', 'employee_id', true);
+        $this->createIndex('uq_user_email', '{{user}}', 'email', true);
 
         /*
          * Method table
@@ -52,10 +52,10 @@ class m160225_162828_create_initial_tables extends Migration
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
-        $this->addForeignKey('fk_method_user_id','{{method}}','user_id','{{user}}','id','CASCADE','NO ACTION');
-        $this->createIndex('uq_method_uid','{{method}}','uid',true);
-        $this->createIndex('uq_method_user_type_value','{{method}}',['user_id','type','value'],true);
-        $this->createIndex('uq_method_verification_code','{{method}}','verification_code',true);
+        $this->addForeignKey('fk_method_user_id', '{{method}}', 'user_id', '{{user}}', 'id', 'CASCADE', 'NO ACTION');
+        $this->createIndex('uq_method_uid', '{{method}}', 'uid', true);
+        $this->createIndex('uq_method_user_type_value', '{{method}}', ['user_id','type','value'], true);
+        $this->createIndex('uq_method_verification_code', '{{method}}', 'verification_code', true);
 
         /*
          * Reset table
@@ -76,11 +76,11 @@ class m160225_162828_create_initial_tables extends Migration
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
-        $this->addForeignKey('fk_reset_user_id','{{reset}}','user_id','{{user}}','id','CASCADE','NO ACTION');
-        $this->addForeignKey('fk_reset_method_id','{{reset}}','method_id','{{method}}','id','CASCADE','NO ACTION');
-        $this->createIndex('uq_reset_uid','{{reset}}','uid',true);
-        $this->createIndex('uq_reset_user_id','{{reset}}','user_id',true);
-        $this->createIndex('uq_reset_code','{{reset}}','code',true);
+        $this->addForeignKey('fk_reset_user_id', '{{reset}}', 'user_id', '{{user}}', 'id', 'CASCADE', 'NO ACTION');
+        $this->addForeignKey('fk_reset_method_id', '{{reset}}', 'method_id', '{{method}}', 'id', 'CASCADE', 'NO ACTION');
+        $this->createIndex('uq_reset_uid', '{{reset}}', 'uid', true);
+        $this->createIndex('uq_reset_user_id', '{{reset}}', 'user_id', true);
+        $this->createIndex('uq_reset_code', '{{reset}}', 'code', true);
 
         /*
          * Requests By IP table
@@ -113,22 +113,22 @@ class m160225_162828_create_initial_tables extends Migration
             ],
             "ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
-        $this->addForeignKey('fk_passwordchangelog_user_id','{{password_change_log}}','user_id','{{user}}','id','CASCADE','NO ACTION');
+        $this->addForeignKey('fk_passwordchangelog_user_id', '{{password_change_log}}', 'user_id', '{{user}}', 'id', 'CASCADE', 'NO ACTION');
 
     }
-    
+
     public function safeDown()
     {
-        $this->dropForeignKey('fk_passwordchangelog_user_id','{{password_change_log}}');
+        $this->dropForeignKey('fk_passwordchangelog_user_id', '{{password_change_log}}');
         $this->dropTable('{{password_change_log}}');
 
         $this->dropTable('{{requests_by_ip}}');
 
-        $this->dropForeignKey('fk_reset_method_id','{{reset}}');
-        $this->dropForeignKey('fk_reset_user_id','{{reset}}');
+        $this->dropForeignKey('fk_reset_method_id', '{{reset}}');
+        $this->dropForeignKey('fk_reset_user_id', '{{reset}}');
         $this->dropTable('{{reset}}');
 
-        $this->dropForeignKey('fk_method_user_id','{{method}}');
+        $this->dropForeignKey('fk_method_user_id', '{{method}}');
         $this->dropTable('{{method}}');
 
         $this->dropTable('{{user}}');

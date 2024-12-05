@@ -1,9 +1,11 @@
 <?php
 
+use common\components\Emailer;
+use notamedia\sentry\SentryTarget;
+use Sentry\Event;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
-use common\components\Emailer;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
@@ -18,7 +20,6 @@ $mysqlPassword = Env::get('MYSQL_PASSWORD');
 $alertsEmail = Env::get('ALERTS_EMAIL');
 $alertsEmailEnabled = Env::get('ALERTS_EMAIL_ENABLED');
 $emailSignature = Env::get('EMAIL_SIGNATURE', Env::get('FROM_NAME'));
-$appEnv = Env::get('APP_ENV');
 $idpName = Env::get('IDP_NAME');
 $idpDisplayName = Env::get('IDP_DISPLAY_NAME', $idpName);
 $recaptchaRequired = Env::get('RECAPTCHA_REQUIRED', true);
@@ -26,7 +27,7 @@ $recaptchaSiteKey = Env::get('RECAPTCHA_SITE_KEY');
 $recaptchaSecretKey = Env::get('RECAPTCHA_SECRET_KEY');
 $uiUrl = Env::get('UI_URL');
 $uiCorsOrigin = Env::get('UI_CORS_ORIGIN', $uiUrl);
-$rpOrigin = Env::get('WEBAUTHN_RP_ORIGIN', $uiCorsOrigin);
+$rpOrigin = $uiCorsOrigin;
 $helpCenterUrl = Env::get('HELP_CENTER_URL');
 $codeLength = Env::get('CODE_LENGTH', 6);
 $supportEmail = Env::get('SUPPORT_EMAIL');
@@ -58,6 +59,7 @@ $passwordRules = [
     'maxLength' => $passwordRulesEnv['maxLength'] ?? 255,
     'minScore' => $passwordRulesEnv['minScore'] ?? 3,
     'enableHIBP' => $passwordRulesEnv['enableHIBP'] ?? true,
+    'requireAlphaAndNumeric' => $passwordRulesEnv['requireAlphaAndNumeric'] ?? false,
 ];
 
 $logPrefix = function () {
@@ -65,9 +67,9 @@ $logPrefix = function () {
     $prefixData = [
         'env' => YII_ENV,
     ];
+    $userId = Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->id;
     if ($request instanceof \yii\web\Request) {
-        // Assumes format: Bearer consumer-module-name-32randomcharacters
-        $prefixData['id'] = substr($request->headers['Authorization'], 7, 16) ?: 'unknown';
+        $prefixData['id'] = $userId;
         $prefixData['ip'] = $request->getUserIP();
         $prefixData['method'] = $request->getMethod();
         $prefixData['url'] = $request->getUrl();
@@ -134,16 +136,16 @@ return [
                     'logVars' => [], // Disable logging of _SERVER, _POST, etc.
                     'message' => [
                         'to' => $alertsEmail ?? '(disabled)',
-                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . $appEnv . ']',
+                        'subject' => 'ALERT - ' . $idpName . ' PW [env=' . YII_ENV . ']',
                     ],
                     'baseUrl' => $emailServiceConfig['baseUrl'],
                     'accessToken' => $emailServiceConfig['accessToken'],
                     'assertValidIp' => $emailServiceConfig['assertValidIp'],
                     'validIpRanges' => $emailServiceConfig['validIpRanges'],
                     'enabled' => $alertsEmailEnabled,
-                    'prefix' => function($message) use ($appEnv) {
+                    'prefix' => function ($message) {
                         $prefixData = [
-                            'env' => $appEnv,
+                            'env' => YII_ENV,
                         ];
 
                         // There is no user when a console command is run
@@ -152,7 +154,7 @@ return [
                         } catch (\Exception $e) {
                             $appUser = null;
                         }
-                        if ($appUser && ! \Yii::$app->user->isGuest) {
+                        if ($appUser && !\Yii::$app->user->isGuest) {
                             $prefixData['user'] = \Yii::$app->user->identity->email;
                         }
 
@@ -168,6 +170,30 @@ return [
                         return $prefixData;
                     },
                     'exportInterval' => 1,
+                ],
+                [
+                    'class' => SentryTarget::class,
+                    'enabled' => !empty(Env::get('SENTRY_DSN')),
+                    'dsn' => Env::get('SENTRY_DSN'),
+                    'levels' => ['error'],
+                    'except' => [
+                        'yii\web\HttpException:401', // Unauthorized
+                        'yii\web\HttpException:404', // NotFound
+                        'yii\web\HttpException:409', // Conflict
+                    ],
+                    'context' => true,
+                    // Additional options for `Sentry\init`
+                    // https://docs.sentry.io/platforms/php/configuration/options
+                    'clientOptions' => [
+                        'attach_stacktrace' => false, // stack trace identifies the logger call stack, not helpful
+                        'environment' => YII_ENV,
+                        'release' => 'idp-pw-api@' . Env::get('GITHUB_REF_NAME', 'unknown'),
+                        'max_request_body_size' => 'never', // never send request bodies
+                        'before_send' => function (Event $event) use ($idpName): ?Event {
+                            $event->setExtra(['idp' => $idpName]);
+                            return $event;
+                        },
+                    ],
                 ],
             ],
         ],
@@ -187,10 +213,10 @@ return [
         'i18n' => [
             'translations' => [
                 '*' => [
-                    'class'          => 'yii\i18n\PhpMessageSource',
-                    'basePath'       => '@frontend/messages',
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@frontend/messages',
                     'sourceLanguage' => '00',
-                    'fileMap'        => [
+                    'fileMap' => [
                         'app' => 'app.php',
                         'model' => 'model.php',
                     ],

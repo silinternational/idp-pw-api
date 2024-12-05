@@ -7,9 +7,6 @@ $mysqlDatabase = Env::get('MYSQL_DATABASE');
 $mysqlUser = Env::get('MYSQL_USER');
 $mysqlPassword = Env::get('MYSQL_PASSWORD');
 
-/* Get frontend-specific config settings from ENV vars or set defaults. */
-$frontCookieSecure = Env::get('FRONT_COOKIE_SECURE', true);
-
 $sessionLifetime = 1800; // 30 minutes
 
 const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
@@ -53,13 +50,13 @@ return [
         ],
         'response' => [
             'class' => 'yii\web\Response',
-            'on beforeSend' => function($event) {
+            'on beforeSend' => function ($event) {
                 /** @var yii\web\Response $response */
                 $response = $event->sender;
                 $response->headers->set('Access-Control-Allow-Origin', \Yii::$app->params['uiCorsOrigin']);
                 $response->headers->set('Access-Control-Allow-Credentials', 'true');
                 $response->headers->set(
-                    'Access-Control-Allow-Methods', 
+                    'Access-Control-Allow-Methods',
                     'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS'
                 );
                 $response->headers->set('Access-Control-Allow-Headers', 'authorization, content-type');
@@ -172,6 +169,6 @@ return [
         ]
     ],
     'params' => [
-        
+
     ],
 ];

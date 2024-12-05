@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\components;
 
 use yii\web\HttpException;
@@ -8,7 +9,6 @@ use yii\base\UserException;
 
 class ErrorAction extends YiiErrorAction
 {
-
     public function run()
     {
         if (($exception = \Yii::$app->getErrorHandler()->exception) === null) {

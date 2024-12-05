@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
+# break on first error
 set -e
+
+# print script lines to stdout
+set -x
 
 # Install composer dev dependencies
 cd /data

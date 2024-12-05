@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components\auth;
 
 use yii\web\Request;

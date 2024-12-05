@@ -1,7 +1,7 @@
 <?php
+
 namespace frontend\controllers;
 
-use common\components\passwordStore\AccountLockedException;
 use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\EventLog;
@@ -67,10 +67,10 @@ class ResetController extends BaseRestController
      */
     public function actionCreate()
     {
-        $username = \Yii::$app->request->post('username');
-        $verificationToken = \Yii::$app->request->post('verification_token');
+        $username = trim(\Yii::$app->request->getBodyParam('username', ''));
+        $verificationToken = trim(\Yii::$app->request->getBodyParam('verification_token', ''));
 
-        if ( ! $username) {
+        if ($username === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingUsername'));
         }
 
@@ -80,12 +80,12 @@ class ResetController extends BaseRestController
          * be double sure an exception is thrown.
          */
         if (\Yii::$app->params['recaptcha']['required']) {
-            if ( ! $verificationToken) {
+            if ($verificationToken === '') {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingRecaptchaCode'));
             }
-            
+
             $clientIp = Utils::getClientIp(\Yii::$app->request);
-            if ( ! Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
+            if (!Utils::isRecaptchaResponseValid($verificationToken, $clientIp)) {
                 throw new BadRequestHttpException(\Yii::t('app', 'Reset.RecaptchaFailedVerification'));
             }
         }
@@ -247,7 +247,7 @@ class ResetController extends BaseRestController
     /**
      * Validate reset code. Logs user in if successful
      * @param string $uid
-     * @return array
+     * @return null
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -303,7 +303,7 @@ class ResetController extends BaseRestController
              * Reset verified successfully, create access token for user
              */
             try {
-                $accessToken = $reset->user->createAccessToken($clientId, User::AUTH_TYPE_RESET);
+                $reset->user->createAccessToken(User::AUTH_TYPE_RESET);
 
                 $log['status'] = 'success';
                 \Yii::warning($log);
@@ -311,7 +311,7 @@ class ResetController extends BaseRestController
                 /*
                  * Delete reset record, log errors, but let user proceed
                  */
-                if (! $reset->delete()) {
+                if (!$reset->delete()) {
                     \Yii::warning([
                         'action' => 'delete reset after validation',
                         'reset_id' => $reset->id,
@@ -319,10 +319,8 @@ class ResetController extends BaseRestController
                         'error' => Json::encode($reset->getFirstErrors()),
                     ]);
                 }
+                return null;
 
-                return [
-                    'access_token' => $accessToken,
-                ];
             } catch (\Exception $e) {
                 $log['status'] = 'error';
                 $log['error'] = 'Unable to log user in after successful reset verification';
@@ -356,8 +354,8 @@ class ResetController extends BaseRestController
      */
     protected function getCodeFromRequestBody(): string
     {
-        $code = \Yii::$app->request->getBodyParam('code', null);
-        if ($code === null) {
+        $code = trim(\Yii::$app->request->getBodyParam('code', ''));
+        if ($code === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Reset.MissingCode'), 1462989866);
         }
         return $code;

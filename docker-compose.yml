@@ -1,229 +1,225 @@
-version: '2'
 services:
-    data:
-        image: silintl/data-volume:latest
-        volumes:
-            - ./application:/data
-        user: "${DOCKER_UIDGID}"
 
-    db:
-        image: mariadb:latest
-        environment:
-            MYSQL_ROOT_PASSWORD: r00tp@ss!
-            MYSQL_DATABASE: pwmgr
-            MYSQL_USER: idpmgmt
-            MYSQL_PASSWORD: idpmgmt
+  db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: r00tp@ss!
+      MYSQL_DATABASE: pwmgr
+      MYSQL_USER: idpmgmt
+      MYSQL_PASSWORD: idpmgmt
 
-    testDb:
-       image: mariadb:latest
-       environment:
-           MYSQL_ROOT_PASSWORD: r00tp@ss!
-           MYSQL_DATABASE: test
-           MYSQL_USER: idpmgmt
-           MYSQL_PASSWORD: idpmgmt
+  testDb:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: r00tp@ss!
+      MYSQL_DATABASE: test
+      MYSQL_USER: idpmgmt
+      MYSQL_PASSWORD: idpmgmt
 
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin:latest
-        ports:
-            - "51151:80"
-        environment:
-            PMA_HOST: db
-            PMA_USER: idpmgmt
-            PMA_PASSWORD: idpmgmt
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "51151:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: idpmgmt
+      PMA_PASSWORD: idpmgmt
 
-    api:
-        build: ./
-        volumes_from:
-            - data
-        ports:
-            - "51155:80"
-        depends_on:
-            - db
-            - email
-        env_file:
-            - ./common.env
-            - ./local.env
+  api:
+    build: ./
+    volumes:
+      - ./application:/data
+    ports:
+      - "51155:80"
+    depends_on:
+      - db
+      - email
+    env_file:
+      - ./common.env
+      - ./local.env
 
-    apitest:
-        build: ./
-        volumes_from:
-            - data
-        depends_on:
-            - testDb
-            - zxcvbn
-            - broker
-        env_file:
-            - ./common.env
-            - ./test.env
-        environment:
-            MYSQL_HOST: testDb
-            MYSQL_DATABASE: test
-            APP_ENV: test
-            ID_BROKER_baseUrl: http://broker
-        command: ["/data/run-tests-api.sh"]
+  apitest:
+    build: ./
+    volumes:
+      - ./application:/data
+    depends_on:
+      - testDb
+      - zxcvbn
+      - broker
+    env_file:
+      - ./common.env
+      - ./test.env
+    environment:
+      MYSQL_HOST: testDb
+      MYSQL_DATABASE: test
+      APP_ENV: test
+      ID_BROKER_baseUrl: http://broker
+    command: [ "/data/run-tests-api.sh" ]
 
-    unittest:
-        build: ./
-        volumes_from:
-            - data
-        volumes:
-            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-        depends_on:
-            - testDb
-            - zxcvbn
-        env_file:
-            - ./common.env
-            - ./test.env
-        environment:
-            MYSQL_HOST: testDb
-            MYSQL_DATABASE: test
-            APP_ENV: test
-            ID_BROKER_baseUrl: http://broker
-        command: ["/data/run-tests.sh"]
+  unittest:
+    build: ./
+    volumes:
+      - ./application:/data
+      - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+    depends_on:
+      - testDb
+      - zxcvbn
+    env_file:
+      - ./common.env
+      - ./test.env
+    environment:
+      MYSQL_HOST: testDb
+      MYSQL_DATABASE: test
+      APP_ENV: test
+      ID_BROKER_baseUrl: http://broker
+    command: [ "/data/run-tests.sh" ]
 
-    integrationtest:
-        build: ./
-        volumes_from:
-            - data
-        volumes:
-            - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
-        depends_on:
-            - testDb
-            - zxcvbn
-        env_file:
-            - ./common.env
-            - ./test.env
-            - ./local.env
-        environment:
-            MYSQL_HOST: testDb
-            MYSQL_DATABASE: test
-            APP_ENV: test
-            ID_BROKER_baseUrl: http://broker
-        command: ["/data/run-tests-integration.sh"]
+  integrationtest:
+    build: ./
+    volumes:
+      - ./application:/data
+      - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
+    depends_on:
+      - testDb
+      - zxcvbn
+    env_file:
+      - ./common.env
+      - ./test.env
+      - ./local.env
+    environment:
+      MYSQL_HOST: testDb
+      MYSQL_DATABASE: test
+      APP_ENV: test
+      ID_BROKER_baseUrl: http://broker
+    command: [ "/data/run-tests-integration.sh" ]
 
-    cli:
-        build: ./
-        volumes_from:
-            - data
-        volumes:
-            - ${COMPOSER_CACHE_DIR}:/composer
-        working_dir: /data
-        user: "${DOCKER_UIDGID}"
-        env_file:
-            - ./common.env
-            - ./local.env
-        command: ["true"]
+  cli:
+    build: ./
+    volumes:
+      - ./application:/data
+      - ${COMPOSER_CACHE_DIR}:/composer
+    working_dir: /data
+    user: "${DOCKER_UIDGID}"
+    env_file:
+      - ./common.env
+      - ./local.env
+    command: [ "true" ]
 
-    email:
-        image: silintl/email-service:develop
-        depends_on:
-            - emaildb
-            - emailcron
-        env_file:
-            - ./email.common.env
-            - ./email.local.env
-        ports:
-            - "51153:80"
+  email:
+    image: silintl/email-service:1
+    depends_on:
+      - emaildb
+      - emailcron
+    env_file:
+      - ./email.common.env
+      - ./email.local.env
+    ports:
+      - "51153:80"
 
-    emailcron:
-        image: silintl/email-service:develop
-        depends_on:
-            - emaildb
-        env_file:
-            - ./email.common.env
-            - ./email.local.env
-        command: /data/run-cron.sh
+  emailcron:
+    image: silintl/email-service:1
+    depends_on:
+      - emaildb
+    env_file:
+      - ./email.common.env
+      - ./email.local.env
+    command: /data/run-cron.sh
 
-    emaildb:
-        image: silintl/mariadb:latest
-        env_file:
-            - ./email.common.env
-        environment:
-            MYSQL_ROOT_PASSWORD: not-a-secret
+  emaildb:
+    image: mariadb:10
+    env_file:
+      - ./email.common.env
+    environment:
+      MYSQL_ROOT_PASSWORD: not-a-secret
 
-    emailpma:
-        image: phpmyadmin/phpmyadmin:latest
-        ports:
-            - "51152:80"
-        environment:
-            PMA_HOST: emaildb
-            PMA_USER: email
-            PMA_PASSWORD: email
+  emailpma:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "51152:80"
+    environment:
+      PMA_HOST: emaildb
+      PMA_USER: email
+      PMA_PASSWORD: email
 
-    zxcvbn:
-        image: wcjr/zxcvbn-api:1.1.0
+  zxcvbn:
+    image: wcjr/zxcvbn-api:1.1.0
 
-    brokerDb:
-        image: mariadb:latest
-        environment:
-            MYSQL_ROOT_PASSWORD: r00tp@ss!
-            MYSQL_DATABASE: broker
-            MYSQL_USER: broker
-            MYSQL_PASSWORD: broker
+  brokerDb:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: r00tp@ss!
+      MYSQL_DATABASE: broker
+      MYSQL_USER: broker
+      MYSQL_PASSWORD: broker
 
-    brokerpma:
-        image: phpmyadmin/phpmyadmin:latest
-        ports:
-            - "51158:80"
-        environment:
-            PMA_HOST: brokerDb
-            PMA_USER: broker
-            PMA_PASSWORD: broker
+  brokerpma:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "51158:80"
+    environment:
+      PMA_HOST: brokerDb
+      PMA_USER: broker
+      PMA_PASSWORD: broker
 
-    broker:
-        image: silintl/idp-id-broker:develop
-        ports:
-            - "51154:80"
-        depends_on:
-            - brokerDb
-        volumes:
-            - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
-            - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
-            - ./dockerbuild/broker/User.php:/data/console/migrations/User.php
-            - ./dockerbuild/broker/Method.php:/data/console/migrations/Method.php
-        environment:
-            EMAIL_SERVICE_accessToken: fake
-            EMAIL_SERVICE_assertValidIp: "false"
-            EMAIL_SERVICE_baseUrl: fake
-            EMAIL_SERVICE_validIpRanges: 10.0.0.0/128
-            EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
-            IDP_NAME: idp1
-            MYSQL_HOST: brokerDb
-            MYSQL_DATABASE: broker
-            MYSQL_USER: broker
-            MYSQL_PASSWORD: broker
-            API_ACCESS_KEYS: abc123
-            HELP_CENTER_URL: https://example.com/#/help
-            PASSWORD_FORGOT_URL: https://example.com/#/forgot
-            PASSWORD_PROFILE_URL: https://example.com/#/profile
-            SUPPORT_EMAIL: support@example.com
-            EMAIL_SIGNATURE: Dummy Signature for Tests
-            APP_ENV: test
-        command: ./run-broker.sh
+  broker:
+    image: silintl/idp-id-broker:6
+    ports:
+      - "51154:80"
+    depends_on:
+      - brokerDb
+    volumes:
+      - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
+      - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
+      - ./dockerbuild/broker/User.php:/data/console/migrations/User.php
+      - ./dockerbuild/broker/Method.php:/data/console/migrations/Method.php
+    environment:
+      EMAIL_SERVICE_accessToken: fake
+      EMAIL_SERVICE_assertValidIp: "false"
+      EMAIL_SERVICE_baseUrl: fake
+      EMAIL_SERVICE_validIpRanges: 10.0.0.0/128
+      EMAILER_CLASS: \Sil\SilIdBroker\Behat\Context\fakes\FakeEmailer
+      IDP_NAME: idp1
+      MYSQL_HOST: brokerDb
+      MYSQL_DATABASE: broker
+      MYSQL_USER: broker
+      MYSQL_PASSWORD: broker
+      API_ACCESS_KEYS: abc123
+      HELP_CENTER_URL: https://example.com/#/help
+      PASSWORD_FORGOT_URL: https://example.com/#/forgot
+      PASSWORD_PROFILE_URL: https://example.com/#/profile
+      SUPPORT_EMAIL: support@example.com
+      EMAIL_SIGNATURE: Dummy Signature for Tests
+      APP_ENV: test
+      MFA_TOTP_apiBaseUrl: not_needed_here
+      MFA_TOTP_apiKey: not_needed_here
+      MFA_TOTP_apiSecret: not_needed_here
+      MFA_WEBAUTHN_apiBaseUrl: not_needed_here
+      MFA_WEBAUTHN_apiKey: not_needed_here
+      MFA_WEBAUTHN_apiSecret: not_needed_here
+    command: ./run-broker.sh
 
-    ldap:
-        build: ./dockerbuild/ldap
+  ldap:
+    build: ./dockerbuild/ldap
 
-    ldapload:
-        build: ./dockerbuild/ldap
-        depends_on:
-            - ldap
-        working_dir: /data
-        command: ./load_ldap.sh
+  ldapload:
+    build: ./dockerbuild/ldap
+    depends_on:
+      - ldap
+    working_dir: /data
+    command: ./load_ldap.sh
 
-    raml2html:
-        image: mattjtodd/raml2html
-        volumes:
-            - ./api.raml:/api.raml
-            - ./api.html:/api.html
-        command: -i api.raml -o api.html
+  raml2html:
+    image: mattjtodd/raml2html
+    volumes:
+      - ./api.raml:/api.raml
+      - ./api.html:/api.html
+    command: -i api.raml -o api.html
 
 networks:
-    default:
-        driver: bridge
-        ipam:
-            driver: default
-            config:
-            - subnet: 10.20.31.0/24
-              gateway: 10.20.31.1
-
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.20.31.0/24
+          gateway: 10.20.31.1

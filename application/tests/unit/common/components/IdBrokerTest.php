@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\unit\common\components;
 
 use PHPUnit\Framework\TestCase;
@@ -35,7 +36,8 @@ class IdBrokerTest extends TestCase
         $this->expectExceptionCode(1496260921);
         $this->expectExceptionMessage(
             'Personnel attributes missing attribute: email for employeeId=' .
-            $employeeId);
+            $employeeId
+        );
         $brokerMock->findByEmployeeId($employeeId);
     }
 
@@ -82,7 +84,7 @@ class IdBrokerTest extends TestCase
         $this->expectException(NotFoundException::class);
         $brokerMock->findByEmployeeId($employeeId);
     }
-    
+
     /**
      * Ensure that users who are not flagged as active are not returned, and
      * thus look like they are simply missing.
@@ -95,10 +97,10 @@ class IdBrokerTest extends TestCase
         $employeeId = '66666';
         $fakeIdBrokerClientResponse = $this->getMockReturnValue();
         $fakeIdBrokerClientResponse['active'] = 'no';
-        
+
         // Pre-assert:
         $this->expectException(NotFoundException::class);
-        
+
         // Act:
         $this->getMockComponent()->returnPersonnelUserFromResponse(
             'employee_id',
@@ -106,7 +108,7 @@ class IdBrokerTest extends TestCase
             $fakeIdBrokerClientResponse
         );
     }
-    
+
     /**
      * Ensure that receiving user info back that lacks an `active` value causes
      * an exception.
@@ -117,10 +119,10 @@ class IdBrokerTest extends TestCase
         $employeeId = '77777';
         $fakeIdBrokerClientResponse = $this->getMockReturnValue();
         unset($fakeIdBrokerClientResponse['active']);
-        
+
         // Pre-assert:
         $this->expectException(\Exception::class);
-        
+
         // Act:
         $this->getMockComponent()->returnPersonnelUserFromResponse(
             'employee_id',
@@ -153,7 +155,7 @@ class IdBrokerTest extends TestCase
             ));
         }
     }
-    
+
     /**
      * @param string $mockedMethod name of method to replace with mocked implementation
      * @param mixed $returnValue return value from mocked method

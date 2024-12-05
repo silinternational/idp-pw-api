@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\components\auth\RedirectException;
@@ -11,7 +12,6 @@ use frontend\components\BaseRestController;
 use Sil\Idp\IdBroker\Client\ServiceException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -46,7 +46,7 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
-        if ( ! \Yii::$app->user->isGuest) {
+        if (! \Yii::$app->user->isGuest) {
             return $this->redirect($this->getAfterLoginUrl($this->getReturnTo()));
         }
 
@@ -56,20 +56,6 @@ class AuthController extends BaseRestController
         $log = ['action' => 'login'];
 
         try {
-            /*
-             * Grab client_id for use in token after successful login
-             */
-            try {
-                $clientId = Utils::getClientIdOrFail();
-            } catch (\Exception $e) {
-                \Yii::warning(\Yii::t('app', 'Auth.MissingClientID'));
-
-                // This condition happens if a user sits on the IDP login prompt long
-                // enough for the session to expire. As a workaround, redirect back to
-                // the profile UI home page, which should restart the login process.
-                return $this->redirect(\Yii::$app->params['uiUrl']);
-            }
-
             /*
              * Grab state for use in response after successful login
              */
@@ -89,8 +75,7 @@ class AuthController extends BaseRestController
                 }
             }
 
-            $accessToken = $user->createAccessToken($clientId, User::AUTH_TYPE_LOGIN);
-
+            $accessToken = $user->createAccessToken(User::AUTH_TYPE_LOGIN);
             $loginSuccessUrl = $this->getLoginSuccessRedirectUrl($state, $accessToken, $user->access_token_expiration);
 
             $log['email'] = $user->email;
@@ -130,12 +115,15 @@ class AuthController extends BaseRestController
 
     public function actionLogout()
     {
-        $accessToken = \Yii::$app->request->get('access_token');
+        $requestCookies = \Yii::$app->request->cookies;
+        $accessToken = $requestCookies->getValue('access_token');
         if ($accessToken !== null) {
             /*
              * Clear access_token
              */
             $accessTokenHash = Utils::getAccessTokenHash($accessToken);
+            $responseCookies = \Yii::$app->response->cookies;
+            $responseCookies->remove('access_token', true);
             $user = User::findOne(['access_token' => $accessTokenHash]);
             if ($user != null) {
                 $user->destroyAccessToken();
@@ -207,21 +195,7 @@ class AuthController extends BaseRestController
         /*
          * build url to redirect user to
          */
-        $afterLogin = $this->getAfterLoginUrl($relayState);
-        if (strpos($afterLogin, '?')) {
-            $joinChar = '&';
-        } else {
-            $joinChar = '?';
-        }
-        $url = $afterLogin . sprintf(
-            '%sstate=%s&token_type=Bearer&expires_utc=%s&access_token=%s',
-            $joinChar,
-            Html::encode($state),
-            Utils::getIso8601($tokenExpiration),
-            $accessToken
-        );
-
-        return $url;
+        return $this->getAfterLoginUrl($relayState);
     }
 
     /**

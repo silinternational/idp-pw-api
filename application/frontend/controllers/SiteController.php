@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\components\Emailer;
@@ -15,7 +16,7 @@ use yii\web\UnauthorizedHttpException;
  */
 class SiteController extends BaseRestController
 {
-    const HttpExceptionBadGateway = 502;
+    public const HttpExceptionBadGateway = 502;
 
     public $layout = false;
 
@@ -78,21 +79,9 @@ class SiteController extends BaseRestController
         try {
             \Yii::$app->db->open();
         } catch (Exception $e) {
-            throw new HttpException(self::HttpExceptionBadGateway,
+            throw new HttpException(
+                self::HttpExceptionBadGateway,
                 'Unable to connect to db, error code ' . $e->getCode(),
-                $e->getCode()
-            );
-        }
-
-        try {
-            /**
-             * @var $emailer Emailer
-             */
-            $emailer = \Yii::$app->emailer;
-            $emailer->getSiteStatus();
-        } catch (\Exception $e) {
-            throw new HttpException(self::HttpExceptionBadGateway,
-                'Problem with email service: ' . $e->getMessage(),
                 $e->getCode()
             );
         }

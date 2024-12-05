@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use common\components\auth\User as AuthUser;
@@ -19,9 +20,8 @@ use yii\web\ServerErrorHttpException;
  */
 class User extends UserBase implements IdentityInterface
 {
-
-    const AUTH_TYPE_LOGIN = 'login';
-    const AUTH_TYPE_RESET = 'reset';
+    public const AUTH_TYPE_LOGIN = 'login';
+    public const AUTH_TYPE_RESET = 'reset';
 
     /**
      * Holds personnelUser
@@ -126,9 +126,9 @@ class User extends UserBase implements IdentityInterface
         try {
             $personnel = self::getPersonnelComponent();
 
-            if ( ! is_null($employeeId)) {
+            if (! is_null($employeeId)) {
                 $personnelUser = $personnel->findByEmployeeId($employeeId);
-            } elseif ( ! is_null($username)) {
+            } elseif (! is_null($username)) {
                 $personnelUser = $personnel->findByUsername($username);
             } else {
                 $personnelUser = $personnel->findByEmail($email);
@@ -156,7 +156,7 @@ class User extends UserBase implements IdentityInterface
 
 
         $user = self::findOne(['employee_id' => $personnelUser->employeeId]);
-        if ( ! $user) {
+        if (! $user) {
             $user = new User();
             $user->uuid = $personnelUser->uuid;
             $user->employee_id = (string)$personnelUser->employeeId;
@@ -267,7 +267,7 @@ class User extends UserBase implements IdentityInterface
                     'found in personnel so their email was updated to %s',
                     $user->email,
                     $personnelUser->email
-                 )
+                )
             ]);
         }
 
@@ -309,7 +309,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function getPersonnelUser()
     {
-        if ( ! empty($this->personnelUser)) {
+        if (! empty($this->personnelUser)) {
             return $this->personnelUser;
         }
 
@@ -580,26 +580,35 @@ class User extends UserBase implements IdentityInterface
     }
 
     /**
-     * @param string $clientId
+     * @param string $authType
      * @return string
      * @throws \Exception
      */
-    public function createAccessToken($clientId, $authType)
+    public function createAccessToken($authType)
     {
         /*
          * Create access_token and update user
          */
         $accessToken = Utils::generateRandomString(32);
         /*
-         * Store combination of clientId and accessToken for bearer auth
+         * Store accessToken for auth
          */
         $this->auth_type = $authType;
-        $this->access_token = Utils::getAccessTokenHash($clientId . $accessToken);
+        $this->access_token = Utils::getAccessTokenHash($accessToken);
         $this->access_token_expiration = Utils::getDatetime(
             time() + \Yii::$app->params['accessTokenLifetime']
         );
         $this->saveOrError('Unable to create access token', 1465833228);
 
+        $secure = !in_array(YII_ENV, ['dev', 'test']);
+        \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+          'name' => 'access_token',
+          'value' => $accessToken,
+          'expire' => $this->access_token_expiration,
+          'httpOnly' => true, // Ensures the cookie is not accessible via JavaScript
+          'secure' => $secure,   // Ensures the cookie is sent only over HTTPS
+          'sameSite' => 'Lax', // Adjust as needed
+        ]));
         return $accessToken;
     }
 
@@ -634,7 +643,7 @@ class User extends UserBase implements IdentityInterface
      */
     public function beforeSave($insert): bool
     {
-        if ( ! parent::beforeSave($insert)) {
+        if (! parent::beforeSave($insert)) {
             return false;
         }
 

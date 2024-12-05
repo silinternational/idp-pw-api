@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\models\Method;
@@ -24,12 +25,15 @@ class MethodController extends BaseRestController
     {
         parent::init();
         $config = \Yii::$app->params['idBrokerConfig'];
+        if (empty($config['baseUrl']) || empty($config['accessToken'])) {
+            throw new \Exception('ID_BROKER_baseURL and ID_BROKER_accessToken are required', 1722423242);
+        }
         $this->idBrokerClient = new IdBrokerClient(
             $config['baseUrl'],
             $config['accessToken'],
             [
-                IdBrokerClient::TRUSTED_IPS_CONFIG              => $config['validIpRanges']       ?? [],
-                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG   => $config['assertValidBrokerIp']   ?? true,
+                IdBrokerClient::TRUSTED_IPS_CONFIG => $config['validIpRanges'] ?? [],
+                IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $config['assertValidBrokerIp'] ?? true,
             ]
         );
     }
@@ -110,8 +114,8 @@ class MethodController extends BaseRestController
 
         $request = \Yii::$app->request;
 
-        $value = $request->post('value');
-        if ($value === null) {
+        $value = trim($request->getBodyParam('value', ''));
+        if ($value === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Method.MissingValue'), 1542750428);
         }
 
@@ -153,8 +157,8 @@ class MethodController extends BaseRestController
             429 => \Yii::t('app', 'Method.TooManyFailures'),
         ];
 
-        $code = \Yii::$app->request->getBodyParam('code');
-        if ($code === null) {
+        $code = trim(\Yii::$app->request->getBodyParam('code', ''));
+        if ($code === '') {
             throw new BadRequestHttpException(\Yii::t('app', 'Method.CodeMissing'), 1542749426);
         }
 

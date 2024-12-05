@@ -28,7 +28,9 @@
     "fillup/fake-bower-assets": "2.0.9",
     "icawebdesign/hibp-php": "~5.1.1",
     "codemix/yii2-streamlog": "^1.3",
-    "codeception/module-phpbrowser": "^1.0||^2.0||^3.0"
+    "codeception/module-phpbrowser": "^1.0||^2.0||^3.0",
+    "notamedia/yii2-sentry": "^1.7",
+    "friendsofphp/php-cs-fixer": "^3.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "*",
@@ -51,7 +53,8 @@
       "bower-asset-library": "vendor/bower"
     },
     "allow-plugins": {
-      "yiisoft/yii2-composer": true
+      "yiisoft/yii2-composer": true,
+      "php-http/discovery": false
     }
   },
   "autoload": {

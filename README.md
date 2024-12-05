@@ -1,10 +1,6 @@
 # idp-pw-api
 Backend API for Identity Provider Password Management
 
-## Build Status
-[![Codeship Status for silinternational/idp-pw-api](https://codeship.com/projects/6e239250-bed3-0133-700c-329cf2fde74f/status?branch=develop)](https://codeship.com/projects/137021)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silinternational/idp-pw-api/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/silinternational/idp-pw-api/?branch=develop)
-
 ## Dev Requirements
 
 ### Linux
@@ -13,12 +9,6 @@ Backend API for Identity Provider Password Management
 
 ### Mac
 1. Docker for Mac
-
-### Windows
-1. VirtualBox
-2. Vagrant
-3. Alternative to using vagrant you can install Docker Toolbox, but Docker Compose
-   still has issues with Windows and doesn't support interactive mode at this time.
 
 ## Setup
 1. Clone this repo
@@ -42,17 +32,31 @@ Backend API for Identity Provider Password Management
 9. You'll probably also want the web interface for this application which you can
    clone at <https://github.com/silinternational/idp-profile-ui>
 
-### Additional setup for Linux & Mac
+## Configuration
+By default, configuration is read from environment variables. These are documented
+in the `local.env.dist` file. Optionally, you can define configuration in AWS AppConfig.
+To do this, set the following environment variables to point to the configuration in
+AWS:
+
+* `AWS_REGION` - the AWS region in use
+* `APP_ID` - the application ID or name
+* `CONFIG_ID` - the configuration profile ID or name
+* `ENV_ID` - the environment ID or name
+
+In addition, the AWS API requires authentication. It is best to use an access role
+such as an [ECS Task Role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html).
+If that is not an option, you can specify an access token using the `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY` variables.
+
+The content of the configuration profile takes the form of a typical .env file, using
+`#` for comments and `=` for variable assignment. Any variables read from AppConfig
+will overwrite variables set in the execution environment.
+
+### Additional setup
+
 1. Add entry to ```/etc/hosts``` for ```127.0.0.1 idp-pw-api.local```
 2. Run ```docker build -t idp-pw-api .```
 3. Run ```make start```
-
-### Additional setup for Windows
-1. Add entry to ```c:\windows\system32\drivers\etc\hosts``` for
-   ```192.168.37.37 idp-pw-api.local```
-2. Run ```vagrant up```
-3. In order to run docker commands directly, SSH into the vagrant box ```vagrant ssh```
-   change to /vagrant folder ```cd /vagrant``` and run ```make start```
 
 ### Makefile script aliases
 To simplify common tasks there is a Makefile in place. The most common tasks will likely be:
@@ -182,33 +186,43 @@ creating a new user. The `access_token` can be found in the `Location` response 
 Tests are configured in multiple places, using different test frameworks.
 The chart below summarizes the test configuration.
 
-| Suite | Framework   |  config   | Local, Docker        | Codeship              |
-|-------|-------------|-----------|----------------------|-----------------------|
-| Unit  | PHPUnit     | container | unittest             | api                   |
-|       |             | script    | run-tests.sh         | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
-|       |             | config    | tests/unit.suite.yml, tests/codeception/config/unit.php | (same) |
-|       |             | coverage  | IdBroker, IdBrokerPw, Ldap | (same)          |
-|-------|-------------|-----------|----------------------|-----------------------|
-| Unit  | Behat       | container | unittest             | api                   |
-|       |             | script    | run-tests.sh         | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | Composer             | (same)                |
-|       |             | config    | features/behat.yml   | (same)                |
-|       |             | coverage  | Multiple, Google     | (same)                |
-|-------|-------------|-----------|----------------------|-----------------------|
-| Unit  | Codeception | container | unittest             | api                   |
-|       |             | script    | run-tests.sh         | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
-|       |             | config    | tests/unit.suite.yml | (same)                |
-|       |             | coverage  | models, helpers      | (same)                |
-|-------|-------------|-----------|----------------------|-----------------------|
-| API   | Codeception | container | apitest              | api                   |
-|       |             | script    | run-tests-api.sh     | (same)                | 
-|       |             | env.      | common.env, test.env | codeship-services.yml |
-|       |             | bootstrap | tests/_bootstrap.php | (same)                | 
-|       |             | config    | tests/api.suite.yml  | (same)                |
-|       |             | coverage  | controllers          | (same)                |
-|-------|-------------|-----------|----------------------|-----------------------|
+| Suite | Framework   |  config   | Local, Docker        | GitHub Actions          |
+|-------|-------------|-----------|----------------------|-------------------------|
+| Unit  | PHPUnit     | container | unittest             | api                     |
+|       |             | script    | run-tests.sh         | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                  | 
+|       |             | config    | tests/unit.suite.yml, tests/codeception/config/unit.php | (same)                  |
+|       |             | coverage  | IdBroker, IdBrokerPw, Ldap | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+| Unit  | Behat       | container | unittest             | api                     |
+|       |             | script    | run-tests.sh         | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | Composer             | (same)                  |
+|       |             | config    | features/behat.yml   | (same)                  |
+|       |             | coverage  | Multiple, Google     | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+| Unit  | Codeception | container | unittest             | api                     |
+|       |             | script    | run-tests.sh         | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                  | 
+|       |             | config    | tests/unit.suite.yml | (same)                  |
+|       |             | coverage  | models, helpers      | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+| API   | Codeception | container | apitest              | api                     |
+|       |             | script    | run-tests-api.sh     | (same)                  | 
+|       |             | env.      | common.env, test.env | actions-services.yml    |
+|       |             | bootstrap | tests/_bootstrap.php | (same)                  | 
+|       |             | config    | tests/api.suite.yml  | (same)                  |
+|       |             | coverage  | controllers          | (same)                  |
+|-------|-------------|-----------|----------------------| ----------------------- |
+
+### Running tests
+
+To run all tests, use `make test`.
+
+To run a single unit test:
+
+```
+docker compose run --rm unittest vendor/bin/codecept run tests/unit/common/models/PasswordTest.php:testBadBytes
+```
