@@ -1,11 +1,11 @@
 <?php
 
 use common\components\Emailer;
-use notamedia\sentry\SentryTarget;
 use Sentry\Event;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
+use Sil\Sentry\SentryTarget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
