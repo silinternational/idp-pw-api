@@ -62,7 +62,7 @@ return [
                 ],
                 [
                     'class' => Google::class,
-                    'displayName' => 'Acme G Suite',
+                    'displayName' => 'Acme Google Workspace',
                     'applicationName' => 'Acme IdP',
                     'jsonAuthFilePath' => '/data/google.json',
                     'delegatedAdminEmail' => 'admin@example.org',

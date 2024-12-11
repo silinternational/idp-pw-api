@@ -655,7 +655,11 @@ class User extends UserBase implements IdentityInterface
                     'hide' => $this->hide,
                 ]);
             } catch (\Exception $e) {
-                \Yii::error(['action' => 'personnel update', 'status' => 'error'], __METHOD__);
+                \Yii::error([
+                    'action' => 'personnel update',
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], __METHOD__);
             }
         }
 

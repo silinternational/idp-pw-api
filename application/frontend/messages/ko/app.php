@@ -19,8 +19,8 @@
 return [
     'and' => '및',
     'Auth.MissingClientID' => '클라이언트 ID가 없습니다.',
-    'Google.EmployeeIdNotFound' => 'G Suite 에 직원 ID가 없습니다.',
-    'Google.MultipleEmailsFound' => 'G Suite 에 여러 이메일 주소가 있습니다. 해결할 수 없습니다.',
+    'Google.EmployeeIdNotFound' => 'Google Workspace 에 직원 ID가 없습니다.',
+    'Google.MultipleEmailsFound' => 'Google Workspace 에 여러 이메일 주소가 있습니다. 해결할 수 없습니다.',
     'Method.AlreadyExists' => '복구 방법이 이미 있습니다.',
     'Method.CodeExpired' => '만료 된 인증 코드',
     'Method.CodeMissing' => '코드가 필요합니다.',

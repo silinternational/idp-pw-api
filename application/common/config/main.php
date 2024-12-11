@@ -1,11 +1,11 @@
 <?php
 
 use common\components\Emailer;
-use notamedia\sentry\SentryTarget;
 use Sentry\Event;
 use Sil\JsonLog\target\EmailServiceTarget;
 use Sil\JsonLog\target\JsonStreamTarget;
 use Sil\PhpEnv\Env;
+use Sil\Sentry\SentryTarget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
@@ -177,11 +177,16 @@ return [
                     'dsn' => Env::get('SENTRY_DSN'),
                     'levels' => ['error'],
                     'except' => [
+                        'yii\web\HttpException:400', // BadRequest
                         'yii\web\HttpException:401', // Unauthorized
                         'yii\web\HttpException:404', // NotFound
                         'yii\web\HttpException:409', // Conflict
                     ],
                     'context' => true,
+                    'tagCallback' => function ($tags) use ($idpName): array {
+                        $tags['idp'] = $idpName;
+                        return $tags;
+                    },
                     // Additional options for `Sentry\init`
                     // https://docs.sentry.io/platforms/php/configuration/options
                     'clientOptions' => [
