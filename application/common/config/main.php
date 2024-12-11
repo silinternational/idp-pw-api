@@ -183,6 +183,10 @@ return [
                         'yii\web\HttpException:409', // Conflict
                     ],
                     'context' => true,
+                    'tagCallback' => function ($tags) use ($idpName): array {
+                        $tags['idp'] = $idpName;
+                        return $tags;
+                    },
                     // Additional options for `Sentry\init`
                     // https://docs.sentry.io/platforms/php/configuration/options
                     'clientOptions' => [
