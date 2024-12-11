@@ -8,13 +8,12 @@ composer install --prefer-dist --no-interaction --optimize-autoloader --no-progr
 mkdir -p /data/runtime/mail
 
 # Run database migrations
-whenavail ${MYSQL_HOST} 3306 100 /data/yii migrate --interactive=0
+/data/yii migrate --interactive=0
 
 # Start apache
 apache2ctl start
 
 # Run codeception tests
-whenavail broker 80 100 echo "broker ready"
 /data/vendor/bin/codecept run api -d
 TESTRESULTS_API=$?
 

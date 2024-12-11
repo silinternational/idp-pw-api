@@ -1,3 +1,11 @@
+x-db_healthcheck: &db_healthcheck
+  healthcheck:
+    test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+    start_period: 10s
+    interval: 10s
+    timeout: 5s
+    retries: 3
+
 services:
 
   db:
@@ -7,6 +15,7 @@ services:
       MYSQL_DATABASE: pwmgr
       MYSQL_USER: idpmgmt
       MYSQL_PASSWORD: idpmgmt
+    <<: *db_healthcheck
 
   testDb:
     image: mariadb:10
@@ -15,6 +24,7 @@ services:
       MYSQL_DATABASE: test
       MYSQL_USER: idpmgmt
       MYSQL_PASSWORD: idpmgmt
+    <<: *db_healthcheck
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -32,8 +42,10 @@ services:
     ports:
       - "51155:80"
     depends_on:
-      - db
-      - email
+      db:
+        condition: service_healthy
+      email:
+        condition: service_started
     env_file:
       - ./common.env
       - ./local.env
@@ -43,9 +55,12 @@ services:
     volumes:
       - ./application:/data
     depends_on:
-      - testDb
-      - zxcvbn
-      - broker
+      testDb:
+        condition: service_healthy
+      zxcvbn:
+        condition: service_started
+      broker:
+        condition: service_healthy
     env_file:
       - ./common.env
       - ./test.env
@@ -62,8 +77,10 @@ services:
       - ./application:/data
       - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
-      - testDb
-      - zxcvbn
+      db:
+        condition: service_healthy
+      zxcvbn:
+        condition: service_started
     env_file:
       - ./common.env
       - ./test.env
@@ -80,8 +97,10 @@ services:
       - ./application:/data
       - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
-      - testDb
-      - zxcvbn
+      testDb:
+        condition: service_healthy
+      zxcvbn:
+        condition: service_started
     env_file:
       - ./common.env
       - ./test.env
@@ -98,6 +117,9 @@ services:
     volumes:
       - ./application:/data
       - ${COMPOSER_CACHE_DIR}:/composer
+    depends_on:
+      testDb:
+        condition: service_healthy
     working_dir: /data
     user: "${DOCKER_UIDGID}"
     env_file:
@@ -108,8 +130,12 @@ services:
   email:
     image: silintl/email-service:1
     depends_on:
-      - emaildb
-      - emailcron
+      emaildb:
+        condition: service_healthy
+      emailcron:
+        condition: service_started
+    environment:
+      MYSQL_HOST: emaildb
     env_file:
       - ./email.common.env
       - ./email.local.env
@@ -119,7 +145,10 @@ services:
   emailcron:
     image: silintl/email-service:1
     depends_on:
-      - emaildb
+      emaildb:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: emaildb
     env_file:
       - ./email.common.env
       - ./email.local.env
@@ -131,6 +160,7 @@ services:
       - ./email.common.env
     environment:
       MYSQL_ROOT_PASSWORD: not-a-secret
+    <<: *db_healthcheck
 
   emailpma:
     image: phpmyadmin/phpmyadmin:latest
@@ -151,6 +181,7 @@ services:
       MYSQL_DATABASE: broker
       MYSQL_USER: broker
       MYSQL_PASSWORD: broker
+    <<: *db_healthcheck
 
   brokerpma:
     image: phpmyadmin/phpmyadmin:latest
@@ -166,7 +197,8 @@ services:
     ports:
       - "51154:80"
     depends_on:
-      - brokerDb
+      brokerDb:
+        condition: service_healthy
     volumes:
       - ./dockerbuild/broker/run-broker.sh:/data/run-broker.sh
       - ./dockerbuild/broker/m381901_235959_insert_test_data.php:/data/console/migrations/m381901_235959_insert_test_data.php
@@ -200,11 +232,18 @@ services:
 
   ldap:
     build: ./dockerbuild/ldap
+    healthcheck:
+      test: nc -vz localhost 389
+      start_period: 1s
+      interval: 1s
+      timeout: 5s
+      retries: 90
 
   ldapload:
     build: ./dockerbuild/ldap
     depends_on:
-      - ldap
+      ldap:
+        condition: service_healthy
     working_dir: /data
     command: ./load_ldap.sh
 
