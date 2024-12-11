@@ -323,6 +323,7 @@ class Google extends Component implements PasswordStoreInterface
                 'employee_id' => $employeeId,
                 'email1' => $response['users'][0]['primaryEmail'],
                 'email2' => $response['users'][1]['primaryEmail'],
+                'error' => 'Multiple email addresses found in G Suite. Cannot resolve.',
             ]);
             throw new \Exception(\Yii::t('app', 'Google.MultipleEmailsFound'), 1560875143);
         }
