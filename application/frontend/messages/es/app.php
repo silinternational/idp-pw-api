@@ -19,8 +19,8 @@
 return [
     'and' => 'y',
     'Auth.MissingClientID' => 'Falta el ID del cliente',
-    'Google.EmployeeIdNotFound' => 'ID de empleado no encontrado en la G Suite',
-    'Google.MultipleEmailsFound' => 'Se encuentran varias direcciones de correo electrónico en G Suite. No se puede resolver.',
+    'Google.EmployeeIdNotFound' => 'ID de empleado no encontrado en la Google Workspace',
+    'Google.MultipleEmailsFound' => 'Se encuentran varias direcciones de correo electrónico en Google Workspace. No se puede resolver.',
     'Method.AlreadyExists' => 'El método de pago ya existe',
     'Method.CodeExpired' => 'Código de verificación vencido',
     'Method.CodeMissing' => 'Es necesario un código',

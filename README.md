@@ -106,7 +106,7 @@ The personnel component is used to look up informaton about users from your comp
 
 1. Create a project on <https://console.developers.google.com/>.
 2. Still in the Google Developers Console, create a Service Account.
-3. Check "Furnish a new private key" and "Enable G Suite Domain-wide Delegation".
+3. Check "Furnish a new private key" and "Enable Google Workspace Domain-wide Delegation".
 4. Save the JSON file it provides (containing your private key), but **DO NOT**
    store it in public version control (such as in a public GitHub repo).
 5. Enable the "Admin SDK" API for your project in the Google Developers Console.
@@ -136,7 +136,7 @@ The personnel component is used to look up informaton about users from your comp
         'emailFieldName' => 'email',
         'employeeIdFieldName' => 'employee_id',
         'userActiveRecordClass' => '\common\models\User',
-        'displayName' => 'G Suite',
+        'displayName' => 'Google Workspace',
     ]);
 
 For details about what each of those fields is used for, see the documenting
