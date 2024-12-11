@@ -697,7 +697,7 @@ class User extends UserBase implements IdentityInterface
             \Yii::error([
                 'action' => $msg,
                 'status' => 'error',
-                'error' => $this->getFirstErrors(),
+                'error' => json_encode($this->getFirstErrors()),
             ]);
             if ($code !== null) {
                 throw new \Exception($msg, $code);
