@@ -177,6 +177,7 @@ return [
                     'dsn' => Env::get('SENTRY_DSN'),
                     'levels' => ['error'],
                     'except' => [
+                        'yii\web\HttpException:400', // BadRequest
                         'yii\web\HttpException:401', // Unauthorized
                         'yii\web\HttpException:404', // NotFound
                         'yii\web\HttpException:409', // Conflict
