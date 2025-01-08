@@ -129,6 +129,7 @@ services:
 
   email:
     image: silintl/email-service:1
+    platform: linux/amd64
     depends_on:
       emaildb:
         condition: service_healthy
@@ -173,6 +174,7 @@ services:
 
   zxcvbn:
     image: wcjr/zxcvbn-api:1.1.0
+    platform: linux/amd64
 
   brokerDb:
     image: mariadb:10
@@ -194,6 +196,7 @@ services:
 
   broker:
     image: silintl/idp-id-broker:6
+    platform: linux/amd64
     ports:
       - "51154:80"
     depends_on:
@@ -249,6 +252,7 @@ services:
 
   raml2html:
     image: mattjtodd/raml2html
+    platform: linux/amd64
     volumes:
       - ./api.raml:/api.raml
       - ./api.html:/api.html
