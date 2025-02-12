@@ -6,22 +6,22 @@ use SAML2\Compat\AbstractContainer;
 
 class SamlContainer extends AbstractContainer
 {
-    public function getLogger()
+    public function getLogger(): \Psr\Log\LoggerInterface
     {
         return new \Monolog\Logger('log');
     }
 
-    public function generateId()
+    public function generateId(): string
     {
         return microtime();
     }
 
-    public function debugMessage($message, $type)
+    public function debugMessage($message, $type): void
     {
-
+        // No action desired.
     }
 
-    public function redirect($url, $data = [])
+    public function redirect($url, $data = []): void
     {
         foreach ($data as $key => $value) {
             if (substr_count($url, '?') > 0) {
@@ -30,14 +30,24 @@ class SamlContainer extends AbstractContainer
                 $url .= '?';
             }
 
-            $url .= $key . '=' . urlencode($value);
+            $url .= urlencode($key) . '=' . urlencode($value);
         }
 
         throw new RedirectException($url);
     }
 
-    public function postRedirect($url, $data = [])
+    public function postRedirect($url, $data = []): void
     {
         $this->redirect($url, $data);
+    }
+
+    public function getTempDir(): string
+    {
+        return sys_get_temp_dir();
+    }
+
+    public function writeFile(string $filename, string $data, int $mode = null): void
+    {
+        // No action desired.
     }
 }
