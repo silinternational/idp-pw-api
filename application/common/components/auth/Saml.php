@@ -140,7 +140,7 @@ class Saml extends Component implements AuthnInterface
      * @throws \common\components\auth\InvalidLoginException
      * @throws RedirectException
      */
-    public function login(string $returnTo, Request $request = null)
+    public function login($returnTo, Request $request = null)
     {
         $container = new SamlContainer();
         ContainerSingleton::setContainer($container);
@@ -257,7 +257,7 @@ class Saml extends Component implements AuthnInterface
      * @param null|\common\components\auth\User $user
      * @throws RedirectException
      */
-    public function logout(string $returnTo, AuthUser $user = null)
+    public function logout($returnTo, AuthUser $user = null)
     {
         if (substr_count($this->sloUrl, '?') > 0) {
             $joinChar = '&';
