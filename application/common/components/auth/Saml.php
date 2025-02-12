@@ -9,6 +9,7 @@ use SAML2\EncryptedAssertion;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use common\components\auth\User as AuthUser;
+use SAML2\XML\saml\Issuer;
 use yii\base\Component;
 use yii\web\Request;
 
