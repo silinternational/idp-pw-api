@@ -21,61 +21,61 @@ class Saml extends Component implements AuthnInterface
      * Whether or not to sign request
      * @var bool [default=true]
      */
-    public $signRequest = true;
+    public bool $signRequest = true;
 
     /**
      * Whether or not response should be signed
      * @var bool [default=true]
      */
-    public $checkResponseSigning = true;
+    public bool $checkResponseSigning = true;
 
     /**
      * Whether or not to require response assertion to be encrypted
      * @var bool [default=true]
      */
-    public $requireEncryptedAssertion = true;
+    public bool $requireEncryptedAssertion = true;
 
     /**
      * Certificate contents for remote IdP
      * @var string
      */
-    public $idpCertificate;
+    public string $idpCertificate;
 
     /**
      * Certificate contents for this SP
      * @var string|null If null, request will not be signed
      */
-    public $spCertificate;
+    public ?string $spCertificate;
 
     /**
      * PEM encoded private key file associated with $spCertificate
      * @var string|null If null, request will not be signed
      */
-    public $spPrivateKey;
+    public ?string $spPrivateKey;
 
     /**
      * This SP Entity ID as known by the remote IdP
      * @var string
      */
-    public $entityId;
+    public string $entityId;
 
     /**
      * Single-Sign-On url for remote IdP
      * @var string
      */
-    public $ssoUrl;
+    public string $ssoUrl;
 
     /**
      * Single-Log-Out url for remote IdP
      * @var string
      */
-    public $sloUrl;
+    public string $sloUrl;
 
     /**
      * Mapping configuration for IdP attributes to User
-     * @var array
+     * @var array[]
      */
-    public $attributeMap = [
+    public array $attributeMap = [
         'idp_username' => ['field' => 'eduPersonPrincipalName', 'element' => 0],
         'first_name' => ['field' => 'givenName', 'element' => 0],
         'last_name' => ['field' => 'sn', 'element' => 0],
@@ -103,21 +103,21 @@ class Saml extends Component implements AuthnInterface
         /*
          * Ensure conditionally required properties are set when needed
          */
-        if ($this->signRequest && (is_null($this->spCertificate) || is_null($this->spPrivateKey))) {
+        if ($this->signRequest && (empty($this->spCertificate) || empty($this->spPrivateKey))) {
             throw new \Exception(
                 'Signing requests requires spCertificate and spPrivateKey to be set in auth component configuration',
                 1459883965
             );
         }
 
-        if ($this->checkResponseSigning && is_null($this->idpCertificate)) {
+        if ($this->checkResponseSigning && empty($this->idpCertificate)) {
             throw new \Exception(
                 'Checking if responses are signed requires idpCertificate to be set in auth component configuration',
                 145988396
             );
         }
 
-        if ($this->requireEncryptedAssertion && is_null($this->spPrivateKey)) {
+        if ($this->requireEncryptedAssertion && empty($this->spPrivateKey)) {
             throw new \Exception(
                 'Decrypting assertions requires spPrivateKey to be set in auth component configuration',
                 145988397
@@ -140,14 +140,16 @@ class Saml extends Component implements AuthnInterface
      * @throws \common\components\auth\InvalidLoginException
      * @throws RedirectException
      */
-    public function login($returnTo, Request $request = null)
+    public function login(string $returnTo, Request $request = null)
     {
         $container = new SamlContainer();
         ContainerSingleton::setContainer($container);
 
+        $issuer = new Issuer();
+        $issuer->setValue($this->entityId);
         $request = new AuthnRequest();
         $request->setId($container->generateId());
-        $request->setIssuer($this->entityId);
+        $request->setIssuer($issuer);
         $request->setDestination($this->ssoUrl);
         $request->setRelayState($returnTo);
 
@@ -255,7 +257,7 @@ class Saml extends Component implements AuthnInterface
      * @param null|\common\components\auth\User $user
      * @throws RedirectException
      */
-    public function logout($returnTo, AuthUser $user = null)
+    public function logout(string $returnTo, AuthUser $user = null)
     {
         if (substr_count($this->sloUrl, '?') > 0) {
             $joinChar = '&';
@@ -270,11 +272,11 @@ class Saml extends Component implements AuthnInterface
     /**
      * Utility function to extract attribute values from SAML attributes and
      * return as a simple array
-     * @param $attributes array the SAML attributes returned
-     * @param $map array configuration map of attribute names with field and element values
+     * @param array $attributes the SAML attributes returned
+     * @param array $map configuration map of attribute names with field and element values
      * @return array
      */
-    public function extractSamlAttributes($attributes, $map)
+    public function extractSamlAttributes(array $attributes, array $map): array
     {
         $attrs = [];
 
@@ -299,9 +301,9 @@ class Saml extends Component implements AuthnInterface
      * @param array $map
      * @throws \Exception
      */
-    public function assertHasRequiredSamlAttributes($attributes, $map)
+    public function assertHasRequiredSamlAttributes(array $attributes, array $map)
     {
-        $username = isset($attributes['idp_username']) ? $attributes['idp_username'] : 'missing username';
+        $username = $attributes['idp_username'] ?? 'missing username';
         foreach ($map as $key => $value) {
             if (! array_key_exists($key, $attributes)) {
                 throw new \Exception(
@@ -318,10 +320,9 @@ class Saml extends Component implements AuthnInterface
      * @param string $type Either self::TYPE_PUBLIC or self::TYPE_PRIVATE
      * @return string
      */
-    public function pemEncodeCertificate($data, $type)
+    public function pemEncodeCertificate(?string $data, string $type): string
     {
-        if (substr($data, 0, 1) !== '-') {
-
+        if ($data !== null && substr($data, 0, 1) !== '-') {
             $prefix = $type == self::TYPE_PUBLIC ? '-----BEGIN CERTIFICATE-----' : '-----BEGIN PRIVATE KEY-----';
             $suffix = $type == self::TYPE_PUBLIC ? '-----END CERTIFICATE-----' : '-----END PRIVATE KEY-----';
 
