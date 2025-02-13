@@ -24,7 +24,7 @@
     "simplesamlphp/saml2": "^4",
     "google/apiclient": "^2.0",
     "google/recaptcha": "^1.1.2",
-    "adldap2/adldap2": "^10.0",
+    "directorytree/ldaprecord": "^3.7",
     "fillup/fake-bower-assets": "2.0.9",
     "icawebdesign/hibp-php": "~5.1.1",
     "codemix/yii2-streamlog": "^1.3",
