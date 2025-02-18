@@ -55,9 +55,10 @@ If that is not an option, you can specify an access token using the `AWS_ACCESS_
 If `PARAMETER_STORE_PATH` is given, AWS Parameter Store will be used. Each parameter in AWS Parameter
 Store is set as an environment variable in the execution environment.
 
-Otherwise, AWS AppConfig will be used. The content of the AppConfig configuration profile takes
-the form of a typical .env file, using `#` for comments and `=` for variable assignment. Any
-variables read from AppConfig will overwrite variables set in the execution environment.
+If `PARAMETER_STORE_PATH` is not given but the AppConfig variables are, AWS AppConfig will be used.
+The content of the AppConfig configuration profile takes the form of a typical .env file, using `#`
+for comments and `=` for variable assignment. Any variables read from AppConfig will overwrite variables
+set in the execution environment.
 
 ### Additional setup
 
