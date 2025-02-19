@@ -7,6 +7,9 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+ADD https://github.com/silinternational/config-shim/releases/download/v1.2.0/config-shim.gz config-shim.gz
+RUN gzip -d config-shim.gz && chmod 755 config-shim && mv config-shim /usr/local/bin
+
 WORKDIR /data
 
 # Install/cleanup composer dependencies

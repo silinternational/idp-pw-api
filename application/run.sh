@@ -16,10 +16,12 @@ if [[ $APP_ENV == "dev" ]]; then
     apt-get update && apt-get install php-xdebug
 fi
 
-if [[ -z "${APP_ID}" ]]; then
-  apache2ctl -k start -D FOREGROUND
-else
+if [[ $PARAMETER_STORE_PATH ]]; then
+  config-shim --path $PARAMETER_STORE_PATH -k start -D FOREGROUND
+elif [[ $APP_ID ]]; then
   config-shim --app $APP_ID --config $CONFIG_ID --env $ENV_ID apache2ctl -k start -D FOREGROUND
+else
+  apache2ctl -k start -D FOREGROUND
 fi
 
 # endless loop with a wait is needed for the trap to work
