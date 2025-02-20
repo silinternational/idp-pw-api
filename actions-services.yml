@@ -30,8 +30,6 @@ services:
         condition: service_started
       broker:
         condition: service_healthy
-    #      ldapload:
-    #        condition: service_started
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: test
@@ -111,22 +109,3 @@ services:
       interval: 5s
       timeout: 1s
       retries: 30
-
-  ldap:
-    build: ./dockerbuild/ldap
-    environment:
-      DEBUG_LEVEL: 320
-    healthcheck:
-      test: nc -vz localhost 389
-      start_period: 1s
-      interval: 5s
-      timeout: 1s
-      retries: 90
-
-  ldapload:
-    build: ./dockerbuild/ldap
-    depends_on:
-      ldap:
-        condition: service_healthy
-    working_dir: /data
-    command: ./load_ldap.sh
