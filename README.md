@@ -114,6 +114,8 @@ auth component could be written to implement OAuth or use Google, etc.
 
 You can store your passwords wherever you like, whether it is LDAP, Active Directory, a database, or even Redis.
 
+#### NOTE: LDAP is deprecated
+
 * Component ID: ```passwordstore```
 * Implement interface: ```common\components\passwordStore\PasswordStoreInterface```
 * [Example implementation](application/common/components/passwordStore/Ldap.php)
