@@ -199,7 +199,7 @@ class Google extends Component implements PasswordStoreInterface
      */
     protected static function hasCorrectEmployeeId(Google_Service_Directory_User $user, string $employeeId): bool
     {
-        foreach($user['externalIds'] as $externalId) {
+        foreach ($user['externalIds'] as $externalId) {
             if ($externalId['value'] === $employeeId && $externalId['type'] === 'organization') {
                 return true;
             }

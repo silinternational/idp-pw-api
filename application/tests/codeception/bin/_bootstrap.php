@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Yii console bootstrap file.
  *
