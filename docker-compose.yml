@@ -1,13 +1,12 @@
 x-db_healthcheck: &db_healthcheck
   healthcheck:
-    test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+    test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
     start_period: 10s
     interval: 10s
     timeout: 5s
     retries: 3
 
 services:
-
   db:
     image: mariadb:10
     environment:
@@ -69,13 +68,12 @@ services:
       MYSQL_DATABASE: test
       APP_ENV: test
       ID_BROKER_baseUrl: http://broker
-    command: [ "/data/run-tests-api.sh" ]
+    command: ["/data/run-tests-api.sh"]
 
   unittest:
     build: ./
     volumes:
       - ./application:/data
-      - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
       db:
         condition: service_healthy
@@ -89,13 +87,12 @@ services:
       MYSQL_DATABASE: test
       APP_ENV: test
       ID_BROKER_baseUrl: http://broker
-    command: [ "/data/run-tests.sh" ]
+    command: ["/data/run-tests.sh"]
 
   integrationtest:
     build: ./
     volumes:
       - ./application:/data
-      - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
       testDb:
         condition: service_healthy
@@ -110,7 +107,7 @@ services:
       MYSQL_DATABASE: test
       APP_ENV: test
       ID_BROKER_baseUrl: http://broker
-    command: [ "/data/run-tests-integration.sh" ]
+    command: ["/data/run-tests-integration.sh"]
 
   cli:
     build: ./
@@ -125,7 +122,7 @@ services:
     env_file:
       - ./common.env
       - ./local.env
-    command: [ "true" ]
+    command: ["true"]
 
   email:
     image: silintl/email-service:1
@@ -238,23 +235,6 @@ services:
       interval: 1s
       timeout: 5s
       retries: 20
-
-  ldap:
-    build: ./dockerbuild/ldap
-    healthcheck:
-      test: nc -vz localhost 389
-      start_period: 1s
-      interval: 1s
-      timeout: 5s
-      retries: 90
-
-  ldapload:
-    build: ./dockerbuild/ldap
-    depends_on:
-      ldap:
-        condition: service_healthy
-    working_dir: /data
-    command: ./load_ldap.sh
 
   raml2html:
     image: mattjtodd/raml2html

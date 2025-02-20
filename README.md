@@ -112,13 +112,10 @@ auth component could be written to implement OAuth or use Google, etc.
 
 ### Password Store Component
 
-You can store your passwords wherever you like, whether it is LDAP, Active Directory, a database, or even Redis.
-
-#### NOTE: LDAP is deprecated
+You can store your passwords wherever you like, whether it is Active Directory, a database, or even Redis.
 
 * Component ID: ```passwordstore```
 * Implement interface: ```common\components\passwordStore\PasswordStoreInterface```
-* [Example implementation](application/common/components/passwordStore/Ldap.php)
 
 ### Personnel Component
 
@@ -226,7 +223,7 @@ The chart below summarizes the test configuration.
 |         |               | env.        | common.env, test.env                                    | actions-services.yml    |
 |         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
 |         |               | config      | tests/unit.suite.yml, tests/codeception/config/unit.php | (same)                  |
-|         |               | coverage    | IdBroker, IdBrokerPw, Ldap                              | (same)                  |
+|         |               | coverage    | IdBroker, IdBrokerPw                                    | (same)                  |
 | ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
 | Unit    | Behat         | container   | unittest                                                | api                     |
 |         |               | script      | run-tests.sh                                            | (same)                  | 
