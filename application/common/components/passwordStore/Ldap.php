@@ -1,7 +1,5 @@
 <?php
 
-// LDAP is being deprecated
-
 namespace common\components\passwordStore;
 
 use Adldap\Adldap;
