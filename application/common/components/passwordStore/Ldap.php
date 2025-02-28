@@ -91,11 +91,6 @@ class Ldap extends Component implements PasswordStoreInterface
             $this->useSsl = false;
         }
 
-        if ($this->ldapClient !== null) {
-            return;
-        }
-
-
         // ensure the `host` property is an array
         $this->host = is_array($this->host) ? $this->host : [$this->host];
 
