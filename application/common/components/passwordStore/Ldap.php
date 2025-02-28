@@ -420,10 +420,11 @@ class Ldap extends Component implements PasswordStoreInterface
     {
         $this->connect();
         $criteria = $this->getSearchCriteria();
+        $client = $this->ldapClient;
 
         try {
             /** @var LDAP_Entry $user */
-            $user = $this->ldapClient->query()
+            $user = $client->query()
                 ->select($criteria)
                 ->findByOrFail($this->employeeIdAttribute, $employeeId);
         } catch (\Exception $e) {
