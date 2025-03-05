@@ -8,6 +8,8 @@ term_handler() {
 }
 trap 'kill ${!}; term_handler' SIGTERM
 
+echo "starting idp-pw-api version $GITHUB_REF_NAME"
+
 # Run database migrations
 /data/yii migrate --interactive=0
 

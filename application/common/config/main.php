@@ -62,10 +62,13 @@ $passwordRules = [
     'requireAlphaAndNumeric' => $passwordRulesEnv['requireAlphaAndNumeric'] ?? false,
 ];
 
-$logPrefix = function () {
+$version = Env::get('GITHUB_REF_NAME', 'unknown');
+
+$logPrefix = function () use ($version) {
     $request = Yii::$app->request;
     $prefixData = [
         'env' => YII_ENV,
+        'version' => $version,
     ];
     $userId = Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->id;
     if ($request instanceof \yii\web\Request) {
@@ -192,7 +195,7 @@ return [
                     'clientOptions' => [
                         'attach_stacktrace' => false, // stack trace identifies the logger call stack, not helpful
                         'environment' => YII_ENV,
-                        'release' => 'idp-pw-api@' . Env::get('GITHUB_REF_NAME', 'unknown'),
+                        'release' => 'idp-pw-api@' . $version,
                         'max_request_body_size' => 'never', // never send request bodies
                         'before_send' => function (Event $event) use ($idpName): ?Event {
                             $event->setExtra(['idp' => $idpName]);
