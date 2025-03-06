@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application configuration for console unit tests
  */

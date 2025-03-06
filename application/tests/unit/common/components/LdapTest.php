@@ -17,7 +17,6 @@ class LdapTest extends TestCase
         $userMeta = $ldap->getMeta('10161');
         $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
         $this->assertNotNull($userMeta->passwordExpireDate);
-
     }
 
     public function testGetMetaDoesntExist()
@@ -35,8 +34,6 @@ class LdapTest extends TestCase
 
         $userMeta = $ldap->set('10161', 'testpass');
         $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
-
-
     }
 
     public function testRemoveAttributesOnSet()
@@ -44,11 +41,12 @@ class LdapTest extends TestCase
         $ldap = $this->getClient();
         $ldap->connect();
         $criteria = $ldap->getSearchCriteria();
+        $client = $ldap->ldapClient;
         /*
          * Get user before change to ensure presence of attributes to be removed
          */
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10131');
 
@@ -68,8 +66,9 @@ class LdapTest extends TestCase
          */
         $ldap = $this->getClient();
         $ldap->connect();
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        $client = $ldap->ldapClient;
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10131');
 
@@ -83,11 +82,12 @@ class LdapTest extends TestCase
         $ldap = $this->getClient();
         $ldap->connect();
         $criteria = $ldap->getSearchCriteria();
+        $client = $ldap->ldapClient;
         /*
          * Get user before change to ensure absence of attributes to be updated
          */
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
 
@@ -103,8 +103,9 @@ class LdapTest extends TestCase
          */
         $ldap = $this->getClient();
         $ldap->connect();
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        $client = $ldap->ldapClient;
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select($criteria)
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
 
@@ -112,7 +113,6 @@ class LdapTest extends TestCase
             $this->assertTrue($user->hasAttribute($attrName) &&
                 $user->getAttribute($attrName) == [0 => $attrValue]);
         }
-
     }
 
     public function testAccountDisabled()
@@ -129,8 +129,9 @@ class LdapTest extends TestCase
         $ldap = $this->getClient();
         $ldap->connect();
         $ldap->set('10171', 'startpassword');
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        $client = $ldap->ldapClient;
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select(['userPassword'])
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
         $beforePassword = $user->getAttribute('userpassword');
@@ -151,7 +152,8 @@ class LdapTest extends TestCase
             'giscurrentasgnentitycode' => 'USA'
         ];
         $ldap->connect();
-        $user = $ldap->ldapProvider->search()
+        $client = $ldap->ldapClient;
+        $user = $client->query()
             ->select(['userPassword'])
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
         $afterPassword = $user->getAttribute('userpassword');
@@ -163,9 +165,10 @@ class LdapTest extends TestCase
     {
         $ldap = $this->getClient();
         $ldap->connect();
+        $client = $ldap->ldapClient;
         $ldap->set('10161', 'startpassword');
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select(['userPassword'])
             ->findByOrFail($ldap->employeeIdAttribute, '10161');
         $beforePassword = $user->getAttribute('userpassword');
@@ -185,7 +188,8 @@ class LdapTest extends TestCase
             'giscurrentasgnentitycode' => 'USA'
         ];
         $ldap->connect();
-        $user = $ldap->ldapProvider->search()
+        $client = $ldap->ldapClient;
+        $user = $client->query()
             ->select(['userPassword'])
             ->findByOrFail($ldap->employeeIdAttribute, '10161');
         $afterPassword = $user->getAttribute('userpassword');
@@ -197,9 +201,10 @@ class LdapTest extends TestCase
     {
         $ldap = $this->getClient();
         $ldap->connect();
+        $client = $ldap->ldapClient;
         $ldap->set('10171', 'startpassword');
-        /** @var \Adldap\Models\Entry $user */
-        $user = $ldap->ldapProvider->search()
+        /** @var \LdapRecord\Models\OpenLDAP\Entry $user */
+        $user = $client->query()
             ->select(['userPassword'])
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
         $beforePassword = $user->getAttribute('userpassword');
@@ -213,7 +218,8 @@ class LdapTest extends TestCase
 
         $ldap = $this->getClient();
         $ldap->connect();
-        $user = $ldap->ldapProvider->search()
+        $client = $ldap->ldapClient;
+        $user = $client->query()
             ->select(['userPassword'])
             ->findByOrFail($ldap->employeeIdAttribute, '10171');
         $afterPassword = $user->getAttribute('userpassword');
