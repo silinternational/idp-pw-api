@@ -2,9 +2,9 @@
 
 namespace common\components\passwordStore;
 
-use Adldap\Adldap;
-use Adldap\Auth\BindException;
-use Adldap\Schemas\OpenLDAP;
+use LdapRecord\Auth\BindException;
+use LdapRecord\Connection;
+use LdapRecord\Models\OpenLDAP\Entry as LDAP_Entry;
 use yii\base\Component;
 
 class Ldap extends Component implements PasswordStoreInterface
@@ -70,11 +70,8 @@ class Ldap extends Component implements PasswordStoreInterface
      */
     public $updateAttributesOnSetPassword = [];
 
-    /** @var \Adldap\Connections\Provider */
-    public $ldapProvider;
-
-    /** @var \Adldap\Adldap LDAP client*/
-    public $ldapClient;
+    /** @var \LdapRecord\Connection */
+    public Connection $ldapClient;
 
     public $displayName = 'LDAP';
 
@@ -89,8 +86,8 @@ class Ldap extends Component implements PasswordStoreInterface
             return;
         }
 
+        // Prefer TLS over SSL
         if ($this->useSsl && $this->useTls) {
-            // Prefer TLS over SSL
             $this->useSsl = false;
         }
 
@@ -99,9 +96,9 @@ class Ldap extends Component implements PasswordStoreInterface
 
         // iterate over the list of hosts to find the first one that is good
         foreach ($this->host as $host) {
-            $client = $this->connectHost($host);
-            if ($client !== null) {
-                $this->ldapClient = $client;
+            $connection = $this->connectHost($host);
+            if ($connection !== null) {
+                $this->ldapClient = $connection;
                 return;
             }
         }
@@ -117,12 +114,11 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * @param string $host
-     * @return Adldap|null
+     * @return Connection|null
      */
-    private function connectHost(string $host)
+    private function connectHost(string $host): ?Connection
     {
-        $client = new Adldap();
-        $client->addProvider([
+        $connection = new Connection([
             'base_dn' => $this->baseDn,
             'hosts' => [$host],
             'port' => $this->port,
@@ -130,12 +126,12 @@ class Ldap extends Component implements PasswordStoreInterface
             'password' => $this->adminPassword,
             'use_ssl' => $this->useSsl,
             'use_tls' => $this->useTls,
-            'schema' => OpenLDAP::class,
             'timeout' => 3, // set connection timeout to 3 seconds, default is 5 seconds
         ]);
 
         try {
-            $this->ldapProvider = $client->connect();
+            $connection->connect();
+            $this->ldapClient = $connection;
         } catch (BindException $e) {
             $err = $e->getDetailedError();
             \Yii::warning([
@@ -148,7 +144,7 @@ class Ldap extends Component implements PasswordStoreInterface
             ]);
             return null;
         }
-        return $client;
+        return $connection;
     }
 
     /**
@@ -275,7 +271,7 @@ class Ldap extends Component implements PasswordStoreInterface
      * @return string
      * @throws \Exception
      */
-    protected function encodeForUnicodePwdField($password)
+    protected function encodeForUnicodePwdField(string $password): string
     {
         $encodedPassword = iconv('UTF-8', 'UTF-16LE', '"' . $password . '"');
         if ($encodedPassword === false) {
@@ -288,11 +284,11 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param \Adldap\Models\Entry $user
+     * @param LDAP_Entry $user
      * @param string $password
      * @throws \common\components\passwordStore\PasswordReuseException
      */
-    protected function updatePassword($user, $password)
+    protected function updatePassword(LDAP_Entry $user, string $password): void
     {
         try {
             $user->updateAttribute($this->userPasswordAttribute, $password);
@@ -312,9 +308,9 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param \Adldap\Models\Entry $user
+     * @param LDAP_Entry $user
      */
-    protected function removeAttributesAfterNewPassword($user)
+    protected function removeAttributesAfterNewPassword(LDAP_Entry $user): void
     {
         foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
             if ($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
@@ -324,9 +320,9 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param \Adldap\Models\Entry $user
+     * @param LDAP_Entry $user
      */
-    protected function updateAttributesAfterNewPassword($user)
+    protected function updateAttributesAfterNewPassword(LDAP_Entry $user): void
     {
         foreach ($this->updateAttributesOnSetPassword as $key => $value) {
             if ($user->hasAttribute($key) || $user->hasAttribute(strtolower($key))) {
@@ -338,10 +334,10 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param \Adldap\Models\Entry $user
+     * @param LDAP_Entry $user
      * @return bool
      */
-    public function matchesRequiredAttributes($user)
+    public function matchesRequiredAttributes(LDAP_Entry $user): bool
     {
         // If not defined, just return true to continue processing as normal
         if (! is_array($this->updatePasswordIfAttributeAndValue)) {
@@ -367,10 +363,10 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param \Adldap\Models\Entry $user
+     * @param LDAP_Entry $user
      * @throws \common\components\passwordStore\AccountLockedException
      */
-    public function assertUserNotDisabled($user)
+    public function assertUserNotDisabled(LDAP_Entry $user): void
     {
         if ($user->hasAttribute($this->userAccountDisabledAttribute)) {
             $value = $user->getAttribute($this->userAccountDisabledAttribute);
@@ -417,17 +413,18 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * @param string $employeeId
-     * @return \Adldap\Models\Entry
+     * @return LDAP_Entry
      * @throws \common\components\passwordStore\UserNotFoundException
      */
-    public function findUser($employeeId)
+    public function findUser(string $employeeId): LDAP_Entry
     {
         $this->connect();
         $criteria = $this->getSearchCriteria();
+        $client = $this->ldapClient;
 
         try {
-            /** @var \Adldap\Models\Entry $user */
-            $user = $this->ldapProvider->search()
+            /** @var LDAP_Entry $user */
+            $user = $client->query()
                 ->select($criteria)
                 ->findByOrFail($this->employeeIdAttribute, $employeeId);
         } catch (\Exception $e) {
