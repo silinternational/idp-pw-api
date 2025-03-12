@@ -453,7 +453,7 @@
   },
   {
     "name": "simplesamlphp/saml2",
-    "version": "v4.16.14"
+    "version": "v4.17.0"
   },
   {
     "name": "swiftmailer/swiftmailer",
