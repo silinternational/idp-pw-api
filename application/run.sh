@@ -15,7 +15,7 @@ echo "starting idp-pw-api version $GITHUB_REF_NAME"
 
 if [[ $APP_ENV == "dev" ]]; then
     export XDEBUG_CONFIG="remote_enable=1 remote_host="$REMOTE_DEBUG_IP
-    apt-get update && apt-get install php-xdebug
+    apt-get update && apt-get install -y php-xdebug
 fi
 
 if [[ $PARAMETER_STORE_PATH ]]; then
