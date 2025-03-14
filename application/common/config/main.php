@@ -82,7 +82,7 @@ $logPrefix = function () use ($version) {
     } elseif ($request instanceof \yii\console\Request) {
         $prefixData['id'] = '(console)';
     }
-    
+
     return Json::encode($prefixData);
 };
 
@@ -153,7 +153,7 @@ return [
                         $prefixData = [
                             'env' => YII_ENV,
                         ];
-                        
+
                         // There is no user when a console command is run
                         try {
                             $appUser = \Yii::$app->user;
@@ -163,7 +163,7 @@ return [
                         if ($appUser && !\Yii::$app->user->isGuest) {
                             $prefixData['user'] = \Yii::$app->user->identity->email;
                         }
-                        
+
                         // Try to get requested url and method
                         try {
                             $request = \Yii::$app->request;
@@ -172,7 +172,7 @@ return [
                         } catch (\Exception $e) {
                             $prefixData['url'] = 'not available';
                         }
-                        
+
                         return $prefixData;
                     },
                     'exportInterval' => 1,
