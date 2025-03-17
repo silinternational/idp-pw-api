@@ -43,6 +43,9 @@ $emailServiceConfig['validIpRanges'] = Env::getArray('EMAIL_SERVICE_validIpRange
 
 $authClass = Env::get('AUTH_CLASS', 'common\components\auth\Saml');
 $authConfig = Env::getArrayFromPrefix('AUTH_SAML_');
+$authConfig['idpCertificate'] ??= '';
+$authConfig['spCertificate'] ??= '';
+$authConfig['spPrivateKey'] ??= '';
 
 $personnelClass = Env::get('PERSONNEL_CLASS', 'common\components\personnel\IdBroker');
 
