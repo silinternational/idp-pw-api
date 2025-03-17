@@ -70,8 +70,8 @@ class Ldap extends Component implements PasswordStoreInterface
      */
     public $updateAttributesOnSetPassword = [];
 
-    /** @var \LdapRecord\Connection */
-    public Connection $ldapClient;
+    /** @var \LdapRecord\Connection|null */
+    public ?Connection $ldapClient = null;
 
     public $displayName = 'LDAP';
 
