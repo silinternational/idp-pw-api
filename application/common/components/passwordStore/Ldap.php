@@ -284,11 +284,11 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param LDAP_Entry|array $user
+     * @param LDAP_Entry $user
      * @param string $password
      * @throws \common\components\passwordStore\PasswordReuseException
      */
-    protected function updatePassword(LDAP_Entry|array $user, string $password): void
+    protected function updatePassword(LDAP_Entry $user, string $password): void
     {
         try {
             $user->updateAttribute($this->userPasswordAttribute, $password);
@@ -308,9 +308,9 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param LDAP_Entry|array $user
+     * @param LDAP_Entry $user
      */
-    protected function removeAttributesAfterNewPassword(LDAP_Entry|array $user): void
+    protected function removeAttributesAfterNewPassword(LDAP_Entry $user): void
     {
         foreach ($this->removeAttributesOnSetPassword as $removeAttr) {
             if ($user->hasAttribute($removeAttr) || $user->hasAttribute(strtolower($removeAttr))) {
@@ -320,9 +320,9 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param LDAP_Entry|array $user
+     * @param LDAP_Entry $user
      */
-    protected function updateAttributesAfterNewPassword(LDAP_Entry|array $user): void
+    protected function updateAttributesAfterNewPassword(LDAP_Entry $user): void
     {
         foreach ($this->updateAttributesOnSetPassword as $key => $value) {
             if ($user->hasAttribute($key) || $user->hasAttribute(strtolower($key))) {
@@ -334,10 +334,10 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param LDAP_Entry|array $user
+     * @param LDAP_Entry $user
      * @return bool
      */
-    public function matchesRequiredAttributes(LDAP_Entry|array $user): bool
+    public function matchesRequiredAttributes(LDAP_Entry $user): bool
     {
         // If not defined, just return true to continue processing as normal
         if (! is_array($this->updatePasswordIfAttributeAndValue)) {
@@ -363,10 +363,10 @@ class Ldap extends Component implements PasswordStoreInterface
     }
 
     /**
-     * @param LDAP_Entry|array $user
+     * @param LDAP_Entry $user
      * @throws \common\components\passwordStore\AccountLockedException
      */
-    public function assertUserNotDisabled(LDAP_Entry|array $user): void
+    public function assertUserNotDisabled(LDAP_Entry $user): void
     {
         if ($user->hasAttribute($this->userAccountDisabledAttribute)) {
             $value = $user->getAttribute($this->userAccountDisabledAttribute);
@@ -413,19 +413,17 @@ class Ldap extends Component implements PasswordStoreInterface
 
     /**
      * @param string $employeeId
-     * @return LDAP_Entry|array
+     * @return LDAP_Entry
      * @throws \common\components\passwordStore\UserNotFoundException
      */
-    public function findUser(string $employeeId): LDAP_Entry|array
+    public function findUser(string $employeeId): LDAP_Entry
     {
         $this->connect();
         $criteria = $this->getSearchCriteria();
-        $client = $this->ldapClient;
 
         try {
             /** @var LDAP_Entry $user */
-            $user = $client->query()
-                ->select($criteria)
+            $user = LDAP_Entry::select($criteria)
                 ->findByOrFail($this->employeeIdAttribute, $employeeId);
         } catch (\Exception $e) {
             throw new UserNotFoundException(
