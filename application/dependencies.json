@@ -1,11 +1,23 @@
 [
   {
     "name": "behat/gherkin",
-    "version": "v4.11.0"
+    "version": "v4.13.0"
   },
   {
     "name": "bower-asset/inputmask",
-    "version": "3.3.11"
+    "version": "5.0.9"
+  },
+  {
+    "name": "bower-asset/jquery",
+    "version": "3.7.1"
+  },
+  {
+    "name": "bower-asset/punycode",
+    "version": "v1.4.1"
+  },
+  {
+    "name": "bower-asset/yii2-pjax",
+    "version": "2.0.8"
   },
   {
     "name": "carbonphp/carbon-doctrine-types",
@@ -25,11 +37,11 @@
   },
   {
     "name": "codeception/codeception",
-    "version": "5.1.2"
+    "version": "5.3.1"
   },
   {
     "name": "codeception/lib-asserts",
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   {
     "name": "codeception/lib-innerbrowser",
@@ -37,7 +49,7 @@
   },
   {
     "name": "codeception/lib-web",
-    "version": "1.0.6"
+    "version": "1.0.7"
   },
   {
     "name": "codeception/module-phpbrowser",
@@ -45,7 +57,7 @@
   },
   {
     "name": "codeception/stub",
-    "version": "4.1.3"
+    "version": "4.1.4"
   },
   {
     "name": "codemix/yii2-streamlog",
@@ -65,11 +77,11 @@
   },
   {
     "name": "directorytree/ldaprecord",
-    "version": "v3.7.7"
+    "version": "v3.8.1"
   },
   {
     "name": "doctrine/deprecations",
-    "version": "1.1.4"
+    "version": "1.1.5"
   },
   {
     "name": "doctrine/instantiator",
@@ -96,28 +108,24 @@
     "version": "1.2.0"
   },
   {
-    "name": "fillup/fake-bower-assets",
-    "version": "2.0.9"
-  },
-  {
     "name": "firebase/php-jwt",
-    "version": "v6.11.0"
+    "version": "v6.11.1"
   },
   {
     "name": "friendsofphp/php-cs-fixer",
-    "version": "v3.68.5"
+    "version": "v3.75.0"
   },
   {
     "name": "google/apiclient",
-    "version": "v2.18.2"
+    "version": "v2.18.3"
   },
   {
     "name": "google/apiclient-services",
-    "version": "v0.394.0"
+    "version": "v0.396.0"
   },
   {
     "name": "google/auth",
-    "version": "v1.46.0"
+    "version": "v1.47.0"
   },
   {
     "name": "google/recaptcha",
@@ -129,7 +137,7 @@
   },
   {
     "name": "guzzlehttp/guzzle",
-    "version": "7.9.2"
+    "version": "7.9.3"
   },
   {
     "name": "guzzlehttp/guzzle-services",
@@ -137,11 +145,11 @@
   },
   {
     "name": "guzzlehttp/promises",
-    "version": "2.0.4"
+    "version": "2.2.0"
   },
   {
     "name": "guzzlehttp/psr7",
-    "version": "2.7.0"
+    "version": "2.7.1"
   },
   {
     "name": "guzzlehttp/uri-template",
@@ -173,7 +181,7 @@
   },
   {
     "name": "jean85/pretty-package-versions",
-    "version": "2.1.0"
+    "version": "2.1.1"
   },
   {
     "name": "masterminds/html5",
@@ -185,11 +193,11 @@
   },
   {
     "name": "monolog/monolog",
-    "version": "3.8.1"
+    "version": "3.9.0"
   },
   {
     "name": "myclabs/deep-copy",
-    "version": "1.13.0"
+    "version": "1.13.1"
   },
   {
     "name": "nesbot/carbon",
@@ -269,7 +277,7 @@
   },
   {
     "name": "phpunit/phpunit",
-    "version": "9.6.22"
+    "version": "9.6.23"
   },
   {
     "name": "psr/cache",
@@ -309,7 +317,7 @@
   },
   {
     "name": "psy/psysh",
-    "version": "v0.12.7"
+    "version": "v0.12.8"
   },
   {
     "name": "ralouphie/getallheaders",
@@ -345,7 +353,7 @@
   },
   {
     "name": "roave/security-advisories",
-    "version": "dev-master 74a1f3e"
+    "version": "dev-master 5326c90"
   },
   {
     "name": "robrichards/xmlseclibs",
@@ -425,11 +433,11 @@
   },
   {
     "name": "silinternational/email-service-php-client",
-    "version": "2.4.3"
+    "version": "2.5.0"
   },
   {
     "name": "silinternational/idp-id-broker-php-client",
-    "version": "4.4.1"
+    "version": "4.6.0"
   },
   {
     "name": "silinternational/php-env",
@@ -441,11 +449,11 @@
   },
   {
     "name": "silinternational/yii2-json-log-targets",
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   {
     "name": "silinternational/yii2-sentry",
-    "version": "2.0.0"
+    "version": "2.1.1"
   },
   {
     "name": "silinternational/zxcvbn-api-client-php",
@@ -453,7 +461,7 @@
   },
   {
     "name": "simplesamlphp/saml2",
-    "version": "v4.17.0"
+    "version": "v4.18.1"
   },
   {
     "name": "swiftmailer/swiftmailer",
@@ -461,11 +469,11 @@
   },
   {
     "name": "symfony/browser-kit",
-    "version": "v6.4.13"
+    "version": "v6.4.19"
   },
   {
     "name": "symfony/console",
-    "version": "v7.2.1"
+    "version": "v7.2.6"
   },
   {
     "name": "symfony/css-selector",
@@ -477,7 +485,7 @@
   },
   {
     "name": "symfony/dom-crawler",
-    "version": "v6.4.18"
+    "version": "v6.4.19"
   },
   {
     "name": "symfony/event-dispatcher",
@@ -497,7 +505,7 @@
   },
   {
     "name": "symfony/http-client",
-    "version": "v7.2.3"
+    "version": "v7.2.4"
   },
   {
     "name": "symfony/http-client-contracts",
@@ -509,39 +517,39 @@
   },
   {
     "name": "symfony/polyfill-ctype",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-iconv",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-intl-grapheme",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-intl-idn",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-intl-normalizer",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-mbstring",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-php80",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/polyfill-php81",
-    "version": "v1.31.0"
+    "version": "v1.32.0"
   },
   {
     "name": "symfony/process",
-    "version": "v7.2.0"
+    "version": "v7.2.5"
   },
   {
     "name": "symfony/service-contracts",
@@ -549,15 +557,15 @@
   },
   {
     "name": "symfony/stopwatch",
-    "version": "v7.2.2"
+    "version": "v7.2.4"
   },
   {
     "name": "symfony/string",
-    "version": "v7.2.0"
+    "version": "v7.2.6"
   },
   {
     "name": "symfony/translation",
-    "version": "v6.4.13"
+    "version": "v6.4.21"
   },
   {
     "name": "symfony/translation-contracts",
@@ -565,11 +573,11 @@
   },
   {
     "name": "symfony/var-dumper",
-    "version": "v7.2.3"
+    "version": "v7.2.6"
   },
   {
     "name": "symfony/yaml",
-    "version": "v6.4.18"
+    "version": "v6.4.21"
   },
   {
     "name": "theseer/tokenizer",
@@ -581,15 +589,15 @@
   },
   {
     "name": "yiisoft/yii2",
-    "version": "2.0.49.4"
+    "version": "2.0.52"
   },
   {
     "name": "yiisoft/yii2-composer",
-    "version": "2.0.10"
+    "version": "2.0.11"
   },
   {
     "name": "yiisoft/yii2-gii",
-    "version": "2.2.6"
+    "version": "2.2.7"
   },
   {
     "name": "yiisoft/yii2-swiftmailer",
