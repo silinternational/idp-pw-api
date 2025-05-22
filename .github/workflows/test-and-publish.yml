@@ -35,7 +35,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         # Step to log into the GHCR
       - name: Log in to GHCR.io
-        if: startsWith(github.ref, 'refs/tags')
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
