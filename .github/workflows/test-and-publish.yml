@@ -22,7 +22,7 @@ jobs:
     name: Build and Publish
     needs: tests
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags')
+    #if: startsWith(github.ref, 'refs/tags')
     timeout-minutes: ${{ fromJSON(vars.DEFAULT_JOB_TIMEOUT_MINUTES) }}
     steps:
       - name: Checkout code
@@ -35,12 +35,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         # Step to log into the GHCR
       - name: Log in to GHCR.io
+        if: startsWith(github.ref, 'refs/tags')
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        # Step to Extract the meta for the image  
+        # Step to Extract the meta for the image
       - name: Extract metadata (tags, labels) for Docker Images
         id: meta
         uses: docker/metadata-action@v5
