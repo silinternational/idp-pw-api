@@ -2,14 +2,16 @@
 
 namespace common\components\auth;
 
+use common\components\auth\User as AuthUser;
+use GuzzleHttp\Client;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\AuthnRequest;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\EncryptedAssertion;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
-use common\components\auth\User as AuthUser;
 use SAML2\XML\saml\Issuer;
+use Yii;
 use yii\base\Component;
 use yii\web\Request;
 
@@ -86,6 +88,27 @@ class Saml extends Component implements AuthnInterface
 
     public function init()
     {
+        $client = new Client([
+            'timeout' => 2,
+        ]);
+        $metadataUrl = $this->getMetadataUrl();
+        try {
+            $response = $client->get($metadataUrl);
+            $metadataXml = $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            Yii::warning([
+                'error' => 'Failed to fetch IdP metadata',
+                'metadataUrl' => $metadataUrl,
+                'metadata' => $metadataXml ?? '',
+                'exception' => $e->getMessage(),
+            ]);
+        }
+        Yii::info([
+            'action' => 'login',
+            'metadataUrl' => $metadataUrl,
+            'metadata' => $metadataXml ?? '',
+        ]);
+
         /*
          * Ensure all required properties are set
          */
@@ -194,7 +217,7 @@ class Saml extends Component implements AuthnInterface
                     ['type' => 'public']
                 );
                 $idpKey->loadKey($this->idpCertificate, false, true);
-                if (! $response->validate($idpKey)) {
+                if (!$response->validate($idpKey)) {
                     throw new \Exception(
                         'SAML response was not signed properly',
                         1459884735
@@ -214,7 +237,7 @@ class Saml extends Component implements AuthnInterface
                 );
                 $decryptKey->loadKey($this->spPrivateKey, false, false);
 
-                if (! $assertions[0] instanceof EncryptedAssertion) {
+                if (!$assertions[0] instanceof EncryptedAssertion) {
                     throw new \Exception(
                         'Response assertion is required to be encrypted but was not',
                         1459884392
@@ -306,7 +329,7 @@ class Saml extends Component implements AuthnInterface
     {
         $username = $attributes['idp_username'] ?? 'missing username';
         foreach ($map as $key => $value) {
-            if (! array_key_exists($key, $attributes)) {
+            if (!array_key_exists($key, $attributes)) {
                 throw new \Exception(
                     'SAML attributes missing attribute: ' . $key . ' for user ' . $username,
                     1454436522
@@ -334,5 +357,32 @@ class Saml extends Component implements AuthnInterface
         }
 
         return $data;
+    }
+
+    /**
+     * Convert the SSO URL to the metadata URL, changing the path and query, but keeping the host and scheme unchanged.
+     * @return string
+     */
+    private function getMetadataUrl(): string
+    {
+        $parsed = parse_url($this->ssoUrl);
+
+        if (!isset($parsed['scheme'], $parsed['host'], $parsed['path'])) {
+            return "";
+        }
+
+        $hostParts = explode('.', $parsed['host']);
+        if (count($hostParts) === 3 && !empty(getenv('AWS_REGION'))) {
+            $hostParts[0] .= '-' . getenv('AWS_REGION');
+            $parsed['host'] = implode('.', $hostParts);
+        }
+
+        if ($parsed['path'] !== '/saml2/idp/SSOService.php') {
+            return "";
+        }
+
+        $parsed['path'] = '/module.php/sildisco/metadata.php';
+        $parsed['query'] = 'format=xml';
+        return $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'] . '?' . $parsed['query'];
     }
 }
