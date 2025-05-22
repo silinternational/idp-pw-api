@@ -99,7 +99,7 @@ class Saml extends Component implements AuthnInterface
             Yii::warning([
                 'error' => 'Failed to fetch IdP metadata',
                 'metadataUrl' => $metadataUrl,
-                'metadataUrlIpAddress' => gethostbyaddr($metadataUrl),
+                'metadataUrlIpAddress' => gethostbyaddr(parse_url($metadataUrl, PHP_URL_HOST)),
                 'metadata' => $metadataXml ?? '',
                 'exception' => $e->getMessage(),
             ]);
