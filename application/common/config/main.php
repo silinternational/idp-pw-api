@@ -86,6 +86,14 @@ $logPrefix = function () use ($version) {
     return Json::encode($prefixData);
 };
 
+$dbAttributes = [];
+$caFile = '/data/console/runtime/ca.pem';
+if (file_exists($caFile)) {
+    $dbAttributes = [
+        PDO::MYSQL_ATTR_SSL_CA => $caFile,
+    ];
+}
+
 return [
     'id' => 'app-common',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
@@ -99,6 +107,7 @@ return [
             'charset' => 'utf8',
             'emulatePrepare' => false,
             'tablePrefix' => '',
+            'attributes' => $dbAttributes,
         ],
         'log' => [
             'traceLevel' => 0,
