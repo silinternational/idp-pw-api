@@ -11,6 +11,15 @@ $sessionLifetime = 1800; // 30 minutes
 
 const UID_ROUTE_PATTERN = '<uid:([a-zA-Z0-9_\-]{32})>';
 
+$dbAttributes = [];
+$caFile = '/data/console/runtime/ca.pem';
+if (file_exists($caFile)) {
+    $dbAttributes = [
+        PDO::MYSQL_ATTR_SSL_CA => $caFile,
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => 1,
+    ];
+}
+
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
@@ -45,6 +54,7 @@ return [
                 'charset' => 'utf8',
                 'emulatePrepare' => false,
                 'tablePrefix' => '',
+                'attributes' => $dbAttributes,
             ],
             // 'sessionTable' => 'session',  // defaults to 'session'
         ],
