@@ -2,9 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\components\auth\AuthnInterface;
 use common\components\auth\RedirectException;
 use common\components\auth\User as AuthUser;
-use common\components\auth\AuthnInterface;
 use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\User;
@@ -46,7 +46,7 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
-        if (! \Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest) {
             return $this->redirect($this->getAfterLoginUrl($this->getReturnTo()));
         }
 
@@ -106,6 +106,7 @@ class AuthController extends BaseRestController
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $log['code'] = $e->getCode();
+            $log['stack'] = $e->getTraceAsString();
             \Yii::error($log, 'application');
 
             throw new ServerErrorHttpException('server error ' . $e->getCode(), 1546440970);
