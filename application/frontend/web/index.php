@@ -5,16 +5,17 @@ $config = require('../config/load-configs.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-if (getenv('MYSQL_ATTR_SSL_CA')) {
+if (getenv('SSL_CA_BASE64')) {
     $caPath = '/data/console/runtime';
     $caFile = $caPath . '/ca.pem';
-    $decoded = base64_decode(getenv('MYSQL_ATTR_SSL_CA'));
+    $decoded = base64_decode(getenv('SSL_CA_BASE64'));
     if (file_put_contents($caFile, $decoded) === false) {
-        $err = " perms: " . sprintf('%o', fileperms($caPath));
-        $err .= " user: " . get_current_user();
+        $err = " user: " . get_current_user();
         $err .= " whoami: " . exec('whoami');
+        $err .= " perms: " . sprintf('%o', fileperms($caPath));
         $err .= " owner: " . json_encode(posix_getpwuid(fileowner($caPath)));
-        die('Failed to write database SSL certificate file: ' . $caFile . $err);
+        fwrite(STDERR, 'Failed to write database SSL certificate file: ' . $caFile . $err);
+        exit(1);
     }
     chmod($caFile, 0600);
 }
