@@ -106,7 +106,6 @@ class AuthController extends BaseRestController
             $log['status'] = 'error';
             $log['error'] = $e->getMessage();
             $log['code'] = $e->getCode();
-            $log['stack'] = $e->getTraceAsString();
             \Yii::error($log, 'application');
 
             throw new ServerErrorHttpException('server error ' . $e->getCode(), 1546440970);
