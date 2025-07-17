@@ -7,6 +7,16 @@ composer install --prefer-dist --no-interaction --optimize-autoloader --no-progr
 
 mkdir -p /data/runtime/mail
 
+if [[ -n "$SSL_CA_BASE64" ]]; then
+    # Decode the base64 and write to the file
+    caFile="/data/console/runtime/ca.pem"
+    echo "$SSL_CA_BASE64" | base64 -d > "$caFile"
+    if [[ $? -ne 0 || ! -s "$caFile" ]]; then
+        echo "Failed to write database SSL certificate file: $caFile" >&2
+        exit 1
+    fi
+fi
+
 # Run database migrations
 /data/yii migrate --interactive=0
 

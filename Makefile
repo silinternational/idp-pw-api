@@ -51,17 +51,17 @@ basemodels:
 	docker compose run --rm cli ./rebuildbasemodels.sh
 
 yiimigratetestDb:
-	docker compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./yii migrate --interactive=0'
+	docker compose run --rm cli bash -c 'MYSQL_HOST=testdb MYSQL_DATABASE=test ./yii migrate --interactive=0'
 
 yiimigratetestDblocal:
-	docker compose run --rm cli bash -c 'MYSQL_HOST=testDb MYSQL_DATABASE=test ./yii migrate --migrationPath=console/migrations-test/ --interactive=0'
+	docker compose run --rm cli bash -c 'MYSQL_HOST=testdb MYSQL_DATABASE=test ./yii migrate --migrationPath=console/migrations-test/ --interactive=0'
 
 rmTestDb:
-	docker compose kill testDb
-	docker compose rm -f testDb
+	docker compose kill testdb
+	docker compose rm -f testdb
 
 upTestDb:
-	docker compose up -d testDb
+	docker compose up -d testdb
 
 broker:
 	docker compose up -d broker
@@ -88,3 +88,6 @@ api.html: api.raml
 
 psr2:
 	docker compose run --rm cli bash -c "vendor/bin/php-cs-fixer fix ."
+
+certs:
+	db/make-db-certs.sh

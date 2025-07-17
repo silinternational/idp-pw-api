@@ -1,6 +1,6 @@
 x-db_healthcheck: &db_healthcheck
   healthcheck:
-    test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+    test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
     start_period: 10s
     interval: 10s
     timeout: 5s
@@ -10,6 +10,9 @@ services:
 
   db:
     image: mariadb:10
+    volumes:
+      - ./db/certs:/certs:ro
+      - ./db/db.cnf:/etc/mysql/conf.d/my.cnf:ro
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
       MYSQL_DATABASE: pwmgr
@@ -17,7 +20,7 @@ services:
       MYSQL_PASSWORD: idpmgmt
     <<: *db_healthcheck
 
-  testDb:
+  testdb:
     image: mariadb:10
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
@@ -49,13 +52,14 @@ services:
     env_file:
       - ./common.env
       - ./local.env
+      - ./db/certs/test.env
 
   apitest:
     build: ./
     volumes:
       - ./application:/data
     depends_on:
-      testDb:
+      testdb:
         condition: service_healthy
       zxcvbn:
         condition: service_started
@@ -65,11 +69,11 @@ services:
       - ./common.env
       - ./test.env
     environment:
-      MYSQL_HOST: testDb
+      MYSQL_HOST: testdb
       MYSQL_DATABASE: test
       APP_ENV: test
       ID_BROKER_baseUrl: http://broker
-    command: [ "/data/run-tests-api.sh" ]
+    command: ["/data/run-tests-api.sh"]
 
   unittest:
     build: ./
@@ -85,11 +89,11 @@ services:
       - ./common.env
       - ./test.env
     environment:
-      MYSQL_HOST: testDb
+      MYSQL_HOST: testdb
       MYSQL_DATABASE: test
       APP_ENV: test
       ID_BROKER_baseUrl: http://broker
-    command: [ "/data/run-tests.sh" ]
+    command: ["/data/run-tests.sh"]
 
   integrationtest:
     build: ./
@@ -97,7 +101,7 @@ services:
       - ./application:/data
       - ./dockerbuild/dev-ldap.conf:/etc/ldap/ldap.conf
     depends_on:
-      testDb:
+      testdb:
         condition: service_healthy
       zxcvbn:
         condition: service_started
@@ -106,11 +110,11 @@ services:
       - ./test.env
       - ./local.env
     environment:
-      MYSQL_HOST: testDb
+      MYSQL_HOST: testdb
       MYSQL_DATABASE: test
       APP_ENV: test
       ID_BROKER_baseUrl: http://broker
-    command: [ "/data/run-tests-integration.sh" ]
+    command: ["/data/run-tests-integration.sh"]
 
   cli:
     build: ./
@@ -118,14 +122,14 @@ services:
       - ./application:/data
       - ${COMPOSER_CACHE_DIR}:/composer
     depends_on:
-      testDb:
+      testdb:
         condition: service_healthy
     working_dir: /data
     user: "${DOCKER_UIDGID}"
     env_file:
       - ./common.env
       - ./local.env
-    command: [ "true" ]
+    command: ["true"]
 
   email:
     image: silintl/email-service:1

@@ -1,6 +1,6 @@
 x-db_healthcheck: &db_healthcheck
   healthcheck:
-    test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+    test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
     start_period: 10s
     interval: 10s
     timeout: 5s
@@ -9,6 +9,9 @@ x-db_healthcheck: &db_healthcheck
 services:
   db:
     image: mariadb:10
+    volumes:
+      - ./db/certs:/certs:ro
+      - ./db/db.cnf:/etc/mysql/conf.d/my.cnf:ro
     environment:
       MYSQL_ROOT_PASSWORD: r00tp@ss!
       MYSQL_DATABASE: test
@@ -56,6 +59,8 @@ services:
       PASSWORD_RULE_minLength: 10
       PASSWORD_RULE_maxLength: 255
       PASSWORD_RULE_minScore: 2
+    env_file:
+      - ./db/certs/test.env
     working_dir: /data
     command: /data/run-tests.sh
 
