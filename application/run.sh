@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# print script lines as they are executed
+set -x
+
+# exit if any line in the script fails
+set -e
+
 # establish a signal handler to catch the SIGTERM from a 'docker stop'
 # reference: https://medium.com/@gchudnov/trapping-signals-in-docker-containers-7a57fdda7d86
 term_handler() {
