@@ -40,7 +40,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        # Step to Extract the meta for the image  
+        # Step to Extract the meta for the image
       - name: Extract metadata (tags, labels) for Docker Images
         id: meta
         uses: docker/metadata-action@v5
