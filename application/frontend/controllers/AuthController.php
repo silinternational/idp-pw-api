@@ -2,9 +2,9 @@
 
 namespace frontend\controllers;
 
-use common\components\auth\AuthnInterface;
 use common\components\auth\RedirectException;
 use common\components\auth\User as AuthUser;
+use common\components\auth\AuthnInterface;
 use common\components\personnel\NotFoundException;
 use common\helpers\Utils;
 use common\models\User;
@@ -46,7 +46,7 @@ class AuthController extends BaseRestController
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (! \Yii::$app->user->isGuest) {
             return $this->redirect($this->getAfterLoginUrl($this->getReturnTo()));
         }
 
