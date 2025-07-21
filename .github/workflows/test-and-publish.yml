@@ -22,25 +22,24 @@ jobs:
     name: Build and Publish
     needs: tests
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags')
     timeout-minutes: ${{ fromJSON(vars.DEFAULT_JOB_TIMEOUT_MINUTES) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        # Step to log into the DockerHub
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        # Step to log into the GHCR
+
       - name: Log in to GHCR.io
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        # Step to Extract the meta for the image
+
       - name: Extract metadata (tags, labels) for Docker Images
         id: meta
         uses: docker/metadata-action@v5
@@ -54,7 +53,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -63,3 +62,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GITHUB_REF_NAME=${{ github.ref_name }}
+
+      - name: Build and push Docker image to GitHub Container Registry
+        uses: docker/build-push-action@v5
+        if: startsWith(github.ref, 'refs/tags')
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            GITHUB_REF_NAME=${{ github.ref_name }} 
