@@ -51,7 +51,8 @@ services:
         condition: service_started
     env_file:
       - ./common.env
-      - ./local.env
+      - path: ./local.env
+        required: false
       - ./db/certs/test.env
 
   apitest:
@@ -108,7 +109,8 @@ services:
     env_file:
       - ./common.env
       - ./test.env
-      - ./local.env
+      - path: ./local.env
+        required: false
     environment:
       MYSQL_HOST: testdb
       MYSQL_DATABASE: test
@@ -128,7 +130,8 @@ services:
     user: "${DOCKER_UIDGID}"
     env_file:
       - ./common.env
-      - ./local.env
+      - path: ./local.env
+        required: false
     command: ["true"]
 
   email:
@@ -143,7 +146,8 @@ services:
       MYSQL_HOST: emaildb
     env_file:
       - ./email.common.env
-      - ./email.local.env
+      - path: ./email.local.env
+        required: false
     ports:
       - "51153:80"
 
@@ -156,7 +160,8 @@ services:
       MYSQL_HOST: emaildb
     env_file:
       - ./email.common.env
-      - ./email.local.env
+      - path: ./email.local.env
+        required: false
     command: /data/run-cron.sh
 
   emaildb:

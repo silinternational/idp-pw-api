@@ -221,28 +221,28 @@ The chart below summarizes the test configuration.
 |---------|---------------|-------------|---------------------------------------------------------|-------------------------|
 | Unit    | PHPUnit       | container   | unittest                                                | api                     |
 |         |               | script      | run-tests.sh                                            | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | actions-services.yml    |
+|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
 |         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
 |         |               | config      | tests/unit.suite.yml, tests/codeception/config/unit.php | (same)                  |
 |         |               | coverage    | IdBroker, IdBrokerPw, Ldap                              | (same)                  |
 | ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
 | Unit    | Behat         | container   | unittest                                                | api                     |
 |         |               | script      | run-tests.sh                                            | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | actions-services.yml    |
+|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
 |         |               | bootstrap   | Composer                                                | (same)                  |
 |         |               | config      | features/behat.yml                                      | (same)                  |
 |         |               | coverage    | Multiple, Google                                        | (same)                  |
 | ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
 | Unit    | Codeception   | container   | unittest                                                | api                     |
 |         |               | script      | run-tests.sh                                            | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | actions-services.yml    |
+|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
 |         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
 |         |               | config      | tests/unit.suite.yml                                    | (same)                  |
 |         |               | coverage    | models, helpers                                         | (same)                  |
 | ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
 | API     | Codeception   | container   | apitest                                                 | api                     |
 |         |               | script      | run-tests-api.sh                                        | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | actions-services.yml    |
+|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
 |         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
 |         |               | config      | tests/api.suite.yml                                     | (same)                  |
 |         |               | coverage    | controllers                                             | (same)                  |
