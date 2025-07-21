@@ -122,12 +122,13 @@ services:
     build: ./
     volumes:
       - ./application:/data
-      - ${COMPOSER_CACHE_DIR}:/composer
+      - composer-cache:/composer
     depends_on:
       testdb:
         condition: service_healthy
     working_dir: /data
-    user: "${DOCKER_UIDGID}"
+    environment:
+      COMPOSER_CACHE_DIR: /composer
     env_file:
       - ./common.env
       - path: ./local.env
@@ -281,3 +282,6 @@ networks:
       config:
         - subnet: 10.20.31.0/24
           gateway: 10.20.31.1
+
+volumes:
+  composer-cache:
