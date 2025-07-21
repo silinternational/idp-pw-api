@@ -217,36 +217,36 @@ creating a new user. The `access_token` can be found in the `Location` response 
 Tests are configured in multiple places, using different test frameworks.
 The chart below summarizes the test configuration.
 
-| Suite   | Framework     | config      | Local, Docker                                           | GitHub Actions          |
-|---------|---------------|-------------|---------------------------------------------------------|-------------------------|
-| Unit    | PHPUnit       | container   | unittest                                                | api                     |
-|         |               | script      | run-tests.sh                                            | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
-|         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
-|         |               | config      | tests/unit.suite.yml, tests/codeception/config/unit.php | (same)                  |
-|         |               | coverage    | IdBroker, IdBrokerPw, Ldap                              | (same)                  |
-| ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
-| Unit    | Behat         | container   | unittest                                                | api                     |
-|         |               | script      | run-tests.sh                                            | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
-|         |               | bootstrap   | Composer                                                | (same)                  |
-|         |               | config      | features/behat.yml                                      | (same)                  |
-|         |               | coverage    | Multiple, Google                                        | (same)                  |
-| ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
-| Unit    | Codeception   | container   | unittest                                                | api                     |
-|         |               | script      | run-tests.sh                                            | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
-|         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
-|         |               | config      | tests/unit.suite.yml                                    | (same)                  |
-|         |               | coverage    | models, helpers                                         | (same)                  |
-| ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
-| API     | Codeception   | container   | apitest                                                 | api                     |
-|         |               | script      | run-tests-api.sh                                        | (same)                  | 
-|         |               | env.        | common.env, test.env                                    | docker-compose.yml      |
-|         |               | bootstrap   | tests/_bootstrap.php                                    | (same)                  | 
-|         |               | config      | tests/api.suite.yml                                     | (same)                  |
-|         |               | coverage    | controllers                                             | (same)                  |
-| ------- | ------------- | ----------- | ----------------------                                  | ----------------------- |
+| Suite   | Framework     | config      | details                                                 |
+|---------|---------------|-------------|---------------------------------------------------------|
+| Unit    | PHPUnit       | container   | unittest                                                |
+|         |               | script      | run-tests.sh                                            | 
+|         |               | env.        | common.env, test.env                                    |
+|         |               | bootstrap   | tests/_bootstrap.php                                    | 
+|         |               | config      | tests/unit.suite.yml, tests/codeception/config/unit.php |
+|         |               | coverage    | IdBroker, IdBrokerPw, Ldap                              |
+| ------- | ------------- | ----------- | ----------------------                                  |
+| Unit    | Behat         | container   | unittest                                                |
+|         |               | script      | run-tests.sh                                            | 
+|         |               | env.        | common.env, test.env                                    |
+|         |               | bootstrap   | Composer                                                |
+|         |               | config      | features/behat.yml                                      |
+|         |               | coverage    | Multiple, Google                                        |
+| ------- | ------------- | ----------- | ----------------------                                  |
+| Unit    | Codeception   | container   | unittest                                                |
+|         |               | script      | run-tests.sh                                            | 
+|         |               | env.        | common.env, test.env                                    |
+|         |               | bootstrap   | tests/_bootstrap.php                                    | 
+|         |               | config      | tests/unit.suite.yml                                    |
+|         |               | coverage    | models, helpers                                         |
+| ------- | ------------- | ----------- | ----------------------                                  |
+| API     | Codeception   | container   | apitest                                                 |
+|         |               | script      | run-tests-api.sh                                        | 
+|         |               | env.        | common.env, test.env                                    |
+|         |               | bootstrap   | tests/_bootstrap.php                                    | 
+|         |               | config      | tests/api.suite.yml                                     |
+|         |               | coverage    | controllers                                             |
+| ------- | ------------- | ----------- | ----------------------                                  |
 
 ### Running tests
 
